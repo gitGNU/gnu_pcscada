@@ -26,7 +26,6 @@ with Ada.Exceptions;
 package body PCSC.SCard is
 
    use IC;
-   use IC.Strings;
 
    C_SCard_Scope : constant array (SCard_Scope) of Thin.DWORD
      := (Scope_User     => Thin.SCARD_SCOPE_USER,
@@ -90,12 +89,13 @@ package body PCSC.SCard is
    ------------------
 
    function List_Readers (Context : in SCard.Context) return String is
-      Res     : Thin.DWORD;
-      Len     : aliased Thin.DWORD;
-      Readers : Thin.LPSTR;
+      Res       : Thin.DWORD;
+      Len       : aliased Thin.DWORD;
+      C_Readers : Thin.LPSTR;
    begin
+      --  Find out how much space we need for Readers.
       Res := Thin.SCardListReaders (hContext    => Context.C_Context,
-                                    mszReaders  => Null_Ptr,
+                                    mszReaders  => Strings.Null_Ptr,
                                     pcchReaders => Len'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -103,23 +103,31 @@ package body PCSC.SCard is
                           Message => "Could not get readers");
       end if;
 
-      --  Allocate memory for reader string.
-      --  TODO: optimize this -> cannot free this way.
-      Readers := IC.Strings.To_Chars_Ptr
-        (new IC.char_array (IC.size_t (1) .. IC.size_t (Len)));
+      declare
+         --  Allocate memory for readers list.
+         Tmp_Readers : String (1 .. Integer (Len)) := (others => '0');
+      begin
+         C_Readers := Strings.New_String (Tmp_Readers);
 
-      Res := Thin.SCardListReaders (hContext    => Context.C_Context,
-                                    mszReaders  => Readers,
-                                    pcchReaders => Len'Access);
+         --  Get readers for this context.
+         Res := Thin.SCardListReaders (hContext    => Context.C_Context,
+                                       mszReaders  => C_Readers,
+                                       pcchReaders => Len'Access);
 
-      if Res /= Thin.SCARD_S_SUCCESS then
-         --  TODO: Free Readers here.
-         SCard_Exception (Code    => Res,
-                          Message => "Could not get readers");
-      end if;
+         if Res /= Thin.SCARD_S_SUCCESS then
+            Strings.Free (C_Readers);
+            SCard_Exception (Code    => Res,
+                             Message => "Could not get readers");
+         end if;
+      end;
 
-      return Value (Readers);
-
+      --  TODO: does gnat-4.1 not support extended return?
+      declare
+         Readers : String := Strings.Value (C_Readers);
+      begin
+         Strings.Free (C_Readers);
+         return Readers;
+      end;
    end List_Readers;
 
    ---------------------
@@ -128,7 +136,7 @@ package body PCSC.SCard is
 
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String)
    is
-      Err_Message : constant String := Value
+      Err_Message : constant String := Strings.Value
         (Thin.pcsc_stringify_error (Code));
    begin
       Ada.Exceptions.Raise_Exception
