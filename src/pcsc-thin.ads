@@ -20,11 +20,10 @@
 --  MA  02110-1301  USA
 --
 
-with Interfaces.C.Strings;
 with System;
-with Interfaces.C;
-with Interfaces;
 with Ada.Text_IO;
+with Interfaces.C;
+with Interfaces.C.Strings;
 
 package PCSC.Thin is
 
@@ -88,6 +87,8 @@ package PCSC.Thin is
    --  SCard io request structure.
 
    --  SCard error codes.
+
+   subtype Return_Code is DWORD range 16#0000_0000# .. 16#8010_002E#;
 
    SCARD_S_SUCCESS              : constant := 16#0000_0000#;
    --  No error was encountered.

@@ -22,6 +22,9 @@
 
 package PCSC is
 
+   SCard_Error : exception;
+   --  Raised by all PCSC.SCard routines in case of error.
+
 private
    Version : constant String := "0.1";
 
