@@ -20,8 +20,12 @@
 --  MA  02110-1301  USA
 --
 
+with GNAT.String_Split; use GNAT.String_Split;
+with Ada.Strings.Maps; use Ada.Strings.Maps;
+with Ada.Characters.Latin_1;
 with Interfaces.C.Strings;
 with Ada.Exceptions;
+with Ada.Text_IO;
 
 package body PCSC.SCard is
 
@@ -91,9 +95,9 @@ package body PCSC.SCard is
    function List_Readers (Context : in SCard.Context) return String is
       Res       : Thin.DWORD;
       Len       : aliased Thin.DWORD;
-      C_Readers : Thin.LPSTR;
    begin
-      --  Find out how much space we need for Readers.
+      --  Find out how much space we need for storing
+      --  readers friendly names first.
       Res := Thin.SCardListReaders (hContext    => Context.C_Context,
                                     mszReaders  => Strings.Null_Ptr,
                                     pcchReaders => Len'Access);
@@ -104,29 +108,43 @@ package body PCSC.SCard is
       end if;
 
       declare
-         --  Allocate memory for readers list.
-         Tmp_Readers : String (1 .. Integer (Len)) := (others => '0');
+         C_Readers : Strings.char_array_access :=
+           new char_array (1 .. IC.size_t (Len));
+         Lines     : Slice_Set;
       begin
-         C_Readers := Strings.New_String (Tmp_Readers);
-
          --  Get readers for this context.
-         Res := Thin.SCardListReaders (hContext    => Context.C_Context,
-                                       mszReaders  => C_Readers,
-                                       pcchReaders => Len'Access);
+         Res := Thin.SCardListReaders
+           (hContext    => Context.C_Context,
+            mszReaders  => Strings.To_Chars_Ptr (C_Readers),
+            pcchReaders => Len'Access);
 
          if Res /= Thin.SCARD_S_SUCCESS then
-            Strings.Free (C_Readers);
             SCard_Exception (Code    => Res,
                              Message => "Could not get readers");
          end if;
-      end;
 
-      --  TODO: does gnat-4.1 not support extended return?
-      declare
-         Readers : String := Strings.Value (C_Readers);
-      begin
-         Strings.Free (C_Readers);
-         return Readers;
+         --  Convert to Ada types.
+         declare
+            Readers : String := To_Ada
+              (Item     => C_Readers.all,
+               Trim_Nul => False);
+         begin
+            --  The C representation is no longer needed.
+            Free (C_Readers);
+
+            --  Slice readers into parts.
+            --  Who uses '\0' as separator anyway?
+            GNAT.String_Split.Create
+              (S          => Lines,
+               From       => Readers (Readers'First .. Readers'Last),
+               Separators => To_Set (Ada.Characters.Latin_1.NUL),
+               Mode       => Single);
+
+            for J in 1 .. Slice_Count (Lines) loop
+               Ada.Text_IO.Put_Line (Slice (Lines, J));
+            end loop;
+            return Readers;
+         end;
       end;
    end List_Readers;
 

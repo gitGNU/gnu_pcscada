@@ -21,6 +21,8 @@
 --
 
 with Interfaces.C;
+with Interfaces.C.Strings;
+with Ada.Unchecked_Deallocation;
 
 with PCSC.Thin;
 
@@ -61,4 +63,10 @@ private
    type Context is limited record
       C_Context : aliased Thin.SCARDCONTEXT;
    end record;
+
+   procedure Free is new Ada.Unchecked_Deallocation
+     (Object => Interfaces.C.char_array,
+      Name   => Interfaces.C.Strings.char_array_access);
+   --  Free a char array.
+
 end PCSC.SCard;
