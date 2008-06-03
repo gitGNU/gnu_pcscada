@@ -53,9 +53,10 @@ package PCSC.SCard is
    --  Verify that given SCard-Context is valid.
 
    function List_Readers (Context : in SCard.Context) return String;
-   --  List all available readers for this PC/SC context.
+   --  Return list of all available readers for this PC/SC context.
 
 private
+
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
    pragma No_Return (SCard_Exception);
    --  Raise SCard exception if something goes wrong.
@@ -63,10 +64,5 @@ private
    type Context is limited record
       C_Context : aliased Thin.SCARDCONTEXT;
    end record;
-
-   procedure Free is new Ada.Unchecked_Deallocation
-     (Object => Interfaces.C.char_array,
-      Name   => Interfaces.C.Strings.char_array_access);
-   --  Free a char array.
 
 end PCSC.SCard;

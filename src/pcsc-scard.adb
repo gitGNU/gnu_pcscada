@@ -108,14 +108,13 @@ package body PCSC.SCard is
       end if;
 
       declare
-         C_Readers : Strings.char_array_access :=
-           new char_array (1 .. IC.size_t (Len));
+         C_Readers : aliased char_array := (1 .. IC.size_t (Len) => <>);
          Lines     : Slice_Set;
       begin
          --  Get readers for this context.
          Res := Thin.SCardListReaders
            (hContext    => Context.C_Context,
-            mszReaders  => Strings.To_Chars_Ptr (C_Readers),
+            mszReaders  => Strings.To_Chars_Ptr (C_Readers'Unchecked_Access),
             pcchReaders => Len'Access);
 
          if Res /= Thin.SCARD_S_SUCCESS then
@@ -125,13 +124,9 @@ package body PCSC.SCard is
 
          --  Convert to Ada types.
          declare
-            Readers : String := To_Ada
-              (Item     => C_Readers.all,
-               Trim_Nul => False);
+            Readers : String := To_Ada (Item     => C_Readers,
+                                        Trim_Nul => False);
          begin
-            --  The C representation is no longer needed.
-            Free (C_Readers);
-
             --  Slice readers into parts.
             --  Who uses '\0' as separator anyway?
             GNAT.String_Split.Create
