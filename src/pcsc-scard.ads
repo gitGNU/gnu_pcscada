@@ -22,7 +22,8 @@
 
 with Interfaces.C;
 with Interfaces.C.Strings;
-with Ada.Unchecked_Deallocation;
+with Ada.Containers.Vectors;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with PCSC.Thin;
 
@@ -40,6 +41,16 @@ package PCSC.SCard is
       Scope_System);  --  Scope in system.
    --  Possible scope for PC/SC-context.
 
+   subtype Reader_ID is Unbounded_String;
+   --  Reader friendly name.
+
+   package Readers_Vector is new Ada.Containers.Vectors (Positive, Reader_ID);
+   use Readers_Vector;
+   --  Vector of readers.
+
+   subtype Readers_List is Readers_Vector.Vector;
+   --  Readers list returned by List_Readers().
+
    procedure Establish_Context
      (Context : in out SCard.Context;
       Scope   : in SCard_Scope);
@@ -52,10 +63,18 @@ package PCSC.SCard is
    function Is_Valid (Context : in SCard.Context) return Boolean;
    --  Verify that given SCard-Context is valid.
 
-   function List_Readers (Context : in SCard.Context) return String;
+   function List_Readers (Context : in SCard.Context)
+                          return Readers_List;
    --  Return list of all available readers for this PC/SC context.
 
 private
+
+   function Slice_Readerstring (To_Slice : in String)
+                                return Readers_List;
+   --  Slice reader string returned from thin binding and create vector of
+   --  reader names. The string to slice has a format like:
+   --  Reader A1\0Reader B1\0Reader C1\0\0
+   --  \0 is used as separator, \0\0 as string termination.
 
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
    pragma No_Return (SCard_Exception);

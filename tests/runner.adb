@@ -20,26 +20,39 @@
 --  MA  02110-1301  USA
 --
 
-with PCSC.Thin; use PCSC.Thin;
-with PCSC.SCard; use PCSC;
 with Ada.Text_IO;
-with Interfaces.C;
-with Interfaces.C.Strings;
-with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Unbounded;
+with Ada.Containers.Vectors;
 
-with Ada.Characters.Latin_1;
-with Ada.Characters.Handling;
-with Interfaces;
+with PCSC.SCard; use PCSC;
+with PCSC.Thin;
 
 --  Thick-binding test.
 procedure Runner is
-   Context : SCard.Context;
+   Context  : SCard.Context;
+   Readers  : SCard.Readers_List;
+
+   use SCard.Readers_Vector;
 
    pragma Linker_Options ("-lpcsclite");
+
 begin
    SCard.Establish_Context (Context => Context,
                             Scope   => SCard.Scope_System);
-   Ada.Text_IO.Put_Line (SCard.List_Readers (Context => Context));
+   Readers := SCard.List_Readers (Context => Context);
+
+   declare
+      Position : Cursor := Readers.First;
+      Reader   : SCard.Reader_ID;
+   begin
+      while Has_Element (Position) loop
+         Reader := Element (Position);
+         Ada.Text_IO.Put_Line (Integer'Image (To_Index (Position)) & " " &
+                              Ada.Strings.Unbounded.To_String (Reader));
+         Next (Position);
+      end loop;
+   end;
+
    SCard.Release_Context (Context => Context);
 
 end Runner;

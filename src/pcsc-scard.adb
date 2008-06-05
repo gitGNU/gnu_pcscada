@@ -20,12 +20,10 @@
 --  MA  02110-1301  USA
 --
 
-with GNAT.String_Split; use GNAT.String_Split;
-with Ada.Strings.Maps; use Ada.Strings.Maps;
-with Ada.Characters.Latin_1;
-with Interfaces.C.Strings;
 with Ada.Exceptions;
-with Ada.Text_IO;
+with Ada.Strings.Maps;
+with GNAT.String_Split;
+with Ada.Characters.Latin_1;
 
 package body PCSC.SCard is
 
@@ -92,7 +90,9 @@ package body PCSC.SCard is
    -- List_Readers --
    ------------------
 
-   function List_Readers (Context : in SCard.Context) return String is
+   function List_Readers (Context : in SCard.Context)
+                          return Readers_List
+   is
       Res       : Thin.DWORD;
       Len       : aliased Thin.DWORD;
    begin
@@ -109,7 +109,6 @@ package body PCSC.SCard is
 
       declare
          C_Readers : aliased char_array := (1 .. IC.size_t (Len) => <>);
-         Lines     : Slice_Set;
       begin
          --  Get readers for this context.
          Res := Thin.SCardListReaders
@@ -127,18 +126,7 @@ package body PCSC.SCard is
             Readers : String := To_Ada (Item     => C_Readers,
                                         Trim_Nul => False);
          begin
-            --  Slice readers into parts.
-            --  Who uses '\0' as separator anyway?
-            GNAT.String_Split.Create
-              (S          => Lines,
-               From       => Readers (Readers'First .. Readers'Last),
-               Separators => To_Set (Ada.Characters.Latin_1.NUL),
-               Mode       => Single);
-
-            for J in 1 .. Slice_Count (Lines) loop
-               Ada.Text_IO.Put_Line (Slice (Lines, J));
-            end loop;
-            return Readers;
+            return Slice_Readerstring (To_Slice => Readers);
          end;
       end;
    end List_Readers;
@@ -157,5 +145,36 @@ package body PCSC.SCard is
          Message & " - ["
            & Thin.DWORD'Image (Code) & "] " & Err_Message);
    end SCard_Exception;
+
+   ------------------------
+   -- Slice_Readerstring --
+   ------------------------
+
+   function Slice_Readerstring (To_Slice : in String)
+                                return Readers_List
+   is
+      use GNAT.String_Split;
+      use Ada.Strings.Maps;
+
+      Readers  : Readers_List;
+      Lines    : Slice_Set;
+   begin
+      --  Slice readers into parts.
+      --  Who uses '\0' as separator anyway?
+      Create
+        (S          => Lines,
+         From       => To_Slice (To_Slice'First .. To_Slice'Last),
+         Separators => To_Set (Ada.Characters.Latin_1.NUL),
+         Mode       => Single);
+
+      --  Minux two because \0\0 is used as termination.
+      for J in 1 .. Slice_Count (Lines) - 2 loop
+         Readers.Append (New_Item => To_Unbounded_String
+                         (Slice (Lines, J)));
+      end loop;
+
+      return Readers;
+
+   end Slice_Readerstring;
 
 end PCSC.SCard;
