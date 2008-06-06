@@ -72,8 +72,14 @@ package PCSC.SCard is
    --  Helper functions --
    -----------------------
 
-   function To_String (Reader : Reader_ID) return String;
+   function To_String (Reader : in Reader_ID) return String;
    --  Return string from Reader_ID.
+
+   generic
+      with procedure Action (Reader : in Reader_ID);
+   procedure For_Every_Reader
+     (Readers : in Readers_List);
+   --  Call callback function for every reader in readers list.
 
 private
 

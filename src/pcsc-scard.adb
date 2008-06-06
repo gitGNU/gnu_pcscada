@@ -181,9 +181,25 @@ package body PCSC.SCard is
    -- To_String --
    ---------------
 
-   function To_String (Reader : Reader_ID) return String is
+   function To_String (Reader : in Reader_ID) return String is
    begin
       return Ada.Strings.Unbounded.To_String (Reader);
    end To_String;
+
+   ----------------------
+   -- For_Every_Reader --
+   ----------------------
+   procedure For_Every_Reader (Readers : in Readers_List)
+   is
+      Position : Cursor := Readers.First;
+      Reader   : Reader_ID;
+   begin
+      while Has_Element (Position) loop
+         Reader := Element (Position);
+         --  Perform action on specific reader.
+         Action (Reader);
+         Next (Position);
+      end loop;
+   end For_Every_Reader;
 
 end PCSC.SCard;
