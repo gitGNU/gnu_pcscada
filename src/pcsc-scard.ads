@@ -67,6 +67,14 @@ package PCSC.SCard is
                           return Readers_List;
    --  Return list of all available readers for this PC/SC context.
 
+
+   -----------------------
+   --  Helper functions --
+   -----------------------
+
+   function To_String (Reader : Reader_ID) return String;
+   --  Return string from Reader_ID.
+
 private
 
    function Slice_Readerstring (To_Slice : in String)

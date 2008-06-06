@@ -177,4 +177,13 @@ package body PCSC.SCard is
 
    end Slice_Readerstring;
 
+   ---------------
+   -- To_String --
+   ---------------
+
+   function To_String (Reader : Reader_ID) return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Reader);
+   end To_String;
+
 end PCSC.SCard;

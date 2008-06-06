@@ -21,7 +21,6 @@
 --
 
 with Ada.Text_IO;
-with Ada.Strings.Unbounded;
 with Ada.Containers.Vectors;
 
 with PCSC.SCard; use PCSC;
@@ -48,7 +47,7 @@ begin
       while Has_Element (Position) loop
          Reader := Element (Position);
          Ada.Text_IO.Put_Line (Integer'Image (To_Index (Position)) & " " &
-                              Ada.Strings.Unbounded.To_String (Reader));
+                               SCard.To_String (Reader));
          Next (Position);
       end loop;
    end;
