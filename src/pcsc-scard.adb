@@ -33,7 +33,13 @@ package body PCSC.SCard is
      := (Scope_User     => Thin.SCARD_SCOPE_USER,
          Scope_Terminal => Thin.SCARD_SCOPE_TERMINAL,
          Scope_System   => Thin.SCARD_SCOPE_SYSTEM);
-   --  Map SCard_Scope with the corresponding C values.
+   --  Map SCard_Scope to corresponding C values.
+
+   C_SCard_Mode  : constant array (SCard_Mode) of Thin.DWORD
+     := (Mode_Exclusive => SCARD_SHARE_EXCLUSIVE,
+         Mode_Shared    => SCARD_SHARE_SHARED,
+         Mode_Direct    => SCARD_SHARE_DIRECT);
+   --  Map SCard_Mode to corresponding C values.
 
    -----------------------
    -- Establish_Context --

@@ -41,6 +41,12 @@ package PCSC.SCard is
       Scope_System);  --  Scope in system.
    --  Possible scope for PC/SC-context.
 
+   type SCard_Mode is
+     (Mode_Exclusive,  -- Exclusive mode only.
+      Mode_Shared,     -- Shared mode only.
+      Mode_Direct);    -- Raw mode only.
+   -- Possible Mode for SCard connects.
+
    subtype Reader_ID is Unbounded_String;
    --  Reader friendly name.
 
