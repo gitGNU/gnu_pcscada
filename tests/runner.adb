@@ -35,6 +35,13 @@ procedure Runner is
 
    pragma Linker_Options ("-lpcsclite");
 
+   procedure Print_ReaderID (ID : in SCard.Reader_ID);
+
+   procedure Print_ReaderID (ID : in SCard.Reader_ID) is
+   begin
+      Ada.Text_IO.Put_Line (SCard.To_String (ID));
+   end Print_ReaderID;
+
 begin
    SCard.Establish_Context (Context => Context,
                             Scope   => SCard.Scope_System);
@@ -44,12 +51,8 @@ begin
       Position : Cursor := Readers.First;
       Reader   : SCard.Reader_ID;
    begin
-      while Has_Element (Position) loop
-         Reader := Element (Position);
-         Ada.Text_IO.Put_Line (Integer'Image (To_Index (Position)) & " " &
-                               SCard.To_String (Reader));
-         Next (Position);
-      end loop;
+      SCard.For_Every_Reader (Readers => Readers,
+                              Call    => Print_ReaderID'Unrestricted_Access);
    end;
 
    SCard.Release_Context (Context => Context);

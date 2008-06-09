@@ -189,7 +189,7 @@ package body PCSC.SCard is
    ----------------------
    -- For_Every_Reader --
    ----------------------
-   procedure For_Every_Reader (Readers : in Readers_List)
+   procedure For_Every_Reader (Readers : in Readers_List; Call : in Callback)
    is
       Position : Cursor := Readers.First;
       Reader   : Reader_ID;
@@ -197,7 +197,7 @@ package body PCSC.SCard is
       while Has_Element (Position) loop
          Reader := Element (Position);
          --  Perform action on specific reader.
-         Action (Reader);
+         Call (Reader);
          Next (Position);
       end loop;
    end For_Every_Reader;

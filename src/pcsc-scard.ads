@@ -51,6 +51,10 @@ package PCSC.SCard is
    subtype Readers_List is Readers_Vector.Vector;
    --  Readers list returned by List_Readers().
 
+   type Callback is access procedure (ID : in Reader_ID);
+   --  Callback for reader ID handling. Provides flexible way to access
+   --  specific readers.
+
    procedure Establish_Context
      (Context : in out SCard.Context;
       Scope   : in SCard_Scope);
@@ -75,11 +79,8 @@ package PCSC.SCard is
    function To_String (Reader : in Reader_ID) return String;
    --  Return string from Reader_ID.
 
-   generic
-      with procedure Action (Reader : in Reader_ID);
-   procedure For_Every_Reader
-     (Readers : in Readers_List);
-   --  Call callback function for every reader in readers list.
+   procedure For_Every_Reader (Readers : in Readers_List; Call : in Callback);
+   --  Call callback procedure for every reader in readers list.
 
 private
 
