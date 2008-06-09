@@ -36,16 +36,25 @@ package PCSC.SCard is
    --  Establish_Context below and is used with all services.
 
    type SCard_Scope is
-     (Scope_User,     --  Scope in user space.
-      Scope_Terminal, --  Scope in terminal.
-      Scope_System);  --  Scope in system.
+     (Scope_User,       --  Scope in user space.
+      Scope_Terminal,   --  Scope in terminal.
+      Scope_System);    --  Scope in system.
    --  Possible scope for PC/SC-context.
 
    type SCard_Mode is
-     (Mode_Exclusive,  -- Exclusive mode only.
-      Mode_Shared,     -- Shared mode only.
-      Mode_Direct);    -- Raw mode only.
-   -- Possible Mode for SCard connects.
+     (Mode_Exclusive,   -- Exclusive mode only.
+      Mode_Shared,      -- Shared mode only.
+      Mode_Direct);     -- Raw mode only.
+   --  Possible Mode for SCard connects.
+
+   type SCard_Proto is
+     (Proto_Undefined,  --  Protocol not set.
+      Proto_Unset,      --  Backward compatibility.
+      Proto_T0,         --  T=0 active protocol.
+      Proto_T1,         --  T=1 active protocol.
+      Proto_RAW,        --  Raw active protocol.
+      Proto_T15);       --  T=15 protocol.
+   --  Possible Protos for SCard connects.
 
    subtype Reader_ID is Unbounded_String;
    --  Reader friendly name.

@@ -30,16 +30,25 @@ package body PCSC.SCard is
    use IC;
 
    C_SCard_Scope : constant array (SCard_Scope) of Thin.DWORD
-     := (Scope_User     => Thin.SCARD_SCOPE_USER,
-         Scope_Terminal => Thin.SCARD_SCOPE_TERMINAL,
-         Scope_System   => Thin.SCARD_SCOPE_SYSTEM);
+     := (Scope_User      => Thin.SCARD_SCOPE_USER,
+         Scope_Terminal  => Thin.SCARD_SCOPE_TERMINAL,
+         Scope_System    => Thin.SCARD_SCOPE_SYSTEM);
    --  Map SCard_Scope to corresponding C values.
 
    C_SCard_Mode  : constant array (SCard_Mode) of Thin.DWORD
-     := (Mode_Exclusive => SCARD_SHARE_EXCLUSIVE,
-         Mode_Shared    => SCARD_SHARE_SHARED,
-         Mode_Direct    => SCARD_SHARE_DIRECT);
+     := (Mode_Exclusive  => Thin.SCARD_SHARE_EXCLUSIVE,
+         Mode_Shared     => Thin.SCARD_SHARE_SHARED,
+         Mode_Direct     => Thin.SCARD_SHARE_DIRECT);
    --  Map SCard_Mode to corresponding C values.
+
+   C_SCard_Proto : constant array (SCard_Proto) of Thin.DWORD
+     := (Proto_Undefined => Thin.SCARD_PROTOCOL_UNDEFINED,
+         Proto_Unset     => Thin.SCARD_PROTOCOL_UNSET,
+         Proto_T0        => Thin.SCARD_PROTOCOL_T0,
+         Proto_T1        => Thin.SCARD_PROTOCOL_T1,
+         Proto_RAW       => Thin.SCARD_PROTOCOL_RAW,
+         Proto_T15       => Thin.SCARD_PROTOCOL_T15);
+   --  Map SCard_Proto to corresponding C values.
 
    -----------------------
    -- Establish_Context --
