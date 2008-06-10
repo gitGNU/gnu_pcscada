@@ -22,7 +22,6 @@
 
 with Ada.Exceptions;
 with Ada.Strings.Maps;
-with Ada.Text_IO;
 with GNAT.String_Split;
 with Ada.Characters.Latin_1;
 
