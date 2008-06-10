@@ -22,6 +22,7 @@
 
 with Ada.Exceptions;
 with Ada.Strings.Maps;
+with Ada.Text_IO;
 with GNAT.String_Split;
 with Ada.Characters.Latin_1;
 
@@ -158,7 +159,7 @@ package body PCSC.SCard is
       Protocol : in SCard_Proto)
    is
       Res      : Thin.DWORD;
-      C_Reader : Thin.LPSTR := Strings.New_String (To_String (Reader));
+      C_Reader : Thin.LPSTR := To_LPSTR (Reader);
    begin
       Res := Thin.SCardConnect
         (hContext             => Context.hContext,
@@ -169,10 +170,37 @@ package body PCSC.SCard is
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
+         Strings.Free (C_Reader);
          SCard_Exception (Code    => Res,
                           Message => "Could not connect to reader");
       end if;
+
+      --  Free allocated memory.
+      Strings.Free (C_Reader);
    end Connect;
+
+   ----------------------
+   -- Get_Active_Proto --
+   ----------------------
+
+   function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto is
+      --  Forward spec.
+      function Lookup (C_Proto : Thin.DWORD) return SCard_Proto;
+
+      function Lookup (C_Proto : Thin.DWORD) return SCard_Proto is
+      begin
+         for P in SCard_Proto'Range loop
+            if C_SCard_Proto (P) = C_Proto then
+               --  Return active Proto.
+               return P;
+            end if;
+         end loop;
+         --  Return 'Undefined' if no active proto found.
+         return Proto_Undefined;
+      end Lookup;
+   begin
+      return Lookup (Card.Active_Proto);
+   end Get_Active_Proto;
 
    ---------------------
    -- SCard_Exception --
@@ -193,8 +221,7 @@ package body PCSC.SCard is
    -- Slice_Readerstring --
    ------------------------
 
-   function Slice_Readerstring (To_Slice : in String)
-                                return Readers_List
+   function Slice_Readerstring (To_Slice : in String) return Readers_List
    is
       use GNAT.String_Split;
       use Ada.Strings.Maps;
@@ -210,7 +237,7 @@ package body PCSC.SCard is
          Separators => To_Set (Ada.Characters.Latin_1.NUL),
          Mode       => Single);
 
-      --  Minux two because \0\0 is used as termination.
+      --  Minus two because \0\0 is used as termination.
       for J in 1 .. Slice_Count (Lines) - 2 loop
          Readers.Append (New_Item => To_Unbounded_String
                          (Slice (Lines, J)));
@@ -245,5 +272,14 @@ package body PCSC.SCard is
          Next (Position);
       end loop;
    end For_Every_Reader;
+
+   --------------
+   -- To_LPSTR --
+   --------------
+
+   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr is
+   begin
+      return Strings.New_String (To_String (Reader));
+   end To_LPSTR;
 
 end PCSC.SCard;

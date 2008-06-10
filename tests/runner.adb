@@ -58,6 +58,9 @@ begin
                   Mode     => SCard.Mode_Shared,
                   Protocol => SCard.Proto_T1);
 
+   Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
+                           (SCard.Get_Active_Proto (Card => Card)));
+
    SCard.Release_Context (Context => Context);
 
 end Runner;

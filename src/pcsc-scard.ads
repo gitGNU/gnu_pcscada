@@ -96,6 +96,9 @@ package PCSC.SCard is
       Mode     : in SCard_Mode;
       Protocol : in SCard_Proto);
 
+   function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
+   --  Return protocol in use for a given card handle.
+
    -----------------------
    --  Helper functions --
    -----------------------
@@ -108,8 +111,7 @@ package PCSC.SCard is
 
 private
 
-   function Slice_Readerstring (To_Slice : in String)
-                                return Readers_List;
+   function Slice_Readerstring (To_Slice : in String) return Readers_List;
    --  Slice reader string returned from thin binding and create vector of
    --  reader names. The string to slice has a format like:
    --  Reader A1\0Reader B1\0Reader C1\0\0
@@ -119,13 +121,17 @@ private
    pragma No_Return (SCard_Exception);
    --  Raise SCard exception if something goes wrong.
 
+   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
+   --  Return a new C compatible string from Reader_ID. The allocated memory
+   --  must be freed by calling Free.
+
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;
    end record;
 
    type Card is limited record
       hCard        : aliased Thin.SCARDHANDLE;
-      Active_Proto : aliased Thin.DWORD;
+      Active_Proto : aliased Thin.DWORD := Thin.SCARD_PROTOCOL_UNDEFINED;
    end record;
 
 end PCSC.SCard;
