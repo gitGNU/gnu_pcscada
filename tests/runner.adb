@@ -28,8 +28,9 @@ with PCSC.Thin;
 
 --  Thick-binding test.
 procedure Runner is
-   Context  : SCard.Context;
-   Readers  : SCard.Readers_List;
+   Context : SCard.Context;
+   Readers : SCard.Readers_List;
+   Card    : SCard.Card;
 
    use SCard.Readers_Vector;
 
@@ -47,13 +48,15 @@ begin
                             Scope   => SCard.Scope_System);
    Readers := SCard.List_Readers (Context => Context);
 
-   declare
-      Position : Cursor := Readers.First;
-      Reader   : SCard.Reader_ID;
-   begin
-      SCard.For_Every_Reader (Readers => Readers,
-                              Call    => Print_ReaderID'Unrestricted_Access);
-   end;
+   SCard.For_Every_Reader (Readers => Readers,
+                           Call    => Print_ReaderID'Unrestricted_Access);
+
+   --  Connect to first reader.
+   SCard.Connect (Card     => Card,
+                  Context  => Context,
+                  Reader   => Readers.First_Element,
+                  Mode     => SCard.Mode_Shared,
+                  Protocol => SCard.Proto_T1);
 
    SCard.Release_Context (Context => Context);
 

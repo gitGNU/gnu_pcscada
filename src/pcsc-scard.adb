@@ -62,7 +62,7 @@ package body PCSC.SCard is
    begin
       Res := Thin.SCardEstablishContext
         (dwScope     => C_SCard_Scope (Scope),
-         phContext   => Context.C_Context'Access);
+         phContext   => Context.hContext'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
@@ -77,7 +77,7 @@ package body PCSC.SCard is
    procedure Release_Context (Context : in out SCard.Context) is
       Res : Thin.DWORD;
    begin
-      Res := Thin.SCardReleaseContext (hContext => Context.C_Context);
+      Res := Thin.SCardReleaseContext (hContext => Context.hContext);
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
@@ -92,7 +92,7 @@ package body PCSC.SCard is
    function Is_Valid (Context : in SCard.Context) return Boolean is
       Res : Thin.DWORD;
    begin
-      Res := Thin.SCardIsValidContext (hContext => Context.C_Context);
+      Res := Thin.SCardIsValidContext (hContext => Context.hContext);
 
       if Res /= Thin.SCARD_S_SUCCESS then
          return False;
@@ -113,7 +113,7 @@ package body PCSC.SCard is
    begin
       --  Find out how much space we need for storing
       --  readers friendly names first.
-      Res := Thin.SCardListReaders (hContext    => Context.C_Context,
+      Res := Thin.SCardListReaders (hContext    => Context.hContext,
                                     mszReaders  => Strings.Null_Ptr,
                                     pcchReaders => Len'Access);
 
@@ -127,7 +127,7 @@ package body PCSC.SCard is
       begin
          --  Get readers for this context.
          Res := Thin.SCardListReaders
-           (hContext    => Context.C_Context,
+           (hContext    => Context.hContext,
             mszReaders  => Strings.To_Chars_Ptr (C_Readers'Unchecked_Access),
             pcchReaders => Len'Access);
 
@@ -145,6 +145,34 @@ package body PCSC.SCard is
          end;
       end;
    end List_Readers;
+
+   -------------
+   -- Connect --
+   -------------
+
+   procedure Connect
+     (Card     : in out SCard.Card;
+      Context  : in SCard.Context;
+      Reader   : in Reader_ID;
+      Mode     : in SCard_Mode;
+      Protocol : in SCard_Proto)
+   is
+      Res      : Thin.DWORD;
+      C_Reader : Thin.LPSTR := Strings.New_String (To_String (Reader));
+   begin
+      Res := Thin.SCardConnect
+        (hContext             => Context.hContext,
+         szReader             => C_Reader,
+         dwShareMode          => C_SCard_Mode (Mode),
+         dwPreferredProtocols => C_SCard_Proto (Protocol),
+         phCard               => Card.hCard'Access,
+         pdwActiveProtocol    => Card.Active_Proto'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Could not connect to reader");
+      end if;
+   end Connect;
 
    ---------------------
    -- SCard_Exception --
@@ -204,6 +232,7 @@ package body PCSC.SCard is
    ----------------------
    -- For_Every_Reader --
    ----------------------
+
    procedure For_Every_Reader (Readers : in Readers_List; Call : in Callback)
    is
       Position : Cursor := Readers.First;

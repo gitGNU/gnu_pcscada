@@ -35,6 +35,9 @@ package PCSC.SCard is
    --  This is the PC/SC-Context. This object is initialized by
    --  Establish_Context below and is used with all services.
 
+   type Card is limited private;
+   --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
+
    type SCard_Scope is
      (Scope_User,       --  Scope in user space.
       Scope_Terminal,   --  Scope in terminal.
@@ -86,6 +89,12 @@ package PCSC.SCard is
                           return Readers_List;
    --  Return list of all available readers for this PC/SC context.
 
+   procedure Connect
+     (Card     : in out SCard.Card;
+      Context  : in SCard.Context;
+      Reader   : in Reader_ID;
+      Mode     : in SCard_Mode;
+      Protocol : in SCard_Proto);
 
    -----------------------
    --  Helper functions --
@@ -111,7 +120,12 @@ private
    --  Raise SCard exception if something goes wrong.
 
    type Context is limited record
-      C_Context : aliased Thin.SCARDCONTEXT;
+      hContext : aliased Thin.SCARDCONTEXT;
+   end record;
+
+   type Card is limited record
+      hCard        : aliased Thin.SCARDHANDLE;
+      Active_Proto : aliased Thin.DWORD;
    end record;
 
 end PCSC.SCard;
