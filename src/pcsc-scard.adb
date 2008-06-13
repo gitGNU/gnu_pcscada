@@ -22,8 +22,9 @@
 
 with Ada.Exceptions;
 with Ada.Strings.Maps;
-with GNAT.String_Split;
 with Ada.Characters.Latin_1;
+
+with GNAT.String_Split;
 
 package body PCSC.SCard is
 
@@ -245,32 +246,6 @@ package body PCSC.SCard is
       return Readers;
 
    end Slice_Readerstring;
-
-   ---------------
-   -- To_String --
-   ---------------
-
-   function To_String (Reader : in Reader_ID) return String is
-   begin
-      return Ada.Strings.Unbounded.To_String (Reader);
-   end To_String;
-
-   ----------------------
-   -- For_Every_Reader --
-   ----------------------
-
-   procedure For_Every_Reader (Readers : in Readers_List; Call : in Callback)
-   is
-      Position : Cursor := Readers.First;
-      Reader   : Reader_ID;
-   begin
-      while Has_Element (Position) loop
-         Reader := Element (Position);
-         --  Perform action on specific reader.
-         Call (Reader);
-         Next (Position);
-      end loop;
-   end For_Every_Reader;
 
    --------------
    -- To_LPSTR --

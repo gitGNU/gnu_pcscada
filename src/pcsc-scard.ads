@@ -22,7 +22,7 @@
 
 with Interfaces.C;
 with Interfaces.C.Strings;
-with Ada.Containers.Vectors;
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with PCSC.Thin;
@@ -62,7 +62,8 @@ package PCSC.SCard is
    subtype Reader_ID is Unbounded_String;
    --  Reader friendly name.
 
-   package Readers_Vector is new Ada.Containers.Vectors (Positive, Reader_ID);
+   package Readers_Vector is new
+     Ada.Containers.Indefinite_Vectors (Positive, Reader_ID);
    use Readers_Vector;
    --  Vector of readers.
 
@@ -98,16 +99,6 @@ package PCSC.SCard is
 
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
    --  Return protocol in use for a given card handle.
-
-   -----------------------
-   --  Helper functions --
-   -----------------------
-
-   function To_String (Reader : in Reader_ID) return String;
-   --  Return string from Reader_ID.
-
-   procedure For_Every_Reader (Readers : in Readers_List; Call : in Callback);
-   --  Call callback procedure for every reader in readers list.
 
 private
 

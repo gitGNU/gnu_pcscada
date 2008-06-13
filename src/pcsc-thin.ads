@@ -20,8 +20,6 @@
 --  MA  02110-1301  USA
 --
 
-with System;
-with Ada.Text_IO;
 with Interfaces.C;
 with Interfaces.C.Strings;
 
@@ -41,16 +39,20 @@ package PCSC.Thin is
    type Byte_Array is array (C.size_t range <>) of aliased Byte;
    type Byte_Array_Access is access all Byte;
 
+
    --  ATR
 
    MAX_ATR_SIZE : constant := 33;
    --  Maximum ATR size.
+
    type ATR is new Byte_Array (0 .. MAX_ATR_SIZE);
    --  Binary ATR data.
+
    Null_ATR : constant ATR := (others => 0);
    --  Null initialized ATR.
 
-   --  void definitions.
+
+   --  void definitions
 
    type void is null record;
    pragma Convention (C, void);
@@ -66,7 +68,8 @@ package PCSC.Thin is
    subtype SCARDHANDLE    is LONG;
    --  Smartcard handle.
 
-   --  Reader states.
+
+   --  Reader states
 
    type SCARD_READERSTATE is record
       szReader       : LPSTR   := C.Strings.Null_Ptr;
@@ -84,9 +87,10 @@ package PCSC.Thin is
       dwProtocol  : DWORD;
       cbPciLength : DWORD;
    end record;
-   --  SCard io request structure.
+   --  SCard io request structure
 
-   --  SCard error codes.
+
+   --  SCard error codes
 
    subtype Return_Code is DWORD range 16#0000_0000# .. 16#8010_002E#;
 
@@ -233,13 +237,13 @@ package PCSC.Thin is
    --  Protocol control information (PCI) for RAW protocol.
 
 
-   --  PC/SC Lite specific extension.
+   --  PC/SC Lite specific extension
 
    INFINITE                     : constant := 16#FFFF_FFFF#;
-   --  Infinite timeout.
+   --  Infinite timeout
 
 
-   --  Context related functions.
+   --  Context related functions
 
    function SCardEstablishContext
      (dwScope     : in DWORD;
@@ -251,7 +255,7 @@ package PCSC.Thin is
    function SCardReleaseContext (hContext : in SCARDCONTEXT) return DWORD;
    function SCardIsValidContext (hContext : in SCARDCONTEXT) return DWORD;
 
-   --  Connect / Reconnect / Disconnect.
+   --  Connect / Reconnect / Disconnect
 
    function SCardConnect
      (hContext             : in SCARDCONTEXT;
@@ -275,7 +279,8 @@ package PCSC.Thin is
       dwDisposition : in DWORD)
       return DWORD;
 
-   --  Transaction handling.
+
+   --  Transaction handling
 
    function SCardBeginTransaction (hCard : SCARDHANDLE) return DWORD;
 
@@ -286,7 +291,8 @@ package PCSC.Thin is
 
    function SCardCancelTransaction (hCard : SCARDHANDLE) return DWORD;
 
-   --  Card-status management.
+
+   --  Card-status management
 
    function SCardStatus
      (hCard : in SCARDHANDLE;
@@ -297,7 +303,7 @@ package PCSC.Thin is
       pbAtr          : in Byte_Array_Access;
       pcbAtrLen      : access DWORD)
       return DWORD;
-   --  Get status from specific card.
+   --  Get status from specific card
 
    function SCardGetStatusChange
      (hContext       : in SCARDCONTEXT;
@@ -305,7 +311,7 @@ package PCSC.Thin is
       rgReaderStates : in SCARD_READERSTATE_A_Access;
       cReaders       : in DWORD)
       return DWORD;
-   --  Used to track status changes of readers.
+   --  Used to track status changes of readers
 
    function SCardControl
      (hCard           : in SCARDHANDLE;
@@ -316,7 +322,7 @@ package PCSC.Thin is
       cbRecvLength    : in DWORD;
       lpBytesReturned : access DWORD)
       return DWORD;
-   --  Send control to card.
+   --  Send control to card
 
    function SCardTransmit
      (hCard         : in SCARDHANDLE;
@@ -327,7 +333,7 @@ package PCSC.Thin is
       pbRecvBuffer  : in Byte_Array_Access;
       pcbRecvLength : access DWORD)
       return DWORD;
-   --  Transmit APDUs to cards.
+   --  Transmit APDUs to cards
 
    function SCardListReaders
      (hContext    : in SCARDCONTEXT;
@@ -335,14 +341,14 @@ package PCSC.Thin is
       mszReaders  : in LPSTR;
       pcchReaders : access DWORD)
       return DWORD;
-   --  List readers.
+   --  List readers
 
    function SCardListReaderGroups
      (hContext   : in SCARDCONTEXT;
       mszGroups  : in LPSTR;
       pcchGroups : access DWORD)
       return DWORD;
-   --  List reader groups.
+   --  List reader groups
 
    function SCardGetAttrib
      (hCard      : in SCARDHANDLE;
@@ -350,7 +356,7 @@ package PCSC.Thin is
       pbAttr     : in Byte_Array_Access;
       pcbAttrLen : access DWORD)
       return DWORD;
-   --  Get an attribute from the IFD handler.
+   --  Get an attribute from the IFD handler
 
    function SCardSetAttrib
      (hCard     : in SCARDHANDLE;
@@ -358,21 +364,17 @@ package PCSC.Thin is
       pbAttr    : in Byte_Array_Access;
       cbAttrLen : in DWORD)
       return DWORD;
-   --  Set an attribute of the IFD handler.
+   --  Set an attribute of the IFD handler
 
 
-   --  Helper functions.
+   --  Helper functions
 
    function pcsc_stringify_error (status : DWORD) return C.Strings.chars_ptr;
-   --  Get stringified error message.
-
-   function To_String (Given : Byte_Array; Len : Positive) return String;
-   --  Returns hex-representation of binary data. Len defines the length
-   --  of the returned string.
+   --  Get stringified error message
 
 private
 
-   --  Actual imports.
+   --  Imports
 
    pragma Import (Convention    => C,
                   Entity        => SCardEstablishContext,

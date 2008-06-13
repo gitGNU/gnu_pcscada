@@ -20,13 +20,19 @@
 --  MA  02110-1301  USA
 --
 
-package body PCSC.Thin is
+with Ada.Strings.Unbounded;
+with Ada.Containers.Indefinite_Vectors;
+
+with Interfaces.C;
+
+package body PCSC.Utils is
 
    -----------------
    --  To_String  --
    -----------------
 
-   function To_String (Given : Byte_Array; Len : Positive) return String is
+   function To_String (Given : Thin.Byte_Array; Len : Positive) return String
+   is
       Hex : constant String := "0123456789ABCDEF";
 
       Result : String (1 .. Len);
@@ -51,4 +57,34 @@ package body PCSC.Thin is
       return Result;
    end To_String;
 
-end PCSC.Thin;
+   ---------------
+   -- To_String --
+   ---------------
+
+   function To_String (Reader : in SCard.Reader_ID) return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Reader);
+   end To_String;
+
+   ----------------------
+   -- For_Every_Reader --
+   ----------------------
+
+   procedure For_Every_Reader
+     (Readers : in SCard.Readers_List;
+      Call    : in SCard.Callback)
+   is
+      use SCard.Readers_Vector;
+
+      Position : Cursor := Readers.First;
+      Reader   : SCard.Reader_ID;
+   begin
+      while Has_Element (Position) loop
+         Reader := Element (Position);
+         --  Perform action on specific reader.
+         Call (Reader);
+         Next (Position);
+      end loop;
+   end For_Every_Reader;
+
+end PCSC.Utils;

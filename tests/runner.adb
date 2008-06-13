@@ -24,7 +24,7 @@ with Ada.Text_IO;
 with Ada.Containers.Vectors;
 
 with PCSC.SCard; use PCSC;
-with PCSC.Thin;
+with PCSC.Utils;
 
 --  Thick-binding test.
 procedure Runner is
@@ -32,15 +32,13 @@ procedure Runner is
    Readers : SCard.Readers_List;
    Card    : SCard.Card;
 
-   use SCard.Readers_Vector;
-
    pragma Linker_Options ("-lpcsclite");
 
    procedure Print_ReaderID (ID : in SCard.Reader_ID);
 
    procedure Print_ReaderID (ID : in SCard.Reader_ID) is
    begin
-      Ada.Text_IO.Put_Line (SCard.To_String (ID));
+      Ada.Text_IO.Put_Line (Utils.To_String (ID));
    end Print_ReaderID;
 
 begin
@@ -48,7 +46,7 @@ begin
                             Scope   => SCard.Scope_System);
    Readers := SCard.List_Readers (Context => Context);
 
-   SCard.For_Every_Reader (Readers => Readers,
+   Utils.For_Every_Reader (Readers => Readers,
                            Call    => Print_ReaderID'Unrestricted_Access);
 
    --  Connect to first reader.
