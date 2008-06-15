@@ -38,35 +38,45 @@ package PCSC.SCard is
    type Card is limited private;
    --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
 
-   type SCard_Scope is
-     (Scope_User,        --  Scope in user space
-      Scope_Terminal,    --  Scope in terminal
-      Scope_System);     --  Scope in system
+   type Scope is
+     (Scope_User,     --  Scope in user space
+      Scope_Terminal, --  Scope in terminal
+      Scope_System);  --  Scope in system
    --  Possible scope for PC/SC-context
 
-   type SCard_Mode is
-     (Mode_Exclusive,    -- Exclusive mode only
-      Mode_Shared,       -- Shared mode only
-      Mode_Direct);      -- Raw mode only
+   type Mode is
+     (Share_Exclusive, -- Exclusive mode only
+      Share_Shared,    -- Shared mode only
+      Share_Direct);   -- Raw mode only
    --  Possible Mode for SCard connects
 
-   type SCard_Proto is
-     (Proto_Undefined,   --  Protocol not set
-      Proto_Unset,       --  Backward compatibility
-      Proto_T0,          --  T=0 active protocol
-      Proto_T1,          --  T=1 active protocol
-      Proto_RAW,         --  Raw active protocol
-      Proto_T15);        --  T=15 protocol
+   type Proto is
+     (Proto_Undefined, --  Protocol not set
+      Proto_Unset,     --  Backward compatibility
+      Proto_T0,        --  T=0 active protocol
+      Proto_T1,        --  T=1 active protocol
+      Proto_RAW,       --  Raw active protocol
+      Proto_T15);      --  T=15 protocol
    --  Possible Protos for SCard connects
 
-   type SCard_Action is
-     (Action_Leave,      --  Do nothing on close
-      Action_Reset,      --  Reset on close
-      Action_Unpower,    --  Power down on close
-      Action_Eject);     --  Eject on close
+   type Action is
+     (Leave_Card,   --  Do nothing on close
+      Reset_Card,   --  Reset on close
+      Unpower_Card, --  Power down on close
+      Eject_Card);  --  Eject on close
    --  Desired action taken on the card/reader
 
-   type SCard_State is
+   type Card_State is
+     (Unknown,    -- Unknown state
+      Absent,     -- Card is absent
+      Present,    -- Card is present
+      Swallowed,  -- Card not powered
+      Powered,    -- Card is powered
+      Negotiable, -- Ready for PTS
+      Specific);  -- PTS has been set
+   --  Card states.
+
+   type Reader_State is
      (State_Unaware,     --  App wants status
       State_Ignore,      --  Ignore this reader
       State_Changed,     --  State has changed
@@ -103,7 +113,7 @@ package PCSC.SCard is
 
    procedure Establish_Context
      (Context : in out SCard.Context;
-      Scope   : in SCard_Scope);
+      Scope   : in SCard.Scope);
    --  Establish PC/SC-context. Possible Scope values are defined in
    --  SCard_Scope type.
 
@@ -121,18 +131,18 @@ package PCSC.SCard is
      (Card    : in out SCard.Card;
       Context : in SCard.Context;
       Reader  : in Reader_ID;
-      Mode    : in SCard_Mode);
+      Mode    : in SCard.Mode);
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
    --  SCard will be stored in 'Card' parameter.
 
-   procedure Disconnect (Card   : in SCard.Card; Action : in SCard_Action);
+   procedure Disconnect (Card   : in SCard.Card; Action : in SCard.Action);
    --  This procedure terminates a connection to the connection made through
    --  Connect procedure.
 
    procedure Reconnect
      (Card   : in out SCard.Card;
-      Mode   : in SCard_Mode;
-      Action : in SCard_Action);
+      Mode   : in SCard.Mode;
+      Action : in SCard.Action);
    --  This procedure reestablishes a connection to a reader that was
    --  previously connected to using Connect(). Init defines the desired action
    --  taken on the card/reader.
@@ -143,20 +153,20 @@ package PCSC.SCard is
 
    procedure End_Transaction
      (Card   : in SCard.Card;
-      Action : in SCard_Action);
+      Action : in SCard.Action);
    --  This procedure ends a previously begun transaction.
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard_State;
-      Proto   : in out SCard_Proto;
+      State   : in out SCard.Card_State;
+      Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer);
    --  This procedure checks the current status of the reader connected to by
    --  'Card'. Current State, Protocol and ATR value of inserted Card are
    --  returned as in out params.
 
-   function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
+   function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
 private
@@ -176,11 +186,11 @@ private
    --  must be freed by calling Free.
 
    --  Lookup functions. Used to get Ada type from Thin.DWORD value.
-   function To_Ada (C_Proto : Thin.DWORD) return SCard_Proto;
+   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
    --  Protocol
 
-   function To_Ada (C_State : Thin.DWORD) return SCard_State;
-   --  State
+   function To_Ada (C_State : Thin.DWORD) return Card_State;
+   --  Card state
 
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;

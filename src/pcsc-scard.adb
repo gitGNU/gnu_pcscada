@@ -24,54 +24,67 @@ with Ada.Exceptions;
 with Ada.Strings.Maps;
 with Ada.Characters.Latin_1;
 
+--  TODO: remove me
+with Ada.Text_IO;
+
 with GNAT.String_Split;
 
 package body PCSC.SCard is
 
    use IC;
 
-   C_SCard_Scope  : constant array (SCard_Scope) of Thin.DWORD
-     := (Scope_User      => Thin.SCARD_SCOPE_USER,
-         Scope_Terminal  => Thin.SCARD_SCOPE_TERMINAL,
-         Scope_System    => Thin.SCARD_SCOPE_SYSTEM);
-   --  Map SCard_Scope to corresponding C values
+   C_Scope : constant array (Scope) of Thin.DWORD
+     := (Scope_User     => Thin.SCARD_SCOPE_USER,
+         Scope_Terminal => Thin.SCARD_SCOPE_TERMINAL,
+         Scope_System   => Thin.SCARD_SCOPE_SYSTEM);
+   --  Map Scope to corresponding C values
 
-   C_SCard_Mode   : constant array (SCard_Mode) of Thin.DWORD
-     := (Mode_Exclusive  => Thin.SCARD_SHARE_EXCLUSIVE,
-         Mode_Shared     => Thin.SCARD_SHARE_SHARED,
-         Mode_Direct     => Thin.SCARD_SHARE_DIRECT);
-   --  Map SCard_Mode to corresponding C values
+   C_Mode : constant array (Mode) of Thin.DWORD
+     := (Share_Exclusive => Thin.SCARD_SHARE_EXCLUSIVE,
+         Share_Shared    => Thin.SCARD_SHARE_SHARED,
+         Share_Direct    => Thin.SCARD_SHARE_DIRECT);
+   --  Map Mode to corresponding C values
 
-   C_SCard_Proto  : constant array (SCard_Proto) of Thin.DWORD
+   C_Proto : constant array (Proto) of Thin.DWORD
      := (Proto_Undefined => Thin.SCARD_PROTOCOL_UNDEFINED,
          Proto_Unset     => Thin.SCARD_PROTOCOL_UNSET,
          Proto_T0        => Thin.SCARD_PROTOCOL_T0,
          Proto_T1        => Thin.SCARD_PROTOCOL_T1,
          Proto_RAW       => Thin.SCARD_PROTOCOL_RAW,
          Proto_T15       => Thin.SCARD_PROTOCOL_T15);
-   --  Map SCard_Proto to corresponding C values
+   --  Map Proto to corresponding C values
 
-   C_SCard_Action : constant array (SCard_Action) of Thin.DWORD
-     := (Action_Leave    => Thin.SCARD_LEAVE_CARD,
-         Action_Reset    => Thin.SCARD_RESET_CARD,
-         Action_Unpower  => Thin.SCARD_UNPOWER_CARD,
-         Action_Eject    => Thin.SCARD_EJECT_CARD);
-   --  Map SCard_Action to corresponding C values
+   C_Action : constant array (Action) of Thin.DWORD
+     := (Leave_Card   => Thin.SCARD_LEAVE_CARD,
+         Reset_Card   => Thin.SCARD_RESET_CARD,
+         Unpower_Card => Thin.SCARD_UNPOWER_CARD,
+         Eject_Card   => Thin.SCARD_EJECT_CARD);
+   --  Map Action to corresponding C values
 
-   C_SCard_State  : constant array (SCard_State) of Thin.DWORD
+   C_Card_State : constant array (Card_State) of Thin.DWORD
+     := (Unknown    => Thin.SCARD_UNKNOWN,
+         Absent     => Thin.SCARD_ABSENT,
+         Present    => Thin.SCARD_PRESENT,
+         Swallowed  => Thin.SCARD_SWALLOWED,
+         Powered    => Thin.SCARD_POWERED,
+         Negotiable => Thin.SCARD_NEGOTIABLE,
+         Specific   => Thin.SCARD_SPECIFIC);
+   --  Map Card_State to corresponding C values.
+
+   C_Reader_State : constant array (Reader_State) of Thin.DWORD
      := (State_Unaware     => Thin.SCARD_STATE_UNAWARE,
          State_Ignore      => Thin.SCARD_STATE_IGNORE,
          State_Changed     => Thin.SCARD_STATE_CHANGED,
          State_Unknown     => Thin.SCARD_STATE_UNKNOWN,
          State_Unavailable => Thin.SCARD_STATE_UNAVAILABLE,
          State_Empty       => Thin.SCARD_STATE_EMPTY,
-         State_Present     => Thin.SCARD_STATE_EMPTY,
+         State_Present     => Thin.SCARD_STATE_PRESENT,
          State_Atrmatch    => Thin.SCARD_STATE_ATRMATCH,
          State_Exclusive   => Thin.SCARD_STATE_EXCLUSIVE,
          State_Inuse       => Thin.SCARD_STATE_INUSE,
          State_Mute        => Thin.SCARD_STATE_MUTE,
          State_Unpowered   => Thin.SCARD_STATE_UNPOWERED);
-   --  Map SCard_State to corresponding C values
+   --  Map Reader_State to corresponding C values
 
    -----------------------
    -- Establish_Context --
@@ -79,12 +92,12 @@ package body PCSC.SCard is
 
    procedure Establish_Context
      (Context : in out SCard.Context;
-      Scope   : in SCard_Scope)
+      Scope   : in SCard.Scope)
    is
       Res : Thin.DWORD;
    begin
       Res := Thin.SCardEstablishContext
-        (dwScope     => C_SCard_Scope (Scope),
+        (dwScope     => C_Scope (Scope),
          phContext   => Context.hContext'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -182,7 +195,7 @@ package body PCSC.SCard is
      (Card    : in out SCard.Card;
       Context : in SCard.Context;
       Reader  : in Reader_ID;
-      Mode    : in SCard_Mode)
+      Mode    : in SCard.Mode)
    is
       Res      : Thin.DWORD;
       C_Reader : Thin.LPSTR := To_LPSTR (Reader);
@@ -190,7 +203,7 @@ package body PCSC.SCard is
       Res := Thin.SCardConnect
         (hContext             => Context.hContext,
          szReader             => C_Reader,
-         dwShareMode          => C_SCard_Mode (Mode),
+         dwShareMode          => C_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
                                  Thin.SCARD_PROTOCOL_T0,
          phCard               => Card.hCard'Access,
@@ -211,11 +224,11 @@ package body PCSC.SCard is
    -- Disconnect --
    ----------------
 
-   procedure Disconnect (Card   : in SCard.Card; Action : in SCard_Action) is
+   procedure Disconnect (Card   : in SCard.Card; Action : in SCard.Action) is
       Res : Thin.DWORD;
    begin
       Res := Thin.SCardDisconnect (hCard         => Card.hCard,
-                                   dwDisposition => C_SCard_Action (Action));
+                                   dwDisposition => C_Action (Action));
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
@@ -229,17 +242,17 @@ package body PCSC.SCard is
 
    procedure Reconnect
      (Card   : in out SCard.Card;
-      Mode   : in SCard_Mode;
-      Action : in SCard_Action)
+      Mode   : in SCard.Mode;
+      Action : in SCard.Action)
    is
       Res : Thin.DWORD;
    begin
       Res := Thin.SCardReconnect
         (hCard                => Card.hCard,
-         dwShareMode          => C_SCard_Mode (Mode),
+         dwShareMode          => C_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
                                  Thin.SCARD_PROTOCOL_T0,
-         dwInitialization     => C_SCard_Action (Action),
+         dwInitialization     => C_Action (Action),
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -269,13 +282,13 @@ package body PCSC.SCard is
 
    procedure End_Transaction
      (Card   : in SCard.Card;
-      Action : in SCard_Action)
+      Action : in SCard.Action)
    is
       Res : Thin.DWORD;
    begin
       Res := Thin.SCardEndTransaction
         (hCard         => Card.hCard,
-         dwDisposition => C_SCard_Action (Action));
+         dwDisposition => C_Action (Action));
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
@@ -289,8 +302,8 @@ package body PCSC.SCard is
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard_State;
-      Proto   : in out SCard_Proto;
+      State   : in out SCard.Card_State;
+      Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer)
    is
@@ -327,7 +340,7 @@ package body PCSC.SCard is
    -- Get_Active_Proto --
    ----------------------
 
-   function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto is
+   function Get_Active_Proto (Card : in SCard.Card) return Proto is
    begin
       return To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
@@ -393,10 +406,10 @@ package body PCSC.SCard is
    -- To_Ada (SCard_Proto) --
    --------------------------
 
-   function To_Ada (C_Proto : Thin.DWORD) return SCard_Proto is
+   function To_Ada (C_Protocol : Thin.DWORD) return Proto is
    begin
-      for P in SCard_Proto'Range loop
-         if C_SCard_Proto (P) = C_Proto then
+      for P in Proto'Range loop
+         if C_Proto (P) = C_Protocol then
 
             --  Return active Proto
 
@@ -413,22 +426,22 @@ package body PCSC.SCard is
    -- To_Ada (SCard_State) --
    --------------------------
 
-   function To_Ada (C_State : Thin.DWORD) return SCard_State is
+   function To_Ada (C_State : Thin.DWORD) return Card_State is
    begin
-      for P in SCard_State'Range loop
-         null;
---           if C_SCard_State (P) mod C_State then
---
---              --  Return active State
---
---              return P;
---           end if;
+      --  Ada.Text_IO.Put_Line (Thin.DWORD'Image (C_State));
+      for P in C_Card_State'Range loop
+         if (C_State and C_Card_State (P)) /= 0 then
+            Ada.Text_IO.Put_Line (Card_State'Image (P));
+
+            --  One more state found
+            --  return P;
+         end if;
 
       end loop;
 
-      --  Return 'Unaware' if no state found
+      --  Return 'Unknown' if no card state found
 
-      return State_Unaware;
+      return Unknown;
    end To_Ada;
 
 end PCSC.SCard;

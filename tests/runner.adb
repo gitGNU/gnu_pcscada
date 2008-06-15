@@ -23,8 +23,10 @@
 with Ada.Text_IO;
 with Ada.Containers.Vectors;
 
-with PCSC.SCard; use PCSC;
+with PCSC.SCard;
 with PCSC.Utils;
+
+use PCSC;
 
 --  Thick-binding test.
 procedure Runner is
@@ -61,8 +63,8 @@ begin
    SCard.Connect (Card     => Card,
                   Context  => Context,
                   Reader   => Readers.First_Element,
-                  Mode     => SCard.Mode_Shared);
-   Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
+                  Mode     => SCard.Share_Shared);
+   Ada.Text_IO.Put_Line ("Card uses : " & SCard.Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
    --  Reconnect to first reader
@@ -70,9 +72,9 @@ begin
    Ada.Text_IO.Put_Line ("Reconnecting to " &
                          Utils.To_String (Readers.First_Element) & " ...");
    SCard.Reconnect (Card   => Card,
-                    Mode   => SCard.Mode_Exclusive,
-                    Action => SCard.Action_Reset);
-   Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
+                    Mode   => SCard.Share_Exclusive,
+                    Action => SCard.Reset_Card);
+   Ada.Text_IO.Put_Line ("Card uses : " & SCard.Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
    --  Begin transaction with first reader
@@ -82,8 +84,8 @@ begin
    SCard.Begin_Transaction (Card => Card);
 
    declare
-      Reader_State   : SCard.SCard_State := SCard.State_Unaware;
-      Reader_Proto   : SCard.SCard_Proto := SCard.Proto_Undefined;
+      Card_State     : SCard.Card_State := SCard.Unknown;
+      Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
       Reader_ATR     : SCard.ATR;
       Reader_ATR_Len : Integer := SCard.ATR_Length;
    begin
@@ -93,16 +95,16 @@ begin
       Ada.Text_IO.Put_Line ("Asking for status of  " &
                             Utils.To_String (Readers.First_Element) & " ...");
       SCard.Status (Card    => Card,
-                    State   => Reader_State,
+                    State   => Card_State,
                     Proto   => Reader_Proto,
                     Atr     => Reader_ATR,
                     Atr_Len => Reader_ATR_Len);
       Ada.Text_IO.Put_Line ("  ATR      : " & Utils.To_String
                             (Given => Reader_ATR, Len => 2 * Reader_ATR_Len));
       Ada.Text_IO.Put_Line ("  Protocol : " &
-                            SCard.SCard_Proto'Image (Reader_Proto));
+                            SCard.Proto'Image (Reader_Proto));
       Ada.Text_IO.Put_Line ("  State    : " &
-                            SCard.SCard_State'Image (Reader_State));
+                            SCard.Card_State'Image (Card_State));
    end;
 
    --  End transaction with first reader
@@ -110,14 +112,14 @@ begin
    Ada.Text_IO.Put_Line ("Ending transaction with " &
                          Utils.To_String (Readers.First_Element) & " ...");
    SCard.End_Transaction (Card   => Card,
-                          Action => SCard.Action_Leave);
+                          Action => SCard.Leave_Card);
 
    --  Disconnect from first reader
 
    Ada.Text_IO.Put_Line ("Disconnecting from " &
                          Utils.To_String (Readers.First_Element) & " ...");
    SCard.Disconnect (Card   => Card,
-                     Action => SCard.Action_Leave);
+                     Action => SCard.Leave_Card);
 
    --  Release context
 
