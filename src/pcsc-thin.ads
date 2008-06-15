@@ -27,15 +27,15 @@ package PCSC.Thin is
 
    package C renames Interfaces.C;
 
-   --  Type definitions.
+   --  Type definitions
 
-   subtype LONG    is C.long;
-   subtype DWORD   is C.unsigned_long;
-   subtype LPSTR   is C.Strings.chars_ptr;
+   subtype LONG  is C.long;
+   subtype DWORD is C.unsigned_long;
+   subtype LPSTR is C.Strings.chars_ptr;
 
-   --  Byte'n'Hex.
+   --  Byte'n'Hex
 
-   subtype Byte    is Interfaces.Unsigned_8;
+   subtype Byte is Interfaces.Unsigned_8;
    type Byte_Array is array (C.size_t range <>) of aliased Byte;
    type Byte_Array_Access is access all Byte;
 
@@ -43,13 +43,13 @@ package PCSC.Thin is
    --  ATR
 
    MAX_ATR_SIZE : constant := 33;
-   --  Maximum ATR size.
+   --  Maximum ATR size
 
-   type ATR is new Byte_Array (0 .. MAX_ATR_SIZE);
-   --  Binary ATR data.
+   subtype ATR is Byte_Array (0 .. MAX_ATR_SIZE);
+   --  Binary ATR data
 
    Null_ATR : constant ATR := (others => 0);
-   --  Null initialized ATR.
+   --  Null initialized ATR
 
 
    --  void definitions
@@ -63,10 +63,10 @@ package PCSC.Thin is
    pragma Convention (C, LPCVOID);
 
    subtype SCARDCONTEXT   is LONG;
-   --  Context handling related definitions.
+   --  Context handling related definitions
 
    subtype SCARDHANDLE    is LONG;
-   --  Smartcard handle.
+   --  Smartcard handle
 
 
    --  Reader states
@@ -181,11 +181,11 @@ package PCSC.Thin is
    --  Cannot find a smart card reader.
 
    SCARD_SCOPE_USER             : constant := 16#0000#;
-   --  Scope in user space.
+   --  Scope in user space
    SCARD_SCOPE_TERMINAL         : constant := 16#0001#;
-   --  Scope in terminal.
+   --  Scope in terminal
    SCARD_SCOPE_SYSTEM           : constant := 16#0002#;
-   --  Scope in system.
+   --  Scope in system
 
    SCARD_PROTOCOL_UNDEFINED     : constant := 16#0000#; --  protocol not set
    SCARD_PROTOCOL_UNSET         : constant := 16#0000#; --  backward compat
@@ -228,13 +228,13 @@ package PCSC.Thin is
 
    SCARD_PCI_T0  : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_T0, cbPciLength => 8);
-   --  Protocol control information (PCI) for T=0.
+   --  Protocol control information (PCI) for T=0
    SCARD_PCI_T1  : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_T1, cbPciLength => 8);
-   --  Protocol control information (PCI) for T=1.
+   --  Protocol control information (PCI) for T=1
    SCARD_PCI_RAW : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_RAW, cbPciLength => 8);
-   --  Protocol control information (PCI) for RAW protocol.
+   --  Protocol control information (PCI) for RAW protocol
 
 
    --  PC/SC Lite specific extension

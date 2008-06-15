@@ -58,6 +58,20 @@ package body PCSC.SCard is
          Action_Eject    => Thin.SCARD_EJECT_CARD);
    --  Map SCard_Action to corresponding C values
 
+   C_SCard_State  : constant array (SCard_State) of Thin.DWORD
+     := (State_Unaware     => Thin.SCARD_STATE_UNAWARE,
+         State_Ignore      => Thin.SCARD_STATE_IGNORE,
+         State_Changed     => Thin.SCARD_STATE_CHANGED,
+         State_Unknown     => Thin.SCARD_STATE_UNKNOWN,
+         State_Unavailable => Thin.SCARD_STATE_UNAVAILABLE,
+         State_Empty       => Thin.SCARD_STATE_EMPTY,
+         State_Present     => Thin.SCARD_STATE_EMPTY,
+         State_Atrmatch    => Thin.SCARD_STATE_ATRMATCH,
+         State_Exclusive   => Thin.SCARD_STATE_EXCLUSIVE,
+         State_Inuse       => Thin.SCARD_STATE_INUSE,
+         State_Mute        => Thin.SCARD_STATE_MUTE,
+         State_Unpowered   => Thin.SCARD_STATE_UNPOWERED);
+   --  Map SCard_State to corresponding C values
 
    -----------------------
    -- Establish_Context --
@@ -269,29 +283,53 @@ package body PCSC.SCard is
       end if;
    end End_Transaction;
 
+   ------------
+   -- Status --
+   ------------
+
+   procedure Status
+     (Card    : in SCard.Card;
+      State   : in out SCard_State;
+      Proto   : in out SCard_Proto;
+      Atr     : in out SCard.ATR;
+      Atr_Len : in out Integer)
+   is
+      Res         : Thin.DWORD;
+
+      dwReaderLen : aliased Thin.DWORD;
+      dwState     : aliased Thin.DWORD;
+      dwProtocol  : aliased Thin.DWORD;
+      dwAtrLen    : aliased Thin.DWORD := Thin.MAX_ATR_SIZE;
+   begin
+
+      Res := Thin.SCardStatus
+        (hCard          => Card.hCard,
+         mszReaderNames => IC.Strings.Null_Ptr,
+         pcchReaderLen  => dwReaderLen'Access,
+         pdwState       => dwState'Unchecked_Access,
+         pdwProtocol    => dwProtocol'Access,
+         pbAtr          => Atr (Atr'First)'Unchecked_Access,
+         pcbAtrLen      => dwAtrLen'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Get status failed");
+      end if;
+
+      --  Assign in out params
+
+      Atr_Len := Integer (dwAtrLen);
+      Proto   := To_Ada (dwProtocol);
+      State   := To_Ada (dwState);
+   end Status;
+
    ----------------------
    -- Get_Active_Proto --
    ----------------------
 
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto is
-      --  Forward spec
-      function Lookup (C_Proto : Thin.DWORD) return SCard_Proto;
-
-      function Lookup (C_Proto : Thin.DWORD) return SCard_Proto is
-      begin
-         for P in SCard_Proto'Range loop
-            if C_SCard_Proto (P) = C_Proto then
-               --  Return active Proto.
-               return P;
-            end if;
-         end loop;
-
-         --  Return 'Undefined' if no active proto found
-
-         return Proto_Undefined;
-      end Lookup;
    begin
-      return Lookup (Card.Active_Proto);
+      return To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
 
    ---------------------
@@ -350,5 +388,47 @@ package body PCSC.SCard is
    begin
       return Strings.New_String (To_String (Reader));
    end To_LPSTR;
+
+   --------------------------
+   -- To_Ada (SCard_Proto) --
+   --------------------------
+
+   function To_Ada (C_Proto : Thin.DWORD) return SCard_Proto is
+   begin
+      for P in SCard_Proto'Range loop
+         if C_SCard_Proto (P) = C_Proto then
+
+            --  Return active Proto
+
+            return P;
+         end if;
+      end loop;
+
+      --  Return 'Undefined' if no active proto found
+
+      return Proto_Undefined;
+   end To_Ada;
+
+   --------------------------
+   -- To_Ada (SCard_State) --
+   --------------------------
+
+   function To_Ada (C_State : Thin.DWORD) return SCard_State is
+   begin
+      for P in SCard_State'Range loop
+         null;
+--           if C_SCard_State (P) mod C_State then
+--
+--              --  Return active State
+--
+--              return P;
+--           end if;
+
+      end loop;
+
+      --  Return 'Unaware' if no state found
+
+      return State_Unaware;
+   end To_Ada;
 
 end PCSC.SCard;

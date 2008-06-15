@@ -39,32 +39,47 @@ package PCSC.SCard is
    --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
 
    type SCard_Scope is
-     (Scope_User,      --  Scope in user space
-      Scope_Terminal,  --  Scope in terminal
-      Scope_System);   --  Scope in system
+     (Scope_User,        --  Scope in user space
+      Scope_Terminal,    --  Scope in terminal
+      Scope_System);     --  Scope in system
    --  Possible scope for PC/SC-context
 
    type SCard_Mode is
-     (Mode_Exclusive,  -- Exclusive mode only
-      Mode_Shared,     -- Shared mode only
-      Mode_Direct);    -- Raw mode only
+     (Mode_Exclusive,    -- Exclusive mode only
+      Mode_Shared,       -- Shared mode only
+      Mode_Direct);      -- Raw mode only
    --  Possible Mode for SCard connects
 
    type SCard_Proto is
-     (Proto_Undefined, --  Protocol not set
-      Proto_Unset,     --  Backward compatibility
-      Proto_T0,        --  T=0 active protocol
-      Proto_T1,        --  T=1 active protocol
-      Proto_RAW,       --  Raw active protocol
-      Proto_T15);      --  T=15 protocol
+     (Proto_Undefined,   --  Protocol not set
+      Proto_Unset,       --  Backward compatibility
+      Proto_T0,          --  T=0 active protocol
+      Proto_T1,          --  T=1 active protocol
+      Proto_RAW,         --  Raw active protocol
+      Proto_T15);        --  T=15 protocol
    --  Possible Protos for SCard connects
 
    type SCard_Action is
-     (Action_Leave,    --  Do nothing on close
-      Action_Reset,    --  Reset on close
-      Action_Unpower,  --  Power down on close
-      Action_Eject);   --  Eject on close
+     (Action_Leave,      --  Do nothing on close
+      Action_Reset,      --  Reset on close
+      Action_Unpower,    --  Power down on close
+      Action_Eject);     --  Eject on close
    --  Desired action taken on the card/reader
+
+   type SCard_State is
+     (State_Unaware,     --  App wants status
+      State_Ignore,      --  Ignore this reader
+      State_Changed,     --  State has changed
+      State_Unknown,     --  Reader unknown
+      State_Unavailable, --  Status unavailable
+      State_Empty,       --  Card removed
+      State_Present,     --  Card inserted
+      State_Atrmatch,    --  ATR matches card
+      State_Exclusive,   --  Exclusive Mode
+      State_Inuse,       --  Shared Mode
+      State_Mute,        --  Unresponsive card
+      State_Unpowered);  --  Unpowered card
+   --  Reader / Card states
 
    subtype Reader_ID is Unbounded_String;
    --  Reader friendly name
@@ -76,6 +91,11 @@ package PCSC.SCard is
 
    subtype Readers_List is Readers_Vector.Vector;
    --  Readers list returned by List_Readers()
+
+   subtype ATR is Thin.ATR;
+   ATR_Length : constant Integer := Thin.MAX_ATR_SIZE;
+   --  Card ATR. Directly mapped to thin binding ATR (atm), which is a
+   --  Byte_Array type.
 
    type Callback is access procedure (ID : in Reader_ID);
    --  Callback for reader ID handling. Provides flexible way to access
@@ -126,6 +146,16 @@ package PCSC.SCard is
       Action : in SCard_Action);
    --  This procedure ends a previously begun transaction.
 
+   procedure Status
+     (Card    : in SCard.Card;
+      State   : in out SCard_State;
+      Proto   : in out SCard_Proto;
+      Atr     : in out SCard.ATR;
+      Atr_Len : in out Integer);
+   --  This procedure checks the current status of the reader connected to by
+   --  'Card'. Current State, Protocol and ATR value of inserted Card are
+   --  returned as in out params.
+
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
    --  Return protocol in use for a given card handle.
 
@@ -144,6 +174,13 @@ private
    function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory
    --  must be freed by calling Free.
+
+   --  Lookup functions. Used to get Ada type from Thin.DWORD value.
+   function To_Ada (C_Proto : Thin.DWORD) return SCard_Proto;
+   --  Protocol
+
+   function To_Ada (C_State : Thin.DWORD) return SCard_State;
+   --  State
 
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;
