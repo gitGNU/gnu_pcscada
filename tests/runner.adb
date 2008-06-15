@@ -53,8 +53,7 @@ begin
    SCard.Connect (Card     => Card,
                   Context  => Context,
                   Reader   => Readers.First_Element,
-                  Mode     => SCard.Mode_Shared,
-                  Protocol => SCard.Proto_T1);
+                  Mode     => SCard.Mode_Shared);
 
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
                            (SCard.Get_Active_Proto (Card => Card)));

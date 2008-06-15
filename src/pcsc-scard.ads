@@ -94,8 +94,7 @@ package PCSC.SCard is
      (Card     : in out SCard.Card;
       Context  : in SCard.Context;
       Reader   : in Reader_ID;
-      Mode     : in SCard_Mode;
-      Protocol : in SCard_Proto);
+      Mode     : in SCard_Mode);
 
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
    --  Return protocol in use for a given card handle.

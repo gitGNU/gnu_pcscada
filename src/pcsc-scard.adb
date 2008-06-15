@@ -155,8 +155,7 @@ package body PCSC.SCard is
      (Card     : in out SCard.Card;
       Context  : in SCard.Context;
       Reader   : in Reader_ID;
-      Mode     : in SCard_Mode;
-      Protocol : in SCard_Proto)
+      Mode     : in SCard_Mode)
    is
       Res      : Thin.DWORD;
       C_Reader : Thin.LPSTR := To_LPSTR (Reader);
@@ -165,7 +164,9 @@ package body PCSC.SCard is
         (hContext             => Context.hContext,
          szReader             => C_Reader,
          dwShareMode          => C_SCard_Mode (Mode),
-         dwPreferredProtocols => C_SCard_Proto (Protocol),
+         dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
+                                 Thin.SCARD_PROTOCOL_T0 or
+                                 Thin.SCARD_PROTOCOL_T15,
          phCard               => Card.hCard'Access,
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
