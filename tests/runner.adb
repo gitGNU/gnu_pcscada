@@ -49,11 +49,21 @@ begin
    Utils.For_Every_Reader (Readers => Readers,
                            Call    => Print_ReaderID'Unrestricted_Access);
 
-   --  Connect to first reader.
+   --  Connect to first reader
+
    SCard.Connect (Card     => Card,
                   Context  => Context,
                   Reader   => Readers.First_Element,
                   Mode     => SCard.Mode_Shared);
+
+   Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
+                         (SCard.Get_Active_Proto (Card => Card)));
+
+   --  Reconnect to first reader
+
+   SCard.Reconnect (Card => Card,
+                    Mode => SCard.Mode_Exclusive,
+                    Init => SCard.Init_Reset_Card);
 
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
                            (SCard.Get_Active_Proto (Card => Card)));

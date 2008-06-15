@@ -39,36 +39,43 @@ package PCSC.SCard is
    --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
 
    type SCard_Scope is
-     (Scope_User,       --  Scope in user space.
-      Scope_Terminal,   --  Scope in terminal.
-      Scope_System);    --  Scope in system.
-   --  Possible scope for PC/SC-context.
+     (Scope_User,        --  Scope in user space
+      Scope_Terminal,    --  Scope in terminal
+      Scope_System);     --  Scope in system
+   --  Possible scope for PC/SC-context
 
    type SCard_Mode is
-     (Mode_Exclusive,   -- Exclusive mode only.
-      Mode_Shared,      -- Shared mode only.
-      Mode_Direct);     -- Raw mode only.
-   --  Possible Mode for SCard connects.
+     (Mode_Exclusive,    -- Exclusive mode only
+      Mode_Shared,       -- Shared mode only
+      Mode_Direct);      -- Raw mode only
+   --  Possible Mode for SCard connects
 
    type SCard_Proto is
-     (Proto_Undefined,  --  Protocol not set.
-      Proto_Unset,      --  Backward compatibility.
-      Proto_T0,         --  T=0 active protocol.
-      Proto_T1,         --  T=1 active protocol.
-      Proto_RAW,        --  Raw active protocol.
-      Proto_T15);       --  T=15 protocol.
-   --  Possible Protos for SCard connects.
+     (Proto_Undefined,   --  Protocol not set
+      Proto_Unset,       --  Backward compatibility
+      Proto_T0,          --  T=0 active protocol
+      Proto_T1,          --  T=1 active protocol
+      Proto_RAW,         --  Raw active protocol
+      Proto_T15);        --  T=15 protocol
+   --  Possible Protos for SCard connects
+
+   type SCard_Init is
+     (Init_Leave_Card,   --  Do nothing on close
+      Init_Reset_Card,   --  Reset on close
+      Init_Unpower_Card, --  Power down on close
+      Init_Eject_Card);  --  Eject on close
+   --  Desired action taken on the card/reader
 
    subtype Reader_ID is Unbounded_String;
-   --  Reader friendly name.
+   --  Reader friendly name
 
    package Readers_Vector is new
      Ada.Containers.Indefinite_Vectors (Positive, Reader_ID);
    use Readers_Vector;
-   --  Vector of readers.
+   --  Vector of readers
 
    subtype Readers_List is Readers_Vector.Vector;
-   --  Readers list returned by List_Readers().
+   --  Readers list returned by List_Readers()
 
    type Callback is access procedure (ID : in Reader_ID);
    --  Callback for reader ID handling. Provides flexible way to access
@@ -91,10 +98,20 @@ package PCSC.SCard is
    --  Return list of all available readers for this PC/SC context.
 
    procedure Connect
-     (Card     : in out SCard.Card;
-      Context  : in SCard.Context;
-      Reader   : in Reader_ID;
-      Mode     : in SCard_Mode);
+     (Card    : in out SCard.Card;
+      Context : in SCard.Context;
+      Reader  : in Reader_ID;
+      Mode    : in SCard_Mode);
+   --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
+   --  SCard will be stored in 'Card' parameter.
+
+   procedure Reconnect
+     (Card : in out SCard.Card;
+      Mode : in SCard_Mode;
+      Init : in SCard_Init);
+   --  This procedure reestablishes a connection to a reader that was
+   --  previously connected to using Connect(). Init defines the desired action
+   --  taken on the card/reader.
 
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
    --  Return protocol in use for a given card handle.

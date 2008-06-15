@@ -31,25 +31,33 @@ package body PCSC.SCard is
    use IC;
 
    C_SCard_Scope : constant array (SCard_Scope) of Thin.DWORD
-     := (Scope_User      => Thin.SCARD_SCOPE_USER,
-         Scope_Terminal  => Thin.SCARD_SCOPE_TERMINAL,
-         Scope_System    => Thin.SCARD_SCOPE_SYSTEM);
-   --  Map SCard_Scope to corresponding C values.
+     := (Scope_User        => Thin.SCARD_SCOPE_USER,
+         Scope_Terminal    => Thin.SCARD_SCOPE_TERMINAL,
+         Scope_System      => Thin.SCARD_SCOPE_SYSTEM);
+   --  Map SCard_Scope to corresponding C values
 
    C_SCard_Mode  : constant array (SCard_Mode) of Thin.DWORD
-     := (Mode_Exclusive  => Thin.SCARD_SHARE_EXCLUSIVE,
-         Mode_Shared     => Thin.SCARD_SHARE_SHARED,
-         Mode_Direct     => Thin.SCARD_SHARE_DIRECT);
-   --  Map SCard_Mode to corresponding C values.
+     := (Mode_Exclusive    => Thin.SCARD_SHARE_EXCLUSIVE,
+         Mode_Shared       => Thin.SCARD_SHARE_SHARED,
+         Mode_Direct       => Thin.SCARD_SHARE_DIRECT);
+   --  Map SCard_Mode to corresponding C values
 
    C_SCard_Proto : constant array (SCard_Proto) of Thin.DWORD
-     := (Proto_Undefined => Thin.SCARD_PROTOCOL_UNDEFINED,
-         Proto_Unset     => Thin.SCARD_PROTOCOL_UNSET,
-         Proto_T0        => Thin.SCARD_PROTOCOL_T0,
-         Proto_T1        => Thin.SCARD_PROTOCOL_T1,
-         Proto_RAW       => Thin.SCARD_PROTOCOL_RAW,
-         Proto_T15       => Thin.SCARD_PROTOCOL_T15);
-   --  Map SCard_Proto to corresponding C values.
+     := (Proto_Undefined   => Thin.SCARD_PROTOCOL_UNDEFINED,
+         Proto_Unset       => Thin.SCARD_PROTOCOL_UNSET,
+         Proto_T0          => Thin.SCARD_PROTOCOL_T0,
+         Proto_T1          => Thin.SCARD_PROTOCOL_T1,
+         Proto_RAW         => Thin.SCARD_PROTOCOL_RAW,
+         Proto_T15         => Thin.SCARD_PROTOCOL_T15);
+   --  Map SCard_Proto to corresponding C values
+
+   C_SCard_Init  : constant array (SCard_Init) of Thin.DWORD
+     := (Init_Leave_Card   => Thin.SCARD_LEAVE_CARD,
+         Init_Reset_Card   => Thin.SCARD_RESET_CARD,
+         Init_Unpower_Card => Thin.SCARD_UNPOWER_CARD,
+         Init_Eject_Card   => Thin.SCARD_EJECT_CARD);
+   --  Map SCard_Init to corresponding C values
+
 
    -----------------------
    -- Establish_Context --
@@ -112,8 +120,10 @@ package body PCSC.SCard is
       Res       : Thin.DWORD;
       Len       : aliased Thin.DWORD;
    begin
+
       --  Find out how much space we need for storing
       --  readers friendly names first.
+
       Res := Thin.SCardListReaders (hContext    => Context.hContext,
                                     mszReaders  => Strings.Null_Ptr,
                                     pcchReaders => Len'Access);
@@ -126,7 +136,9 @@ package body PCSC.SCard is
       declare
          C_Readers : aliased char_array := (1 .. IC.size_t (Len) => <>);
       begin
-         --  Get readers for this context.
+
+         --  Get readers for this context
+
          Res := Thin.SCardListReaders
            (hContext    => Context.hContext,
             mszReaders  => Strings.To_Chars_Ptr (C_Readers'Unchecked_Access),
@@ -137,7 +149,8 @@ package body PCSC.SCard is
                              Message => "Could not get readers");
          end if;
 
-         --  Convert to Ada types.
+         --  Convert to Ada types
+
          declare
             Readers : String := To_Ada (Item     => C_Readers,
                                         Trim_Nul => False);
@@ -152,10 +165,10 @@ package body PCSC.SCard is
    -------------
 
    procedure Connect
-     (Card     : in out SCard.Card;
-      Context  : in SCard.Context;
-      Reader   : in Reader_ID;
-      Mode     : in SCard_Mode)
+     (Card    : in out SCard.Card;
+      Context : in SCard.Context;
+      Reader  : in Reader_ID;
+      Mode    : in SCard_Mode)
    is
       Res      : Thin.DWORD;
       C_Reader : Thin.LPSTR := To_LPSTR (Reader);
@@ -176,16 +189,43 @@ package body PCSC.SCard is
                           Message => "Could not connect to reader");
       end if;
 
-      --  Free allocated memory.
+      --  Free allocated memory
+
       Strings.Free (C_Reader);
    end Connect;
+
+   ---------------
+   -- Reconnect --
+   ---------------
+
+   procedure Reconnect
+     (Card : in out SCard.Card;
+      Mode : in SCard_Mode;
+      Init : in SCard_Init)
+   is
+      Res : Thin.DWORD;
+   begin
+      Res := Thin.SCardReconnect
+        (hCard                => Card.hCard,
+         dwShareMode          => C_SCard_Mode (Mode),
+         dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
+                                 Thin.SCARD_PROTOCOL_T0 or
+                                 Thin.SCARD_PROTOCOL_T15,
+         dwInitialization     => C_SCard_Init (Init),
+         pdwActiveProtocol    => Card.Active_Proto'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Could not reconnect to reader");
+      end if;
+   end Reconnect;
 
    ----------------------
    -- Get_Active_Proto --
    ----------------------
 
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto is
-      --  Forward spec.
+      --  Forward spec
       function Lookup (C_Proto : Thin.DWORD) return SCard_Proto;
 
       function Lookup (C_Proto : Thin.DWORD) return SCard_Proto is
@@ -196,7 +236,9 @@ package body PCSC.SCard is
                return P;
             end if;
          end loop;
-         --  Return 'Undefined' if no active proto found.
+
+         --  Return 'Undefined' if no active proto found
+
          return Proto_Undefined;
       end Lookup;
    begin
@@ -230,8 +272,10 @@ package body PCSC.SCard is
       Readers  : Readers_List;
       Lines    : Slice_Set;
    begin
+
       --  Slice readers into parts.
       --  Who uses '\0' as separator anyway?
+
       Create
         (S          => Lines,
          From       => To_Slice (To_Slice'First .. To_Slice'Last),
@@ -239,6 +283,7 @@ package body PCSC.SCard is
          Mode       => Single);
 
       --  Minus two because \0\0 is used as termination.
+
       for J in 1 .. Slice_Count (Lines) - 2 loop
          Readers.Append (New_Item => To_Unbounded_String
                          (Slice (Lines, J)));
