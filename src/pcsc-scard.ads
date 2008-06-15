@@ -105,6 +105,10 @@ package PCSC.SCard is
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
    --  SCard will be stored in 'Card' parameter.
 
+   procedure Disconnect (Card   : in SCard.Card; Action : in SCard_Action);
+   --  This procedure terminates a connection to the connection made through
+   --  Connect procedure.
+
    procedure Reconnect
      (Card   : in out SCard.Card;
       Mode   : in SCard_Mode;

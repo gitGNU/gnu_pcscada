@@ -193,6 +193,22 @@ package body PCSC.SCard is
       Strings.Free (C_Reader);
    end Connect;
 
+   ----------------
+   -- Disconnect --
+   ----------------
+
+   procedure Disconnect (Card   : in SCard.Card; Action : in SCard_Action) is
+      Res : Thin.DWORD;
+   begin
+      Res := Thin.SCardDisconnect (hCard         => Card.hCard,
+                                   dwDisposition => C_SCard_Action (Action));
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Could not disconnect from reader");
+      end if;
+   end Disconnect;
+
    ---------------
    -- Reconnect --
    ---------------

@@ -90,10 +90,20 @@ begin
    SCard.End_Transaction (Card   => Card,
                           Action => SCard.Action_Leave);
 
+   --  Disconnect from first reader
+
+   Ada.Text_IO.Put_Line ("Disconnecting from " &
+                         Utils.To_String (Readers.First_Element) & " ...");
+
+   SCard.Disconnect (Card   => Card,
+                     Action => SCard.Action_Leave);
+
    --  Release context
 
    Ada.Text_IO.Put_Line ("Releasing context ...");
    SCard.Release_Context (Context => Context);
+
+   Ada.Text_IO.Put_Line ("DONE");
 
 end Runner;
 
