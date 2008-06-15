@@ -113,6 +113,10 @@ package PCSC.SCard is
    --  previously connected to using Connect(). Init defines the desired action
    --  taken on the card/reader.
 
+   procedure Begin_Transaction (Card : in SCard.Card);
+   --  This procedure establishes a temporary exclusive access mode for doing
+   --  a series of commands or transactions with a SCard.
+
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
    --  Return protocol in use for a given card handle.
 

@@ -49,6 +49,9 @@ begin
    Utils.For_Every_Reader (Readers => Readers,
                            Call    => Print_ReaderID'Unrestricted_Access);
 
+   Ada.Text_IO.Put_Line ("Connecting to " &
+                         Utils.To_String (Readers.First_Element) & " ...");
+
    --  Connect to first reader
 
    SCard.Connect (Card     => Card,
@@ -59,6 +62,9 @@ begin
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
+   Ada.Text_IO.Put_Line ("Reconnecting to " &
+                         Utils.To_String (Readers.First_Element) & " ...");
+
    --  Reconnect to first reader
 
    SCard.Reconnect (Card => Card,
@@ -66,7 +72,14 @@ begin
                     Init => SCard.Init_Reset_Card);
 
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
-                           (SCard.Get_Active_Proto (Card => Card)));
+                         (SCard.Get_Active_Proto (Card => Card)));
+
+   --  Begin transaction with first reader
+
+   Ada.Text_IO.Put_Line ("Beginning transaction with " &
+                         Utils.To_String (Readers.First_Element) & " ...");
+
+   SCard.Begin_Transaction (Card => Card);
 
    SCard.Release_Context (Context => Context);
 

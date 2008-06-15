@@ -178,8 +178,7 @@ package body PCSC.SCard is
          szReader             => C_Reader,
          dwShareMode          => C_SCard_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
-                                 Thin.SCARD_PROTOCOL_T0 or
-                                 Thin.SCARD_PROTOCOL_T15,
+                                 Thin.SCARD_PROTOCOL_T0,
          phCard               => Card.hCard'Access,
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
@@ -209,8 +208,7 @@ package body PCSC.SCard is
         (hCard                => Card.hCard,
          dwShareMode          => C_SCard_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
-                                 Thin.SCARD_PROTOCOL_T0 or
-                                 Thin.SCARD_PROTOCOL_T15,
+                                 Thin.SCARD_PROTOCOL_T0,
          dwInitialization     => C_SCard_Init (Init),
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
@@ -219,6 +217,21 @@ package body PCSC.SCard is
                           Message => "Could not reconnect to reader");
       end if;
    end Reconnect;
+
+   -----------------------
+   -- Begin_Transaction --
+   -----------------------
+
+   procedure Begin_Transaction (Card : in SCard.Card) is
+      Res : Thin.DWORD;
+   begin
+      Res := Thin.SCardBeginTransaction (hCard => Card.hCard);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Begin of transaction failed");
+      end if;
+   end Begin_Transaction;
 
    ----------------------
    -- Get_Active_Proto --
