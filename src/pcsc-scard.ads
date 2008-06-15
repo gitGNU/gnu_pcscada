@@ -39,31 +39,31 @@ package PCSC.SCard is
    --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
 
    type SCard_Scope is
-     (Scope_User,        --  Scope in user space
-      Scope_Terminal,    --  Scope in terminal
-      Scope_System);     --  Scope in system
+     (Scope_User,      --  Scope in user space
+      Scope_Terminal,  --  Scope in terminal
+      Scope_System);   --  Scope in system
    --  Possible scope for PC/SC-context
 
    type SCard_Mode is
-     (Mode_Exclusive,    -- Exclusive mode only
-      Mode_Shared,       -- Shared mode only
-      Mode_Direct);      -- Raw mode only
+     (Mode_Exclusive,  -- Exclusive mode only
+      Mode_Shared,     -- Shared mode only
+      Mode_Direct);    -- Raw mode only
    --  Possible Mode for SCard connects
 
    type SCard_Proto is
-     (Proto_Undefined,   --  Protocol not set
-      Proto_Unset,       --  Backward compatibility
-      Proto_T0,          --  T=0 active protocol
-      Proto_T1,          --  T=1 active protocol
-      Proto_RAW,         --  Raw active protocol
-      Proto_T15);        --  T=15 protocol
+     (Proto_Undefined, --  Protocol not set
+      Proto_Unset,     --  Backward compatibility
+      Proto_T0,        --  T=0 active protocol
+      Proto_T1,        --  T=1 active protocol
+      Proto_RAW,       --  Raw active protocol
+      Proto_T15);      --  T=15 protocol
    --  Possible Protos for SCard connects
 
-   type SCard_Init is
-     (Init_Leave_Card,   --  Do nothing on close
-      Init_Reset_Card,   --  Reset on close
-      Init_Unpower_Card, --  Power down on close
-      Init_Eject_Card);  --  Eject on close
+   type SCard_Action is
+     (Action_Leave,    --  Do nothing on close
+      Action_Reset,    --  Reset on close
+      Action_Unpower,  --  Power down on close
+      Action_Eject);   --  Eject on close
    --  Desired action taken on the card/reader
 
    subtype Reader_ID is Unbounded_String;
@@ -106,9 +106,9 @@ package PCSC.SCard is
    --  SCard will be stored in 'Card' parameter.
 
    procedure Reconnect
-     (Card : in out SCard.Card;
-      Mode : in SCard_Mode;
-      Init : in SCard_Init);
+     (Card   : in out SCard.Card;
+      Mode   : in SCard_Mode;
+      Action : in SCard_Action);
    --  This procedure reestablishes a connection to a reader that was
    --  previously connected to using Connect(). Init defines the desired action
    --  taken on the card/reader.
@@ -116,6 +116,11 @@ package PCSC.SCard is
    procedure Begin_Transaction (Card : in SCard.Card);
    --  This procedure establishes a temporary exclusive access mode for doing
    --  a series of commands or transactions with a SCard.
+
+   procedure End_Transaction
+     (Card   : in SCard.Card;
+      Action : in SCard_Action);
+   --  This procedure ends a previously begun transaction.
 
    function Get_Active_Proto (Card : in SCard.Card) return SCard_Proto;
    --  Return protocol in use for a given card handle.

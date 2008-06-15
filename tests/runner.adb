@@ -42,35 +42,36 @@ procedure Runner is
    end Print_ReaderID;
 
 begin
+
+   --  Establish context
+
    SCard.Establish_Context (Context => Context,
                             Scope   => SCard.Scope_System);
-   Readers := SCard.List_Readers (Context => Context);
 
+   --  List readers
+
+   Readers := SCard.List_Readers (Context => Context);
    Utils.For_Every_Reader (Readers => Readers,
                            Call    => Print_ReaderID'Unrestricted_Access);
 
-   Ada.Text_IO.Put_Line ("Connecting to " &
-                         Utils.To_String (Readers.First_Element) & " ...");
-
    --  Connect to first reader
 
+   Ada.Text_IO.Put_Line ("Connecting to " &
+                         Utils.To_String (Readers.First_Element) & " ...");
    SCard.Connect (Card     => Card,
                   Context  => Context,
                   Reader   => Readers.First_Element,
                   Mode     => SCard.Mode_Shared);
-
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
-   Ada.Text_IO.Put_Line ("Reconnecting to " &
-                         Utils.To_String (Readers.First_Element) & " ...");
-
    --  Reconnect to first reader
 
-   SCard.Reconnect (Card => Card,
-                    Mode => SCard.Mode_Exclusive,
-                    Init => SCard.Init_Reset_Card);
-
+   Ada.Text_IO.Put_Line ("Reconnecting to " &
+                         Utils.To_String (Readers.First_Element) & " ...");
+   SCard.Reconnect (Card   => Card,
+                    Mode   => SCard.Mode_Exclusive,
+                    Action => SCard.Action_Reset);
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.SCard_Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
@@ -81,6 +82,17 @@ begin
 
    SCard.Begin_Transaction (Card => Card);
 
+   --  End transaction with first reader
+
+   Ada.Text_IO.Put_Line ("Ending transaction with " &
+                         Utils.To_String (Readers.First_Element) & " ...");
+
+   SCard.End_Transaction (Card   => Card,
+                          Action => SCard.Action_Leave);
+
+   --  Release context
+
+   Ada.Text_IO.Put_Line ("Releasing context ...");
    SCard.Release_Context (Context => Context);
 
 end Runner;

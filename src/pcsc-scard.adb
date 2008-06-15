@@ -30,33 +30,33 @@ package body PCSC.SCard is
 
    use IC;
 
-   C_SCard_Scope : constant array (SCard_Scope) of Thin.DWORD
-     := (Scope_User        => Thin.SCARD_SCOPE_USER,
-         Scope_Terminal    => Thin.SCARD_SCOPE_TERMINAL,
-         Scope_System      => Thin.SCARD_SCOPE_SYSTEM);
+   C_SCard_Scope  : constant array (SCard_Scope) of Thin.DWORD
+     := (Scope_User      => Thin.SCARD_SCOPE_USER,
+         Scope_Terminal  => Thin.SCARD_SCOPE_TERMINAL,
+         Scope_System    => Thin.SCARD_SCOPE_SYSTEM);
    --  Map SCard_Scope to corresponding C values
 
-   C_SCard_Mode  : constant array (SCard_Mode) of Thin.DWORD
-     := (Mode_Exclusive    => Thin.SCARD_SHARE_EXCLUSIVE,
-         Mode_Shared       => Thin.SCARD_SHARE_SHARED,
-         Mode_Direct       => Thin.SCARD_SHARE_DIRECT);
+   C_SCard_Mode   : constant array (SCard_Mode) of Thin.DWORD
+     := (Mode_Exclusive  => Thin.SCARD_SHARE_EXCLUSIVE,
+         Mode_Shared     => Thin.SCARD_SHARE_SHARED,
+         Mode_Direct     => Thin.SCARD_SHARE_DIRECT);
    --  Map SCard_Mode to corresponding C values
 
-   C_SCard_Proto : constant array (SCard_Proto) of Thin.DWORD
-     := (Proto_Undefined   => Thin.SCARD_PROTOCOL_UNDEFINED,
-         Proto_Unset       => Thin.SCARD_PROTOCOL_UNSET,
-         Proto_T0          => Thin.SCARD_PROTOCOL_T0,
-         Proto_T1          => Thin.SCARD_PROTOCOL_T1,
-         Proto_RAW         => Thin.SCARD_PROTOCOL_RAW,
-         Proto_T15         => Thin.SCARD_PROTOCOL_T15);
+   C_SCard_Proto  : constant array (SCard_Proto) of Thin.DWORD
+     := (Proto_Undefined => Thin.SCARD_PROTOCOL_UNDEFINED,
+         Proto_Unset     => Thin.SCARD_PROTOCOL_UNSET,
+         Proto_T0        => Thin.SCARD_PROTOCOL_T0,
+         Proto_T1        => Thin.SCARD_PROTOCOL_T1,
+         Proto_RAW       => Thin.SCARD_PROTOCOL_RAW,
+         Proto_T15       => Thin.SCARD_PROTOCOL_T15);
    --  Map SCard_Proto to corresponding C values
 
-   C_SCard_Init  : constant array (SCard_Init) of Thin.DWORD
-     := (Init_Leave_Card   => Thin.SCARD_LEAVE_CARD,
-         Init_Reset_Card   => Thin.SCARD_RESET_CARD,
-         Init_Unpower_Card => Thin.SCARD_UNPOWER_CARD,
-         Init_Eject_Card   => Thin.SCARD_EJECT_CARD);
-   --  Map SCard_Init to corresponding C values
+   C_SCard_Action : constant array (SCard_Action) of Thin.DWORD
+     := (Action_Leave    => Thin.SCARD_LEAVE_CARD,
+         Action_Reset    => Thin.SCARD_RESET_CARD,
+         Action_Unpower  => Thin.SCARD_UNPOWER_CARD,
+         Action_Eject    => Thin.SCARD_EJECT_CARD);
+   --  Map SCard_Action to corresponding C values
 
 
    -----------------------
@@ -198,9 +198,9 @@ package body PCSC.SCard is
    ---------------
 
    procedure Reconnect
-     (Card : in out SCard.Card;
-      Mode : in SCard_Mode;
-      Init : in SCard_Init)
+     (Card   : in out SCard.Card;
+      Mode   : in SCard_Mode;
+      Action : in SCard_Action)
    is
       Res : Thin.DWORD;
    begin
@@ -209,7 +209,7 @@ package body PCSC.SCard is
          dwShareMode          => C_SCard_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
                                  Thin.SCARD_PROTOCOL_T0,
-         dwInitialization     => C_SCard_Init (Init),
+         dwInitialization     => C_SCard_Action (Action),
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -232,6 +232,26 @@ package body PCSC.SCard is
                           Message => "Begin of transaction failed");
       end if;
    end Begin_Transaction;
+
+   ---------------------
+   -- End_Transaction --
+   ---------------------
+
+   procedure End_Transaction
+     (Card   : in SCard.Card;
+      Action : in SCard_Action)
+   is
+      Res : Thin.DWORD;
+   begin
+      Res := Thin.SCardEndTransaction
+        (hCard         => Card.hCard,
+         dwDisposition => C_SCard_Action (Action));
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "End of transaction failed");
+      end if;
+   end End_Transaction;
 
    ----------------------
    -- Get_Active_Proto --
