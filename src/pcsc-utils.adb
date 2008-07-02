@@ -27,9 +27,9 @@ with Interfaces.C;
 
 package body PCSC.Utils is
 
-   -----------------
-   --  To_String  --
-   -----------------
+   -----------------------------
+   --  To_String (Byte_Array) --
+   -----------------------------
 
    function To_String (Given : Thin.Byte_Array; Len : Positive) return String
    is
@@ -57,13 +57,32 @@ package body PCSC.Utils is
       return Result;
    end To_String;
 
-   ---------------
-   -- To_String --
-   ---------------
+   ---------------------------
+   -- To_String (Reader_ID) --
+   ---------------------------
 
    function To_String (Reader : in SCard.Reader_ID) return String is
    begin
       return Ada.Strings.Unbounded.To_String (Reader);
+   end To_String;
+
+   ----------------------------------
+   -- To_String (Card_State_Array) --
+   ----------------------------------
+
+   function To_String
+     (States : in SCard.Card_State_Array := SCard.Empty_States)
+      return String
+   is
+      use Ada.Strings.Unbounded;
+
+      Str_States : Unbounded_String;
+   begin
+      for S in States'Range loop
+         Str_States := SCard.Card_State'Image (States (S)) & " " & Str_States;
+      end loop;
+
+      return To_String (Str_States);
    end To_String;
 
    ----------------------

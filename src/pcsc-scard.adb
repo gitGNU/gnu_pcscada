@@ -24,9 +24,6 @@ with Ada.Exceptions;
 with Ada.Strings.Maps;
 with Ada.Characters.Latin_1;
 
---  TODO: remove me
-with Ada.Text_IO;
-
 with GNAT.String_Split;
 
 package body PCSC.SCard is
@@ -302,7 +299,7 @@ package body PCSC.SCard is
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard.Card_State;
+      State   : in out SCard.Card_State_Array;
       Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer)
@@ -422,26 +419,22 @@ package body PCSC.SCard is
       return Proto_Undefined;
    end To_Ada;
 
-   --------------------------
-   -- To_Ada (SCard_State) --
-   --------------------------
+   --------------------------------
+   -- To_Ada (SCard_State_Array) --
+   --------------------------------
 
-   function To_Ada (C_State : Thin.DWORD) return Card_State is
+   function To_Ada (C_State : Thin.DWORD) return Card_State_Array is
+      Num_States  : Natural := 0;
+      Card_States : Card_State_Array (1 .. 3);
    begin
-      --  Ada.Text_IO.Put_Line (Thin.DWORD'Image (C_State));
       for P in C_Card_State'Range loop
          if (C_State and C_Card_State (P)) /= 0 then
-            Ada.Text_IO.Put_Line (Card_State'Image (P));
-
-            --  One more state found
-            --  return P;
+            Num_States := Num_States + 1;
+            Card_States (Num_States) := P;
          end if;
-
       end loop;
 
-      --  Return 'Unknown' if no card state found
-
-      return Unknown;
+      return Card_States;
    end To_Ada;
 
 end PCSC.SCard;

@@ -73,7 +73,7 @@ begin
                          Utils.To_String (Readers.First_Element) & " ...");
    SCard.Reconnect (Card   => Card,
                     Mode   => SCard.Share_Exclusive,
-                    Action => SCard.Reset_Card);
+                    Action => SCard.Leave_Card);
    Ada.Text_IO.Put_Line ("Card uses : " & SCard.Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
@@ -84,7 +84,7 @@ begin
    SCard.Begin_Transaction (Card => Card);
 
    declare
-      Card_State     : SCard.Card_State := SCard.Unknown;
+      Card_States    : SCard.Card_State_Array (1 .. 3);
       Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
       Reader_ATR     : SCard.ATR;
       Reader_ATR_Len : Integer := SCard.ATR_Length;
@@ -95,7 +95,7 @@ begin
       Ada.Text_IO.Put_Line ("Asking for status of  " &
                             Utils.To_String (Readers.First_Element) & " ...");
       SCard.Status (Card    => Card,
-                    State   => Card_State,
+                    State   => Card_States,
                     Proto   => Reader_Proto,
                     Atr     => Reader_ATR,
                     Atr_Len => Reader_ATR_Len);
@@ -103,8 +103,8 @@ begin
                             (Given => Reader_ATR, Len => 2 * Reader_ATR_Len));
       Ada.Text_IO.Put_Line ("  Protocol : " &
                             SCard.Proto'Image (Reader_Proto));
-      Ada.Text_IO.Put_Line ("  State    : " &
-                            SCard.Card_State'Image (Card_State));
+      Ada.Text_IO.Put_Line ("  States   : " &
+                            Utils.To_String (Card_States));
    end;
 
    --  End transaction with first reader

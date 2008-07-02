@@ -76,6 +76,11 @@ package PCSC.SCard is
       Specific);  -- PTS has been set
    --  Card states.
 
+   type Card_State_Array is array (Positive range <>) of Card_State;
+   --  Array of card states.
+
+   Empty_States : constant Card_State_Array := (1 .. 0 => Unknown);
+
    type Reader_State is
      (State_Unaware,     --  App wants status
       State_Ignore,      --  Ignore this reader
@@ -158,7 +163,7 @@ package PCSC.SCard is
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard.Card_State;
+      State   : in out SCard.Card_State_Array;
       Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer);
@@ -189,8 +194,8 @@ private
    function To_Ada (C_Protocol : Thin.DWORD) return Proto;
    --  Protocol
 
-   function To_Ada (C_State : Thin.DWORD) return Card_State;
-   --  Card state
+   function To_Ada (C_State : Thin.DWORD) return Card_State_Array;
+   --  Card state array
 
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;
