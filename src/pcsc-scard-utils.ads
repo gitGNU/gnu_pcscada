@@ -25,7 +25,7 @@ with PCSC.SCard;
 
 use PCSC;
 
-package PCSC.Utils is
+package PCSC.SCard.Utils is
 
    function To_String (Given : Thin.Byte_Array; Len : Positive) return String;
    --  Returns hex-representation of binary data. Len defines the length
@@ -34,9 +34,7 @@ package PCSC.Utils is
    function To_String (Reader : in SCard.Reader_ID) return String;
    --  Return string from Reader_ID.
 
-   function To_String
-     (States : in SCard.Card_State_Array := SCard.Empty_States)
-      return String;
+   function To_String (States : in SCard.Card_States) return String;
    --  Return string representation of card reader states.
 
    procedure For_Every_Reader
@@ -44,4 +42,4 @@ package PCSC.Utils is
       Call    : in SCard.Callback);
    --  Call callback procedure for every reader in readers list.
 
-end PCSC.Utils;
+end PCSC.SCard.Utils;

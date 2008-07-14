@@ -24,7 +24,7 @@ with Ada.Text_IO;
 with Ada.Containers.Vectors;
 
 with PCSC.SCard;
-with PCSC.Utils;
+with PCSC.SCard.Utils;
 
 use PCSC;
 
@@ -36,13 +36,14 @@ procedure Runner is
 
    pragma Linker_Options ("-lpcsclite");
 
+   package SCU renames SCard.Utils;
+
    procedure Print_ReaderID (ID : in SCard.Reader_ID);
 
    procedure Print_ReaderID (ID : in SCard.Reader_ID) is
    begin
-      Ada.Text_IO.Put_Line (Utils.To_String (ID));
+      Ada.Text_IO.Put_Line (SCU.To_String (ID));
    end Print_ReaderID;
-
 begin
 
    --  Establish context
@@ -53,13 +54,13 @@ begin
    --  List readers
 
    Readers := SCard.List_Readers (Context => Context);
-   Utils.For_Every_Reader (Readers => Readers,
-                           Call    => Print_ReaderID'Unrestricted_Access);
+   SCU.For_Every_Reader (Readers => Readers,
+                         Call    => Print_ReaderID'Unrestricted_Access);
 
    --  Connect to first reader
 
    Ada.Text_IO.Put_Line ("Connecting to " &
-                         Utils.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First_Element) & " ...");
    SCard.Connect (Card     => Card,
                   Context  => Context,
                   Reader   => Readers.First_Element,
@@ -70,7 +71,7 @@ begin
    --  Reconnect to first reader
 
    Ada.Text_IO.Put_Line ("Reconnecting to " &
-                         Utils.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First_Element) & " ...");
    SCard.Reconnect (Card   => Card,
                     Mode   => SCard.Share_Exclusive,
                     Action => SCard.Leave_Card);
@@ -80,11 +81,11 @@ begin
    --  Begin transaction with first reader
 
    Ada.Text_IO.Put_Line ("Beginning transaction with " &
-                         Utils.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First_Element) & " ...");
    SCard.Begin_Transaction (Card => Card);
 
    declare
-      Card_States    : SCard.Card_State_Array (1 .. 3);
+      Card_States    : SCard.Card_States;
       Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
       Reader_ATR     : SCard.ATR;
       Reader_ATR_Len : Integer := SCard.ATR_Length;
@@ -92,32 +93,32 @@ begin
 
       --  Get status of reader / card
 
-      Ada.Text_IO.Put_Line ("Asking for status of  " &
-                            Utils.To_String (Readers.First_Element) & " ...");
+      Ada.Text_IO.Put_Line ("Asking for status of  " & SCU.To_String
+                              (Readers.First_Element) & " ...");
       SCard.Status (Card    => Card,
                     State   => Card_States,
                     Proto   => Reader_Proto,
                     Atr     => Reader_ATR,
                     Atr_Len => Reader_ATR_Len);
-      Ada.Text_IO.Put_Line ("  ATR      : " & Utils.To_String
+      Ada.Text_IO.Put_Line ("  ATR      : " & SCU.To_String
                             (Given => Reader_ATR, Len => 2 * Reader_ATR_Len));
       Ada.Text_IO.Put_Line ("  Protocol : " &
                             SCard.Proto'Image (Reader_Proto));
       Ada.Text_IO.Put_Line ("  States   : " &
-                            Utils.To_String (Card_States));
+                            SCU.To_String (Card_States));
    end;
 
    --  End transaction with first reader
 
    Ada.Text_IO.Put_Line ("Ending transaction with " &
-                         Utils.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First_Element) & " ...");
    SCard.End_Transaction (Card   => Card,
                           Action => SCard.Leave_Card);
 
    --  Disconnect from first reader
 
    Ada.Text_IO.Put_Line ("Disconnecting from " &
-                         Utils.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First_Element) & " ...");
    SCard.Disconnect (Card   => Card,
                      Action => SCard.Leave_Card);
 

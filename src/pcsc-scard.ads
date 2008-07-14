@@ -74,12 +74,10 @@ package PCSC.SCard is
       Powered,    -- Card is powered
       Negotiable, -- Ready for PTS
       Specific);  -- PTS has been set
-   --  Card states.
+   --  Card states
 
-   type Card_State_Array is array (Positive range <>) of Card_State;
-   --  Array of card states.
-
-   Empty_States : constant Card_State_Array := (1 .. 0 => Unknown);
+   type Card_States is tagged private;
+   --  Card states handling.
 
    type Reader_State is
      (State_Unaware,     --  App wants status
@@ -163,16 +161,29 @@ package PCSC.SCard is
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard.Card_State_Array;
+      State   : in out SCard.Card_States;
       Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer);
    --  This procedure checks the current status of the reader connected to by
-   --  'Card'. Current State, Protocol and ATR value of inserted Card are
+   --  'Card'. Current state, protocol and ATR value of inserted card are
    --  returned as in out params.
 
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
+
+
+   --  Lookup functions. Used to get Ada type from Thin.DWORD value.
+
+   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
+   --  Return a new C compatible string from Reader_ID. The allocated memory
+   --  must be freed by calling Free.
+
+   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
+   --  Return Ada style Proto for C_Protocol (DWORD).
+
+   function To_Ada (C_State : Thin.DWORD) return Card_States;
+   --  Return Ada style Card_States for C_State (DWORD).
 
 private
 
@@ -186,17 +197,6 @@ private
    pragma No_Return (SCard_Exception);
    --  Raise SCard exception if something goes wrong.
 
-   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
-   --  Return a new C compatible string from Reader_ID. The allocated memory
-   --  must be freed by calling Free.
-
-   --  Lookup functions. Used to get Ada type from Thin.DWORD value.
-   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
-   --  Protocol
-
-   function To_Ada (C_State : Thin.DWORD) return Card_State_Array;
-   --  Card state array
-
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;
    end record;
@@ -204,6 +204,19 @@ private
    type Card is limited record
       hCard        : aliased Thin.SCARDHANDLE;
       Active_Proto : aliased Thin.DWORD := Thin.SCARD_PROTOCOL_UNDEFINED;
+   end record;
+
+   --  Card states, wrapper for indef vector
+
+   package Vector_Of_States_Package is new
+     Ada.Containers.Indefinite_Vectors (Index_Type   => Natural,
+                                        Element_Type => Card_State);
+
+   package VOSP renames Vector_Of_States_Package;
+   subtype Vector_Of_States_Type is VOSP.Vector;
+
+   type Card_States is tagged record
+      Data : Vector_Of_States_Type;
    end record;
 
 end PCSC.SCard;

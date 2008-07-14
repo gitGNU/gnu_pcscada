@@ -21,11 +21,10 @@
 --
 
 with Ada.Strings.Unbounded;
-with Ada.Containers.Indefinite_Vectors;
 
 with Interfaces.C;
 
-package body PCSC.Utils is
+package body PCSC.SCard.Utils is
 
    -----------------------------
    --  To_String (Byte_Array) --
@@ -66,22 +65,23 @@ package body PCSC.Utils is
       return Ada.Strings.Unbounded.To_String (Reader);
    end To_String;
 
-   ----------------------------------
-   -- To_String (Card_State_Array) --
-   ----------------------------------
+   -----------------------------
+   -- To_String (Card_States) --
+   -----------------------------
 
-   function To_String
-     (States : in SCard.Card_State_Array := SCard.Empty_States)
-      return String
+   function To_String (States : in SCard.Card_States) return String
    is
       use Ada.Strings.Unbounded;
 
       Str_States : Unbounded_String;
+      Position   : SCard.VOSP.Cursor := States.Data.First;
+      State      : SCard.Card_State;
    begin
-      for S in States'Range loop
-         Str_States := SCard.Card_State'Image (States (S)) & " " & Str_States;
+      while SCard.VOSP.Has_Element (Position) loop
+         State := SCard.VOSP.Element (Position);
+         Str_States := SCard.Card_State'Image (State) & " " & Str_States;
+         SCard.VOSP.Next (Position);
       end loop;
-
       return To_String (Str_States);
    end To_String;
 
@@ -106,4 +106,4 @@ package body PCSC.Utils is
       end loop;
    end For_Every_Reader;
 
-end PCSC.Utils;
+end PCSC.SCard.Utils;
