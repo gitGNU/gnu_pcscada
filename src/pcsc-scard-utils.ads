@@ -42,4 +42,7 @@ package PCSC.SCard.Utils is
       Call    : in SCard.Callback);
    --  Call callback procedure for every reader in readers list.
 
+   procedure Print_ReaderID (ID : in SCard.Reader_ID);
+   --  Print out specific reader ID to default output.
+
 end PCSC.SCard.Utils;

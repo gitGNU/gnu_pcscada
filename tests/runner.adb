@@ -21,7 +21,6 @@
 --
 
 with Ada.Text_IO;
-with Ada.Containers.Vectors;
 
 with PCSC.SCard;
 with PCSC.SCard.Utils;
@@ -38,12 +37,6 @@ procedure Runner is
 
    package SCU renames SCard.Utils;
 
-   procedure Print_ReaderID (ID : in SCard.Reader_ID);
-
-   procedure Print_ReaderID (ID : in SCard.Reader_ID) is
-   begin
-      Ada.Text_IO.Put_Line (SCU.To_String (ID));
-   end Print_ReaderID;
 begin
 
    --  Establish context
@@ -55,7 +48,7 @@ begin
 
    Readers := SCard.List_Readers (Context => Context);
    SCU.For_Every_Reader (Readers => Readers,
-                         Call    => Print_ReaderID'Unrestricted_Access);
+                         Call    => SCU.Print_ReaderID'Access);
 
    --  Connect to first reader
 

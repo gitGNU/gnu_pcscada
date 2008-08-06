@@ -20,6 +20,7 @@
 --  MA  02110-1301  USA
 --
 
+with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 
 with Interfaces.C;
@@ -105,5 +106,14 @@ package body PCSC.SCard.Utils is
          Next (Position);
       end loop;
    end For_Every_Reader;
+
+   --------------------
+   -- Print_ReaderID --
+   --------------------
+
+   procedure Print_ReaderID (ID : in SCard.Reader_ID) is
+   begin
+      Ada.Text_IO.Put_Line (To_String (ID));
+   end Print_ReaderID;
 
 end PCSC.SCard.Utils;
