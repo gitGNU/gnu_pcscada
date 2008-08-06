@@ -144,7 +144,6 @@ package body PCSC.SCard is
       Res       : Thin.DWORD;
       Len       : aliased Thin.DWORD;
    begin
-
       --  Find out how much space we need for storing
       --  readers friendly names first.
 
@@ -221,7 +220,7 @@ package body PCSC.SCard is
    -- Disconnect --
    ----------------
 
-   procedure Disconnect (Card   : in SCard.Card; Action : in SCard.Action) is
+   procedure Disconnect (Card : in SCard.Card; Action : in SCard.Action) is
       Res : Thin.DWORD;
    begin
       Res := Thin.SCardDisconnect (hCard         => Card.hCard,
@@ -311,7 +310,6 @@ package body PCSC.SCard is
       dwProtocol  : aliased Thin.DWORD;
       dwAtrLen    : aliased Thin.DWORD := Thin.MAX_ATR_SIZE;
    begin
-
       Res := Thin.SCardStatus
         (hCard          => Card.hCard,
          mszReaderNames => IC.Strings.Null_Ptr,
@@ -332,6 +330,36 @@ package body PCSC.SCard is
       Proto   := To_Ada (dwProtocol);
       State   := To_Ada (dwState);
    end Status;
+
+   --------------
+   -- Transmit --
+   --------------
+
+   procedure Transmit
+     (Card        : in SCard.Card;
+      Send_Pci    : access Thin.SCARD_IO_REQUEST;
+      Send_Buffer : in out Thin.Byte_Array;
+      Recv_Pci    : access Thin.SCARD_IO_REQUEST;
+      Recv_Buffer : in out Thin.Byte_Array)
+   is
+      Res         : Thin.DWORD;
+
+      Recv_Length : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
+   begin
+      Res := Thin.SCardTransmit
+        (hCard         => Card.hCard,
+         pioSendPci    => Send_Pci,
+         pbSendBuffer  => Send_Buffer (Send_Buffer'First)'Unchecked_Access,
+         cbSendLength  => Thin.DWORD (Send_Buffer'Last),
+         pioRecvPci    => Recv_Pci,
+         pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
+         pcbRecvLength => Recv_Length'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Transmit failed");
+      end if;
+   end Transmit;
 
    ----------------------
    -- Get_Active_Proto --
@@ -369,7 +397,6 @@ package body PCSC.SCard is
       Readers  : Readers_List;
       Lines    : Slice_Set;
    begin
-
       --  Slice readers into parts.
       --  Who uses '\0' as separator anyway?
 

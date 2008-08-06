@@ -333,7 +333,7 @@ package PCSC.Thin is
       pbRecvBuffer  : in Byte_Array_Access;
       pcbRecvLength : access DWORD)
       return DWORD;
-   --  Transmit APDUs to cards
+   --  Transmit APDUs to card
 
    function SCardListReaders
      (hContext    : in SCARDCONTEXT;

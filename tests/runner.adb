@@ -23,6 +23,7 @@
 with Ada.Text_IO;
 
 with PCSC.SCard;
+with PCSC.Thin;
 with PCSC.SCard.Utils;
 
 use PCSC;
@@ -99,6 +100,22 @@ begin
                             SCard.Proto'Image (Reader_Proto));
       Ada.Text_IO.Put_Line ("  States   : " &
                             SCU.To_String (Card_States));
+   end;
+
+   --  Send arbitrary APDU to card
+   declare
+      Recv_Buffer : Thin.Byte_Array (1 .. 10);
+      Send_Buffer : Thin.Byte_Array :=
+        (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
+   begin
+      SCard.Transmit (Card        => Card,
+                      Send_Pci    => Thin.SCARD_PCI_T1'Access,
+                      Send_Buffer => Send_Buffer,
+                      Recv_Pci    => Thin.SCARD_PCI_T1'Access,
+                      Recv_Buffer => Recv_Buffer);
+      Ada.Text_IO.Put_Line ("response from card: " &
+        String (SCU.To_String (Given => Recv_Buffer,
+                               Len   => 2 * Integer (Recv_Buffer'Last))));
    end;
 
    --  End transaction with first reader

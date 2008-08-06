@@ -169,6 +169,14 @@ package PCSC.SCard is
    --  'Card'. Current state, protocol and ATR value of inserted card are
    --  returned as in out params.
 
+   procedure Transmit
+     (Card        : in SCard.Card;
+      Send_Pci    : access Thin.SCARD_IO_REQUEST;
+      Send_Buffer : in out Thin.Byte_Array;
+      Recv_Pci    : access Thin.SCARD_IO_REQUEST;
+      Recv_Buffer : in out Thin.Byte_Array);
+   --  Transmit APDUs to SCard.
+
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
