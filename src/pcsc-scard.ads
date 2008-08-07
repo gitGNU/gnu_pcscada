@@ -188,7 +188,7 @@ package PCSC.SCard is
    --  Return protocol in use for a given card handle.
 
 
-   --  Lookup functions. Used to get Ada type from Thin.DWORD value.
+   --  Helper functions. Used to get Ada type from Thin.DWORD value.
 
    function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory

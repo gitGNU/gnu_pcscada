@@ -439,9 +439,9 @@ package body PCSC.SCard is
       return Strings.New_String (To_String (Reader));
    end To_LPSTR;
 
-   --------------------------
-   -- To_Ada (SCard_Proto) --
-   --------------------------
+   --------------------
+   -- To_Ada (Proto) --
+   --------------------
 
    function To_Ada (C_Protocol : Thin.DWORD) return Proto is
    begin
@@ -459,9 +459,9 @@ package body PCSC.SCard is
       return Proto_Undefined;
    end To_Ada;
 
-   --------------------------------
-   -- To_Ada (SCard_State_Array) --
-   --------------------------------
+   --------------------------
+   -- To_Ada (Card_States) --
+   --------------------------
 
    function To_Ada (C_State : Thin.DWORD) return Card_States is
       States     : Card_States;
