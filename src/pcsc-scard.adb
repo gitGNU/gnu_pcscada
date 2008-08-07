@@ -350,7 +350,7 @@ package body PCSC.SCard is
         (hCard         => Card.hCard,
          pioSendPci    => Send_Pci,
          pbSendBuffer  => Send_Buffer (Send_Buffer'First)'Unchecked_Access,
-         cbSendLength  => Thin.DWORD (Send_Buffer'Last),
+         cbSendLength  => Thin.DWORD (Send_Buffer'Length),
          pioRecvPci    => Recv_Pci,
          pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
          pcbRecvLength => Recv_Length'Access);
