@@ -116,6 +116,13 @@ package PCSC.SCard is
    --  Card ATR. Directly mapped to thin binding ATR (atm), which is a
    --  Byte_Array type.
 
+   subtype Byte_Set is Thin.Byte_Array;
+   --  Byte_Sets are used to send and receive data to/from SCard-Readers. At
+   --  the moment, Byte_Sets are just subtypes of Thin.Byte_Arrays.
+
+   Null_Byte_Set : constant Byte_Set;
+   --  Empty Byte_Set
+
    type Callback is access procedure (ID : in Reader_ID);
    --  Callback for reader ID handling. Provides flexible way to access
    --  specific readers.
@@ -178,9 +185,9 @@ package PCSC.SCard is
    procedure Transmit
      (Card        : in SCard.Card;
       Send_Pci    : in PCI;
-      Send_Buffer : in out Thin.Byte_Array;
+      Send_Buffer : in out Byte_Set;
       Recv_Pci    : in PCI;
-      Recv_Buffer : in out Thin.Byte_Array;
+      Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.
 
@@ -233,5 +240,10 @@ private
    type Card_States is tagged record
       Data : Vector_Of_States_Type;
    end record;
+
+   Null_Byte : constant Thin.Byte := 16#00#;
+
+   Null_Byte_Set : constant Byte_Set (1 .. 0)
+     := (others => Null_Byte);
 
 end PCSC.SCard;

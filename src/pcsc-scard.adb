@@ -344,9 +344,9 @@ package body PCSC.SCard is
    procedure Transmit
      (Card        : in SCard.Card;
       Send_Pci    : in PCI;
-      Send_Buffer : in out Thin.Byte_Array;
+      Send_Buffer : in out Byte_Set;
       Recv_Pci    : in PCI;
-      Recv_Buffer : in out Thin.Byte_Array;
+      Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
       Res         : Thin.DWORD;
@@ -355,6 +355,8 @@ package body PCSC.SCard is
       C_Recv_PCI  : aliased Thin.SCARD_IO_REQUEST := C_PCI (Recv_Pci);
       Recv_Length : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
    begin
+      --  TODO: Send_Buffer needs to be 'in out', otherwise:
+      --        access-to-variable designates constant => fix
       Res := Thin.SCardTransmit
         (hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,

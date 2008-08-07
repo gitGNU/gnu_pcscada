@@ -23,7 +23,6 @@
 with Ada.Text_IO;
 
 with PCSC.SCard;
-with PCSC.Thin;
 with PCSC.SCard.Utils;
 
 use PCSC;
@@ -103,8 +102,8 @@ begin
 
    --  Send arbitrary APDU to card
    declare
-      Recv_Buffer : Thin.Byte_Array (1 .. 10);
-      Send_Buffer : Thin.Byte_Array :=
+      Recv_Buffer : SCard.Byte_Set (1 .. 10);
+      Send_Buffer : SCard.Byte_Set :=
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
       Recv_Len    : Natural := 0;
    begin
