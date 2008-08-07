@@ -83,6 +83,12 @@ package body PCSC.SCard is
          State_Unpowered   => Thin.SCARD_STATE_UNPOWERED);
    --  Map Reader_State to corresponding C values
 
+   C_PCI : constant array (PCI) of Thin.SCARD_IO_REQUEST
+     := (PCI_T0  => Thin.SCARD_PCI_T0,
+         PCI_T1  => Thin.SCARD_PCI_T1,
+         PCI_RAW => Thin.SCARD_PCI_RAW);
+   --  Map PCI to corresponding C SCARD_IO_REQUESTs
+
    -----------------------
    -- Establish_Context --
    -----------------------
@@ -337,22 +343,24 @@ package body PCSC.SCard is
 
    procedure Transmit
      (Card        : in SCard.Card;
-      Send_Pci    : access Thin.SCARD_IO_REQUEST;
+      Send_Pci    : in PCI;
       Send_Buffer : in out Thin.Byte_Array;
-      Recv_Pci    : access Thin.SCARD_IO_REQUEST;
+      Recv_Pci    : in PCI;
       Recv_Buffer : in out Thin.Byte_Array;
       Recv_Len    : in out Natural)
    is
       Res         : Thin.DWORD;
 
+      C_Send_PCI  : aliased Thin.SCARD_IO_REQUEST := C_PCI (Send_Pci);
+      C_Recv_PCI  : aliased Thin.SCARD_IO_REQUEST := C_PCI (Recv_Pci);
       Recv_Length : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
    begin
       Res := Thin.SCardTransmit
         (hCard         => Card.hCard,
-         pioSendPci    => Send_Pci,
+         pioSendPci    => C_Send_PCI'Access,
          pbSendBuffer  => Send_Buffer (Send_Buffer'First)'Unchecked_Access,
          cbSendLength  => Thin.DWORD (Send_Buffer'Length),
-         pioRecvPci    => Recv_Pci,
+         pioRecvPci    => C_Recv_PCI'Access,
          pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
          pcbRecvLength => Recv_Length'Access);
 

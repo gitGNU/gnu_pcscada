@@ -94,6 +94,12 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
+   type PCI is
+     (PCI_T0,   --  (PCI) for T=0
+      PCI_T1,   --  (PCI) for T=1
+      PCI_RAW); --  (PCI) for RAW protocol
+   --  Protocol control information types
+
    subtype Reader_ID is Unbounded_String;
    --  Reader friendly name
 
@@ -171,9 +177,9 @@ package PCSC.SCard is
 
    procedure Transmit
      (Card        : in SCard.Card;
-      Send_Pci    : access Thin.SCARD_IO_REQUEST;
+      Send_Pci    : in PCI;
       Send_Buffer : in out Thin.Byte_Array;
-      Recv_Pci    : access Thin.SCARD_IO_REQUEST;
+      Recv_Pci    : in PCI;
       Recv_Buffer : in out Thin.Byte_Array;
       Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.

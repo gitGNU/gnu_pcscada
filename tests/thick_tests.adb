@@ -113,9 +113,9 @@ begin
                                Len   => 2 * Integer (Send_Buffer'Last))));
 
       SCard.Transmit (Card        => Card,
-                      Send_Pci    => Thin.SCARD_PCI_T1'Access,
+                      Send_Pci    => SCard.PCI_T1,
                       Send_Buffer => Send_Buffer,
-                      Recv_Pci    => Thin.SCARD_PCI_T1'Access,
+                      Recv_Pci    => SCard.PCI_T1,
                       Recv_Buffer => Recv_Buffer,
                       Recv_Len    => Recv_Len);
       Ada.Text_IO.Put_Line ("response from card: " &
