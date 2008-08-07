@@ -29,3 +29,9 @@ clean:
 
 distclean:
 	@rm -rf obj
+
+tests:
+	@obj/thin_tests
+	@obj/thick_tests
+
+.PHONY: tests
