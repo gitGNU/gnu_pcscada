@@ -107,6 +107,7 @@ begin
       Recv_Buffer : Thin.Byte_Array (1 .. 10);
       Send_Buffer : Thin.Byte_Array :=
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
+      Recv_Len    : Natural := 0;
    begin
       Ada.Text_IO.Put_Line ("Sending APDU: " &
         String (SCU.To_String (Given => Send_Buffer,
@@ -116,10 +117,11 @@ begin
                       Send_Pci    => Thin.SCARD_PCI_T1'Access,
                       Send_Buffer => Send_Buffer,
                       Recv_Pci    => Thin.SCARD_PCI_T1'Access,
-                      Recv_Buffer => Recv_Buffer);
+                      Recv_Buffer => Recv_Buffer,
+                      Recv_Len    => Recv_Len);
       Ada.Text_IO.Put_Line ("Response from card: " &
         String (SCU.To_String (Given => Recv_Buffer,
-                               Len   => 2 * Integer (Recv_Buffer'Last))));
+                               Len   => 2 * Integer (Recv_Len))));
    end;
 
    --  End transaction with first reader

@@ -340,7 +340,8 @@ package body PCSC.SCard is
       Send_Pci    : access Thin.SCARD_IO_REQUEST;
       Send_Buffer : in out Thin.Byte_Array;
       Recv_Pci    : access Thin.SCARD_IO_REQUEST;
-      Recv_Buffer : in out Thin.Byte_Array)
+      Recv_Buffer : in out Thin.Byte_Array;
+      Recv_Len    : in out Natural)
    is
       Res         : Thin.DWORD;
 
@@ -359,6 +360,10 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Transmit failed");
       end if;
+
+      --  Return read bytes count
+
+      Recv_Len := Natural (Recv_Length);
    end Transmit;
 
    ----------------------

@@ -174,7 +174,8 @@ package PCSC.SCard is
       Send_Pci    : access Thin.SCARD_IO_REQUEST;
       Send_Buffer : in out Thin.Byte_Array;
       Recv_Pci    : access Thin.SCARD_IO_REQUEST;
-      Recv_Buffer : in out Thin.Byte_Array);
+      Recv_Buffer : in out Thin.Byte_Array;
+      Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.
 
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
