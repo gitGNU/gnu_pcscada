@@ -27,6 +27,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with PCSC.Thin;
 
+--  PC/SC thick-binding package
 package PCSC.SCard is
 
    package IC renames Interfaces.C;
@@ -194,8 +195,6 @@ package PCSC.SCard is
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
-
-   --  Helper functions. Used to get Ada type from Thin.DWORD value.
 
    function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory

@@ -20,12 +20,16 @@
 --  MA  02110-1301  USA
 --
 
+--  This library provides bindings to PC/SC-middleware for the Ada programming
+--  language. The library allows you to communicate with smart cards using the
+--  SCard API with Ada.
 package PCSC is
 
    SCard_Error : exception;
-   --  Raised by all PCSC.SCard routines in case of error.
+   --  Raised by all PCSC.SCard routines in case of error
 
 private
    Version : constant String := "0.1";
+   --  Current PCSC/Ada version
 
 end PCSC;

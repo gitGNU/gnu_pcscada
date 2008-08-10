@@ -23,6 +23,7 @@
 with Interfaces.C;
 with Interfaces.C.Strings;
 
+--  PC/SC thin-binding package
 package PCSC.Thin is
 
    package C renames Interfaces.C;
@@ -52,8 +53,6 @@ package PCSC.Thin is
    --  Null initialized ATR
 
 
-   --  void definitions
-
    type void is null record;
    pragma Convention (C, void);
 
@@ -69,8 +68,6 @@ package PCSC.Thin is
    --  Smartcard handle
 
 
-   --  Reader states
-
    type SCARD_READERSTATE is record
       szReader       : LPSTR   := C.Strings.Null_Ptr;
       pvUserData     : LPCVOID := null;
@@ -82,6 +79,7 @@ package PCSC.Thin is
    type SCARD_READERSTATE_A is array (C.size_t range <>) of aliased
      SCARD_READERSTATE;
    type SCARD_READERSTATE_A_Access is access all SCARD_READERSTATE;
+   --  Reader states
 
    type SCARD_IO_REQUEST is record
       dwProtocol  : DWORD;
@@ -90,160 +88,257 @@ package PCSC.Thin is
    --  SCard io request structure
 
 
-   --  SCard error codes
-
    subtype Return_Code is DWORD range 16#0000_0000# .. 16#8010_002E#;
+   --  SCard error return codes
 
    SCARD_S_SUCCESS              : constant := 16#0000_0000#;
-   --  No error was encountered.
+   --  No error was encountered
+
    SCARD_F_INTERNAL_ERROR       : constant := 16#8010_0001#;
-   --  An internal consistency check failed.
+   --  An internal consistency check failed
+
    SCARD_E_CANCELLED            : constant := 16#8010_0002#;
-   --  The action was cancelled by an SCardCancel request.
+   --  The action was cancelled by an SCardCancel request
+
    SCARD_E_INVALID_HANDLE       : constant := 16#8010_0003#;
-   --  The supplied handle was invalid.
+   --  The supplied handle was invalid
+
    SCARD_E_INVALID_PARAMETER    : constant := 16#8010_0004#;
    --  One or more of the supplied parameters could not be properly
-   --  interpreted.
+   --  interpreted
+
    SCARD_E_INVALID_TARGET       : constant := 16#8010_0005#;
-   --  Registry startup information is missing or invalid.
+   --  Registry startup information is missing or invalid
+
    SCARD_E_NO_MEMORY            : constant := 16#8010_0006#;
-   --  Not enough memory available to complete this command.
+   --  Not enough memory available to complete this command
+
    SCARD_F_WAITED_TOO_LONG      : constant := 16#8010_0007#;
-   --  An internal consistency timer has expired.
+   --  An internal consistency timer has expired
+
    SCARD_E_INSUFFICIENT_BUFFER  : constant := 16#8010_0008#;
    --  The data buffer to receive returned data is too small for the returned
-   --  data.
+   --  data
+
    SCARD_E_UNKNOWN_READER       : constant := 16#8010_0009#;
-   --  The specified reader name is not recognized.
+   --  The specified reader name is not recognized
+
    SCARD_E_TIMEOUT              : constant := 16#8010_000A#;
-   --  The user-specified timeout value has expired.
+   --  The user-specified timeout value has expired
+
    SCARD_E_SHARING_VIOLATION    : constant := 16#8010_000B#;
    --  The smart card cannot be accessed because of other connections
-   --  outstanding.
+   --  outstanding
+
    SCARD_E_NO_SMARTCARD         : constant := 16#8010_000C#;
    --  The operation requires a Smart Card, but no Smart Card is currently in
-   --  the device.
+   --  the device
+
    SCARD_E_UNKNOWN_CARD         : constant := 16#8010_000D#;
-   --  The specified smart card name is not recognized.
+   --  The specified smart card name is not recognized
+
    SCARD_E_CANT_DISPOSE         : constant := 16#8010_000E#;
-   --  The system could not dispose of the media in the requested manner.
+   --  The system could not dispose of the media in the requested manner
+
    SCARD_E_PROTO_MISMATCH       : constant := 16#8010_000F#;
    --  The requested protocols are incompatible with the protocol currently in
-   --  use with the smart card.
+   --  use with the smart card
+
    SCARD_E_NOT_READY            : constant := 16#8010_0010#;
-   --  The reader or smart card is not ready to accept commands.
+   --  The reader or smart card is not ready to accept commands
+
    SCARD_E_INVALID_VALUE        : constant := 16#8010_0011#;
    --  One or more of the supplied parameters values could not be properly
-   --  interpreted.
+   --  interpreted
+
    SCARD_E_SYSTEM_CANCELLED     : constant := 16#8010_0012#;
    --  The action was cancelled by the system, presumably to log off or shut
-   --  down.
+   --  down
+
    SCARD_F_COMM_ERROR           : constant := 16#8010_0013#;
-   --  An internal communications error has been detected.
+   --  An internal communications error has been detected
+
    SCARD_F_UNKNOWN_ERROR        : constant := 16#8010_0014#;
-   --  An internal error has been detected, but the source is unknown.
+   --  An internal error has been detected, but the source is unknown
+
    SCARD_E_INVALID_ATR          : constant := 16#8010_0015#;
-   --  An ATR obtained from the registry is not a valid ATR string.
+   --  An ATR obtained from the registry is not a valid ATR string
+
    SCARD_E_NOT_TRANSACTED       : constant := 16#8010_0016#;
-   --  An attempt was made to end a non-existent transaction.
+   --  An attempt was made to end a non-existent transaction
+
    SCARD_E_READER_UNAVAILABLE   : constant := 16#8010_0017#;
-   --  The specified reader is not currently available for use.
+   --  The specified reader is not currently available for use
 
    SCARD_W_UNSUPPORTED_CARD     : constant := 16#8010_0065#;
    --  The reader cannot communicate with the card, due to ATR string
-   --  configuration conflicts.
+   --  configuration conflicts
+
    SCARD_W_UNRESPONSIVE_CARD    : constant := 16#8010_0066#;
-   --  The smart card is not responding to a reset.
+   --  The smart card is not responding to a reset
+
    SCARD_W_UNPOWERED_CARD       : constant := 16#8010_0067#;
    --  Power has been removed from the smart card, so that further
-   --  communication is not possible.
+   --  communication is not possible
+
    SCARD_W_RESET_CARD           : constant := 16#8010_0068#;
    --  The smart card has been reset, so any shared state information is
-   --  invalid.
+   --  invalid
+
    SCARD_W_REMOVED_CARD         : constant := 16#8010_0069#;
    --  The smart card has been removed, so further communication is not
-   --  possible.
+   --  possible
+
 
    SCARD_E_PCI_TOO_SMALL        : constant := 16#8010_0019#;
-   --  The PCI Receive buffer was too small.
+   --  The PCI Receive buffer was too small
+
    SCARD_E_READER_UNSUPPORTED   : constant := 16#8010_001A#;
-   --  The reader driver does not meet minimal requirements for support.
+   --  The reader driver does not meet minimal requirements for support
+
    SCARD_E_DUPLICATE_READER     : constant := 16#8010_001B#;
-   --  The reader driver did not produce a unique reader name.
+   --  The reader driver did not produce a unique reader name
+
    SCARD_E_CARD_UNSUPPORTED     : constant := 16#8010_001C#;
-   --  The smart card does not meet minimal requirements for support.
+   --  The smart card does not meet minimal requirements for support
+
    SCARD_E_NO_SERVICE           : constant := 16#8010_001D#;
-   --  The Smart card resource manager is not running.
+   --  The Smart card resource manager is not running
+
    SCARD_E_SERVICE_STOPPED      : constant := 16#8010_001E#;
-   --  The Smart card resource manager has shut down.
+   --  The Smart card resource manager has shut down
+
    SCARD_E_NO_READERS_AVAILABLE : constant := 16#8010_002E#;
-   --  Cannot find a smart card reader.
+   --  Cannot find a smart card reader
+
+
 
    SCARD_SCOPE_USER             : constant := 16#0000#;
    --  Scope in user space
+
    SCARD_SCOPE_TERMINAL         : constant := 16#0001#;
    --  Scope in terminal
+
    SCARD_SCOPE_SYSTEM           : constant := 16#0002#;
    --  Scope in system
 
-   SCARD_PROTOCOL_UNDEFINED     : constant := 16#0000#; --  protocol not set
-   SCARD_PROTOCOL_UNSET         : constant := 16#0000#; --  backward compat
-   SCARD_PROTOCOL_T0            : constant := 16#0001#; --  T=0 active protocol
-   SCARD_PROTOCOL_T1            : constant := 16#0002#; --  T=1 active protocol
-   SCARD_PROTOCOL_RAW           : constant := 16#0004#; --  Raw active protocol
-   SCARD_PROTOCOL_T15           : constant := 16#0008#; --  T=15 protocol
 
-   SCARD_SHARE_EXCLUSIVE        : constant := 16#0001#; --  Exclusive mode only
-   SCARD_SHARE_SHARED           : constant := 16#0002#; --  Shared mode only
-   SCARD_SHARE_DIRECT           : constant := 16#0003#; --  Raw mode only
+   SCARD_PROTOCOL_UNDEFINED     : constant := 16#0000#;
+   --  protocol not set
 
-   SCARD_LEAVE_CARD             : constant := 16#0000#; --  Do nothing on close
-   SCARD_RESET_CARD             : constant := 16#0001#; --  Reset on close
-   SCARD_UNPOWER_CARD           : constant := 16#0002#; --  Power down on close
-   SCARD_EJECT_CARD             : constant := 16#0003#; --  Eject on close
+   SCARD_PROTOCOL_UNSET         : constant := 16#0000#;
+   --  backward compat
 
-   SCARD_UNKNOWN                : constant := 16#0001#; --  Unknown state
-   SCARD_ABSENT                 : constant := 16#0002#; --  Card is absent
-   SCARD_PRESENT                : constant := 16#0004#; --  Card is present
-   SCARD_SWALLOWED              : constant := 16#0008#; --  Card not powered
-   SCARD_POWERED                : constant := 16#0010#; --  Card is powered
-   SCARD_NEGOTIABLE             : constant := 16#0020#; --  Ready for PTS
-   SCARD_SPECIFIC               : constant := 16#0040#; --  PTS has been set
+   SCARD_PROTOCOL_T0            : constant := 16#0001#;
+   --  T=0 active protocol
 
-   SCARD_STATE_UNAWARE          : constant := 16#0000#; --  App wants status
-   SCARD_STATE_IGNORE           : constant := 16#0001#; --  Ignore this reader
-   SCARD_STATE_CHANGED          : constant := 16#0002#; --  State has changed
-   SCARD_STATE_UNKNOWN          : constant := 16#0004#; --  Reader unknown
-   SCARD_STATE_UNAVAILABLE      : constant := 16#0008#; --  Status unavailable
-   SCARD_STATE_EMPTY            : constant := 16#0010#; --  Card removed
-   SCARD_STATE_PRESENT          : constant := 16#0020#; --  Card inserted
-   SCARD_STATE_ATRMATCH         : constant := 16#0040#; --  ATR matches card
-   SCARD_STATE_EXCLUSIVE        : constant := 16#0080#; --  Exclusive Mode
-   SCARD_STATE_INUSE            : constant := 16#0100#; --  Shared Mode
-   SCARD_STATE_MUTE             : constant := 16#0200#; --  Unresponsive card
-   SCARD_STATE_UNPOWERED        : constant := 16#0400#; --  Unpowered card
+   SCARD_PROTOCOL_T1            : constant := 16#0002#;
+   --  T=1 active protocol
 
-   --  Protocol control information (PCI)
+   SCARD_PROTOCOL_RAW           : constant := 16#0004#;
+   --  Raw active protocol
+
+   SCARD_PROTOCOL_T15           : constant := 16#0008#;
+   --  T=15 protocol
+
+   SCARD_SHARE_EXCLUSIVE        : constant := 16#0001#;
+   --  Exclusive mode only
+
+   SCARD_SHARE_SHARED           : constant := 16#0002#;
+   --  Shared mode only
+
+   SCARD_SHARE_DIRECT           : constant := 16#0003#;
+   --  Raw mode only
+
+
+   SCARD_LEAVE_CARD             : constant := 16#0000#;
+   --  Do nothing on close
+
+   SCARD_RESET_CARD             : constant := 16#0001#;
+   --  Reset on close
+
+   SCARD_UNPOWER_CARD           : constant := 16#0002#;
+   --  Power down on close
+
+   SCARD_EJECT_CARD             : constant := 16#0003#;
+   --  Eject on close
+
+
+   SCARD_UNKNOWN                : constant := 16#0001#;
+   --  Unknown state
+
+   SCARD_ABSENT                 : constant := 16#0002#;
+   --  Card is absent
+
+   SCARD_PRESENT                : constant := 16#0004#;
+   --  Card is present
+
+   SCARD_SWALLOWED              : constant := 16#0008#;
+   --  Card not powered
+
+   SCARD_POWERED                : constant := 16#0010#;
+   --  Card is powered
+
+   SCARD_NEGOTIABLE             : constant := 16#0020#;
+   --  Ready for PTS
+
+   SCARD_SPECIFIC               : constant := 16#0040#;
+   --  PTS has been set
+
+
+   SCARD_STATE_UNAWARE          : constant := 16#0000#;
+   --  App wants status
+
+   SCARD_STATE_IGNORE           : constant := 16#0001#;
+   --  Ignore this reader
+
+   SCARD_STATE_CHANGED          : constant := 16#0002#;
+   --  State has changed
+
+   SCARD_STATE_UNKNOWN          : constant := 16#0004#;
+   --  Reader unknown
+
+   SCARD_STATE_UNAVAILABLE      : constant := 16#0008#;
+   --  Status unavailable
+
+   SCARD_STATE_EMPTY            : constant := 16#0010#;
+   --  Card removed
+
+   SCARD_STATE_PRESENT          : constant := 16#0020#;
+   --  Card inserted
+
+   SCARD_STATE_ATRMATCH         : constant := 16#0040#;
+   --  ATR matches card
+
+   SCARD_STATE_EXCLUSIVE        : constant := 16#0080#;
+   --  Exclusive Mode
+
+   SCARD_STATE_INUSE            : constant := 16#0100#;
+   --  Shared Mode
+
+   SCARD_STATE_MUTE             : constant := 16#0200#;
+   --  Unresponsive card
+
+   SCARD_STATE_UNPOWERED        : constant := 16#0400#;
+   --  Unpowered card
+
 
    SCARD_PCI_T0  : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_T0, cbPciLength => 8);
    --  Protocol control information (PCI) for T=0
+
    SCARD_PCI_T1  : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_T1, cbPciLength => 8);
    --  Protocol control information (PCI) for T=1
+
    SCARD_PCI_RAW : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_RAW, cbPciLength => 8);
    --  Protocol control information (PCI) for RAW protocol
 
 
-   --  PC/SC Lite specific extension
-
    INFINITE                     : constant := 16#FFFF_FFFF#;
-   --  Infinite timeout
+   --  Infinite timeout (PC/SC Lite specific extension)
 
-
-   --  Context related functions
 
    function SCardEstablishContext
      (dwScope     : in DWORD;
@@ -251,11 +346,14 @@ package PCSC.Thin is
       pvReserver2 : in LPCVOID := null;
       phContext   : access SCARDCONTEXT)
       return DWORD;
+   --  Establish PC/SC context
 
    function SCardReleaseContext (hContext : in SCARDCONTEXT) return DWORD;
-   function SCardIsValidContext (hContext : in SCARDCONTEXT) return DWORD;
+   --  Release PC/SC context
 
-   --  Connect / Reconnect / Disconnect
+   function SCardIsValidContext (hContext : in SCARDCONTEXT) return DWORD;
+   --  Validate PC/SC context
+
 
    function SCardConnect
      (hContext             : in SCARDCONTEXT;
@@ -265,6 +363,7 @@ package PCSC.Thin is
       phCard               : access SCARDHANDLE;
       pdwActiveProtocol    : access DWORD)
       return DWORD;
+   --  Connect to specific SCard
 
    function SCardReconnect
      (hCard                : in SCARDHANDLE;
@@ -273,26 +372,27 @@ package PCSC.Thin is
       dwInitialization     : in DWORD;
       pdwActiveProtocol    : access DWORD)
       return DWORD;
+   --  Recconnect to specific SCard
 
    function SCardDisconnect
      (hCard : in SCARDHANDLE;
       dwDisposition : in DWORD)
       return DWORD;
+   --  Disconnect from specific SCard
 
-
-   --  Transaction handling
 
    function SCardBeginTransaction (hCard : SCARDHANDLE) return DWORD;
+   --  Begin transaction with specific SCard
 
    function SCardEndTransaction
      (hCard         : SCARDHANDLE;
       dwDisposition : DWORD)
       return DWORD;
+   --  End transaction with specific SCard
 
    function SCardCancelTransaction (hCard : SCARDHANDLE) return DWORD;
+   --  Cancel transaction with specific SCard
 
-
-   --  Card-status management
 
    function SCardStatus
      (hCard : in SCARDHANDLE;
@@ -366,8 +466,6 @@ package PCSC.Thin is
       return DWORD;
    --  Set an attribute of the IFD handler
 
-
-   --  Helper functions
 
    function pcsc_stringify_error (status : DWORD) return C.Strings.chars_ptr;
    --  Get stringified error message

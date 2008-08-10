@@ -25,6 +25,7 @@ with PCSC.SCard;
 
 use PCSC;
 
+--  SCard utilities package
 package PCSC.SCard.Utils is
 
    function To_String (Given : Thin.Byte_Array; Len : Positive) return String;
