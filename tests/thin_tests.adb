@@ -73,7 +73,7 @@ begin
         ("KOBIL KAAN SIM III (K_000000000) 00 00");
    begin
 
-      --  List readers.
+      --  List readers
 
       ret := SCardListReaders (hContext    => hContext,
                                mszReaders  =>
@@ -89,29 +89,7 @@ begin
       Ada.Text_IO.Put_Line ("readers: " &
                             Interfaces.C.Strings.Value (mszReaders));
 
-      declare
-         rgbAtr : ATR   := Null_ATR;
-         rgReaderStates : aliased SCARD_READERSTATE;
-
-      begin
-         --  Status change detection.
-         rgReaderStates.szReader := Reader_Name;
-         ret := SCardGetStatusChange
-           (hContext       => hContext,
-            dwTimeout      => INFINITE,
-            rgReaderStates => rgReaderStates'Unchecked_Access,
-            cReaders       => 1);
-
-         if ret = SCARD_S_SUCCESS then
-            Ada.Text_IO.Put_Line ("status change detected");
-            Ada.Text_IO.Put_Line ("status of reader is (dec): " &
-                                  Integer'Image
-                                    (Integer (
-                                       rgReaderStates.dwEventState)));
-         end if;
-      end;
-
-      --  Try to connect.
+      --  Try to connect
 
       ret := SCardConnect (hContext             => hContext,
                            szReader             => Reader_Name,
@@ -125,7 +103,8 @@ begin
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("connect ok");
 
-         --  Try to re-connect.
+         --  Try to re-connect
+
          ret := SCardReconnect (hCard                => hCard,
                                 dwShareMode          => SCARD_SHARE_SHARED,
                                 dwPreferredProtocols =>
@@ -139,7 +118,8 @@ begin
          end if;
       end if;
 
-      --  Get status.
+      --  Get status
+
       ret := SCardStatus (hCard          => hCard,
                           mszReaderNames => C.Strings.Null_Ptr,
                           pcchReaderLen  => dwReaderLen'Access,
@@ -160,7 +140,8 @@ begin
                                DWORD'Image (dwProtocol));
       end if;
 
-      --  Begin transaction.
+      --  Begin transaction
+
       ret := SCardBeginTransaction (hCard => hCard);
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("transaction start ok");
@@ -173,7 +154,8 @@ begin
          pcbRecvLength : aliased DWORD := 10;
       begin
 
-         --  Send arbitrary APDU to card.
+         --  Send arbitrary APDU to card
+
          ret := SCardTransmit (hCard         => hCard,
                                pioSendPci    => SCARD_PCI_T1'Access,
                                pbSendBuffer  => pbSendBuffer
@@ -191,14 +173,16 @@ begin
                                   Len   => 2 * Integer (pcbRecvLength))));
       end;
 
-      --  End transaction.
+      --  End transaction
+
       ret := SCardEndTransaction (hCard         => hCard,
                                   dwDisposition => SCARD_LEAVE_CARD);
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("transaction end ok");
       end if;
 
-      --  Disconnect.
+      --  Disconnect
+
       ret := SCardDisconnect (hCard         => hCard,
                               dwDisposition => SCARD_RESET_CARD);
 
@@ -206,7 +190,8 @@ begin
          Ada.Text_IO.Put_Line ("disconnect ok");
       end if;
 
-      --  Free memory.
+      --  Free memory
+
       C.Strings.Free (Reader_Name);
    end;
 
