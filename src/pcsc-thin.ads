@@ -88,7 +88,7 @@ package PCSC.Thin is
    --  SCard io request structure
 
 
-   subtype Return_Code is DWORD range 16#0000_0000# .. 16#8010_002E#;
+   subtype Return_Code is DWORD range 16#0000_0000# .. 16#8010_0069#;
    --  SCard error return codes
 
    SCARD_S_SUCCESS              : constant := 16#0000_0000#;
