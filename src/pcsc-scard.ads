@@ -138,8 +138,6 @@ package PCSC.SCard is
    type Readerstates is tagged private;
    --  Reader status change handling
 
-   type Readerstates_Access is access all Readerstates;
-
 
    type PCI is
      (PCI_T0,   --  (PCI) for T=0
