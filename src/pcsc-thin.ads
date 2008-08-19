@@ -68,7 +68,7 @@ package PCSC.Thin is
    --  Smartcard handle
 
 
-   type SCARD_READERSTATE is record
+   type READERSTATE is record
       szReader       : LPSTR   := C.Strings.Null_Ptr;
       pvUserData     : LPCVOID := null;
       dwCurrentState : DWORD   := 0;
@@ -76,9 +76,12 @@ package PCSC.Thin is
       cbAtr          : DWORD   := MAX_ATR_SIZE;
       rgbAtr         : ATR;
    end record;
-   type SCARD_READERSTATE_A is array (C.size_t range <>) of aliased
-     SCARD_READERSTATE;
-   type SCARD_READERSTATE_A_Access is access all SCARD_READERSTATE;
+   type READERSTATE_Access is access all READERSTATE;
+
+   type READERSTATE_Array is array (C.size_t range <>) of aliased
+     READERSTATE_Access;
+   type READERSTATE_Array_Access is access all READERSTATE_Access;
+   pragma Convention (C, READERSTATE_Array_Access);
    --  Reader states
 
    type SCARD_IO_REQUEST is record
@@ -408,7 +411,7 @@ package PCSC.Thin is
    function SCardGetStatusChange
      (hContext       : in SCARDCONTEXT;
       dwTimeout      : in DWORD;
-      rgReaderStates : in SCARD_READERSTATE_A_Access;
+      rgReaderStates : in READERSTATE_Array_Access;
       cReaders       : in DWORD)
       return DWORD;
    --  Used to track status changes of readers

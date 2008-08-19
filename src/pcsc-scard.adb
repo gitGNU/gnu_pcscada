@@ -89,6 +89,10 @@ package body PCSC.SCard is
          PCI_RAW => Thin.SCARD_PCI_RAW);
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
 
+
+   function To_C (States : in Readerstates) return Thin.READERSTATE_Array;
+
+
    -----------------------
    -- Establish_Context --
    -----------------------
@@ -163,7 +167,7 @@ package body PCSC.SCard is
       end if;
 
       declare
-         C_Readers : aliased char_array := (1 .. IC.size_t (Len) => <>);
+         C_Readers : aliased char_array := (1 .. size_t (Len) => <>);
       begin
 
          --  Get readers for this context
@@ -188,6 +192,35 @@ package body PCSC.SCard is
          end;
       end;
    end List_Readers;
+
+   -------------------
+   -- Status_Change --
+   -------------------
+
+   procedure Status_Change
+     (Context : in SCard.Context;
+      Timeout : in Natural := 0;
+      Readers : in out Readerstates)
+   is
+      Res       : Thin.DWORD;
+      C_Timeout : Thin.DWORD;
+      C_States  : Thin.READERSTATE_Array := To_C (States => Readers);
+   begin
+      if Timeout = 0 then
+         C_Timeout := Thin.INFINITE;
+      end if;
+
+      Res := Thin.SCardGetStatusChange
+        (hContext       => Context.hContext,
+         dwTimeout      => C_Timeout,
+         rgReaderStates => C_States (C_States'First)'Unchecked_Access,
+         cReaders       => Thin.DWORD (C_States'Last));
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Status change detection failed");
+      end if;
+   end Status_Change;
 
    -------------
    -- Connect --
@@ -318,7 +351,7 @@ package body PCSC.SCard is
    begin
       Res := Thin.SCardStatus
         (hCard          => Card.hCard,
-         mszReaderNames => IC.Strings.Null_Ptr,
+         mszReaderNames => Strings.Null_Ptr,
          pcchReaderLen  => dwReaderLen'Access,
          pdwState       => dwState'Unchecked_Access,
          pdwProtocol    => dwProtocol'Access,
@@ -385,6 +418,16 @@ package body PCSC.SCard is
       return To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
 
+   ----------------
+   -- Add_Reader --
+   ----------------
+
+   procedure Add_Reader (States : in out Readerstates; State : in Readerstate)
+   is
+   begin
+      States.Data.Append (New_Item => State);
+   end Add_Reader;
+
    ---------------------
    -- SCard_Exception --
    ---------------------
@@ -436,7 +479,7 @@ package body PCSC.SCard is
    -- To_LPSTR --
    --------------
 
-   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr is
+   function To_LPSTR (Reader : in Reader_ID) return Strings.chars_ptr is
    begin
       return Strings.New_String (To_String (Reader));
    end To_LPSTR;
@@ -475,5 +518,38 @@ package body PCSC.SCard is
       end loop;
       return States;
    end To_Ada;
+
+   ----------
+   -- To_C --
+   ----------
+
+   function To_C (States : in Readerstates) return Thin.READERSTATE_Array
+   is
+      use VORSP;
+
+      Position : Cursor := States.Data.First;
+      C_States : Thin.READERSTATE_Array
+        (size_t (1) .. size_t (States.Data.Last_Index));
+   begin
+      while Has_Element (Position) loop
+         declare
+            Item : constant Readerstate := Element (Position);
+         begin
+            C_States (size_t (To_Index (Position))) :=
+              new Thin.READERSTATE'
+                (szReader       => Strings.New_String
+                     (To_String (Item.Name)),
+                 pvUserData     => null,
+                 dwCurrentState => Thin.SCARD_STATE_UNAWARE,
+                 dwEventState   => 0,
+                 cbAtr          => Thin.MAX_ATR_SIZE,
+                 rgbAtr         => Null_ATR);
+
+            Next (Position);
+         end;
+      end loop;
+
+      return C_States;
+   end To_C;
 
 end PCSC.SCard;

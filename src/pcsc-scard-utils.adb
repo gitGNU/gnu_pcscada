@@ -75,13 +75,13 @@ package body PCSC.SCard.Utils is
       use Ada.Strings.Unbounded;
 
       Str_States : Unbounded_String;
-      Position   : SCard.VOSP.Cursor := States.Data.First;
+      Position   : SCard.VOSCP.Cursor := States.Data.First;
       State      : SCard.Card_State;
    begin
-      while SCard.VOSP.Has_Element (Position) loop
-         State := SCard.VOSP.Element (Position);
+      while SCard.VOSCP.Has_Element (Position) loop
+         State := SCard.VOSCP.Element (Position);
          Str_States := SCard.Card_State'Image (State) & " " & Str_States;
-         SCard.VOSP.Next (Position);
+         SCard.VOSCP.Next (Position);
       end loop;
       return To_String (Str_States);
    end To_String;

@@ -39,6 +39,37 @@ package PCSC.SCard is
    type Card is limited private;
    --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
 
+
+   subtype Byte_Set is Thin.Byte_Array;
+   --  Byte_Sets are used to send and receive data to/from SCard-Readers. At
+   --  the moment, Byte_Sets are just subtypes of Thin.Byte_Arrays.
+
+   Null_Byte_Set : constant Byte_Set;
+   --  Empty Byte_Set
+
+
+   subtype ATR is Thin.ATR;
+   --  Card ATR. Directly mapped to thin binding ATR (atm), which is a
+   --  Byte_Array type.
+
+   ATR_Length : constant Integer  := Thin.MAX_ATR_SIZE;
+   --  Max ATR length
+
+   Null_ATR   : constant Byte_Set := Thin.Null_ATR;
+   --  Null initialized ATR
+
+
+   subtype Reader_ID is Unbounded_String;
+   --  Reader friendly name
+
+   package Readers_Vector is new
+     Ada.Containers.Indefinite_Vectors (Positive, Reader_ID);
+   --  Vector of readers
+
+   subtype Readers_List is Readers_Vector.Vector;
+   --  Readers list returned by List_Readers()
+
+
    type Scope is
      (Scope_User,     --  Scope in user space
       Scope_Terminal, --  Scope in terminal
@@ -78,7 +109,7 @@ package PCSC.SCard is
    --  Card states
 
    type Card_States is tagged private;
-   --  Card states handling.
+   --  Card states handling
 
    type Reader_State is
      (State_Unaware,     --  App wants status
@@ -95,34 +126,21 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
+   type Readerstate is record
+      Name          : Reader_ID;
+      Current_State : Reader_State;
+      Event_State   : Reader_State;
+      Card_ATR      : ATR := Null_ATR;
+   end record;
+
+   type Readerstates is tagged private;
+   --  Reader status change handling
+
    type PCI is
      (PCI_T0,   --  (PCI) for T=0
       PCI_T1,   --  (PCI) for T=1
       PCI_RAW); --  (PCI) for RAW protocol
    --  Protocol control information types
-
-   subtype Reader_ID is Unbounded_String;
-   --  Reader friendly name
-
-   package Readers_Vector is new
-     Ada.Containers.Indefinite_Vectors (Positive, Reader_ID);
-   use Readers_Vector;
-   --  Vector of readers
-
-   subtype Readers_List is Readers_Vector.Vector;
-   --  Readers list returned by List_Readers()
-
-   subtype ATR is Thin.ATR;
-   ATR_Length : constant Integer := Thin.MAX_ATR_SIZE;
-   --  Card ATR. Directly mapped to thin binding ATR (atm), which is a
-   --  Byte_Array type.
-
-   subtype Byte_Set is Thin.Byte_Array;
-   --  Byte_Sets are used to send and receive data to/from SCard-Readers. At
-   --  the moment, Byte_Sets are just subtypes of Thin.Byte_Arrays.
-
-   Null_Byte_Set : constant Byte_Set;
-   --  Empty Byte_Set
 
    type Callback is access procedure (ID : in Reader_ID);
    --  Callback for reader ID handling. Provides flexible way to access
@@ -135,14 +153,19 @@ package PCSC.SCard is
    --  SCard_Scope type.
 
    procedure Release_Context (Context : in out SCard.Context);
-   --  Release acquired SCard-context.
+   --  Release previously acquired SCard context.
 
    function Is_Valid (Context : in SCard.Context) return Boolean;
-   --  Verify that given SCard-Context is valid.
+   --  Verify that given SCard context is valid.
 
    function List_Readers (Context : in SCard.Context)
                           return Readers_List;
    --  Return list of all available readers for this PC/SC context.
+
+   procedure Status_Change
+     (Context : in SCard.Context;
+      Timeout : in Natural := 0;
+      Readers : in out Readerstates);
 
    procedure Connect
      (Card    : in out SCard.Card;
@@ -195,6 +218,8 @@ package PCSC.SCard is
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
+   procedure Add_Reader (States : in out Readerstates; State : in Readerstate);
+
 
    function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory
@@ -227,17 +252,28 @@ private
       Active_Proto : aliased Thin.DWORD := Thin.SCARD_PROTOCOL_UNDEFINED;
    end record;
 
-   --  Card states, wrapper for indef vector
+   --  Card states, reader states vector packages
 
-   package Vector_Of_States_Package is new
-     Ada.Containers.Indefinite_Vectors (Index_Type   => Natural,
+   package Vector_Of_CStates_Package is new
+     Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
                                         Element_Type => Card_State);
 
-   package VOSP renames Vector_Of_States_Package;
-   subtype Vector_Of_States_Type is VOSP.Vector;
+   package VOSCP renames Vector_Of_CStates_Package;
+   subtype Vector_Of_CStates_Type is VOSCP.Vector;
 
    type Card_States is tagged record
-      Data : Vector_Of_States_Type;
+      Data : Vector_Of_CStates_Type;
+   end record;
+
+   package Vector_Of_RStates_Package is new
+     Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
+                                        Element_Type => Readerstate);
+
+   package VORSP renames Vector_Of_RStates_Package;
+   subtype Vector_Of_RStates_Type is VORSP.Vector;
+
+   type Readerstates is tagged record
+      Data : Vector_Of_RStates_Type;
    end record;
 
    Null_Byte : constant Thin.Byte := 16#00#;

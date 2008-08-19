@@ -36,6 +36,9 @@ procedure Thick_Tests is
    package SCU renames SCard.Utils;
 
    pragma Linker_Options ("-lpcsclite");
+
+   Reader_States : SCard.Readerstates;
+   Reader1       : SCard.Readerstate;
 begin
 
    --  Establish context
@@ -48,6 +51,13 @@ begin
    Readers := SCard.List_Readers (Context => Context);
    SCU.For_Every_Reader (Readers => Readers,
                          Call    => SCU.Print_ReaderID'Access);
+
+   --  Detect status changes
+   Reader1.Name := Readers.First_Element;
+   Reader1.Current_State := SCard.State_Unaware;
+   Reader_States.Add_Reader (Reader1);
+   SCard.Status_Change (Context => Context,
+                        Readers => Reader_States);
 
    --  Connect to first reader
 
@@ -101,6 +111,7 @@ begin
    end;
 
    --  Send arbitrary APDU to card
+
    declare
       Recv_Buffer : SCard.Byte_Set (1 .. 10);
       Send_Buffer : SCard.Byte_Set :=
