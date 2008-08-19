@@ -91,6 +91,25 @@ package body PCSC.SCard is
 
 
    function To_C (States : in Readerstates) return Thin.READERSTATE_Array;
+   --  Convert an Ada type Readerstates array to the corresponding C
+   --  READERSTATE_ARRAY.
+
+   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
+   --  Return a new C compatible string from Reader_ID. The allocated memory
+   --  must be freed by calling Free.
+
+   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
+   --  Return Ada style Proto for C_Protocol (DWORD).
+
+   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States;
+   --  Return Ada style Card_States for C_Cardstate (DWORD).
+
+   --  function To_Ada (C_Readerstate : Thin.DWORD) return Reader_State;
+   --  Return Ada style Reader_States for C_Readerstate (DWORD).
+
+   procedure To_Ada
+     (States   : in out Readerstates;
+      C_States : in Thin.READERSTATE_Array);
 
 
    -----------------------
@@ -213,13 +232,19 @@ package body PCSC.SCard is
       Res := Thin.SCardGetStatusChange
         (hContext       => Context.hContext,
          dwTimeout      => C_Timeout,
-         rgReaderStates => C_States (C_States'First)'Unchecked_Access,
+         rgReaderStates => C_States (C_States'First),
          cReaders       => Thin.DWORD (C_States'Last));
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
                           Message => "Status change detection failed");
       end if;
+
+      --  Write back results
+      To_Ada (States   => Readers,
+              C_States => C_States);
+
+      --  Free C_States again
    end Status_Change;
 
    -------------
@@ -504,15 +529,15 @@ package body PCSC.SCard is
       return Proto_Undefined;
    end To_Ada;
 
-   --------------------------
-   -- To_Ada (Card_States) --
-   --------------------------
+   -------------------------
+   -- To_Ada (Cardstates) --
+   -------------------------
 
-   function To_Ada (C_State : Thin.DWORD) return Card_States is
+   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States is
       States     : Card_States;
    begin
       for P in C_Card_State'Range loop
-         if (C_State and C_Card_State (P)) /= 0 then
+         if (C_Cardstate and C_Card_State (P)) /= 0 then
             States.Data.Append (New_Item => P);
          end if;
       end loop;
@@ -539,11 +564,11 @@ package body PCSC.SCard is
               new Thin.READERSTATE'
                 (szReader       => Strings.New_String
                      (To_String (Item.Name)),
-                 pvUserData     => null,
-                 dwCurrentState => Thin.SCARD_STATE_UNAWARE,
+                 pvUserData     => null,  --  not used atm
+                 dwCurrentState => C_Reader_State (Item.Current_State),
                  dwEventState   => 0,
-                 cbAtr          => Thin.MAX_ATR_SIZE,
-                 rgbAtr         => Null_ATR);
+                 cbAtr          => Item.Card_ATR'Size,
+                 rgbAtr         => Item.Card_ATR);
 
             Next (Position);
          end;
@@ -552,4 +577,13 @@ package body PCSC.SCard is
       return C_States;
    end To_C;
 
+   procedure To_Ada
+     (States   : in out Readerstates;
+      C_States : in Thin.READERSTATE_Array)
+   is
+   begin
+      for Index in C_States'Range loop
+         null;
+      end loop;
+   end To_Ada;
 end PCSC.SCard;

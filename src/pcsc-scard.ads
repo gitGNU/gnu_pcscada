@@ -22,6 +22,7 @@
 
 with Interfaces.C;
 with Interfaces.C.Strings;
+
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
@@ -126,6 +127,7 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
+
    type Readerstate is record
       Name          : Reader_ID;
       Current_State : Reader_State;
@@ -135,6 +137,9 @@ package PCSC.SCard is
 
    type Readerstates is tagged private;
    --  Reader status change handling
+
+   type Readerstates_Access is access all Readerstates;
+
 
    type PCI is
      (PCI_T0,   --  (PCI) for T=0
@@ -218,18 +223,10 @@ package PCSC.SCard is
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
+
    procedure Add_Reader (States : in out Readerstates; State : in Readerstate);
-
-
-   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
-   --  Return a new C compatible string from Reader_ID. The allocated memory
-   --  must be freed by calling Free.
-
-   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
-   --  Return Ada style Proto for C_Protocol (DWORD).
-
-   function To_Ada (C_State : Thin.DWORD) return Card_States;
-   --  Return Ada style Card_States for C_State (DWORD).
+   --  Add a new reader to reader states array. State specifies the assumed
+   --  initial state of the reader/card.
 
 private
 

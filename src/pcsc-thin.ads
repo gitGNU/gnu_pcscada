@@ -76,13 +76,14 @@ package PCSC.Thin is
       cbAtr          : DWORD   := MAX_ATR_SIZE;
       rgbAtr         : ATR;
    end record;
+   --  Reader state type
+
    type READERSTATE_Access is access all READERSTATE;
+   --  Access type to reader state
 
    type READERSTATE_Array is array (C.size_t range <>) of aliased
      READERSTATE_Access;
-   type READERSTATE_Array_Access is access all READERSTATE_Access;
-   pragma Convention (C, READERSTATE_Array_Access);
-   --  Reader states
+   --  Array of access to reader states
 
    type SCARD_IO_REQUEST is record
       dwProtocol  : DWORD;
@@ -411,7 +412,7 @@ package PCSC.Thin is
    function SCardGetStatusChange
      (hContext       : in SCARDCONTEXT;
       dwTimeout      : in DWORD;
-      rgReaderStates : in READERSTATE_Array_Access;
+      rgReaderStates : in READERSTATE_Access;
       cReaders       : in DWORD)
       return DWORD;
    --  Used to track status changes of readers
