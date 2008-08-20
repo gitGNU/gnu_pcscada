@@ -66,9 +66,9 @@ package body PCSC.SCard.Utils is
       return Ada.Strings.Unbounded.To_String (Reader);
    end To_String;
 
-   -----------------------------
-   -- To_String (Card_States) --
-   -----------------------------
+   -----------------------------------
+   -- To_String (Card_States_Array) --
+   -----------------------------------
 
    function To_String (States : in SCard.Card_States_Array) return String
    is
@@ -82,6 +82,26 @@ package body PCSC.SCard.Utils is
          State := SCard.VOCSP.Element (Position);
          Str_States := SCard.Card_State'Image (State) & " " & Str_States;
          SCard.VOCSP.Next (Position);
+      end loop;
+      return To_String (Str_States);
+   end To_String;
+
+   -------------------------------------
+   -- To_String (Reader_States_Array) --
+   -------------------------------------
+
+   function To_String (States : in SCard.Reader_States_Array) return String
+   is
+      use Ada.Strings.Unbounded;
+
+      Str_States : Unbounded_String;
+      Position   : SCard.VORSP.Cursor := States.Data.First;
+      State      : SCard.Reader_State;
+   begin
+      while SCard.VORSP.Has_Element (Position) loop
+         State := SCard.VORSP.Element (Position);
+         Str_States := SCard.Reader_State'Image (State) & " " & Str_States;
+         SCard.VORSP.Next (Position);
       end loop;
       return To_String (Str_States);
    end To_String;

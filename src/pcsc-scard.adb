@@ -103,10 +103,10 @@ package body PCSC.SCard is
    --  Return Ada style Proto for C_Protocol (DWORD).
 
    function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Array;
-   --  Return Ada style Card_States for C_Cardstate (DWORD).
+   --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
 
-   --  function To_Ada (C_Readerstate : Thin.DWORD) return Reader_State;
-   --  Return Ada style Reader_States for C_Readerstate (DWORD).
+   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array;
+   --  Return Ada style Reader_States_Array for C_Readerstate (DWORD).
 
    procedure To_Ada
      (States   : in out Reader_Status_Array;
@@ -225,6 +225,8 @@ package body PCSC.SCard is
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
       C_States  : Thin.READERSTATE_Array := To_C (States => Readers);
+
+      States    : Reader_States_Array;
    begin
       if Timeout = 0 then
          C_Timeout := Thin.INFINITE;
@@ -532,9 +534,9 @@ package body PCSC.SCard is
       return Proto_Undefined;
    end To_Ada;
 
-   -------------------------
-   -- To_Ada (Cardstates) --
-   -------------------------
+   --------------------------------
+   -- To_Ada (Card_States_Array) --
+   --------------------------------
 
    function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Array is
       States     : Card_States_Array;
@@ -547,9 +549,24 @@ package body PCSC.SCard is
       return States;
    end To_Ada;
 
-   ----------
-   -- To_C --
-   ----------
+   ----------------------------------
+   -- To_Ada (Reader_States_Array) --
+   ----------------------------------
+
+   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array is
+      States     : Reader_States_Array;
+   begin
+      for P in C_Reader_State'Range loop
+         if (C_Readerstate and C_Reader_State (P)) /= 0 then
+            States.Data.Append (New_Item => P);
+         end if;
+      end loop;
+      return States;
+   end To_Ada;
+
+   --------------------------------
+   -- To_C (Reader_Status_Array) --
+   --------------------------------
 
    function To_C (States : in Reader_Status_Array)
                   return Thin.READERSTATE_Array
