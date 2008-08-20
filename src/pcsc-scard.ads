@@ -128,15 +128,16 @@ package PCSC.SCard is
    --  Reader / Card states
 
 
-   type Readerstate is record
+   type Reader_Status is record
       Name          : Reader_ID;
       Current_State : Reader_State;
       Event_State   : Reader_State;
       Card_ATR      : ATR := Null_ATR;
    end record;
+   --  Reader status type for status change handling
 
-   type Readerstates is tagged private;
-   --  Reader status change handling
+   type Reader_Status_Array is tagged private;
+   --  Array of reader status types
 
 
    type PCI is
@@ -168,7 +169,7 @@ package PCSC.SCard is
    procedure Status_Change
      (Context : in SCard.Context;
       Timeout : in Natural := 0;
-      Readers : in out Readerstates);
+      Readers : in out Reader_Status_Array);
 
    procedure Connect
      (Card    : in out SCard.Card;
@@ -222,8 +223,10 @@ package PCSC.SCard is
    --  Return protocol in use for a given card handle.
 
 
-   procedure Add_Reader (States : in out Readerstates; State : in Readerstate);
-   --  Add a new reader to reader states array. State specifies the assumed
+   procedure Add_Reader
+     (States : in out Reader_Status_Array;
+      State  : in Reader_Status);
+   --  Add a new reader to reader status array. State specifies the assumed
    --  initial state of the reader/card.
 
 private
@@ -260,15 +263,15 @@ private
       Data : Vector_Of_CStates_Type;
    end record;
 
-   package Vector_Of_RStates_Package is new
+   package Vector_Of_RStatus_Package is new
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
-                                        Element_Type => Readerstate);
+                                        Element_Type => Reader_Status);
 
-   package VORSP renames Vector_Of_RStates_Package;
-   subtype Vector_Of_RStates_Type is VORSP.Vector;
+   package VORSP renames Vector_Of_RStatus_Package;
+   subtype Vector_Of_RStatus_Type is VORSP.Vector;
 
-   type Readerstates is tagged record
-      Data : Vector_Of_RStates_Type;
+   type Reader_Status_Array is tagged record
+      Data : Vector_Of_RStatus_Type;
    end record;
 
    Null_Byte : constant Thin.Byte := 16#00#;

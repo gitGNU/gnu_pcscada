@@ -37,8 +37,8 @@ procedure Thick_Tests is
 
    pragma Linker_Options ("-lpcsclite");
 
-   Reader_States : SCard.Readerstates;
-   Reader1       : SCard.Readerstate;
+   Reader_States : SCard.Reader_Status_Array;
+   Reader1       : SCard.Reader_Status;
 begin
 
    --  Establish context

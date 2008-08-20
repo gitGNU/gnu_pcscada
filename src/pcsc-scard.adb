@@ -90,8 +90,9 @@ package body PCSC.SCard is
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
 
 
-   function To_C (States : in Readerstates) return Thin.READERSTATE_Array;
-   --  Convert an Ada type Readerstates array to the corresponding C
+   function To_C (States : in Reader_Status_Array)
+                  return Thin.READERSTATE_Array;
+   --  Convert Ada type Reader_Status_Array to the corresponding C
    --  READERSTATE_ARRAY.
 
    function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
@@ -108,7 +109,7 @@ package body PCSC.SCard is
    --  Return Ada style Reader_States for C_Readerstate (DWORD).
 
    procedure To_Ada
-     (States   : in out Readerstates;
+     (States   : in out Reader_Status_Array;
       C_States : in Thin.READERSTATE_Array);
 
 
@@ -219,7 +220,7 @@ package body PCSC.SCard is
    procedure Status_Change
      (Context : in SCard.Context;
       Timeout : in Natural := 0;
-      Readers : in out Readerstates)
+      Readers : in out Reader_Status_Array)
    is
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
@@ -447,7 +448,9 @@ package body PCSC.SCard is
    -- Add_Reader --
    ----------------
 
-   procedure Add_Reader (States : in out Readerstates; State : in Readerstate)
+   procedure Add_Reader
+     (States : in out Reader_Status_Array;
+      State  : in Reader_Status)
    is
    begin
       States.Data.Append (New_Item => State);
@@ -548,7 +551,8 @@ package body PCSC.SCard is
    -- To_C --
    ----------
 
-   function To_C (States : in Readerstates) return Thin.READERSTATE_Array
+   function To_C (States : in Reader_Status_Array)
+                  return Thin.READERSTATE_Array
    is
       use VORSP;
 
@@ -558,7 +562,7 @@ package body PCSC.SCard is
    begin
       while Has_Element (Position) loop
          declare
-            Item : constant Readerstate := Element (Position);
+            Item : constant Reader_Status := Element (Position);
          begin
             C_States (size_t (To_Index (Position))) :=
               new Thin.READERSTATE'
@@ -578,7 +582,7 @@ package body PCSC.SCard is
    end To_C;
 
    procedure To_Ada
-     (States   : in out Readerstates;
+     (States   : in out Reader_Status_Array;
       C_States : in Thin.READERSTATE_Array)
    is
    begin
