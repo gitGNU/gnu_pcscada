@@ -35,7 +35,7 @@ package PCSC.SCard.Utils is
    function To_String (Reader : in SCard.Reader_ID) return String;
    --  Return string from Reader_ID.
 
-   function To_String (States : in SCard.Card_States) return String;
+   function To_String (States : in SCard.Card_States_Array) return String;
    --  Return string representation of card reader states.
 
    procedure For_Every_Reader

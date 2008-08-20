@@ -70,7 +70,7 @@ package body PCSC.SCard.Utils is
    -- To_String (Card_States) --
    -----------------------------
 
-   function To_String (States : in SCard.Card_States) return String
+   function To_String (States : in SCard.Card_States_Array) return String
    is
       use Ada.Strings.Unbounded;
 
