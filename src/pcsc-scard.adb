@@ -554,7 +554,7 @@ package body PCSC.SCard is
    function To_C (States : in Reader_Status_Array)
                   return Thin.READERSTATE_Array
    is
-      use VORSP;
+      use VORSTP;
 
       Position : Cursor := States.Data.First;
       C_States : Thin.READERSTATE_Array

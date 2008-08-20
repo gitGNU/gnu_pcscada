@@ -127,6 +127,9 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
+   type Reader_States_Array is tagged private;
+   --  Array of reader states
+
 
    type Reader_Status is record
       Name          : Reader_ID;
@@ -250,29 +253,45 @@ private
       Active_Proto : aliased Thin.DWORD := Thin.SCARD_PROTOCOL_UNDEFINED;
    end record;
 
-   --  Card states, reader states vector packages
+   --  Card states
 
    package Vector_Of_CStates_Package is new
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
                                         Element_Type => Card_State);
 
-   package VOSCP renames Vector_Of_CStates_Package;
-   subtype Vector_Of_CStates_Type is VOSCP.Vector;
+   package VOCSP renames Vector_Of_CStates_Package;
+   subtype Vector_Of_CStates_Type is VOCSP.Vector;
 
    type Card_States_Array is tagged record
       Data : Vector_Of_CStates_Type;
    end record;
 
-   package Vector_Of_RStatus_Package is new
+   --  Reader states
+
+   package Vector_Of_RStates_Package is new
+     Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
+                                        Element_Type => Reader_State);
+
+   package VORSP renames Vector_Of_RStates_Package;
+   subtype Vector_Of_RStates_Type is VORSP.Vector;
+
+   type Reader_States_Array is tagged record
+      Data : Vector_Of_RStates_Type;
+   end record;
+
+   --  Reader status
+
+   package Vector_Of_Status_Package is new
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
                                         Element_Type => Reader_Status);
 
-   package VORSP renames Vector_Of_RStatus_Package;
-   subtype Vector_Of_RStatus_Type is VORSP.Vector;
+   package VORSTP renames Vector_Of_Status_Package;
+   subtype Vector_Of_Status_Type is VORSTP.Vector;
 
    type Reader_Status_Array is tagged record
-      Data : Vector_Of_RStatus_Type;
+      Data : Vector_Of_Status_Type;
    end record;
+
 
    Null_Byte : constant Thin.Byte := 16#00#;
 
