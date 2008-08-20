@@ -566,7 +566,7 @@ package body PCSC.SCard is
                      (To_String (Item.Name)),
                  pvUserData     => null,  --  not used atm
                  dwCurrentState => C_Reader_State (Item.Current_State),
-                 dwEventState   => 0,
+                 dwEventState   => Thin.SCARD_STATE_UNAWARE,
                  cbAtr          => Item.Card_ATR'Size,
                  rgbAtr         => Item.Card_ATR);
 
