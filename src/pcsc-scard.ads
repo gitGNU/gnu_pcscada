@@ -170,9 +170,14 @@ package PCSC.SCard is
    --  Return list of all available readers for this PC/SC context.
 
    procedure Status_Change
-     (Context : in SCard.Context;
-      Timeout : in Natural := 0;
-      Readers : in out Reader_Status_Array);
+     (Context       : in SCard.Context;
+      Timeout       : in Natural := 0;
+      Reader_States : in out Reader_Status_Array);
+   --  This procedure takes a Reader_Status_Array type containing reader names
+   --  and assumed initial state. It then blocks maximum 'Timeout' miliseconds
+   --  time for a change in state to occur. If no timeout is given, 0 will be
+   --  used, which will block forever. When a status change occurs, the
+   --  Reader_States type is updated to reflect this new state.
 
    procedure Connect
      (Card    : in out SCard.Card;

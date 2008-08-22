@@ -56,8 +56,8 @@ begin
    Reader1.Name := Readers.First_Element;
    Reader1.Current_State := SCard.State_Empty;
    Reader_States.Add_Reader (Reader1);
-   SCard.Status_Change (Context => Context,
-                        Readers => Reader_States);
+   SCard.Status_Change (Context       => Context,
+                        Reader_States => Reader_States);
 
    --  Connect to first reader
 

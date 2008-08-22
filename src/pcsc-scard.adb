@@ -218,15 +218,13 @@ package body PCSC.SCard is
    -------------------
 
    procedure Status_Change
-     (Context : in SCard.Context;
-      Timeout : in Natural := 0;
-      Readers : in out Reader_Status_Array)
+     (Context       : in SCard.Context;
+      Timeout       : in Natural := 0;
+      Reader_States : in out Reader_Status_Array)
    is
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
-      C_States  : Thin.READERSTATE_Array := To_C (States => Readers);
-
-      States    : Reader_States_Array;
+      C_States  : Thin.READERSTATE_Array := To_C (States => Reader_States);
    begin
       if Timeout = 0 then
          C_Timeout := Thin.INFINITE;
@@ -244,7 +242,7 @@ package body PCSC.SCard is
       end if;
 
       --  Write back results
-      To_Ada (States   => Readers,
+      To_Ada (States   => Reader_States,
               C_States => C_States);
 
       --  Free C_States again
