@@ -49,15 +49,24 @@ begin
    --  List readers
 
    Readers := SCard.List_Readers (Context => Context);
+   Ada.Text_IO.Put_Line ("found readers: ");
    SCU.For_Every_Reader (Readers => Readers,
                          Call    => SCU.Print_ReaderID'Access);
 
    --  Detect status changes
+
+   Ada.Text_IO.Put_Line ("status change detection ...");
    Reader1.Name := Readers.First_Element;
    Reader1.Current_State := SCard.State_Empty;
    Reader_States.Add_Reader (Reader1);
    SCard.Status_Change (Context       => Context,
                         Reader_States => Reader_States);
+
+   Ada.Text_IO.Put
+     (SCU.To_String (Reader_States.Get_Status (Index => 1).Name) & " : ");
+
+   Ada.Text_IO.Put_Line (SCU.To_String
+     (Reader_States.Get_Status (Index => 1).Event_State));
 
    --  Connect to first reader
 

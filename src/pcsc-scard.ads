@@ -134,10 +134,12 @@ package PCSC.SCard is
    type Reader_Status is record
       Name          : Reader_ID;
       Current_State : Reader_State;
-      Event_State   : Reader_State;
+      Event_State   : Reader_States_Array;
       Card_ATR      : ATR := Null_ATR;
    end record;
-   --  Reader status type for status change handling
+   --  Reader status type for status change handling. Current_State defines
+   --  the current assumed state. Event_State and Card_ATR is updated by
+   --  calling Status_Change procedure.
 
    type Reader_Status_Array is tagged private;
    --  Array of reader status types
@@ -236,6 +238,14 @@ package PCSC.SCard is
       State  : in Reader_Status);
    --  Add a new reader to reader status array. State specifies the assumed
    --  initial state of the reader/card.
+
+   function Size (States : in Reader_Status_Array) return Natural;
+   --  Returns the size of a Reader_Status_Array.
+
+   function Get_Status (States : in Reader_Status_Array;
+                        Index  : Natural)
+                        return Reader_Status;
+   --  Return Reader_Status type at index 'Index'.
 
 private
 

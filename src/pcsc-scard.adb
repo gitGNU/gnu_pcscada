@@ -108,10 +108,6 @@ package body PCSC.SCard is
    function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array;
    --  Return Ada style Reader_States_Array for C_Readerstate (DWORD).
 
-   procedure To_Ada
-     (States   : in out Reader_Status_Array;
-      C_States : in Thin.READERSTATE_Array);
-
 
    -----------------------
    -- Establish_Context --
@@ -222,9 +218,13 @@ package body PCSC.SCard is
       Timeout       : in Natural := 0;
       Reader_States : in out Reader_Status_Array)
    is
+      use VORSTP;
+
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
       C_States  : Thin.READERSTATE_Array := To_C (States => Reader_States);
+
+      Position  : Cursor := Reader_States.Data.First;
    begin
       if Timeout = 0 then
          C_Timeout := Thin.INFINITE;
@@ -241,11 +241,23 @@ package body PCSC.SCard is
                           Message => "Status change detection failed");
       end if;
 
-      --  Write back results
-      To_Ada (States   => Reader_States,
-              C_States => C_States);
+      --  Update Ada type with values returned by C API function
+      --  TODO: what happens when a reader vanishes?
+      --  TODO: don't use Replace_Element, Update existing instead
+      while Has_Element (Position) loop
+         declare
+            Item : Reader_Status := Element (Position);
+         begin
+            Item.Event_State := To_Ada
+              (C_States (C_States'First).dwEventState);
+            Item.Card_ATR    := C_States (size_t (To_Index (Position))).rgbAtr;
+            Reader_States.Data.Replace_Element (Position => Position,
+                                                New_Item => Item);
+            Next (Position);
+         end;
+      end loop;
 
-      --  Free C_States again
+      --  Free C_States
    end Status_Change;
 
    -------------
@@ -456,6 +468,27 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add_Reader;
 
+   ----------
+   -- Size --
+   ----------
+
+   function Size (States : in Reader_Status_Array) return Natural is
+   begin
+      return States.Data.Last_Index;
+   end Size;
+
+   ----------------
+   -- Get_Status --
+   ----------------
+
+   function Get_Status (States : in Reader_Status_Array;
+                        Index  : Natural)
+                        return Reader_Status
+   is
+   begin
+      return States.Data.Element (Index);
+   end Get_Status;
+
    ---------------------
    -- SCard_Exception --
    ---------------------
@@ -595,14 +628,4 @@ package body PCSC.SCard is
 
       return C_States;
    end To_C;
-
-   procedure To_Ada
-     (States   : in out Reader_Status_Array;
-      C_States : in Thin.READERSTATE_Array)
-   is
-   begin
-      for Index in C_States'Range loop
-         null;
-      end loop;
-   end To_Ada;
 end PCSC.SCard;
