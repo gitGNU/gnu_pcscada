@@ -23,6 +23,7 @@
 with Ada.Exceptions;
 with Ada.Strings.Maps;
 with Ada.Characters.Latin_1;
+with Ada.Unchecked_Deallocation;
 
 with GNAT.String_Split;
 
@@ -107,6 +108,14 @@ package body PCSC.SCard is
 
    function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array;
    --  Return Ada style Reader_States_Array for C_Readerstate (DWORD).
+
+   procedure Free is new Ada.Unchecked_Deallocation
+     (Object => Thin.READERSTATE,
+      Name   => Thin.READERSTATE_Access);
+   --  Free memory allocated by a C READERSTATE struct.
+
+   procedure Free (Name : in out Thin.READERSTATE_Array);
+   --  Free C Array of READERSTATES.
 
 
    -----------------------
@@ -258,6 +267,7 @@ package body PCSC.SCard is
       end loop;
 
       --  Free C_States
+      Free (C_States);
    end Status_Change;
 
    -------------
@@ -628,4 +638,16 @@ package body PCSC.SCard is
 
       return C_States;
    end To_C;
+
+   ------------------------------
+   -- Free (READERSTATE_Array) --
+   ------------------------------
+
+   procedure Free (Name : in out Thin.READERSTATE_Array) is
+   begin
+      for Index in Name'Range loop
+         Strings.Free (Name (Index).szReader);
+         Free (Name (Index));
+      end loop;
+   end Free;
 end PCSC.SCard;
