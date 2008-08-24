@@ -47,11 +47,17 @@ begin
       phContext   => hContext'Unchecked_Access);
    if ret = SCARD_S_SUCCESS then
       Ada.Text_IO.Put_Line ("context established");
+   else
+      Ada.Text_IO.Put_Line ("could not establish context");
+      return;
    end if;
 
    ret := SCardIsValidContext (hContext => hContext);
    if ret = SCARD_S_SUCCESS then
       Ada.Text_IO.Put_Line ("context is valid");
+   else
+      Ada.Text_IO.Put_Line ("context not valid");
+      return;
    end if;
 
    declare
@@ -79,6 +85,12 @@ begin
                                mszReaders  =>
                                  Interfaces.C.Strings.Null_Ptr,
                                pcchReaders => dwReaders'Access);
+
+      -- NULL termination is counted as well
+      if dwReaders = 1 then
+         Ada.Text_IO.Put_Line ("no readers found");
+         return;
+      end if;
 
       mszReaders := C.Strings.To_Chars_Ptr
         (new C.char_array (C.size_t (1) .. C.size_t (dwReaders)));
@@ -116,6 +128,9 @@ begin
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("re-connect ok");
          end if;
+      else
+         Ada.Text_IO.Put_Line ("connect to card failed");
+         return;
       end if;
 
       --  Get status
@@ -138,6 +153,9 @@ begin
          Ada.Text_IO.Put_Line ("  -- STATE  : " & DWORD'Image (dwState));
          Ada.Text_IO.Put_Line ("  -- PROTO  : " &
                                DWORD'Image (dwProtocol));
+      else
+         Ada.Text_IO.Put_Line ("get status failed");
+         return;
       end if;
 
       --  Begin transaction
