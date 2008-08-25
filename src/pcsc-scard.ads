@@ -109,7 +109,7 @@ package PCSC.SCard is
       Specific);  -- PTS has been set
    --  Card states
 
-   type Card_States_Array is tagged private;
+   type Card_States_Set is tagged private;
    --  Array of card states
 
    type Reader_State is
@@ -212,7 +212,7 @@ package PCSC.SCard is
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard.Card_States_Array;
+      State   : in out SCard.Card_States_Set;
       Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer);
@@ -277,7 +277,7 @@ private
    package VOCSP renames Vector_Of_CStates_Package;
    subtype Vector_Of_CStates_Type is VOCSP.Vector;
 
-   type Card_States_Array is tagged record
+   type Card_States_Set is tagged record
       Data : Vector_Of_CStates_Type;
    end record;
 

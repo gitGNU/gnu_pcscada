@@ -96,7 +96,7 @@ begin
    SCard.Begin_Transaction (Card => Card);
 
    declare
-      Card_States    : SCard.Card_States_Array;
+      Card_States    : SCard.Card_States_Set;
       Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
       Reader_ATR     : SCard.ATR;
       Reader_ATR_Len : Integer := SCard.ATR_Length;

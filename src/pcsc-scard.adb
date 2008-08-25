@@ -103,7 +103,7 @@ package body PCSC.SCard is
    function To_Ada (C_Protocol : Thin.DWORD) return Proto;
    --  Return Ada style Proto for C_Protocol (DWORD).
 
-   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Array;
+   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set;
    --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
 
    function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array;
@@ -385,7 +385,7 @@ package body PCSC.SCard is
 
    procedure Status
      (Card    : in SCard.Card;
-      State   : in out SCard.Card_States_Array;
+      State   : in out SCard.Card_States_Set;
       Proto   : in out SCard.Proto;
       Atr     : in out SCard.ATR;
       Atr_Len : in out Integer)
@@ -579,8 +579,8 @@ package body PCSC.SCard is
    -- To_Ada (Card_States_Array) --
    --------------------------------
 
-   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Array is
-      States     : Card_States_Array;
+   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set is
+      States     : Card_States_Set;
    begin
       for P in C_Card_State'Range loop
          if (C_Cardstate and C_Card_State (P)) /= 0 then
