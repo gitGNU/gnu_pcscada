@@ -110,7 +110,7 @@ package PCSC.SCard is
    --  Card states
 
    type Card_States_Set is tagged private;
-   --  Array of card states
+   --  Set of card states
 
    type Reader_State is
      (State_Unaware,     --  App wants status
@@ -127,14 +127,14 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
-   type Reader_States_Array is tagged private;
-   --  Array of reader states
+   type Reader_States_Set is tagged private;
+   --  Set of reader states
 
 
    type Reader_Status is record
       Name          : Reader_ID;
       Current_State : Reader_State;
-      Event_State   : Reader_States_Array;
+      Event_State   : Reader_States_Set;
       Card_ATR      : ATR := Null_ATR;
    end record;
    --  Reader status type for status change handling. Current_State defines
@@ -290,7 +290,7 @@ private
    package VORSP renames Vector_Of_RStates_Package;
    subtype Vector_Of_RStates_Type is VORSP.Vector;
 
-   type Reader_States_Array is tagged record
+   type Reader_States_Set is tagged record
       Data : Vector_Of_RStates_Type;
    end record;
 

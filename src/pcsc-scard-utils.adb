@@ -66,9 +66,9 @@ package body PCSC.SCard.Utils is
       return Ada.Strings.Unbounded.To_String (Reader);
    end To_String;
 
-   -----------------------------------
-   -- To_String (Card_States_Array) --
-   -----------------------------------
+   ---------------------------------
+   -- To_String (Card_States_Set) --
+   ---------------------------------
 
    function To_String (States : in SCard.Card_States_Set) return String
    is
@@ -86,11 +86,11 @@ package body PCSC.SCard.Utils is
       return To_String (Str_States);
    end To_String;
 
-   -------------------------------------
-   -- To_String (Reader_States_Array) --
-   -------------------------------------
+   -----------------------------------
+   -- To_String (Reader_States_Set) --
+   -----------------------------------
 
-   function To_String (States : in SCard.Reader_States_Array) return String
+   function To_String (States : in SCard.Reader_States_Set) return String
    is
       use Ada.Strings.Unbounded;
 

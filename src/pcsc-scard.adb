@@ -106,8 +106,8 @@ package body PCSC.SCard is
    function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set;
    --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
 
-   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array;
-   --  Return Ada style Reader_States_Array for C_Readerstate (DWORD).
+   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set;
+   --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
 
    procedure Free is new Ada.Unchecked_Deallocation
      (Object => Thin.READERSTATE,
@@ -591,11 +591,11 @@ package body PCSC.SCard is
    end To_Ada;
 
    ----------------------------------
-   -- To_Ada (Reader_States_Array) --
+   -- To_Ada (Reader_States_Set) --
    ----------------------------------
 
-   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Array is
-      States     : Reader_States_Array;
+   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set is
+      States     : Reader_States_Set;
    begin
       for P in C_Reader_State'Range loop
          if (C_Readerstate and C_Reader_State (P)) /= 0 then
