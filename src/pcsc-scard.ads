@@ -141,8 +141,8 @@ package PCSC.SCard is
    --  the current assumed state. Event_State and Card_ATR is updated by
    --  calling Status_Change procedure.
 
-   type Reader_Status_Array is tagged private;
-   --  Array of reader status types
+   type Reader_Status_Set is tagged private;
+   --  Set of reader status types
 
 
    type PCI is
@@ -174,8 +174,8 @@ package PCSC.SCard is
    procedure Status_Change
      (Context       : in SCard.Context;
       Timeout       : in Natural := 0;
-      Reader_States : in out Reader_Status_Array);
-   --  This procedure takes a Reader_Status_Array type containing reader names
+      Reader_States : in out Reader_Status_Set);
+   --  This procedure takes a Reader_Status_Set type containing reader names
    --  and assumed initial state. It then blocks maximum 'Timeout' miliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
    --  used, which will block forever. When a status change occurs, the
@@ -234,15 +234,15 @@ package PCSC.SCard is
 
 
    procedure Add_Reader
-     (States : in out Reader_Status_Array;
+     (States : in out Reader_Status_Set;
       State  : in Reader_Status);
    --  Add a new reader to reader status array. State specifies the assumed
    --  initial state of the reader/card.
 
-   function Size (States : in Reader_Status_Array) return Natural;
-   --  Returns the size of a Reader_Status_Array.
+   function Size (States : in Reader_Status_Set) return Natural;
+   --  Returns the size of a Reader_Status_Set.
 
-   function Get_Status (States : in Reader_Status_Array;
+   function Get_Status (States : in Reader_Status_Set;
                         Index  : Natural)
                         return Reader_Status;
    --  Return Reader_Status type at index 'Index'.
@@ -303,7 +303,7 @@ private
    package VORSTP renames Vector_Of_Status_Package;
    subtype Vector_Of_Status_Type is VORSTP.Vector;
 
-   type Reader_Status_Array is tagged record
+   type Reader_Status_Set is tagged record
       Data : Vector_Of_Status_Type;
    end record;
 
