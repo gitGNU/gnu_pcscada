@@ -37,7 +37,7 @@ procedure Thick_Tests is
 
    pragma Linker_Options ("-lpcsclite");
 
-   Reader_States : SCard.Reader_Status_Array;
+   Reader_States : SCard.Reader_Status_Set;
    Reader1       : SCard.Reader_Status;
 begin
 
@@ -59,14 +59,17 @@ begin
    Reader1.Name := Readers.First_Element;
    Reader1.Current_State := SCard.State_Empty;
    Reader_States.Add_Reader (Reader1);
-   SCard.Status_Change (Context       => Context,
-                        Reader_States => Reader_States);
+   SCard.Status_Change (Context    => Context,
+                        Status_Set => Reader_States);
 
    Ada.Text_IO.Put
      (SCU.To_String (Reader_States.Get_Status (Index => 1).Name) & " : ");
 
-   Ada.Text_IO.Put_Line (SCU.To_String
-     (Reader_States.Get_Status (Index => 1).Event_State));
+   Ada.Text_IO.Put_Line
+     (SCU.To_String (Reader_States.Get_Status (Index => 1).Event_State));
+
+   Ada.Text_IO.Put_Line
+     (SCU.To_String (Reader_States.Get_Status (Index => 1).Card_ATR));
 
    --  Connect to first reader
 
@@ -99,7 +102,6 @@ begin
       Card_States    : SCard.Card_States_Set;
       Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
       Reader_ATR     : SCard.ATR;
-      Reader_ATR_Len : Integer := SCard.ATR_Length;
    begin
 
       --  Get status of reader / card
@@ -109,10 +111,9 @@ begin
       SCard.Status (Card    => Card,
                     State   => Card_States,
                     Proto   => Reader_Proto,
-                    Atr     => Reader_ATR,
-                    Atr_Len => Reader_ATR_Len);
-      Ada.Text_IO.Put_Line ("  ATR      : " & SCU.To_String
-                            (Given => Reader_ATR, Len => 2 * Reader_ATR_Len));
+                    Atr     => Reader_ATR);
+      Ada.Text_IO.Put_Line ("  ATR      : " &
+                            SCU.To_String (Given => Reader_ATR));
       Ada.Text_IO.Put_Line ("  protocol : " &
                             SCard.Proto'Image (Reader_Proto));
       Ada.Text_IO.Put_Line ("  states   : " &

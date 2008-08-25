@@ -57,6 +57,20 @@ package body PCSC.SCard.Utils is
       return Result;
    end To_String;
 
+   ----------------------
+   --  To_String (ATR) --
+   ----------------------
+
+   function To_String (Given : ATR) return String is
+   begin
+      if Given.Length <= 0 then
+         return "0";
+      end if;
+
+      return To_String (Given => Given.Data,
+                        Len   => 2 * Positive (Given.Length));
+   end To_String;
+
    ---------------------------
    -- To_String (Reader_ID) --
    ---------------------------

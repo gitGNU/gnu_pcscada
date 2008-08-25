@@ -49,14 +49,10 @@ package PCSC.SCard is
    --  Empty Byte_Set
 
 
-   subtype ATR is Thin.ATR;
-   --  Card ATR. Directly mapped to thin binding ATR (atm), which is a
-   --  Byte_Array type.
+   type ATR is private;
+   --  Card ATR type
 
-   ATR_Length : constant Integer  := Thin.MAX_ATR_SIZE;
-   --  Max ATR length
-
-   Null_ATR   : constant Byte_Set := Thin.Null_ATR;
+   Null_ATR : constant ATR;
    --  Null initialized ATR
 
 
@@ -172,9 +168,9 @@ package PCSC.SCard is
    --  Return list of all available readers for this PC/SC context.
 
    procedure Status_Change
-     (Context       : in SCard.Context;
-      Timeout       : in Natural := 0;
-      Reader_States : in out Reader_Status_Set);
+     (Context    : in SCard.Context;
+      Timeout    : in Natural := 0;
+      Status_Set : in out Reader_Status_Set);
    --  This procedure takes a Reader_Status_Set type containing reader names
    --  and assumed initial state. It then blocks maximum 'Timeout' miliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
@@ -214,8 +210,7 @@ package PCSC.SCard is
      (Card    : in SCard.Card;
       State   : in out SCard.Card_States_Set;
       Proto   : in out SCard.Proto;
-      Atr     : in out SCard.ATR;
-      Atr_Len : in out Integer);
+      Atr     : in out SCard.ATR);
    --  This procedure checks the current status of the reader connected to by
    --  'Card'. Current state, protocol and ATR value of inserted card are
    --  returned as in out params.
@@ -268,6 +263,25 @@ private
       Active_Proto : aliased Thin.DWORD := Thin.SCARD_PROTOCOL_UNDEFINED;
    end record;
 
+
+   Null_Byte : constant Thin.Byte := 16#00#;
+
+   Null_Byte_Set : constant Byte_Set (1 .. 0)
+     := (others => Null_Byte);
+
+
+   type ATR_Range is range 0 .. Thin.MAX_ATR_SIZE;
+   --  Allowed length for valid ATRs. '0' is used to indicate Null_ATR.
+
+   type ATR is record
+      Data   : Thin.ATR;
+      Length : ATR_Range;
+   end record;
+
+   Null_ATR : constant ATR := ATR'(Data   => Thin.Null_ATR,
+                                   Length => 0);
+
+
    --  Card states
 
    package Vector_Of_CStates_Package is new
@@ -306,11 +320,5 @@ private
    type Reader_Status_Set is tagged record
       Data : Vector_Of_Status_Type;
    end record;
-
-
-   Null_Byte : constant Thin.Byte := 16#00#;
-
-   Null_Byte_Set : constant Byte_Set (1 .. 0)
-     := (others => Null_Byte);
 
 end PCSC.SCard;

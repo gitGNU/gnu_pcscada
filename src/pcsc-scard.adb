@@ -91,9 +91,9 @@ package body PCSC.SCard is
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
 
 
-   function To_C (States : in Reader_Status_Array)
+   function To_C (States : in Reader_Status_Set)
                   return Thin.READERSTATE_Array;
-   --  Convert Ada type Reader_Status_Array to the corresponding C
+   --  Convert Ada type Reader_Status_Set to the corresponding C
    --  READERSTATE_ARRAY.
 
    function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
@@ -223,17 +223,17 @@ package body PCSC.SCard is
    -------------------
 
    procedure Status_Change
-     (Context       : in SCard.Context;
-      Timeout       : in Natural := 0;
-      Reader_States : in out Reader_Status_Array)
+     (Context    : in SCard.Context;
+      Timeout    : in Natural := 0;
+      Status_Set : in out Reader_Status_Set)
    is
       use VORSTP;
 
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
-      C_States  : Thin.READERSTATE_Array := To_C (States => Reader_States);
+      C_States  : Thin.READERSTATE_Array := To_C (States => Status_Set);
 
-      Position  : Cursor := Reader_States.Data.First;
+      Position  : Cursor := Status_Set.Data.First;
    begin
       if Timeout = 0 then
          C_Timeout := Thin.INFINITE;
@@ -257,11 +257,17 @@ package body PCSC.SCard is
          declare
             Item : Reader_Status := Element (Position);
          begin
-            Item.Event_State := To_Ada
+            Item.Event_State   := To_Ada
               (C_States (C_States'First).dwEventState);
-            Item.Card_ATR    := C_States (size_t (To_Index (Position))).rgbAtr;
-            Reader_States.Data.Replace_Element (Position => Position,
-                                                New_Item => Item);
+            Item.Card_ATR.Data := C_States
+              (size_t (To_Index (Position))).rgbAtr;
+            Item.Card_ATR.Length := ATR_Range
+              (C_States (size_t (To_Index (Position))).cbAtr);
+
+            --  Update existing Reader_Status set
+
+            Status_Set.Data.Replace_Element (Position => Position,
+                                             New_Item => Item);
             Next (Position);
          end;
       end loop;
@@ -387,8 +393,7 @@ package body PCSC.SCard is
      (Card    : in SCard.Card;
       State   : in out SCard.Card_States_Set;
       Proto   : in out SCard.Proto;
-      Atr     : in out SCard.ATR;
-      Atr_Len : in out Integer)
+      Atr     : in out SCard.ATR)
    is
       Res         : Thin.DWORD;
 
@@ -403,7 +408,7 @@ package body PCSC.SCard is
          pcchReaderLen  => dwReaderLen'Access,
          pdwState       => dwState'Unchecked_Access,
          pdwProtocol    => dwProtocol'Access,
-         pbAtr          => Atr (Atr'First)'Unchecked_Access,
+         pbAtr          => Atr.Data (Atr.Data'First)'Unchecked_Access,
          pcbAtrLen      => dwAtrLen'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -413,9 +418,9 @@ package body PCSC.SCard is
 
       --  Assign in out params
 
-      Atr_Len := Integer (dwAtrLen);
-      Proto   := To_Ada (dwProtocol);
-      State   := To_Ada (dwState);
+      Atr.Length := ATR_Range (dwAtrLen);
+      Proto      := To_Ada (dwProtocol);
+      State      := To_Ada (dwState);
    end Status;
 
    --------------
@@ -471,7 +476,7 @@ package body PCSC.SCard is
    ----------------
 
    procedure Add_Reader
-     (States : in out Reader_Status_Array;
+     (States : in out Reader_Status_Set;
       State  : in Reader_Status)
    is
    begin
@@ -482,7 +487,7 @@ package body PCSC.SCard is
    -- Size --
    ----------
 
-   function Size (States : in Reader_Status_Array) return Natural is
+   function Size (States : in Reader_Status_Set) return Natural is
    begin
       return States.Data.Last_Index;
    end Size;
@@ -491,7 +496,7 @@ package body PCSC.SCard is
    -- Get_Status --
    ----------------
 
-   function Get_Status (States : in Reader_Status_Array;
+   function Get_Status (States : in Reader_Status_Set;
                         Index  : Natural)
                         return Reader_Status
    is
@@ -606,10 +611,10 @@ package body PCSC.SCard is
    end To_Ada;
 
    --------------------------------
-   -- To_C (Reader_Status_Array) --
+   -- To_C (Reader_Status_Set) --
    --------------------------------
 
-   function To_C (States : in Reader_Status_Array)
+   function To_C (States : in Reader_Status_Set)
                   return Thin.READERSTATE_Array
    is
       use VORSTP;
@@ -630,7 +635,7 @@ package body PCSC.SCard is
                  dwCurrentState => C_Reader_State (Item.Current_State),
                  dwEventState   => Thin.SCARD_STATE_UNAWARE,
                  cbAtr          => Item.Card_ATR'Size,
-                 rgbAtr         => Item.Card_ATR);
+                 rgbAtr         => Item.Card_ATR.Data);
 
             Next (Position);
          end;

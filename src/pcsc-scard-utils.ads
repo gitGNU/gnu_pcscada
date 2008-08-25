@@ -32,6 +32,9 @@ package PCSC.SCard.Utils is
    --  Returns hex-representation of binary data. Len defines the length
    --  of the returned string.
 
+   function To_String (Given : ATR) return String;
+   --  Returns hex-representation of an ATR.
+
    function To_String (Reader : in SCard.Reader_ID) return String;
    --  Return string from Reader_ID.
 
