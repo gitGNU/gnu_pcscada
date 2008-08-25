@@ -30,14 +30,14 @@ use PCSC;
 --  Thick-binding test
 procedure Thick_Tests is
    Context : SCard.Context;
-   Readers : SCard.Readers_List;
+   Readers : SCard.Reader_ID_Set;
    Card    : SCard.Card;
 
    package SCU renames SCard.Utils;
 
    pragma Linker_Options ("-lpcsclite");
 
-   Reader_States : SCard.Reader_Status_Set;
+   Reader_Status : SCard.Reader_Status_Set;
    Reader1       : SCard.Reader_Status;
 begin
 
@@ -49,6 +49,10 @@ begin
    --  List readers
 
    Readers := SCard.List_Readers (Context => Context);
+   if Readers.Empty then
+      Ada.Text_IO.Put_Line ("no readers found");
+      return;
+   end if;
    Ada.Text_IO.Put_Line ("found readers: ");
    SCU.For_Every_Reader (Readers => Readers,
                          Call    => SCU.Print_ReaderID'Access);
@@ -56,28 +60,28 @@ begin
    --  Detect status changes
 
    Ada.Text_IO.Put_Line ("status change detection ...");
-   Reader1.Name := Readers.First_Element;
+   Reader1.Name := Readers.First;
    Reader1.Current_State := SCard.State_Empty;
-   Reader_States.Add_Reader (Reader1);
+   Reader_Status.Add_Reader (Reader1);
    SCard.Status_Change (Context    => Context,
-                        Status_Set => Reader_States);
+                        Status_Set => Reader_Status);
 
    Ada.Text_IO.Put
-     (SCU.To_String (Reader_States.Get_Status (Index => 1).Name) & " : ");
+     (SCU.To_String (Reader_Status.Get_Status (Index => 1).Name) & " : ");
 
    Ada.Text_IO.Put_Line
-     (SCU.To_String (Reader_States.Get_Status (Index => 1).Event_State));
+     (SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
 
    Ada.Text_IO.Put_Line
-     (SCU.To_String (Reader_States.Get_Status (Index => 1).Card_ATR));
+     (SCU.To_String (Reader_Status.Get_Status (Index => 1).Card_ATR));
 
    --  Connect to first reader
 
    Ada.Text_IO.Put_Line ("connecting to " &
-                         SCU.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First) & " ...");
    SCard.Connect (Card     => Card,
                   Context  => Context,
-                  Reader   => Readers.First_Element,
+                  Reader   => Readers.First,
                   Mode     => SCard.Share_Shared);
    Ada.Text_IO.Put_Line ("card uses : " & SCard.Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
@@ -85,7 +89,7 @@ begin
    --  Reconnect to first reader
 
    Ada.Text_IO.Put_Line ("reconnecting to " &
-                         SCU.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First) & " ...");
    SCard.Reconnect (Card   => Card,
                     Mode   => SCard.Share_Exclusive,
                     Action => SCard.Leave_Card);
@@ -95,7 +99,7 @@ begin
    --  Begin transaction with first reader
 
    Ada.Text_IO.Put_Line ("start transaction with " &
-                         SCU.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First) & " ...");
    SCard.Begin_Transaction (Card => Card);
 
    declare
@@ -107,7 +111,7 @@ begin
       --  Get status of reader / card
 
       Ada.Text_IO.Put_Line ("status of  " & SCU.To_String
-                              (Readers.First_Element) & " ...");
+                              (Readers.First) & " ...");
       SCard.Status (Card    => Card,
                     State   => Card_States,
                     Proto   => Reader_Proto,
@@ -146,14 +150,14 @@ begin
    --  End transaction with first reader
 
    Ada.Text_IO.Put_Line ("ending transaction with " &
-                         SCU.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First) & " ...");
    SCard.End_Transaction (Card   => Card,
                           Action => SCard.Leave_Card);
 
    --  Disconnect from first reader
 
    Ada.Text_IO.Put_Line ("disconnecting from " &
-                         SCU.To_String (Readers.First_Element) & " ...");
+                         SCU.To_String (Readers.First) & " ...");
    SCard.Disconnect (Card   => Card,
                      Action => SCard.Leave_Card);
 

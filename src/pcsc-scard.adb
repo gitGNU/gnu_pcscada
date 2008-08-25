@@ -91,6 +91,12 @@ package body PCSC.SCard is
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
 
 
+   function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set;
+   --  Slice reader string returned from thin binding and create vector of
+   --  reader names. The string to slice has a format like:
+   --  Reader A1\0Reader B1\0Reader C1\0\0
+   --  \0 is used as separator, \0\0 as string termination.
+
    function To_C (States : in Reader_Status_Set)
                   return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Status_Set to the corresponding C
@@ -174,7 +180,7 @@ package body PCSC.SCard is
    ------------------
 
    function List_Readers (Context : in SCard.Context)
-                          return Readers_List
+                          return Reader_ID_Set
    is
       Res       : Thin.DWORD;
       Len       : aliased Thin.DWORD;
@@ -283,7 +289,7 @@ package body PCSC.SCard is
    procedure Connect
      (Card    : in out SCard.Card;
       Context : in SCard.Context;
-      Reader  : in Reader_ID;
+      Reader  : in Reader_ID := Null_Reader_ID;
       Mode    : in SCard.Mode)
    is
       Res      : Thin.DWORD;
@@ -471,6 +477,34 @@ package body PCSC.SCard is
       return To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
 
+   ---------------------------
+   -- First (Reader_ID_Set) --
+   ---------------------------
+
+   function First (Set : in Reader_ID_Set) return Reader_ID is
+      use Ada.Containers;
+   begin
+      if Set.Data.Length = 0 then
+         return Null_Reader_ID;
+      end if;
+
+      return Set.Data.First_Element;
+   end First;
+
+   ---------------------------
+   -- Empty (Reader_ID_Set) --
+   ---------------------------
+
+   function Empty (Set : in Reader_ID_Set) return Boolean is
+      use Ada.Containers;
+   begin
+      if Set.Data.Length = 0 then
+         return True;
+      end if;
+
+      return False;
+   end Empty;
+
    ----------------
    -- Add_Reader --
    ----------------
@@ -523,12 +557,12 @@ package body PCSC.SCard is
    -- Slice_Readerstring --
    ------------------------
 
-   function Slice_Readerstring (To_Slice : in String) return Readers_List
+   function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set
    is
       use GNAT.String_Split;
       use Ada.Strings.Maps;
 
-      Readers  : Readers_List;
+      Readers  : Reader_ID_Set;
       Lines    : Slice_Set;
    begin
       --  Slice readers into parts.
@@ -543,8 +577,8 @@ package body PCSC.SCard is
       --  Minus two because \0\0 is used as termination.
 
       for J in 1 .. Slice_Count (Lines) - 2 loop
-         Readers.Append (New_Item => To_Unbounded_String
-                         (Slice (Lines, J)));
+         Readers.Data.Append (New_Item => To_Unbounded_String
+                              (Slice (Lines, J)));
       end loop;
 
       return Readers;

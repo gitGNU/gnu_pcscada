@@ -59,12 +59,11 @@ package PCSC.SCard is
    subtype Reader_ID is Unbounded_String;
    --  Reader friendly name
 
-   package Readers_Vector is new
-     Ada.Containers.Indefinite_Vectors (Positive, Reader_ID);
-   --  Vector of readers
+   Null_Reader_ID : constant Reader_ID;
+   --  Empty reader ID
 
-   subtype Readers_List is Readers_Vector.Vector;
-   --  Readers list returned by List_Readers()
+   type Reader_ID_Set is tagged private;
+   --  Set of ReaderIDs
 
 
    type Scope is
@@ -128,7 +127,7 @@ package PCSC.SCard is
 
 
    type Reader_Status is record
-      Name          : Reader_ID;
+      Name          : Reader_ID := Null_Reader_ID;
       Current_State : Reader_State;
       Event_State   : Reader_States_Set;
       Card_ATR      : ATR := Null_ATR;
@@ -147,7 +146,7 @@ package PCSC.SCard is
       PCI_RAW); --  (PCI) for RAW protocol
    --  Protocol control information types
 
-   type Callback is access procedure (ID : in Reader_ID);
+   type Callback is access procedure (ID : in Reader_ID := Null_Reader_ID);
    --  Callback for reader ID handling. Provides flexible way to access
    --  specific readers.
 
@@ -164,7 +163,7 @@ package PCSC.SCard is
    --  Verify that given SCard context is valid.
 
    function List_Readers (Context : in SCard.Context)
-                          return Readers_List;
+                          return Reader_ID_Set;
    --  Return list of all available readers for this PC/SC context.
 
    procedure Status_Change
@@ -180,7 +179,7 @@ package PCSC.SCard is
    procedure Connect
      (Card    : in out SCard.Card;
       Context : in SCard.Context;
-      Reader  : in Reader_ID;
+      Reader  : in Reader_ID := Null_Reader_ID;
       Mode    : in SCard.Mode);
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
    --  SCard will be stored in 'Card' parameter.
@@ -228,6 +227,13 @@ package PCSC.SCard is
    --  Return protocol in use for a given card handle.
 
 
+   function Empty (Set : in Reader_ID_Set) return Boolean;
+   --  Function returns true if Reader_ID_Set contains no readers.
+
+   function First (Set : in Reader_ID_Set) return Reader_ID;
+   --  Return the first reader in a reader ID set.
+
+
    procedure Add_Reader
      (States : in out Reader_Status_Set;
       State  : in Reader_Status);
@@ -243,12 +249,6 @@ package PCSC.SCard is
    --  Return Reader_Status type at index 'Index'.
 
 private
-
-   function Slice_Readerstring (To_Slice : in String) return Readers_List;
-   --  Slice reader string returned from thin binding and create vector of
-   --  reader names. The string to slice has a format like:
-   --  Reader A1\0Reader B1\0Reader C1\0\0
-   --  \0 is used as separator, \0\0 as string termination.
 
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
    pragma No_Return (SCard_Exception);
@@ -282,6 +282,22 @@ private
                                    Length => 0);
 
 
+   --  Reader IDs
+
+   Null_Reader_ID : constant Reader_ID := Null_Unbounded_String;
+
+   package Vector_Of_ReaderID_Package is new
+     Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
+                                        Element_Type => Reader_ID);
+
+   package VOIDP renames Vector_Of_ReaderID_Package;
+   subtype Vector_Of_ReaderID_Type is VOIDP.Vector;
+
+   type Reader_ID_Set is tagged record
+      Data : Vector_Of_ReaderID_Type;
+   end record;
+
+
    --  Card states
 
    package Vector_Of_CStates_Package is new
@@ -295,6 +311,7 @@ private
       Data : Vector_Of_CStates_Type;
    end record;
 
+
    --  Reader states
 
    package Vector_Of_RStates_Package is new
@@ -307,6 +324,7 @@ private
    type Reader_States_Set is tagged record
       Data : Vector_Of_RStates_Type;
    end record;
+
 
    --  Reader status
 

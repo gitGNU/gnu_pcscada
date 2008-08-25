@@ -75,7 +75,9 @@ package body PCSC.SCard.Utils is
    -- To_String (Reader_ID) --
    ---------------------------
 
-   function To_String (Reader : in SCard.Reader_ID) return String is
+   function To_String (Reader : in SCard.Reader_ID := SCard.Null_Reader_ID)
+                       return String
+   is
    begin
       return Ada.Strings.Unbounded.To_String (Reader);
    end To_String;
@@ -125,12 +127,12 @@ package body PCSC.SCard.Utils is
    ----------------------
 
    procedure For_Every_Reader
-     (Readers : in SCard.Readers_List;
+     (Readers : in SCard.Reader_ID_Set;
       Call    : in SCard.Callback)
    is
-      use SCard.Readers_Vector;
+      use SCard.VOIDP;
 
-      Position : Cursor := Readers.First;
+      Position : Cursor := Readers.Data.First;
       Reader   : SCard.Reader_ID;
    begin
       while Has_Element (Position) loop

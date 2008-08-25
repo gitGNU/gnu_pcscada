@@ -86,7 +86,7 @@ begin
                                  Interfaces.C.Strings.Null_Ptr,
                                pcchReaders => dwReaders'Access);
 
-      -- NULL termination is counted as well
+      --  NULL termination is counted as well
       if dwReaders = 1 then
          Ada.Text_IO.Put_Line ("no readers found");
          return;

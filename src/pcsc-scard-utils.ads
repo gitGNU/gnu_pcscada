@@ -35,7 +35,8 @@ package PCSC.SCard.Utils is
    function To_String (Given : ATR) return String;
    --  Returns hex-representation of an ATR.
 
-   function To_String (Reader : in SCard.Reader_ID) return String;
+   function To_String (Reader : in SCard.Reader_ID := SCard.Null_Reader_ID)
+                       return String;
    --  Return string from Reader_ID.
 
    function To_String (States : in SCard.Card_States_Set) return String;
@@ -45,7 +46,7 @@ package PCSC.SCard.Utils is
    --  Return string representation of reader states.
 
    procedure For_Every_Reader
-     (Readers : in SCard.Readers_List;
+     (Readers : in SCard.Reader_ID_Set;
       Call    : in SCard.Callback);
    --  Call callback procedure for every reader in readers list.
 
