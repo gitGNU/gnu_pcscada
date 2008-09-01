@@ -206,10 +206,10 @@ package PCSC.SCard is
    --  This procedure ends a previously begun transaction.
 
    procedure Status
-     (Card    : in SCard.Card;
-      State   : in out SCard.Card_States_Set;
-      Proto   : in out SCard.Proto;
-      Atr     : in out SCard.ATR);
+     (Card  : in SCard.Card;
+      State : in out SCard.Card_States_Set;
+      Proto : in out SCard.Proto;
+      Atr   : in out SCard.ATR);
    --  This procedure checks the current status of the reader connected to by
    --  'Card'. Current state, protocol and ATR value of inserted card are
    --  returned as in out params.
@@ -266,8 +266,7 @@ private
 
    Null_Byte : constant Thin.Byte := 16#00#;
 
-   Null_Byte_Set : constant Byte_Set (1 .. 0)
-     := (others => Null_Byte);
+   Null_Byte_Set : constant Byte_Set (1 .. 0) := (others => Null_Byte);
 
 
    type ATR_Range is range 0 .. Thin.MAX_ATR_SIZE;
@@ -278,8 +277,7 @@ private
       Length : ATR_Range;
    end record;
 
-   Null_ATR : constant ATR := ATR'(Data   => Thin.Null_ATR,
-                                   Length => 0);
+   Null_ATR : constant ATR := ATR'(Data   => Thin.Null_ATR, Length => 0);
 
 
    --  Reader IDs

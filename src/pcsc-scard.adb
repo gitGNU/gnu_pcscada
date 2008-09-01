@@ -97,8 +97,7 @@ package body PCSC.SCard is
    --  Reader A1\0Reader B1\0Reader C1\0\0
    --  \0 is used as separator, \0\0 as string termination.
 
-   function To_C (States : in Reader_Status_Set)
-                  return Thin.READERSTATE_Array;
+   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Status_Set to the corresponding C
    --  READERSTATE_ARRAY.
 
@@ -182,8 +181,8 @@ package body PCSC.SCard is
    function List_Readers (Context : in SCard.Context)
                           return Reader_ID_Set
    is
-      Res       : Thin.DWORD;
-      Len       : aliased Thin.DWORD;
+      Res : Thin.DWORD;
+      Len : aliased Thin.DWORD;
    begin
       --  Find out how much space we need for storing
       --  readers friendly names first.
@@ -648,8 +647,7 @@ package body PCSC.SCard is
    -- To_C (Reader_Status_Set) --
    --------------------------------
 
-   function To_C (States : in Reader_Status_Set)
-                  return Thin.READERSTATE_Array
+   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array
    is
       use VORSTP;
 
