@@ -379,7 +379,7 @@ package PCSC.Thin is
    --  Recconnect to specific SCard
 
    function SCardDisconnect
-     (hCard : in SCARDHANDLE;
+     (hCard         : in SCARDHANDLE;
       dwDisposition : in DWORD)
       return DWORD;
    --  Disconnect from specific SCard
@@ -399,7 +399,7 @@ package PCSC.Thin is
 
 
    function SCardStatus
-     (hCard : in SCARDHANDLE;
+     (hCard          : in SCARDHANDLE;
       mszReaderNames : in LPSTR;
       pcchReaderLen  : access DWORD;
       pdwState       : access DWORD;
