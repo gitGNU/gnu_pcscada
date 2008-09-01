@@ -168,10 +168,19 @@ package PCSC.SCard is
       Timeout    : in Natural := 0;
       Status_Set : in out Reader_Status_Set);
    --  This procedure takes a Reader_Status_Set type containing reader names
-   --  and assumed initial state. It then blocks maximum 'Timeout' miliseconds
+   --  and assumed initial state. It then blocks maximum 'Timeout' milliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
    --  used, which will block forever. When a status change occurs, the
    --  Reader_States type is updated to reflect this new state.
+
+   procedure Wait_For_Readers
+     (Context : in SCard.Context;
+      Timeout : in Natural := 0);
+   --  This procedure calls SCardGetStatusChange for reader detection. If there
+   --  is no reader available, the call will block maximum 'Timeout'
+   --  milliseconds until a reader is connected.
+   --  If there are readers present when this function is called, it will
+   --  return immediately.
 
    procedure Connect
      (Card    : in out SCard.Card;
@@ -333,5 +342,11 @@ private
    type Reader_Status_Set is tagged record
       Data : Vector_Of_Status_Type;
    end record;
+
+   Empty_Vector_Of_Status_Type : constant Vector_Of_Status_Type
+     := VORSTP.Empty_Vector;
+
+   Empty_Reader_Status_Set : constant Reader_Status_Set :=
+     Reader_Status_Set'(Data => Empty_Vector_Of_Status_Type);
 
 end PCSC.SCard;

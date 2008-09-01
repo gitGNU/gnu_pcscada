@@ -50,19 +50,28 @@ begin
 
    Readers := SCard.List_Readers (Context => Context);
    if Readers.Empty then
-      Ada.Text_IO.Put_Line ("no readers found");
-      return;
+      Ada.Text_IO.Put_Line ("no readers found ... waiting ...");
+      SCard.Wait_For_Readers (Context => Context);
+
+      --  Re-read readers list
+
+      Readers := SCard.List_Readers (Context => Context);
+   else
+      Ada.Text_IO.Put_Line ("found readers: ");
+      SCU.For_Every_Reader (Readers => Readers,
+                            Call    => SCU.Print_ReaderID'Access);
+
    end if;
-   Ada.Text_IO.Put_Line ("found readers: ");
-   SCU.For_Every_Reader (Readers => Readers,
-                         Call    => SCU.Print_ReaderID'Access);
+
+   --  Use first reader for status change detection.
+
+   Reader1.Name := Readers.First;
+   Reader1.Current_State := SCard.State_Empty;
+   Reader_Status.Add_Reader (Reader1);
 
    --  Detect status changes
 
    Ada.Text_IO.Put_Line ("status change detection ...");
-   Reader1.Name := Readers.First;
-   Reader1.Current_State := SCard.State_Empty;
-   Reader_Status.Add_Reader (Reader1);
    SCard.Status_Change (Context    => Context,
                         Status_Set => Reader_Status);
 

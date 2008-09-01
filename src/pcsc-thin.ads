@@ -85,6 +85,7 @@ package PCSC.Thin is
      READERSTATE_Access;
    --  Array of access to reader states
 
+
    type SCARD_IO_REQUEST is record
       dwProtocol  : DWORD;
       cbPciLength : DWORD;
@@ -412,8 +413,8 @@ package PCSC.Thin is
    function SCardGetStatusChange
      (hContext       : in SCARDCONTEXT;
       dwTimeout      : in DWORD;
-      rgReaderStates : in READERSTATE_Access;
-      cReaders       : in DWORD)
+      rgReaderStates : in READERSTATE_Access := null;
+      cReaders       : in DWORD := 0)
       return DWORD;
    --  Used to track status changes of readers
 

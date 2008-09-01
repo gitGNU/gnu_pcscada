@@ -97,7 +97,8 @@ package body PCSC.SCard is
    --  Reader A1\0Reader B1\0Reader C1\0\0
    --  \0 is used as separator, \0\0 as string termination.
 
-   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array;
+   function To_C (States : in Reader_Status_Set := Empty_Reader_Status_Set)
+                  return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Status_Set to the corresponding C
    --  READERSTATE_ARRAY.
 
@@ -240,15 +241,20 @@ package body PCSC.SCard is
 
       Position  : Cursor := Status_Set.Data.First;
    begin
+
       if Timeout = 0 then
          C_Timeout := Thin.INFINITE;
       end if;
 
-      Res := Thin.SCardGetStatusChange
-        (hContext       => Context.hContext,
-         dwTimeout      => C_Timeout,
-         rgReaderStates => C_States (C_States'First),
-         cReaders       => Thin.DWORD (C_States'Last));
+      if Status_Set = Empty_Reader_Status_Set then
+         return;
+      else
+         Res := Thin.SCardGetStatusChange
+           (hContext       => Context.hContext,
+            dwTimeout      => C_Timeout,
+            rgReaderStates => C_States (C_States'First),
+            cReaders       => Thin.DWORD (C_States'Last));
+      end if;
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
@@ -280,6 +286,33 @@ package body PCSC.SCard is
       --  Free C_States
       Free (C_States);
    end Status_Change;
+
+   ----------------------
+   -- Wait_For_Readers --
+   ----------------------
+
+   procedure Wait_For_Readers
+     (Context : in SCard.Context;
+      Timeout : in Natural := 0)
+   is
+      Res       : Thin.DWORD;
+      C_Timeout : Thin.DWORD;
+   begin
+
+      if Timeout = 0 then
+         C_Timeout := Thin.INFINITE;
+      end if;
+
+      Res := Thin.SCardGetStatusChange
+        (hContext       => Context.hContext,
+         dwTimeout      => C_Timeout);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Waiting for readers failed");
+      end if;
+
+   end Wait_For_Readers;
 
    -------------
    -- Connect --
@@ -647,7 +680,8 @@ package body PCSC.SCard is
    -- To_C (Reader_Status_Set) --
    --------------------------------
 
-   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array
+   function To_C (States : in Reader_Status_Set := Empty_Reader_Status_Set)
+                  return Thin.READERSTATE_Array
    is
       use VORSTP;
 
