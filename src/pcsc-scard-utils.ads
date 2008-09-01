@@ -28,6 +28,10 @@ use PCSC;
 --  SCard utilities package
 package PCSC.SCard.Utils is
 
+   type Callback is access procedure (ID : in Reader_ID := Null_Reader_ID);
+   --  Callback for reader ID handling. Provides flexible way to access
+   --  specific readers.
+
    function To_String (Given : Thin.Byte_Array; Len : Positive) return String;
    --  Returns hex-representation of binary data. Len defines the length
    --  of the returned string.
@@ -47,7 +51,7 @@ package PCSC.SCard.Utils is
 
    procedure For_Every_Reader
      (Readers : in SCard.Reader_ID_Set;
-      Call    : in SCard.Callback);
+      Call    : in Callback);
    --  Call callback procedure for every reader in readers list.
 
    procedure Print_ReaderID (ID : in SCard.Reader_ID);

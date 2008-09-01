@@ -128,7 +128,7 @@ package body PCSC.SCard.Utils is
 
    procedure For_Every_Reader
      (Readers : in SCard.Reader_ID_Set;
-      Call    : in SCard.Callback)
+      Call    : in Callback)
    is
       use SCard.VOIDP;
 

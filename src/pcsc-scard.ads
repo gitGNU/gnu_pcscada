@@ -146,9 +146,6 @@ package PCSC.SCard is
       PCI_RAW); --  (PCI) for RAW protocol
    --  Protocol control information types
 
-   type Callback is access procedure (ID : in Reader_ID := Null_Reader_ID);
-   --  Callback for reader ID handling. Provides flexible way to access
-   --  specific readers.
 
    procedure Establish_Context
      (Context : in out SCard.Context;
