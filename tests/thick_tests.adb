@@ -29,16 +29,17 @@ use PCSC;
 
 --  Thick-binding test
 procedure Thick_Tests is
-   Context : SCard.Context;
-   Readers : SCard.Reader_ID_Set;
-   Card    : SCard.Card;
+   Context       : SCard.Context;
+   Card          : SCard.Card;
+
+   Readers       : SCard.Reader_ID_Set;
+
+   Reader_Status : SCard.Reader_Status_Set;
+   Reader1       : SCard.Reader_Status;
 
    package SCU renames SCard.Utils;
 
    pragma Linker_Options ("-lpcsclite");
-
-   Reader_Status : SCard.Reader_Status_Set;
-   Reader1       : SCard.Reader_Status;
 begin
 
    --  Establish context
