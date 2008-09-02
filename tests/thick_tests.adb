@@ -79,11 +79,12 @@ begin
    Ada.Text_IO.Put
      (SCU.To_String (Reader_Status.Get_Status (Index => 1).Name) & " : ");
 
-   Ada.Text_IO.Put_Line
+   Ada.Text_IO.Put
      (SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
 
    Ada.Text_IO.Put_Line
-     (SCU.To_String (Reader_Status.Get_Status (Index => 1).Card_ATR));
+     (", ATR : " & SCU.To_String
+        (Reader_Status.Get_Status (Index => 1).Card_ATR));
 
    --  Connect to first reader
 
