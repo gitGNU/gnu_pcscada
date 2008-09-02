@@ -173,12 +173,9 @@ package PCSC.SCard is
    --  used, which will block forever. When a status change occurs, the
    --  Reader_States type is updated to reflect this new state.
 
-   procedure Wait_For_Readers
-     (Context : in SCard.Context;
-      Timeout : in Natural := 0);
+   procedure Wait_For_Readers (Context : in SCard.Context);
    --  This procedure calls SCardGetStatusChange for reader detection. If there
-   --  is no reader available, the call will block maximum 'Timeout'
-   --  milliseconds until a reader is connected.
+   --  is no reader available, the call will block until a reader is connected.
    --  If there are readers present when this function is called, it will
    --  return immediately.
 

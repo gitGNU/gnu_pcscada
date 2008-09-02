@@ -291,21 +291,12 @@ package body PCSC.SCard is
    -- Wait_For_Readers --
    ----------------------
 
-   procedure Wait_For_Readers
-     (Context : in SCard.Context;
-      Timeout : in Natural := 0)
-   is
+   procedure Wait_For_Readers (Context : in SCard.Context) is
       Res       : Thin.DWORD;
-      C_Timeout : Thin.DWORD;
    begin
-
-      if Timeout = 0 then
-         C_Timeout := Thin.INFINITE;
-      end if;
-
       Res := Thin.SCardGetStatusChange
         (hContext       => Context.hContext,
-         dwTimeout      => C_Timeout);
+         dwTimeout      => Thin.INFINITE);
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
