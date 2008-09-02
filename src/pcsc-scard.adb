@@ -22,6 +22,7 @@
 
 with Ada.Exceptions;
 with Ada.Strings.Maps;
+with Ada.Strings.Fixed;
 with Ada.Characters.Latin_1;
 with Ada.Unchecked_Deallocation;
 
@@ -302,7 +303,6 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Waiting for readers failed");
       end if;
-
    end Wait_For_Readers;
 
    -------------
@@ -540,13 +540,36 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add_Reader;
 
-   ----------
-   -- Size --
-   ----------
+   ------------------------------
+   -- Size (Reader_Status_Set) --
+   ------------------------------
 
    function Size (States : in Reader_Status_Set) return Natural is
    begin
       return States.Data.Last_Index;
+   end Size;
+
+   ----------------
+   -- Size (ATR) --
+   ----------------
+
+   function Size (Atr : in SCard.ATR := Null_ATR) return Natural is
+   begin
+      return Natural (Atr.Length);
+   end Size;
+
+   ----------------
+   -- Size (ATR) --
+   ----------------
+
+   function Size (Atr : in SCard.ATR := Null_ATR) return String is
+      Natural_ATR : Natural := Size (Atr);
+
+      use Ada.Strings.Fixed;
+   begin
+      --  Remove leading space
+
+      return Trim (Natural'Image (Natural_ATR), Ada.Strings.Left);
    end Size;
 
    ----------------

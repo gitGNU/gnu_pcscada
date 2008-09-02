@@ -246,6 +246,12 @@ package PCSC.SCard is
    function Size (States : in Reader_Status_Set) return Natural;
    --  Returns the size of a Reader_Status_Set.
 
+   function Size (Atr : in SCard.ATR := Null_ATR) return Natural;
+   --  Return current size of an ATR as Natural.
+
+   function Size (Atr : in SCard.ATR := Null_ATR) return String;
+   --  Return current size of an ATR as string.
+
    function Get_Status (States : in Reader_Status_Set;
                         Index  : Natural)
                         return Reader_Status;

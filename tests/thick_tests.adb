@@ -128,6 +128,7 @@ begin
                     Atr     => Reader_ATR);
       Ada.Text_IO.Put_Line ("  ATR      : " &
                             SCU.To_String (Given => Reader_ATR));
+      Ada.Text_IO.Put_Line ("  ATR Size : " & SCard.Size (Reader_ATR));
       Ada.Text_IO.Put_Line ("  protocol : " &
                             SCard.Proto'Image (Reader_Proto));
       Ada.Text_IO.Put_Line ("  states   : " &
