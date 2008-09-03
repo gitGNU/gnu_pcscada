@@ -42,27 +42,40 @@ procedure Thick_Tests is
    pragma Linker_Options ("-lpcsclite");
 begin
 
+   Ada.Text_IO.New_Line;
+   Ada.Text_IO.Put_Line ("** PCSC/Ada Thick-Binding test program **");
+   Ada.Text_IO.New_Line;
+
    --  Establish context
 
+   Ada.Text_IO.Put ("Testing Establish_Context : ");
    SCard.Establish_Context (Context => Context,
                             Scope   => SCard.Scope_System);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+
+   --  Test for valid context
+
+   Ada.Text_IO.Put ("Testing Is_Valid          : ");
+   if not SCard.Is_Valid (Context => Context) then
+      Ada.Text_IO.Put_Line ("FAILED : " & SCard.Get_Return_Code);
+   end if;
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+
+   --  Status change detection
+
+   Ada.Text_IO.Put_Line ("Testing Wait_For_Readers");
+   Ada.Text_IO.Put ("Please connect a reader   : ");
+   SCard.Wait_For_Readers (Context => Context);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
 
    --  List readers
 
+   Ada.Text_IO.Put ("Testing List_Readers      : ");
    Readers := SCard.List_Readers (Context => Context);
-   if Readers.Empty then
-      Ada.Text_IO.Put_Line ("no readers found ... waiting ...");
-      SCard.Wait_For_Readers (Context => Context);
-
-      --  Re-read readers list
-
-      Readers := SCard.List_Readers (Context => Context);
-   else
-      Ada.Text_IO.Put_Line ("found readers: ");
-      SCU.For_Every_Reader (Readers => Readers,
-                            Call    => SCU.Print_ReaderID'Access);
-
-   end if;
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+   Ada.Text_IO.Put_Line ("> Readers found           : ");
+   SCU.For_Every_Reader (Readers => Readers,
+                         Call    => SCU.Print_ReaderID'Access);
 
    --  Use first reader for status change detection.
 
@@ -72,67 +85,57 @@ begin
 
    --  Detect status changes
 
-   Ada.Text_IO.Put_Line ("status change detection ...");
+   Ada.Text_IO.Put ("Waiting for card insertion: ");
    SCard.Status_Change (Context    => Context,
                         Status_Set => Reader_Status);
-
-   Ada.Text_IO.Put
-     (SCU.To_String (Reader_Status.Get_Status (Index => 1).Name) & " : ");
-
-   Ada.Text_IO.Put
-     (SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
-
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
    Ada.Text_IO.Put_Line
-     (", ATR : " & SCU.To_String
-        (Reader_Status.Get_Status (Index => 1).Card_ATR));
+     (">> Reader Name            : " &
+      SCU.To_String (Reader_Status.Get_Status (Index => 1).Name));
+   Ada.Text_IO.Put_Line
+     (">> Card Status            : " &
+      SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
+   Ada.Text_IO.Put_Line
+     (">> Card ATR               : " &
+      SCU.To_String (Reader_Status.Get_Status (Index => 1).Card_ATR));
 
    --  Connect to first reader
 
-   Ada.Text_IO.Put_Line ("connecting to " &
-                         SCU.To_String (Readers.First) & " ...");
+   Ada.Text_IO.Put ("Testing Connect           : ");
    SCard.Connect (Card     => Card,
                   Context  => Context,
                   Reader   => Readers.First,
                   Mode     => SCard.Share_Shared);
-   Ada.Text_IO.Put_Line ("card uses : " & SCard.Proto'Image
-                         (SCard.Get_Active_Proto (Card => Card)));
-
-   --  Reconnect to first reader
-
-   Ada.Text_IO.Put_Line ("reconnecting to " &
-                         SCU.To_String (Readers.First) & " ...");
-   SCard.Reconnect (Card   => Card,
-                    Mode   => SCard.Share_Exclusive,
-                    Action => SCard.Leave_Card);
-   Ada.Text_IO.Put_Line ("card uses : " & SCard.Proto'Image
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+   Ada.Text_IO.Put_Line (">> Card uses protocol     : " & SCard.Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
 
    --  Begin transaction with first reader
 
-   Ada.Text_IO.Put_Line ("start transaction with " &
-                         SCU.To_String (Readers.First) & " ...");
+   Ada.Text_IO.Put ("Testing Begin_Transaction : ");
    SCard.Begin_Transaction (Card => Card);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+
+   --  Test status
 
    declare
       Card_States    : SCard.Card_States_Set;
       Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
       Reader_ATR     : SCard.ATR;
    begin
-
-      --  Get status of reader / card
-
-      Ada.Text_IO.Put_Line ("status of  " & SCU.To_String
-                              (Readers.First) & " ...");
+      Ada.Text_IO.Put ("Testing Status            : ");
       SCard.Status (Card    => Card,
                     State   => Card_States,
                     Proto   => Reader_Proto,
                     Atr     => Reader_ATR);
-      Ada.Text_IO.Put_Line ("  ATR      : " &
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+      Ada.Text_IO.Put_Line (">>  ATR                   : " &
                             SCU.To_String (Given => Reader_ATR));
-      Ada.Text_IO.Put_Line ("  ATR Size : " & SCard.Size (Reader_ATR));
-      Ada.Text_IO.Put_Line ("  protocol : " &
+      Ada.Text_IO.Put_Line (">>  ATR Size              : " &
+                            SCard.Size (Reader_ATR));
+      Ada.Text_IO.Put_Line (">>  Protocol              : " &
                             SCard.Proto'Image (Reader_Proto));
-      Ada.Text_IO.Put_Line ("  states   : " &
+      Ada.Text_IO.Put_Line (">>  States                : " &
                             SCU.To_String (Card_States));
    end;
 
@@ -144,37 +147,57 @@ begin
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
       Recv_Len    : Natural := 0;
    begin
-      Ada.Text_IO.Put_Line ("sending APDU: " &
-        String (SCU.To_String (Given => Send_Buffer,
-                               Len   => 2 * Integer (Send_Buffer'Last))));
-
+      Ada.Text_IO.Put ("Testing Transmit          : ");
       SCard.Transmit (Card        => Card,
                       Send_Pci    => SCard.PCI_T1,
                       Send_Buffer => Send_Buffer,
                       Recv_Pci    => SCard.PCI_T1,
                       Recv_Buffer => Recv_Buffer,
                       Recv_Len    => Recv_Len);
-      Ada.Text_IO.Put_Line ("response from card: " &
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+      Ada.Text_IO.Put_Line (">> APDU (select file)     : " &
+        String (SCU.To_String (Given => Send_Buffer,
+                               Len   => 2 * Integer (Send_Buffer'Last))));
+      Ada.Text_IO.Put_Line (">> Response from card     : " &
         String (SCU.To_String (Given => Recv_Buffer,
                                Len   => 2 * Integer (Recv_Len))));
    end;
 
    --  End transaction with first reader
 
-   Ada.Text_IO.Put_Line ("ending transaction with " &
-                         SCU.To_String (Readers.First) & " ...");
+   Ada.Text_IO.Put ("Testing End_Transaction   : ");
    SCard.End_Transaction (Card   => Card,
                           Action => SCard.Leave_Card);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+
+   --  Reconnect to first reader
+
+   Ada.Text_IO.Put ("Testing Reconnect         : ");
+   SCard.Reconnect (Card   => Card,
+                    Mode   => SCard.Share_Shared,
+                    Action => SCard.Unpower_Card);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
 
    --  Disconnect from first reader
 
-   Ada.Text_IO.Put_Line ("disconnecting from " &
-                         SCU.To_String (Readers.First) & " ...");
+   Ada.Text_IO.Put ("Testing Disconnect        : ");
    SCard.Disconnect (Card   => Card,
-                     Action => SCard.Leave_Card);
+                     Action => SCard.Unpower_Card);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
 
    --  Release context
 
-   Ada.Text_IO.Put_Line ("releasing context ...");
+   Ada.Text_IO.Put ("Testing Release_Context   : ");
    SCard.Release_Context (Context => Context);
+   Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+
+   Ada.Text_IO.New_Line;
+   Ada.Text_IO.Put_Line ("PCSC/Ada test completed successfully!");
+   Ada.Text_IO.New_Line;
+
+exception
+   when others =>
+      Ada.Text_IO.Put_Line ("FAILED: " & SCard.Get_Return_Code);
+      SCard.Release_Context (Context => Context);
+      raise;
 end Thick_Tests;
