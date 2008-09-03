@@ -626,7 +626,7 @@ package body PCSC.SCard is
       Ada.Exceptions.Raise_Exception
         (SCard_Error'Identity,
          Message & " - ["
-           & Thin.DWORD'Image (Code) & "] " & Err_Message);
+           & Thin.Return_Code'Image (Code) & "] " & Err_Message);
    end SCard_Exception;
 
    -----------------
