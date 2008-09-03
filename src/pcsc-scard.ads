@@ -257,11 +257,24 @@ package PCSC.SCard is
                         return Reader_Status;
    --  Return Reader_Status type at index 'Index'.
 
+
+   function Get_Return_Code return String;
+   --  Return string representation of last stored return code.
+
 private
 
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
    pragma No_Return (SCard_Exception);
    --  Raise SCard exception if something goes wrong.
+
+   Last_Return_Code : Thin.Return_Code;
+   --  Holds the return code of the last SCard operation. Get_Return_Code
+   --  can be used to obtain this code by the client. Store_Error should be
+   --  used to save the return code after a thin binding call.
+
+   procedure Store_Error (Code : in Thin.Return_Code);
+   --  Saves the last returned code.
+
 
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;

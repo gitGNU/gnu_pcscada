@@ -143,6 +143,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Context failed");
       end if;
+      Store_Error (Code => Res);
    end Establish_Context;
 
    ---------------------
@@ -158,6 +159,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Could not release context");
       end if;
+      Store_Error (Code => Res);
    end Release_Context;
 
    --------------
@@ -170,8 +172,10 @@ package body PCSC.SCard is
       Res := Thin.SCardIsValidContext (hContext => Context.hContext);
 
       if Res /= Thin.SCARD_S_SUCCESS then
+         Store_Error (Code => Res);
          return False;
       end if;
+      Store_Error (Code => Res);
 
       return True;
    end Is_Valid;
@@ -213,6 +217,7 @@ package body PCSC.SCard is
             SCard_Exception (Code    => Res,
                              Message => "Could not get readers");
          end if;
+         Store_Error (Code => Res);
 
          --  Convert to Ada types
 
@@ -261,6 +266,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Status change detection failed");
       end if;
+      Store_Error (Code => Res);
 
       --  Update Ada type with values returned by C API function
       --  TODO: what happens when a reader vanishes?
@@ -286,6 +292,7 @@ package body PCSC.SCard is
 
       --  Free C_States
       Free (C_States);
+
    end Status_Change;
 
    ----------------------
@@ -303,6 +310,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Waiting for readers failed");
       end if;
+      Store_Error (Code => Res);
    end Wait_For_Readers;
 
    -------------
@@ -332,6 +340,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Could not connect to reader");
       end if;
+      Store_Error (Code => Res);
 
       --  Free allocated memory
 
@@ -352,6 +361,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Could not disconnect from reader");
       end if;
+      Store_Error (Code => Res);
    end Disconnect;
 
    ---------------
@@ -377,6 +387,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Could not reconnect to reader");
       end if;
+      Store_Error (Code => Res);
    end Reconnect;
 
    -----------------------
@@ -392,6 +403,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Begin of transaction failed");
       end if;
+      Store_Error (Code => Res);
    end Begin_Transaction;
 
    ---------------------
@@ -412,6 +424,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "End of transaction failed");
       end if;
+      Store_Error (Code => Res);
    end End_Transaction;
 
    ------------
@@ -444,6 +457,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Get status failed");
       end if;
+      Store_Error (Code => Res);
 
       --  Assign in out params
 
@@ -485,6 +499,7 @@ package body PCSC.SCard is
          SCard_Exception (Code    => Res,
                           Message => "Transmit failed");
       end if;
+      Store_Error (Code => Res);
 
       --  Return read bytes count
 
@@ -585,6 +600,17 @@ package body PCSC.SCard is
    end Get_Status;
 
    ---------------------
+   -- Get_Return_Code --
+   ---------------------
+
+   function Get_Return_Code return String is
+      Err_Message : constant String := Strings.Value
+        (Thin.pcsc_stringify_error (Last_Return_Code));
+   begin
+      return Err_Message;
+   end Get_Return_Code;
+
+   ---------------------
    -- SCard_Exception --
    ---------------------
 
@@ -593,11 +619,24 @@ package body PCSC.SCard is
       Err_Message : constant String := Strings.Value
         (Thin.pcsc_stringify_error (Code));
    begin
+      --  Store return code
+
+      Store_Error (Code => Code);
+
       Ada.Exceptions.Raise_Exception
         (SCard_Error'Identity,
          Message & " - ["
            & Thin.DWORD'Image (Code) & "] " & Err_Message);
    end SCard_Exception;
+
+   -----------------
+   -- Store_Error --
+   -----------------
+
+   procedure Store_Error (Code : in Thin.Return_Code) is
+   begin
+      Last_Return_Code := Code;
+   end Store_Error;
 
    ------------------------
    -- Slice_Readerstring --
