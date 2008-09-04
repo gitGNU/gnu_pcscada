@@ -1,2 +1,4 @@
 * support multiple Current_States Readerstate
 * correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
+* add preferred protocols to SCard.Connect procedure
+* support 'or' operation for SCard.Connect preferred protocols
