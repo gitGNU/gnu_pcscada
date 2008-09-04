@@ -198,6 +198,10 @@ begin
 exception
    when others =>
       Ada.Text_IO.Put_Line ("FAILED: " & SCard.Get_Return_Code);
-      SCard.Release_Context (Context => Context);
+
+      if SCard.Is_Valid (Context => Context) then
+         SCard.Release_Context (Context => Context);
+      end if;
+
       raise;
 end Thick_Tests;
