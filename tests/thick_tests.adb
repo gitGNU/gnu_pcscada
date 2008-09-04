@@ -27,6 +27,9 @@ with PCSC.SCard.Utils;
 
 use PCSC;
 
+--  TODO: remove again!!
+with PCSC.Thin;
+
 --  Thick-binding test
 procedure Thick_Tests is
    Context       : SCard.Context;
@@ -161,6 +164,36 @@ begin
       Ada.Text_IO.Put_Line (">> Response from card     : " &
         String (SCU.To_String (Given => Recv_Buffer,
                                Len   => 2 * Integer (Recv_Len))));
+   end;
+
+   --  Test Get_Attribute_Size
+
+   Ada.Text_IO.Put ("Testing Get_Attribute_Size: ");
+   declare
+      Attr_Size : Natural := SCard.Get_Attribute_Size
+        (Card => Card, Attr => SCard.Attr_Vendor_Name);
+   begin
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+      Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size  : "
+                            & Natural'Image (Attr_Size));
+   end;
+
+   --  Test Get_Attribute
+
+   declare
+      Len    : Natural := SCard.Get_Attribute_Size
+        (Card => Card, Attr => SCard.Attr_Vendor_Name);
+
+      --  TODO: Byte_Set is not abstract enough!
+      Buffer : SCard.Byte_Set (Thin.C.size_t (1) .. Thin.C.size_t (Len));
+   begin
+      Ada.Text_IO.Put ("Testing Get_Attribute     : ");
+      SCard.Get_Attribute (Card        => Card,
+                           Attr        => SCard.Attr_Vendor_Name,
+                           Recv_Buffer => Buffer);
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+      Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is    : "
+                            & SCU.To_String (Given => Buffer));
    end;
 
    --  End transaction with first reader

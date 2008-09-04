@@ -122,6 +122,20 @@ package body PCSC.SCard.Utils is
       return To_String (Str_States);
    end To_String;
 
+   --------------------------
+   -- To_String (Byte_Set) --
+   --------------------------
+
+   function To_String (Given : SCard.Byte_Set) return String is
+      New_String : String (1 .. Given'Length - 1);
+   begin
+      for C in 1 .. Given'Length - 1 loop
+         New_String (C) := Character'Val (Given (IC.size_t (C)));
+      end loop;
+
+      return New_String;
+   end To_String;
+
    ----------------------
    -- For_Every_Reader --
    ----------------------

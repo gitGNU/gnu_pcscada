@@ -147,6 +147,11 @@ package PCSC.SCard is
    --  Protocol control information types
 
 
+   type Attribute is
+     (Attr_Vendor_Name);
+   --  Possible attributes for Get_Attribute procedure
+
+
    procedure Establish_Context
      (Context : in out SCard.Context;
       Scope   : in SCard.Scope);
@@ -225,6 +230,19 @@ package PCSC.SCard is
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.
+
+   procedure Get_Attribute
+     (Card        : in SCard.Card;
+      Attr        : in Attribute;
+      Recv_Buffer : in out Byte_Set);
+   --  This procedure gets an attribute from the IFD handler.
+
+   function Get_Attribute_Size
+     (Card        : in SCard.Card;
+      Attr        : in Attribute)
+      return Natural;
+   --  This function returns the size an attribute needs to store it into a
+   --  buffer.
 
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.

@@ -28,6 +28,8 @@ with Ada.Unchecked_Deallocation;
 
 with GNAT.String_Split;
 
+with PCSC.Thin.Reader;
+
 package body PCSC.SCard is
 
    use IC;
@@ -90,6 +92,10 @@ package body PCSC.SCard is
          PCI_T1  => Thin.SCARD_PCI_T1,
          PCI_RAW => Thin.SCARD_PCI_RAW);
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
+
+   C_Attr : constant array (Attribute) of Thin.DWORD
+     := (Attr_Vendor_Name => Thin.Reader.SCARD_ATTR_VENDOR_NAME);
+   --  Map Attribute to corresponding C values
 
 
    function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set;
@@ -188,7 +194,7 @@ package body PCSC.SCard is
                           return Reader_ID_Set
    is
       Res : Thin.DWORD;
-      Len : aliased Thin.DWORD;
+      Len : aliased Thin.DWORD := 0;
    begin
       --  Find out how much space we need for storing
       --  readers friendly names first.
@@ -505,6 +511,59 @@ package body PCSC.SCard is
 
       Recv_Len := Natural (Recv_Length);
    end Transmit;
+
+   -------------------
+   -- Get_Attribute --
+   -------------------
+
+   procedure Get_Attribute
+     (Card        : in SCard.Card;
+      Attr        : in Attribute;
+      Recv_Buffer : in out Byte_Set)
+   is
+      Res : Thin.DWORD;
+
+      Len : aliased Thin.DWORD := Recv_Buffer'Length;
+   begin
+      Res := Thin.SCardGetAttrib
+        (hCard      => Card.hCard,
+         dwAttrId   => C_Attr (Attr),
+         pbAttr     => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
+         pcbAttrLen => Len'Access);
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Get attribute failed");
+      end if;
+      Store_Error (Code => Res);
+   end Get_Attribute;
+
+   ------------------------
+   -- Get_Attribute_Size --
+   ------------------------
+
+   function Get_Attribute_Size
+     (Card        : in SCard.Card;
+      Attr        : in Attribute)
+      return Natural
+   is
+      Res      : Thin.DWORD;
+
+      Len      : aliased Thin.DWORD := 0;
+   begin
+      Res := Thin.SCardGetAttrib
+        (hCard      => Card.hCard,
+         dwAttrId   => C_Attr (Attr),
+         pbAttr     => null,
+         pcbAttrLen => Len'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Get attribute failed");
+      end if;
+      Store_Error (Code => Res);
+
+      return Natural (Len);
+   end Get_Attribute_Size;
 
    ----------------------
    -- Get_Active_Proto --

@@ -33,11 +33,11 @@ package PCSC.SCard.Utils is
    --  specific readers.
 
    function To_String (Given : Thin.Byte_Array; Len : Positive) return String;
-   --  Returns hex-representation of binary data. Len defines the length
+   --  Returns hex-representation string of binary data. Len defines the length
    --  of the returned string.
 
    function To_String (Given : ATR) return String;
-   --  Returns hex-representation of an ATR.
+   --  Returns hex-representation string of an ATR.
 
    function To_String (Reader : in SCard.Reader_ID := SCard.Null_Reader_ID)
                        return String;
@@ -48,6 +48,9 @@ package PCSC.SCard.Utils is
 
    function To_String (States : in SCard.Reader_States_Set) return String;
    --  Return string representation of reader states.
+
+   function To_String (Given : SCard.Byte_Set) return String;
+   --   Return an array of characters from Byte_Set.
 
    procedure For_Every_Reader
      (Readers : in SCard.Reader_ID_Set;
