@@ -183,7 +183,7 @@ package PCSC.SCard is
      (Card    : in out SCard.Card;
       Context : in SCard.Context;
       Reader  : in Reader_ID := Null_Reader_ID;
-      Mode    : in SCard.Mode);
+      Mode    : in SCard.Mode := Share_Shared);
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
    --  SCard will be stored in 'Card' parameter.
 

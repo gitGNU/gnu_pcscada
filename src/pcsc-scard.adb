@@ -321,7 +321,7 @@ package body PCSC.SCard is
      (Card    : in out SCard.Card;
       Context : in SCard.Context;
       Reader  : in Reader_ID := Null_Reader_ID;
-      Mode    : in SCard.Mode)
+      Mode    : in SCard.Mode := Share_Shared)
    is
       Res      : Thin.DWORD;
       C_Reader : Thin.LPSTR := To_LPSTR (Reader);
