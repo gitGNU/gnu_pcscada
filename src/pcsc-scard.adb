@@ -538,7 +538,7 @@ package body PCSC.SCard is
    end Get_Attribute;
 
    ------------------------
-   -- Get_Attribute_Size --
+   -- Init_Attribute_Set --
    ------------------------
 
    function Init_Attribute_Set
