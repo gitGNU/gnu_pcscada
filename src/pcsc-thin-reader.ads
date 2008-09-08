@@ -20,8 +20,9 @@
 --  MA  02110-1301  USA
 --
 
---  This package keeps a list of defines shared between the driver and the
---  application.
+--  This package keeps a list of attributes which can be requested directly
+--  from the IFD handler. Use the Init_Attribute_Set and Get_Attribute
+--  functions to do so.
 package PCSC.Thin.Reader is
 
    --  Tags for requesting card and reader attributes
