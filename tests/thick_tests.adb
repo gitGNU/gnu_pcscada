@@ -21,6 +21,7 @@
 --
 
 with Ada.Text_IO;
+with Ada.Strings.Fixed;
 
 with PCSC.SCard;
 with PCSC.SCard.Utils;
@@ -172,6 +173,8 @@ begin
       --  TODO: Byte_Set is not abstract enough!
       Buffer : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
+
+      use Ada.Strings.Fixed;
    begin
       Ada.Text_IO.Put ("Testing Get_Attribute     : ");
       SCard.Get_Attribute (Card        => Card,
@@ -181,7 +184,7 @@ begin
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is    : "
                             & SCU.To_String (Given => Buffer));
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size  : "
-                            & Integer'Image (Buffer'Last));
+        & Trim (Integer'Image (Buffer'Last), Ada.Strings.Left));
    end;
 
    --  End transaction with first reader
