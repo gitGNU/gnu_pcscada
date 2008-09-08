@@ -541,10 +541,10 @@ package body PCSC.SCard is
    -- Get_Attribute_Size --
    ------------------------
 
-   function Get_Attribute_Size
+   function Init_Attribute_Set
      (Card        : in SCard.Card;
       Attr        : in Attribute)
-      return Natural
+      return Byte_Set
    is
       Res      : Thin.DWORD;
 
@@ -562,8 +562,14 @@ package body PCSC.SCard is
       end if;
       Store_Error (Code => Res);
 
-      return Natural (Len);
-   end Get_Attribute_Size;
+      --  TODO: extended return statement
+      declare
+         B : Byte_Set (IC.size_t (1) .. IC.size_t (Len)) :=
+           (others => Null_Byte);
+      begin
+         return B;
+      end;
+   end Init_Attribute_Set;
 
    ----------------------
    -- Get_Active_Proto --

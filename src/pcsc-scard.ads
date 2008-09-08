@@ -237,12 +237,12 @@ package PCSC.SCard is
       Recv_Buffer : in out Byte_Set);
    --  This procedure gets an attribute from the IFD handler.
 
-   function Get_Attribute_Size
+   function Init_Attribute_Set
      (Card        : in SCard.Card;
       Attr        : in Attribute)
-      return Natural;
-   --  This function returns the size an attribute needs to store it into a
-   --  buffer.
+      return Byte_Set;
+   --  This function returns an initialized byte set to store an attribute by a
+   --  a call of Get_Attribute.
 
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.

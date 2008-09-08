@@ -170,22 +170,20 @@ begin
 
    Ada.Text_IO.Put ("Testing Get_Attribute_Size: ");
    declare
-      Attr_Size : Natural := SCard.Get_Attribute_Size
+      Buffer : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
    begin
       Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size  : "
-                            & Natural'Image (Attr_Size));
+                            & Thin.C.size_t'Image (Buffer'Last));
    end;
 
    --  Test Get_Attribute
 
    declare
-      Len    : Natural := SCard.Get_Attribute_Size
-        (Card => Card, Attr => SCard.Attr_Vendor_Name);
-
       --  TODO: Byte_Set is not abstract enough!
-      Buffer : SCard.Byte_Set (Thin.C.size_t (1) .. Thin.C.size_t (Len));
+      Buffer : SCard.Byte_Set := SCard.Init_Attribute_Set
+        (Card => Card, Attr => SCard.Attr_Vendor_Name);
    begin
       Ada.Text_IO.Put ("Testing Get_Attribute     : ");
       SCard.Get_Attribute (Card        => Card,
