@@ -241,8 +241,10 @@ package PCSC.SCard is
      (Card        : in SCard.Card;
       Attr        : in Attribute)
       return Byte_Set;
-   --  This function returns an initialized byte set to store an attribute by a
-   --  a call of Get_Attribute.
+   --  This function returns an Null_Byte initialized byte set to provide
+   --  storage for an attribute 'Attr'. The byte set can then be used as
+   --  parameter to the Get_Attribute function to actually retrieve the
+   --  attribute data.
 
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
