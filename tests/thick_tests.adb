@@ -166,18 +166,6 @@ begin
                                Len   => 2 * Integer (Recv_Len))));
    end;
 
-   --  Test Get_Attribute_Size
-
-   Ada.Text_IO.Put ("Testing Get_Attribute_Size: ");
-   declare
-      Buffer : SCard.Byte_Set := SCard.Init_Attribute_Set
-        (Card => Card, Attr => SCard.Attr_Vendor_Name);
-   begin
-      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
-      Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size  : "
-                            & Thin.C.size_t'Image (Buffer'Last));
-   end;
-
    --  Test Get_Attribute
 
    declare
@@ -192,6 +180,8 @@ begin
       Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is    : "
                             & SCU.To_String (Given => Buffer));
+      Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size  : "
+                            & Thin.C.size_t'Image (Buffer'Last));
    end;
 
    --  End transaction with first reader
