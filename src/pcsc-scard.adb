@@ -283,9 +283,9 @@ package body PCSC.SCard is
          begin
             Item.Event_State   := To_Ada
               (C_States (C_States'First).dwEventState);
-            Item.Card_ATR.Data := C_States
-              (size_t (To_Index (Position))).rgbAtr;
-            Item.Card_ATR.Length := ATR_Range
+            Item.Card_ATR.Data := ATR_Type (C_States
+              (size_t (To_Index (Position))).rgbAtr);
+            Item.Card_ATR.Length := ATR_Index
               (C_States (size_t (To_Index (Position))).cbAtr);
 
             --  Update existing Reader_Status set
@@ -467,7 +467,7 @@ package body PCSC.SCard is
 
       --  Assign in out params
 
-      Atr.Length := ATR_Range (dwAtrLen);
+      Atr.Length := ATR_Index (dwAtrLen);
       Proto      := To_Ada (dwProtocol);
       State      := To_Ada (dwState);
    end Status;
@@ -564,8 +564,7 @@ package body PCSC.SCard is
 
       --  TODO: extended return statement
       declare
-         B : Byte_Set (IC.size_t (1) .. IC.size_t (Len)) :=
-           (others => Null_Byte);
+         B : Byte_Set (1 .. Positive (Len)) := (others => Null_Byte);
       begin
          return B;
       end;
@@ -819,7 +818,7 @@ package body PCSC.SCard is
                  dwCurrentState => C_Reader_State (Item.Current_State),
                  dwEventState   => Thin.SCARD_STATE_UNAWARE,
                  cbAtr          => Item.Card_ATR'Size,
-                 rgbAtr         => Item.Card_ATR.Data);
+                 rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
 
             Next (Position);
          end;

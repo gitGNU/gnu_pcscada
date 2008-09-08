@@ -27,11 +27,11 @@ with Interfaces.C;
 
 package body PCSC.SCard.Utils is
 
-   -----------------------------
-   --  To_String (Byte_Array) --
-   -----------------------------
+   ---------------------------
+   --  To_String (Byte_Set) --
+   ---------------------------
 
-   function To_String (Given : Thin.Byte_Array; Len : Positive) return String
+   function To_String (Given : SCard.Byte_Set; Len : Positive) return String
    is
       Hex : constant String := "0123456789ABCDEF";
 
@@ -57,6 +57,16 @@ package body PCSC.SCard.Utils is
       return Result;
    end To_String;
 
+   -----------------------------
+   --  To_String (Byte_Array) --
+   -----------------------------
+
+   function To_String (Given : Thin.Byte_Array; Len : Positive) return String
+   is
+   begin
+      return To_String (Given => Byte_Set (Given), Len => Len);
+   end To_String;
+
    ----------------------
    --  To_String (ATR) --
    ----------------------
@@ -67,7 +77,7 @@ package body PCSC.SCard.Utils is
          return "0";
       end if;
 
-      return To_String (Given => Given.Data,
+      return To_String (Given => Byte_Set (Given.Data),
                         Len   => 2 * Positive (Given.Length));
    end To_String;
 
@@ -130,7 +140,7 @@ package body PCSC.SCard.Utils is
       New_String : String (1 .. Given'Length - 1);
    begin
       for C in 1 .. Given'Length - 1 loop
-         New_String (C) := Character'Val (Given (IC.size_t (C)));
+         New_String (C) := Character'Val (Given (C));
       end loop;
 
       return New_String;

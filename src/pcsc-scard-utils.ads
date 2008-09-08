@@ -32,9 +32,13 @@ package PCSC.SCard.Utils is
    --  Callback for reader ID handling. Provides flexible way to access
    --  specific readers.
 
+   function To_String (Given : SCard.Byte_Set; Len : Positive) return String;
+   --  Returns hex-representation string of binary data (Byte_Set). Len defines
+   --  the length of the returned string.
+
    function To_String (Given : Thin.Byte_Array; Len : Positive) return String;
-   --  Returns hex-representation string of binary data. Len defines the length
-   --  of the returned string.
+   --  Returns hex-representation string of binary data (Byte_Array). Len
+   --  defines the length of the returned string.
 
    function To_String (Given : ATR) return String;
    --  Returns hex-representation string of an ATR.

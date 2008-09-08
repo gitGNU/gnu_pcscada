@@ -2,5 +2,3 @@
 * correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
 * add preferred protocols to SCard.Connect procedure
 * support 'or' operation for SCard.Connect preferred protocols
-* refactor Byte_Set: should be more abstract, not just a subtype of
-  Thin.Byte_Array

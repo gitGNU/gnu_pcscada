@@ -41,9 +41,8 @@ package PCSC.SCard is
    --  SCard-Handler, returned by Connect. Used to access a specific smartcard.
 
 
-   subtype Byte_Set is Thin.Byte_Array;
-   --  Byte_Sets are used to send and receive data to/from SCard-Readers. At
-   --  the moment, Byte_Sets are just subtypes of Thin.Byte_Arrays.
+   type Byte_Set is array (Natural range <>) of aliased Thin.Byte;
+   --  Byte_Sets are used to send and receive data to/from SCard-Readers.
 
    Null_Byte_Set : constant Byte_Set;
    --  Empty Byte_Set
@@ -235,7 +234,9 @@ package PCSC.SCard is
      (Card        : in SCard.Card;
       Attr        : in Attribute;
       Recv_Buffer : in out Byte_Set);
-   --  This procedure gets an attribute from the IFD handler.
+   --  This procedure gets an attribute from the IFD handler. Call
+   --  Init_Attribute_Set function to allocate the correct byte set for the
+   --  call.
 
    function Init_Attribute_Set
      (Card        : in SCard.Card;
@@ -311,15 +312,19 @@ private
    Null_Byte_Set : constant Byte_Set (1 .. 0) := (others => Null_Byte);
 
 
-   type ATR_Range is range 0 .. Thin.MAX_ATR_SIZE;
-   --  Allowed length for valid ATRs. '0' is used to indicate Null_ATR.
+   subtype ATR_Index is Natural range 0 .. Thin.MAX_ATR_SIZE;
+   --  Allowed index values for valid ATRs. '0' is used to indicate Null_ATR.
+
+   type ATR_Type is new Byte_Set (ATR_Index'Range);
+   --  ATR type definition. Defines a constrained Byte_Set to store ATRs.
 
    type ATR is record
-      Data   : Thin.ATR;
-      Length : ATR_Range;
+      Data   : ATR_Type;
+      Length : ATR_Index;
    end record;
 
-   Null_ATR : constant ATR := ATR'(Data   => Thin.Null_ATR, Length => 0);
+   Null_ATR : constant ATR := ATR'(Data   => ATR_Type'(others => Null_Byte),
+                                   Length => 0);
 
 
    --  Reader IDs
