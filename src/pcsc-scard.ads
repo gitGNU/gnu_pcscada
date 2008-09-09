@@ -147,7 +147,46 @@ package PCSC.SCard is
 
 
    type Attribute is
-     (Attr_Vendor_Name);
+     (Attr_Vendor_Name,
+      Attr_Vendor_IFD_Type,
+      Attr_Vendor_IFD_Version,
+      Attr_Vendor_IFD_Serial,
+      Attr_Channel_ID,
+      Attr_Default_CLK,
+      Attr_Max_CLK,
+      Attr_Default_Data_Rate,
+      Attr_Max_Data_Rate,
+      Attr_Max_IFSD,
+      Attr_Power_Mgmt_Support,
+      Attr_Characteristics,
+      Attr_Current_Protocol_Type,
+      Attr_Current_CLK,
+      Attr_Current_F,
+      Attr_Current_D,
+      Attr_Current_N,
+      Attr_Current_W,
+      Attr_Current_IFSC,
+      Attr_Current_IFSD,
+      Attr_Current_BWT,
+      Attr_Current_CWT,
+      Attr_Current_EBC_Encoding,
+      Attr_Extended_BWT,
+      Attr_ICC_Presence,
+      Attr_ICC_Interface_Status,
+      Attr_Current_IO_State,
+      Attr_ATR_String,
+      Attr_ICC_Type_Per_ATR,
+      Attr_ESC_Preset,
+      Attr_ESC_Cancel,
+      Attr_ESC_Authrequest,
+      Attr_Maxinput,
+      Attr_Device_Unit,
+      Attr_Device_In_Use,
+      Attr_Device_Friendly_Name_A,
+      Attr_Device_System_Name_A,
+      Attr_Device_Friendly_Name_W,
+      Attr_Device_System_Name_W,
+      Attr_Supress_T1_IFS_Request);
    --  Possible attributes for Get_Attribute procedure
 
 

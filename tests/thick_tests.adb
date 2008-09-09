@@ -170,7 +170,6 @@ begin
    --  Test Get_Attribute
 
    declare
-      --  TODO: Byte_Set is not abstract enough!
       Buffer : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
 

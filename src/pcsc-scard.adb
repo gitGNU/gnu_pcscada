@@ -34,6 +34,8 @@ package body PCSC.SCard is
 
    use IC;
 
+   package TR renames Thin.Reader;
+
    C_Scope : constant array (Scope) of Thin.DWORD
      := (Scope_User     => Thin.SCARD_SCOPE_USER,
          Scope_Terminal => Thin.SCARD_SCOPE_TERMINAL,
@@ -94,7 +96,46 @@ package body PCSC.SCard is
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
 
    C_Attr : constant array (Attribute) of Thin.DWORD
-     := (Attr_Vendor_Name => Thin.Reader.SCARD_ATTR_VENDOR_NAME);
+     := (Attr_Vendor_Name            => TR.SCARD_ATTR_VENDOR_NAME,
+         Attr_Vendor_IFD_Type        => TR.SCARD_ATTR_VENDOR_IFD_TYPE,
+         Attr_Vendor_IFD_Version     => TR.SCARD_ATTR_VENDOR_IFD_VERSION,
+         Attr_Vendor_IFD_Serial      => TR.SCARD_ATTR_VENDOR_IFD_SERIAL_NO,
+         Attr_Channel_ID             => TR.SCARD_ATTR_CHANNEL_ID,
+         Attr_Default_CLK            => TR.SCARD_ATTR_DEFAULT_CLK,
+         Attr_Max_CLK                => TR.SCARD_ATTR_MAX_CLK,
+         Attr_Default_Data_Rate      => TR.SCARD_ATTR_DEFAULT_DATA_RATE,
+         Attr_Max_Data_Rate          => TR.SCARD_ATTR_MAX_DATA_RATE,
+         Attr_Max_IFSD               => TR.SCARD_ATTR_MAX_IFSD,
+         Attr_Power_Mgmt_Support     => TR.SCARD_ATTR_POWER_MGMT_SUPPORT,
+         Attr_Characteristics        => TR.SCARD_ATTR_CHARACTERISTICS,
+         Attr_Current_Protocol_Type  => TR.SCARD_ATTR_CURRENT_PROTOCOL_TYPE,
+         Attr_Current_CLK            => TR.SCARD_ATTR_CURRENT_CLK,
+         Attr_Current_F              => TR.SCARD_ATTR_CURRENT_F,
+         Attr_Current_D              => TR.SCARD_ATTR_CURRENT_D,
+         Attr_Current_N              => TR.SCARD_ATTR_CURRENT_N,
+         Attr_Current_W              => TR.SCARD_ATTR_CURRENT_W,
+         Attr_Current_IFSC           => TR.SCARD_ATTR_CURRENT_IFSC,
+         Attr_Current_IFSD           => TR.SCARD_ATTR_CURRENT_IFSD,
+         Attr_Current_BWT            => TR.SCARD_ATTR_CURRENT_BWT,
+         Attr_Current_CWT            => TR.SCARD_ATTR_CURRENT_CWT,
+         Attr_Current_EBC_Encoding   => TR.SCARD_ATTR_CURRENT_EBC_ENCODING,
+         Attr_Extended_BWT           => TR.SCARD_ATTR_EXTENDED_BWT,
+         Attr_ICC_Presence           => TR.SCARD_ATTR_ICC_PRESENCE,
+         Attr_ICC_Interface_Status   => TR.SCARD_ATTR_ICC_INTERFACE_STATUS,
+         Attr_Current_IO_State       => TR.SCARD_ATTR_CURRENT_IO_STATE,
+         Attr_ATR_String             => TR.SCARD_ATTR_ATR_STRING,
+         Attr_ICC_Type_Per_ATR       => TR.SCARD_ATTR_ICC_TYPE_PER_ATR,
+         Attr_ESC_Preset             => TR.SCARD_ATTR_ESC_RESET,
+         Attr_ESC_Cancel             => TR.SCARD_ATTR_ESC_CANCEL,
+         Attr_ESC_Authrequest        => TR.SCARD_ATTR_ESC_AUTHREQUEST,
+         Attr_Maxinput               => TR.SCARD_ATTR_MAXINPUT,
+         Attr_Device_Unit            => TR.SCARD_ATTR_DEVICE_UNIT,
+         Attr_Device_In_Use          => TR.SCARD_ATTR_DEVICE_IN_USE,
+         Attr_Device_Friendly_Name_A => TR.SCARD_ATTR_DEVICE_FRIENDLY_NAME_A,
+         Attr_Device_System_Name_A   => TR.SCARD_ATTR_DEVICE_SYSTEM_NAME_A,
+         Attr_Device_Friendly_Name_W => TR.SCARD_ATTR_DEVICE_FRIENDLY_NAME_W,
+         Attr_Device_System_Name_W   => TR.SCARD_ATTR_DEVICE_SYSTEM_NAME_W,
+         Attr_Supress_T1_IFS_Request => TR.SCARD_ATTR_SUPRESS_T1_IFS_REQUEST);
    --  Map Attribute to corresponding C values
 
 
