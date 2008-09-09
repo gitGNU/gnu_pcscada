@@ -75,6 +75,8 @@ begin
 
       String_Code      : LPSTR;
 
+      --  Modify Reader_Name according to your test setup
+
       Reader_Name      : C.Strings.chars_ptr := C.Strings.New_String
         ("KOBIL KAAN SIM III (K_000000000) 00 00");
    begin
@@ -87,6 +89,7 @@ begin
                                pcchReaders => dwReaders'Access);
 
       --  NULL termination is counted as well
+
       if dwReaders = 1 then
          Ada.Text_IO.Put_Line ("no readers found");
          return;
