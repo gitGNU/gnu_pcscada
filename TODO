@@ -2,3 +2,9 @@
 * correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
 * add preferred protocols to SCard.Connect procedure
 * support 'or' operation for SCard.Connect preferred protocols
+* add default options or null/empty types for in params.
+* improve SCard.Transmit and corresponding buffer handling.
+  o Remove Recv_Len param.
+  o Allocate memory for buffer inside the binding, client does not
+    know the required size before the call returns.
+  o For that we need Handles and Free() procedures.
