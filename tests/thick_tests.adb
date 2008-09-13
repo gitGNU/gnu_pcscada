@@ -101,7 +101,7 @@ begin
       SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
    Ada.Text_IO.Put_Line
      (">> Card ATR               : " &
-      SCU.To_String (Reader_Status.Get_Status (Index => 1).Card_ATR));
+      SCU.To_Hex_String (Reader_Status.Get_Status (Index => 1).Card_ATR));
 
    --  Connect to first reader
 
@@ -134,7 +134,7 @@ begin
                     Atr     => Reader_ATR);
       Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">>  ATR                   : " &
-                            SCU.To_String (Given => Reader_ATR));
+                            SCU.To_Hex_String (Given => Reader_ATR));
       Ada.Text_IO.Put_Line (">>  ATR Size              : " &
                             SCard.Size (Reader_ATR));
       Ada.Text_IO.Put_Line (">>  Protocol              : " &
@@ -160,30 +160,41 @@ begin
                       Recv_Len    => Recv_Len);
       Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">> APDU (select file)     : " &
-        String (SCU.To_String (Given => Send_Buffer,
-                               Len   => 2 * Integer (Send_Buffer'Last))));
+                            String (SCU.To_Hex_String (Given => Send_Buffer)));
       Ada.Text_IO.Put_Line (">> Response from card     : " &
-        String (SCU.To_String (Given => Recv_Buffer,
-                               Len   => 2 * Integer (Recv_Len))));
+        String (SCU.To_Hex_String (Given => Recv_Buffer,
+                                   Len   => 2 * Integer (Recv_Len))));
    end;
 
    --  Test Get_Attribute
 
    declare
-      Buffer : SCard.Byte_Set := SCard.Init_Attribute_Set
+      Attr_Vendor : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
+      Attr_ATR    : SCard.Byte_Set := SCard.Init_Attribute_Set
+        (Card => Card, Attr => SCard.Attr_ATR_String);
 
       use Ada.Strings.Fixed;
    begin
       Ada.Text_IO.Put ("Testing Get_Attribute     : ");
       SCard.Get_Attribute (Card        => Card,
                            Attr        => SCard.Attr_Vendor_Name,
-                           Recv_Buffer => Buffer);
+                           Recv_Buffer => Attr_Vendor);
       Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is    : "
-                            & SCU.To_String (Given => Buffer));
+                            & SCU.To_String (Given => Attr_Vendor));
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size  : "
-        & Trim (Integer'Image (Buffer'Last), Ada.Strings.Left));
+        & Trim (Integer'Image (Attr_Vendor'Last), Ada.Strings.Left));
+
+      Ada.Text_IO.Put ("Testing Get_Attribute     : ");
+      SCard.Get_Attribute (Card        => Card,
+                           Attr        => SCard.Attr_ATR_String,
+                           Recv_Buffer => Attr_ATR);
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+      Ada.Text_IO.Put_Line (">> Attr_ATR_String is     : "
+        & SCU.To_Hex_String (Given => Attr_ATR));
+      Ada.Text_IO.Put_Line (">> Attr_ATR_String size   : "
+        & Trim (Integer'Image (Attr_ATR'Last), Ada.Strings.Left));
    end;
 
    --  End transaction with first reader
