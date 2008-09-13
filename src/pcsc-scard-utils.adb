@@ -27,11 +27,12 @@ with Interfaces.C;
 
 package body PCSC.SCard.Utils is
 
-   ---------------------------
-   --  To_String (Byte_Set) --
-   ---------------------------
+   -------------------------------
+   --  To_Hex_String (Byte_Set) --
+   -------------------------------
 
-   function To_String (Given : SCard.Byte_Set; Len : Positive) return String
+   function To_Hex_String (Given : in Byte_Set; Len : in Positive)
+                           return String
    is
       Hex : constant String := "0123456789ABCDEF";
 
@@ -55,37 +56,48 @@ package body PCSC.SCard.Utils is
          end if;
       end loop;
       return Result;
-   end To_String;
+   end To_Hex_String;
 
-   -----------------------------
-   --  To_String (Byte_Array) --
-   -----------------------------
+   -------------------------------
+   --  To_Hex_String (Byte_Set) --
+   -------------------------------
 
-   function To_String (Given : Thin.Byte_Array; Len : Positive) return String
+   function To_Hex_String (Given : in Byte_Set) return String is
+   begin
+      return To_Hex_String (Given => Given,
+                            Len   => 2 * Given'Last);
+   end To_Hex_String;
+
+   ---------------------------------
+   --  To_Hex_String (Byte_Array) --
+   ---------------------------------
+
+   function To_Hex_String (Given : in Thin.Byte_Array; Len : in Positive)
+                           return String
    is
    begin
-      return To_String (Given => Byte_Set (Given), Len => Len);
-   end To_String;
+      return To_Hex_String (Given => Byte_Set (Given), Len => Len);
+   end To_Hex_String;
 
-   ----------------------
-   --  To_String (ATR) --
-   ----------------------
+   --------------------------
+   --  To_Hex_String (ATR) --
+   --------------------------
 
-   function To_String (Given : ATR) return String is
+   function To_Hex_String (Given : in ATR) return String is
    begin
       if Given.Length <= 0 then
          return "0";
       end if;
 
-      return To_String (Given => Byte_Set (Given.Data),
-                        Len   => 2 * Positive (Given.Length));
-   end To_String;
+      return To_Hex_String (Given => Byte_Set (Given.Data),
+                            Len   => 2 * Positive (Given.Length));
+   end To_Hex_String;
 
    ---------------------------
    -- To_String (Reader_ID) --
    ---------------------------
 
-   function To_String (Reader : in SCard.Reader_ID := SCard.Null_Reader_ID)
+   function To_String (Reader : in Reader_ID := Null_Reader_ID)
                        return String
    is
    begin
@@ -96,18 +108,18 @@ package body PCSC.SCard.Utils is
    -- To_String (Card_States_Set) --
    ---------------------------------
 
-   function To_String (States : in SCard.Card_States_Set) return String
+   function To_String (States : in Card_States_Set) return String
    is
       use Ada.Strings.Unbounded;
 
       Str_States : Unbounded_String;
-      Position   : SCard.VOCSP.Cursor := States.Data.First;
-      State      : SCard.Card_State;
+      Position   : VOCSP.Cursor := States.Data.First;
+      State      : Card_State;
    begin
-      while SCard.VOCSP.Has_Element (Position) loop
-         State := SCard.VOCSP.Element (Position);
-         Str_States := SCard.Card_State'Image (State) & " " & Str_States;
-         SCard.VOCSP.Next (Position);
+      while VOCSP.Has_Element (Position) loop
+         State := VOCSP.Element (Position);
+         Str_States := Card_State'Image (State) & " " & Str_States;
+         VOCSP.Next (Position);
       end loop;
       return To_String (Str_States);
    end To_String;
@@ -116,18 +128,18 @@ package body PCSC.SCard.Utils is
    -- To_String (Reader_States_Set) --
    -----------------------------------
 
-   function To_String (States : in SCard.Reader_States_Set) return String
+   function To_String (States : in Reader_States_Set) return String
    is
       use Ada.Strings.Unbounded;
 
       Str_States : Unbounded_String;
-      Position   : SCard.VORSP.Cursor := States.Data.First;
-      State      : SCard.Reader_State;
+      Position   : VORSP.Cursor := States.Data.First;
+      State      : Reader_State;
    begin
-      while SCard.VORSP.Has_Element (Position) loop
-         State := SCard.VORSP.Element (Position);
-         Str_States := SCard.Reader_State'Image (State) & " " & Str_States;
-         SCard.VORSP.Next (Position);
+      while VORSP.Has_Element (Position) loop
+         State := VORSP.Element (Position);
+         Str_States := Reader_State'Image (State) & " " & Str_States;
+         VORSP.Next (Position);
       end loop;
       return To_String (Str_States);
    end To_String;
@@ -136,7 +148,7 @@ package body PCSC.SCard.Utils is
    -- To_String (Byte_Set) --
    --------------------------
 
-   function To_String (Given : SCard.Byte_Set) return String is
+   function To_String (Given : Byte_Set) return String is
       New_String : String (1 .. Given'Length - 1);
    begin
       for C in 1 .. Given'Length - 1 loop
@@ -151,13 +163,13 @@ package body PCSC.SCard.Utils is
    ----------------------
 
    procedure For_Every_Reader
-     (Readers : in SCard.Reader_ID_Set;
+     (Readers : in Reader_ID_Set;
       Call    : in Callback)
    is
-      use SCard.VOIDP;
+      use VOIDP;
 
       Position : Cursor := Readers.Data.First;
-      Reader   : SCard.Reader_ID;
+      Reader   : Reader_ID;
    begin
       while Has_Element (Position) loop
          Reader := Element (Position);
@@ -171,7 +183,7 @@ package body PCSC.SCard.Utils is
    -- Print_ReaderID --
    --------------------
 
-   procedure Print_ReaderID (ID : in SCard.Reader_ID) is
+   procedure Print_ReaderID (ID : in Reader_ID) is
    begin
       Ada.Text_IO.Put_Line (To_String (ID));
    end Print_ReaderID;

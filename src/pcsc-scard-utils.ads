@@ -32,36 +32,42 @@ package PCSC.SCard.Utils is
    --  Callback for reader ID handling. Provides flexible way to access
    --  specific readers.
 
-   function To_String (Given : SCard.Byte_Set; Len : Positive) return String;
+   function To_Hex_String (Given : in Byte_Set; Len : in Positive)
+                           return String;
    --  Returns hex-representation string of binary data (Byte_Set). Len defines
    --  the length of the returned string.
 
-   function To_String (Given : Thin.Byte_Array; Len : Positive) return String;
+   function To_Hex_String (Given : in Byte_Set) return String;
+   --  Returns hex-representation string of binary data (Byte_Set). The string
+   --  length will be the double length of the initial byte set.
+
+   function To_Hex_String (Given : in Thin.Byte_Array; Len : in Positive)
+                           return String;
    --  Returns hex-representation string of binary data (Byte_Array). Len
    --  defines the length of the returned string.
 
-   function To_String (Given : ATR) return String;
+   function To_Hex_String (Given : in ATR) return String;
    --  Returns hex-representation string of an ATR.
 
-   function To_String (Reader : in SCard.Reader_ID := SCard.Null_Reader_ID)
+   function To_String (Reader : in Reader_ID := Null_Reader_ID)
                        return String;
    --  Return string from Reader_ID.
 
-   function To_String (States : in SCard.Card_States_Set) return String;
+   function To_String (States : in Card_States_Set) return String;
    --  Return string representation of card reader states.
 
-   function To_String (States : in SCard.Reader_States_Set) return String;
+   function To_String (States : in Reader_States_Set) return String;
    --  Return string representation of reader states.
 
-   function To_String (Given : SCard.Byte_Set) return String;
-   --   Return an array of characters from Byte_Set.
+   function To_String (Given : in Byte_Set) return String;
+   --  Return an array of characters from Byte_Set.
 
    procedure For_Every_Reader
-     (Readers : in SCard.Reader_ID_Set;
+     (Readers : in Reader_ID_Set;
       Call    : in Callback);
    --  Call callback procedure for every reader in readers list.
 
-   procedure Print_ReaderID (ID : in SCard.Reader_ID);
+   procedure Print_ReaderID (ID : in Reader_ID);
    --  Print out specific reader ID to default output.
 
 end PCSC.SCard.Utils;
