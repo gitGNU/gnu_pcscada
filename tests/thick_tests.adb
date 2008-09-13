@@ -169,10 +169,12 @@ begin
    --  Test Get_Attribute
 
    declare
-      Attr_Vendor : SCard.Byte_Set := SCard.Init_Attribute_Set
+      Attr_Vendor   : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
-      Attr_ATR    : SCard.Byte_Set := SCard.Init_Attribute_Set
+      Attr_ATR      : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_ATR_String);
+      Attr_Maxinput : SCard.Byte_Set := SCard.Init_Attribute_Set
+        (Card => Card, Attr => SCard.Attr_Maxinput);
 
       use Ada.Strings.Fixed;
    begin
@@ -195,6 +197,15 @@ begin
         & SCU.To_Hex_String (Given => Attr_ATR));
       Ada.Text_IO.Put_Line (">> Attr_ATR_String size   : "
         & Trim (Integer'Image (Attr_ATR'Last), Ada.Strings.Left));
+
+      Ada.Text_IO.Put ("Testing Get_Attribute     : ");
+      SCard.Get_Attribute (Card        => Card,
+                           Attr        => SCard.Attr_Maxinput,
+                           Recv_Buffer => Attr_Maxinput);
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+      Ada.Text_IO.Put_Line (">> Attr_Maxinput is       : "
+        & Trim (Integer'Image
+          (SCU.To_Integer (Given => Attr_Maxinput)), Ada.Strings.Left));
    end;
 
    --  End transaction with first reader

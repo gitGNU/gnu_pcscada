@@ -62,6 +62,9 @@ package PCSC.SCard.Utils is
    function To_String (Given : in Byte_Set) return String;
    --  Return an array of characters from Byte_Set.
 
+   function To_Integer (Given : in Byte_Set := Null_Byte_Set) return Integer;
+   --  Return converted Integer value from Byte_Set.
+
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;
       Call    : in Callback);

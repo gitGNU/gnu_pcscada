@@ -158,6 +158,21 @@ package body PCSC.SCard.Utils is
       return New_String;
    end To_String;
 
+   ---------------------------
+   -- To_Integer (Byte_Set) --
+   ---------------------------
+
+   function To_Integer (Given : in Byte_Set := Null_Byte_Set) return Integer is
+      Result   : Integer := 0;
+      Position : Integer := 1;
+   begin
+      for V in Given'Range loop
+         Result   :=  Result + Position * Integer (Given (V));
+         Position :=  V * 256;
+      end loop;
+      return Result;
+   end To_Integer;
+
    ----------------------
    -- For_Every_Reader --
    ----------------------
