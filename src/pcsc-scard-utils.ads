@@ -32,12 +32,14 @@ package PCSC.SCard.Utils is
    --  Callback for reader ID handling. Provides flexible way to access
    --  specific readers.
 
-   function To_Hex_String (Given : in Byte_Set; Len : in Positive)
-                           return String;
+   function To_Hex_String
+     (Given : in Byte_Set := Null_Byte_Set;
+      Len   : in Positive)
+      return String;
    --  Returns hex-representation string of binary data (Byte_Set). Len defines
    --  the length of the returned string.
 
-   function To_Hex_String (Given : in Byte_Set) return String;
+   function To_Hex_String (Given : in Byte_Set := Null_Byte_Set) return String;
    --  Returns hex-representation string of binary data (Byte_Set). The string
    --  length will be the double length of the initial byte set.
 
@@ -46,11 +48,10 @@ package PCSC.SCard.Utils is
    --  Returns hex-representation string of binary data (Byte_Array). Len
    --  defines the length of the returned string.
 
-   function To_Hex_String (Given : in ATR) return String;
+   function To_Hex_String (Given : in ATR := Null_ATR) return String;
    --  Returns hex-representation string of an ATR.
 
-   function To_String (Reader : in Reader_ID := Null_Reader_ID)
-                       return String;
+   function To_String (Reader : in Reader_ID := Null_Reader_ID) return String;
    --  Return string from Reader_ID.
 
    function To_String (States : in Card_States_Set) return String;
@@ -59,7 +60,7 @@ package PCSC.SCard.Utils is
    function To_String (States : in Reader_States_Set) return String;
    --  Return string representation of reader states.
 
-   function To_String (Given : in Byte_Set) return String;
+   function To_String (Given : in Byte_Set := Null_Byte_Set) return String;
    --  Return an array of characters from Byte_Set.
 
    function To_Integer (Given : in Byte_Set := Null_Byte_Set) return Integer;

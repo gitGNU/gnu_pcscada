@@ -31,12 +31,14 @@ package body PCSC.SCard.Utils is
    --  To_Hex_String (Byte_Set) --
    -------------------------------
 
-   function To_Hex_String (Given : in Byte_Set; Len : in Positive)
-                           return String
+   function To_Hex_String
+     (Given : in Byte_Set := Null_Byte_Set;
+      Len   : in Positive)
+      return String
    is
-      Hex : constant String := "0123456789ABCDEF";
+      Hex    : constant String := "0123456789ABCDEF";
 
-      Result : String (1 .. Len);
+      Result : String (1 .. Len) := (others => '0');
       Where  : Integer range Result'Range := Result'First;
 
       Temp   : Interfaces.Unsigned_8;
@@ -62,8 +64,13 @@ package body PCSC.SCard.Utils is
    --  To_Hex_String (Byte_Set) --
    -------------------------------
 
-   function To_Hex_String (Given : in Byte_Set) return String is
+   function To_Hex_String (Given : in Byte_Set := Null_Byte_Set) return String
+   is
    begin
+      if Given = Null_Byte_Set then
+         return "0";
+      end if;
+
       return To_Hex_String (Given => Given,
                             Len   => 2 * Given'Last);
    end To_Hex_String;
@@ -83,9 +90,9 @@ package body PCSC.SCard.Utils is
    --  To_Hex_String (ATR) --
    --------------------------
 
-   function To_Hex_String (Given : in ATR) return String is
+   function To_Hex_String (Given : in ATR := Null_ATR) return String is
    begin
-      if Given.Length <= 0 then
+      if Given = Null_ATR then
          return "0";
       end if;
 
@@ -148,9 +155,13 @@ package body PCSC.SCard.Utils is
    -- To_String (Byte_Set) --
    --------------------------
 
-   function To_String (Given : Byte_Set) return String is
+   function To_String (Given : in Byte_Set := Null_Byte_Set) return String is
       New_String : String (1 .. Given'Length - 1);
    begin
+      if Given = Null_Byte_Set then
+         return "0";
+      end if;
+
       for C in 1 .. Given'Length - 1 loop
          New_String (C) := Character'Val (Given (C));
       end loop;

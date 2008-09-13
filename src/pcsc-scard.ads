@@ -313,7 +313,7 @@ package PCSC.SCard is
    --  Return current size of an ATR as string.
 
    function Get_Status (States : in Reader_Status_Set;
-                        Index  : Natural)
+                        Index  : in Natural)
                         return Reader_Status;
    --  Return Reader_Status type at index 'Index'.
 

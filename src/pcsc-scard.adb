@@ -154,13 +154,13 @@ package body PCSC.SCard is
    --  Return a new C compatible string from Reader_ID. The allocated memory
    --  must be freed by calling Free.
 
-   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
+   function To_Ada (C_Protocol : in Thin.DWORD) return Proto;
    --  Return Ada style Proto for C_Protocol (DWORD).
 
-   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set;
+   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set;
    --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
 
-   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set;
+   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set;
    --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
 
    procedure Free is new Ada.Unchecked_Deallocation
@@ -347,7 +347,7 @@ package body PCSC.SCard is
    ----------------------
 
    procedure Wait_For_Readers (Context : in SCard.Context) is
-      Res       : Thin.DWORD;
+      Res : Thin.DWORD;
    begin
       Res := Thin.SCardGetStatusChange
         (hContext       => Context.hContext,
@@ -697,7 +697,7 @@ package body PCSC.SCard is
    ----------------
 
    function Get_Status (States : in Reader_Status_Set;
-                        Index  : Natural)
+                        Index  : in Natural)
                         return Reader_Status
    is
    begin
@@ -788,7 +788,7 @@ package body PCSC.SCard is
    -- To_Ada (Proto) --
    --------------------
 
-   function To_Ada (C_Protocol : Thin.DWORD) return Proto is
+   function To_Ada (C_Protocol : in Thin.DWORD) return Proto is
    begin
       for P in Proto'Range loop
          if C_Proto (P) = C_Protocol then
@@ -808,8 +808,8 @@ package body PCSC.SCard is
    -- To_Ada (Card_States_Array) --
    --------------------------------
 
-   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set is
-      States     : Card_States_Set;
+   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set is
+      States : Card_States_Set;
    begin
       for P in C_Card_State'Range loop
          if (C_Cardstate and C_Card_State (P)) /= 0 then
@@ -823,8 +823,8 @@ package body PCSC.SCard is
    -- To_Ada (Reader_States_Set) --
    ----------------------------------
 
-   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set is
-      States     : Reader_States_Set;
+   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set is
+      States : Reader_States_Set;
    begin
       for P in C_Reader_State'Range loop
          if (C_Readerstate and C_Reader_State (P)) /= 0 then
