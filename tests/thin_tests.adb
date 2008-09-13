@@ -151,8 +151,8 @@ begin
          Ada.Text_IO.Put_Line ("card status ok");
          Ada.Text_IO.Put_Line ("  -- ATR len: " & DWORD'Image (dwAtrLen));
          Ada.Text_IO.Put_Line ("  -- ATR    :  " &
-           String (SCU.To_String (Given => pbAtr,
-                                  Len   => 2 * Integer (dwAtrLen))));
+           String (SCU.To_Hex_String (Given => pbAtr,
+                                      Len   => 2 * Integer (dwAtrLen))));
          Ada.Text_IO.Put_Line ("  -- STATE  : " & DWORD'Image (dwState));
          Ada.Text_IO.Put_Line ("  -- PROTO  : " &
                                DWORD'Image (dwProtocol));
@@ -190,8 +190,8 @@ begin
             Ada.Text_IO.Put_Line ("transmit send ok");
          end if;
          Ada.Text_IO.Put_Line ("response from card: " &
-           String (SCU.To_String (Given => pbRecvBuffer,
-                                  Len   => 2 * Integer (pcbRecvLength))));
+           String (SCU.To_Hex_String (Given => pbRecvBuffer,
+                                      Len   => 2 * Integer (pcbRecvLength))));
       end;
 
       --  End transaction
