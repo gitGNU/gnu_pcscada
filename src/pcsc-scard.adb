@@ -525,11 +525,11 @@ package body PCSC.SCard is
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
-      Res         : Thin.DWORD;
+      Res            : Thin.DWORD;
 
-      C_Send_PCI  : aliased Thin.SCARD_IO_REQUEST := C_PCI (Send_Pci);
-      C_Recv_PCI  : aliased Thin.SCARD_IO_REQUEST := C_PCI (Recv_Pci);
-      Recv_Length : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
+      C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST := C_PCI (Send_Pci);
+      C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST := C_PCI (Recv_Pci);
+      Bytes_Returned : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
    begin
       --  TODO: Send_Buffer needs to be 'in out', otherwise:
       --        access-to-variable designates constant => fix
@@ -540,7 +540,7 @@ package body PCSC.SCard is
          cbSendLength  => Thin.DWORD (Send_Buffer'Length),
          pioRecvPci    => C_Recv_PCI'Access,
          pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
-         pcbRecvLength => Recv_Length'Access);
+         pcbRecvLength => Bytes_Returned'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
@@ -550,8 +550,46 @@ package body PCSC.SCard is
 
       --  Return read bytes count
 
-      Recv_Len := Natural (Recv_Length);
+      Recv_Len := Natural (Bytes_Returned);
    end Transmit;
+
+   -------------
+   -- Control --
+   -------------
+
+   procedure Control
+     (Card        : in SCard.Card;
+      Code        : in Natural;
+      Send_Buffer : in out Byte_Set;
+      Recv_Buffer : in out Byte_Set;
+      Recv_Len    : in out Natural)
+   is
+      Res            : Thin.DWORD;
+
+      Recv_Length    : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
+      Bytes_Returned : aliased Thin.DWORD := 0;
+   begin
+      --  TODO: Send_Buffer needs to be 'in out', otherwise:
+      --        access-to-variable designates constant => fix
+      Res := Thin.SCardControl
+        (hCard           => Card.hCard,
+         dwControlCode   => Thin.DWORD (Code),
+         pbSendBuffer    => Send_Buffer (Send_Buffer'First)'Unchecked_Access,
+         cbSendLength    => Thin.DWORD (Send_Buffer'Length),
+         pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
+         cbRecvLength    => Recv_Length,
+         lpBytesReturned => Bytes_Returned'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Sending Control to Card failed");
+      end if;
+      Store_Error (Code => Res);
+
+      --  Return read bytes count
+
+      Recv_Len := Natural (Bytes_Returned);
+   end Control;
 
    -------------------
    -- Get_Attribute --

@@ -421,9 +421,9 @@ package PCSC.Thin is
    function SCardControl
      (hCard           : in SCARDHANDLE;
       dwControlCode   : in DWORD;
-      pbSendBuffer    : in LPCVOID;
+      pbSendBuffer    : in Byte_Array_Access;
       cbSendLength    : in DWORD;
-      pbRecvBuffer    : in LPVOID;
+      pbRecvBuffer    : in Byte_Array_Access;
       cbRecvLength    : in DWORD;
       lpBytesReturned : access DWORD)
       return DWORD;

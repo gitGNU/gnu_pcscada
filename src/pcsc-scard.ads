@@ -269,6 +269,15 @@ package PCSC.SCard is
       Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.
 
+   procedure Control
+     (Card        : in SCard.Card;
+      Code        : in Natural;
+      Send_Buffer : in out Byte_Set;
+      Recv_Buffer : in out Byte_Set;
+      Recv_Len    : in out Natural);
+   --  This procedure sends a control command to the reader connected to by
+   --  Connect(). It returns the the control response in Recv_Buffer.
+
    procedure Get_Attribute
      (Card        : in SCard.Card;
       Attr        : in Attribute;

@@ -163,6 +163,28 @@ begin
                                    Len   => 2 * Integer (Recv_Len))));
    end;
 
+   --  Test smart card control
+
+   declare
+      Recv_Buffer  : SCard.Byte_Set (1 .. 10);
+      Send_Buffer  : SCard.Byte_Set :=
+        (16#06#, 16#00#, 16#0A#, 16#01#, 16#01#, 16#10#, 16#00#);
+      Recv_Len     : Natural := 0;
+      Control_Code : Integer := 16#42000001#;
+   begin
+      Ada.Text_IO.Put ("Testing Control            : ");
+      SCard.Control (Card        => Card,
+                     Code        => Control_Code,
+                     Send_Buffer => Send_Buffer,
+                     Recv_Buffer => Recv_Buffer,
+                     Recv_Len    => Recv_Len);
+      Ada.Text_IO.Put_Line (SCard.Get_Return_Code);
+   exception
+      when others =>
+         --  This is allowed to fail
+         Ada.Text_IO.Put_Line ("FAILED (don't PANIC)");
+   end;
+
    --  Test Get_Attribute
 
    declare
