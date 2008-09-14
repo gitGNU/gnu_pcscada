@@ -8,3 +8,5 @@
   o Allocate memory for buffer inside the binding, client does not
     know the required size before the call returns.
   o For that we need Handles and Free() procedures.
+* Provide To_Byte_Set function which returns a Byte_Set from a String.
+  o e.g. "16 3B 12 28"
