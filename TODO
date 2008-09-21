@@ -10,3 +10,5 @@
   o For that we need Handles and Free() procedures.
 * Provide To_Byte_Set function which returns a Byte_Set from a String.
   o e.g. "16 3B 12 28"
+* Fix valgrinds "Syscall param write(buf) points to uninitialised byte(s)"
+  error for SCard Control procedure.
