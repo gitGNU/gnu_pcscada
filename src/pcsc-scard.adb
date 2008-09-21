@@ -292,7 +292,29 @@ package body PCSC.SCard is
       C_Timeout : Thin.DWORD;
       C_States  : Thin.READERSTATE_Array := To_C (States => Status_Set);
 
-      Position  : Cursor := Status_Set.Data.First;
+      procedure Update_Status_Set (Position : in Cursor);
+      --  Forward declaration of Update_Status_Set
+
+      procedure Update_Status_Set (Position : in Cursor) is
+
+         procedure Update_Reader_Status (Element : in out Reader_Status);
+         --  Forward declaration of Update_Reader_Status
+
+         procedure Update_Reader_Status (Element : in out Reader_Status) is
+         begin
+            Element.Event_State     := To_Ada
+              (C_States (C_States'First).dwEventState);
+            Element.Card_ATR.Data   := ATR_Type
+              (C_States (size_t (To_Index (Position))).rgbAtr);
+            Element.Card_ATR.Length := ATR_Index
+              (C_States (size_t (To_Index (Position))).cbAtr);
+         end Update_Reader_Status;
+
+      begin
+         Status_Set.Data.Update_Element
+           (Position => Position, Process => Update_Reader_Status'Access);
+      end Update_Status_Set;
+
    begin
 
       if Timeout = 0 then
@@ -317,25 +339,9 @@ package body PCSC.SCard is
 
       --  Update Ada type with values returned by C API function
       --  TODO: what happens when a reader vanishes?
-      --  TODO: don't use Replace_Element, Update existing instead
-      while Has_Element (Position) loop
-         declare
-            Item : Reader_Status := Element (Position);
-         begin
-            Item.Event_State   := To_Ada
-              (C_States (C_States'First).dwEventState);
-            Item.Card_ATR.Data := ATR_Type (C_States
-              (size_t (To_Index (Position))).rgbAtr);
-            Item.Card_ATR.Length := ATR_Index
-              (C_States (size_t (To_Index (Position))).cbAtr);
 
-            --  Update existing Reader_Status set
-
-            Status_Set.Data.Replace_Element (Position => Position,
-                                             New_Item => Item);
-            Next (Position);
-         end;
-      end loop;
+      VORSTP.Iterate (Container => Status_Set.Data,
+                      Process   => Update_Status_Set'Access);
 
       --  Free C_States
       Free (C_States);
