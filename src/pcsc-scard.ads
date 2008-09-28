@@ -103,7 +103,7 @@ package PCSC.SCard is
       Specific);  -- PTS has been set
    --  Card states
 
-   type Card_States_Set is tagged private;
+   type Card_States_Set is private;
    --  Set of card states
 
    type Reader_State is
@@ -121,7 +121,7 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
-   type Reader_States_Set is tagged private;
+   type Reader_States_Set is private;
    --  Set of reader states
 
 
@@ -400,7 +400,7 @@ private
    package VOCSP renames Vector_Of_CStates_Package;
    subtype Vector_Of_CStates_Type is VOCSP.Vector;
 
-   type Card_States_Set is tagged record
+   type Card_States_Set is record
       Data : Vector_Of_CStates_Type;
    end record;
 
@@ -414,7 +414,7 @@ private
    package VORSP renames Vector_Of_RStates_Package;
    subtype Vector_Of_RStates_Type is VORSP.Vector;
 
-   type Reader_States_Set is tagged record
+   type Reader_States_Set is record
       Data : Vector_Of_RStates_Type;
    end record;
 
