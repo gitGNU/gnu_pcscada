@@ -223,8 +223,8 @@ package PCSC.SCard is
    --  return immediately.
 
    procedure Connect
-     (Card    : in out SCard.Card;
-      Context : in SCard.Context;
+     (Context : in SCard.Context;
+      Card    : in out SCard.Card;
       Reader  : in Reader_ID := Null_Reader_ID;
       Mode    : in SCard.Mode := Share_Shared);
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected

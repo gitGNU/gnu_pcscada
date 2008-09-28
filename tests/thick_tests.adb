@@ -121,8 +121,8 @@ begin
    --  Connect to first reader
 
    Print_Testinfo (Text => "Testing Connect");
-   SCard.Connect (Card     => Card,
-                  Context  => Context,
+   SCard.Connect (Context  => Context,
+                  Card     => Card,
                   Reader   => Readers.First,
                   Mode     => SCard.Share_Shared);
    Print_Result (Result => SCard.Get_Return_Code);
