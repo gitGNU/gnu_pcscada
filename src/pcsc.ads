@@ -30,6 +30,6 @@ package PCSC is
 
 private
    Version : constant String := "0.1";
-   --  Current PCSC/Ada version
+   --  PCSC/Ada version
 
 end PCSC;
