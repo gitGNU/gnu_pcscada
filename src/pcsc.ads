@@ -29,7 +29,7 @@ package PCSC is
    --  Raised by all PCSC.SCard routines in case of error
 
 private
-   Version : constant String := "0.1";
+   Version : constant String := "0.5";
    --  PCSC/Ada version
 
 end PCSC;
