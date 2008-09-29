@@ -20,18 +20,41 @@
 #  MA  02110-1301  USA
 #
 
+PREFIX?=$(HOME)/libraries
+INSTALL=install
+
+VERSION=$(shell grep " Version" src/pcsc.ads | cut -d\" -f2)
+PCSCADA=libpcsc-$(VERSION)
+DISTFILES=`ls | grep -v libpcsc`
+
+SOURCES=src/*
+ALI_FILES=lib/*.ali
+SO_LIBRARY=libpcscada.so.$(VERSION)
+
 all:
-	@mkdir -p obj
-	@gnatmake -Ppcsc_ada
+	@mkdir -p lib obj
+	@gnatmake -Ppcscada
+	@gnatmake -Ppcscada_lib
 
 clean:
 	@rm -rf obj/*
+	@rm -rf lib/*
 
 distclean:
 	@rm -rf obj
+	@rm -rf lib
 
 tests:
-	@obj/thin_tests
 	@obj/thick_tests
+
+install: install_lib
+
+install_lib:
+	@mkdir -p $(PREFIX)/include/pcscada
+	@mkdir -p $(PREFIX)/lib/pcscada
+	$(INSTALL) -m 644 $(SOURCES) $(PREFIX)/include/pcscada
+	$(INSTALL) -m 444 $(ALI_FILES) $(PREFIX)/lib/pcscada
+	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib/pcscada
+	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/pcscada/libpcscada.so
 
 .PHONY: tests
