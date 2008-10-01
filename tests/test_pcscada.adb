@@ -28,8 +28,13 @@ with PCSC.SCard.Utils;
 
 use PCSC;
 
---  Thick-binding test
-procedure Thick_Tests is
+--  PCSC/Ada integration test procedure. To run these tests, you need to have
+--  at least one reader and one smartcard ready.
+--
+--  To ease comparing test runs, this procedure is implemented in a manner
+--  similar to the pcsc-lite 'testpcsc' test binary, which should be used as
+--  test reference.
+procedure Test_PCSCAda is
    Context       : SCard.Context;
    Card          : SCard.Card;
 
@@ -205,6 +210,7 @@ begin
 
    --  Test Get_Attribute
 
+   Print_Testinfo (Text => "Testing Get_Attribute");
    declare
       Attr_Vendor      : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
@@ -218,7 +224,6 @@ begin
 
       use Ada.Strings.Fixed;
    begin
-      Print_Testinfo (Text => "Testing Get_Attribute");
       SCard.Get_Attribute (Card        => Card,
                            Attr        => SCard.Attr_Vendor_Name,
                            Recv_Buffer => Attr_Vendor);
@@ -289,4 +294,4 @@ exception
       end if;
 
       raise;
-end Thick_Tests;
+end Test_PCSCAda;

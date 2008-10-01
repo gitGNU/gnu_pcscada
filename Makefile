@@ -44,8 +44,14 @@ distclean:
 	@rm -rf obj
 	@rm -rf lib
 
-tests:
-	@obj/thick_tests
+# run unit tests
+utests: all
+	@obj/runner
+
+# run 'integration' tests
+# you need a reader and smartcard for this to work
+itests: all
+	@obj/test_pcscada
 
 install: install_lib
 
@@ -57,4 +63,4 @@ install_lib:
 	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib/pcscada
 	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/pcscada/libpcscada.so
 
-.PHONY: tests
+.PHONY: itests utests

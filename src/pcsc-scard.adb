@@ -643,7 +643,7 @@ package body PCSC.SCard is
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
-                          Message => "Get attribute failed");
+                          Message => "Init attribute set failed");
       end if;
       Store_Error (Code => Res);
 
