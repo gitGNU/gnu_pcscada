@@ -31,7 +31,7 @@ with PCSC.SCard.Utils;
 use PCSC;
 
 --  Thin-binding test
-procedure Thin_Tests is
+procedure Thin_Example is
    hContext : aliased SCARDCONTEXT;
    ret      : DWORD;
 
@@ -220,4 +220,4 @@ begin
    if ret = SCARD_S_SUCCESS then
       Ada.Text_IO.Put_Line ("context released");
    end if;
-end Thin_Tests;
+end Thin_Example;
