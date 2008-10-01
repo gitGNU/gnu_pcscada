@@ -61,6 +61,6 @@ install_lib:
 	$(INSTALL) -m 644 $(SOURCES) $(PREFIX)/include/pcscada
 	$(INSTALL) -m 444 $(ALI_FILES) $(PREFIX)/lib/pcscada
 	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib/pcscada
-	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/pcscada/libpcscada.so
+	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
 
 .PHONY: itests utests
