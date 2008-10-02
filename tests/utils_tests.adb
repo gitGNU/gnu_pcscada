@@ -49,7 +49,7 @@ package body Utils_Tests is
 
    procedure Dummy is
    begin
-      null;
+      Fail (Message => "not yet implemented");
    end Dummy;
 
 end Utils_Tests;
