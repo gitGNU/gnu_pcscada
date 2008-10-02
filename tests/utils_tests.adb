@@ -20,19 +20,36 @@
 --  MA  02110-1301  USA
 --
 
-project PCSCAda is
+--  Ada
+with Ada.Text_IO;
+with Ada.Exceptions;
+with Ada.IO_Exceptions;
 
-   for Languages use ("Ada");
-   for Object_Dir use "obj";
-   for Source_Dirs use ("src", "tests");
-   for Main use ("test_pcscada.adb");
+--  Ahven
+with Ahven; use Ahven;
 
-   package Compiler is
-      for Default_Switches ("ada") use ("-gnat05", "-gnaty", "-g", "-gnato", "-fstack-check");
-   end Compiler;
+package body Utils_Tests is
 
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
+   ----------------
+   -- Initialize --
+   ----------------
 
-end PCSCAda;
+   procedure Initialize (T : in out Test) is
+   begin
+      Set_Name (T    => T,
+                Name => "Tests for PCSC/Ada SCard Utils");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Dummy'Access,
+                                  Name    => "dummy test");
+   end Initialize;
+
+   -----------
+   -- Dummy --
+   -----------
+
+   procedure Dummy is
+   begin
+      null;
+   end Dummy;
+
+end Utils_Tests;

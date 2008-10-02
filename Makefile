@@ -31,10 +31,19 @@ SOURCES=src/*
 ALI_FILES=lib/*.ali
 SO_LIBRARY=libpcscada.so.$(VERSION)
 
-all:
-	@mkdir -p lib obj
-	@gnatmake -Ppcscada
+all: build_lib
+
+build_lib: create_dirs
 	@gnatmake -Ppcscada_lib
+
+build_utests: create_dirs
+	@gnatmake -Ppcscada_utests
+
+build_itests: create_dirs
+	@gnatmake -Ppcscada_itests
+
+create_dirs:
+	@mkdir -p obj lib
 
 clean:
 	@rm -rf obj/*
@@ -45,12 +54,12 @@ distclean:
 	@rm -rf lib
 
 # run unit tests
-utests: all
+utests: build_utests
 	@obj/runner
 
 # run 'integration' tests
 # you need a reader and smartcard for this to work
-itests: all
+itests: build_itests
 	@obj/test_pcscada
 
 install: install_lib
