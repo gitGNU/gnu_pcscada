@@ -190,9 +190,13 @@ package body PCSC.SCard.Utils is
                                      Shift_Left (U3, 16) or
                                      Shift_Left (U2, 8)  or
                                      U1);
-      --  TODO: raise exception if number is too big for Long_Long_Integer
+
       Ada.Text_IO.Put_Line (Long_Long_Integer'Image (Result));
       return Result;
+
+   exception
+      when Constraint_Error =>
+         raise Number_Too_Big;
    end To_Long_Long_Integer;
 
    ----------------------

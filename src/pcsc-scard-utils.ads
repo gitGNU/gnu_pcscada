@@ -67,8 +67,13 @@ package PCSC.SCard.Utils is
                                   return Long_Long_Integer;
    --  Return converted Long_Long_Integer value from Byte_Set. Maximal value
    --  which can be converted is Long_Long_Integer'Last. If given Byte_Set
-   --  contains a bigger number than Long_Long_Integer'Last, an exception will
-   --  be raised.
+   --  contains a bigger number than Long_Long_Integer'Last, a
+   --  "Number_Too_Big" exception will be raised.
+
+   Number_Too_Big : exception;
+   --  Exception will be raised by To_Long_Long_Integer function if a given
+   --  Byte_Set cannot be converted because it's bigger than
+   --  Long_Long_Integer'Last.
 
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;
