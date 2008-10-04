@@ -22,14 +22,14 @@
 
 with Ahven.Framework;
 
-package Utils_Tests is
+package Tests_Utils is
 
    type Test is new Ahven.Framework.Test_Case with null record;
 
    procedure Initialize (T : in out Test);
    --  Initialize Test suite.
 
-   procedure Dummy;
-   --  Dummy test case.
+   procedure Convert_Long_Long_Integer;
+   --  Test Byte_Set to Long_Long_Integer conversion.
 
-end Utils_Tests;
+end Tests_Utils;

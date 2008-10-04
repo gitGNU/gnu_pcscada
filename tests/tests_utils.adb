@@ -28,7 +28,14 @@ with Ada.IO_Exceptions;
 --  Ahven
 with Ahven; use Ahven;
 
-package body Utils_Tests is
+--  PCSC/Ada
+with PCSC.SCard.Utils;
+
+use PCSC;
+
+package body Tests_Utils is
+
+   package SCU renames SCard.Utils;
 
    ----------------
    -- Initialize --
@@ -36,20 +43,26 @@ package body Utils_Tests is
 
    procedure Initialize (T : in out Test) is
    begin
+
       Set_Name (T    => T,
                 Name => "Tests for PCSC/Ada SCard Utils");
+
       Framework.Add_Test_Routine (T       => T,
-                                  Routine => Dummy'Access,
-                                  Name    => "dummy test");
+                                  Routine => Convert_Long_Long_Integer'Access,
+                                  Name    => "Byte_Set to Long_Long_Integer");
    end Initialize;
 
-   -----------
-   -- Dummy --
-   -----------
+   ------------------------------------------
+   -- Convert_Long_Long_Integer (Byte_Set) --
+   ------------------------------------------
 
-   procedure Dummy is
+   procedure Convert_Long_Long_Integer is
+      Set    : SCard.Byte_Set (1 .. 4) := (16#AA#, 16#0A#, 16#BA#, 16#12#);
+      Result : Long_Long_Integer;
    begin
-      Fail (Message => "not yet implemented");
-   end Dummy;
+      Result := SCU.To_Long_Long_Integer (Given => Set);
+      Assert (Condition => Result = 314182314,
+              Message   => "result is not 314182314");
+   end Convert_Long_Long_Integer;
 
-end Utils_Tests;
+end Tests_Utils;

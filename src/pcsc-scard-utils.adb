@@ -36,21 +36,22 @@ package body PCSC.SCard.Utils is
       Len   : in Positive)
       return String
    is
+      use Interfaces;
+      use Interfaces.C;
+
       Hex    : constant String := "0123456789ABCDEF";
 
       Result : String (1 .. Len) := (others => '0');
       Where  : Integer range Result'Range := Result'First;
 
-      Temp   : Interfaces.Unsigned_8;
+      Temp   : Unsigned_8;
 
-      use Interfaces;
-      use Interfaces.C;
    begin
       for I in Given'Range loop -- For each word
          Temp := Given (I);
          for J in reverse 0 .. 2 - 1 loop
             Result (Where + J) := Hex (Integer (Temp and 16#F#) + 1);
-            Temp := Interfaces.Shift_Right (Temp, 4);
+            Temp := Shift_Right (Temp, 4);
          end loop;
          if I /= Given'Last then
             exit when Where + 2 >= Result'Last;
@@ -169,20 +170,30 @@ package body PCSC.SCard.Utils is
       return New_String;
    end To_String;
 
-   ---------------------------
-   -- To_Integer (Byte_Set) --
-   ---------------------------
+   -------------------------------------
+   -- To_Long_Long_Integer (Byte_Set) --
+   -------------------------------------
 
-   function To_Integer (Given : in Byte_Set := Null_Byte_Set) return Integer is
-      Result   : Integer := 0;
-      Position : Integer := 1;
+   function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
+                                  return Long_Long_Integer
+   is
+      use Interfaces;
+
+      Result : Long_Long_Integer := 0;
+
+      U1     : Unsigned_32 := Unsigned_32 (Given (1));
+      U2     : Unsigned_32 := Unsigned_32 (Given (2));
+      U3     : Unsigned_32 := Unsigned_32 (Given (3));
+      U4     : Unsigned_32 := Unsigned_32 (Given (4));
    begin
-      for V in Given'Range loop
-         Result   :=  Result + Position * Integer (Given (V));
-         Position :=  V * 256;
-      end loop;
+      Result := Long_Long_Integer (Shift_Left (U4, 24)   or
+                                     Shift_Left (U3, 16) or
+                                     Shift_Left (U2, 8)  or
+                                     U1);
+      --  TODO: raise exception if number is too big for Long_Long_Integer
+      Ada.Text_IO.Put_Line (Long_Long_Integer'Image (Result));
       return Result;
-   end To_Integer;
+   end To_Long_Long_Integer;
 
    ----------------------
    -- For_Every_Reader --

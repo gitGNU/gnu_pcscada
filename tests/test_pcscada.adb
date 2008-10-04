@@ -249,8 +249,8 @@ begin
                            Recv_Buffer => Attr_Maxinput);
       Print_Result (Result => SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">> Attr_Maxinput is        : "
-        & Trim (Integer'Image
-          (SCU.To_Integer (Given => Attr_Maxinput)), Ada.Strings.Left));
+        & Trim (Long_Long_Integer'Image (SCU.To_Long_Long_Integer
+          (Given => Attr_Maxinput)), Ada.Strings.Left));
    end;
 
    --  End transaction with first reader

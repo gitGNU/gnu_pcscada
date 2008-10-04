@@ -63,8 +63,12 @@ package PCSC.SCard.Utils is
    function To_String (Given : in Byte_Set := Null_Byte_Set) return String;
    --  Return an array of characters from Byte_Set.
 
-   function To_Integer (Given : in Byte_Set := Null_Byte_Set) return Integer;
-   --  Return converted Integer value from Byte_Set.
+   function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
+                                  return Long_Long_Integer;
+   --  Return converted Long_Long_Integer value from Byte_Set. Maximal value
+   --  which can be converted is Long_Long_Integer'Last. If given Byte_Set
+   --  contains a bigger number than Long_Long_Integer'Last, an exception will
+   --  be raised.
 
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;

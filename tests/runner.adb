@@ -23,7 +23,7 @@
 with Ahven.Framework;
 with Ahven.Text_Runner;
 
-with Utils_Tests;
+with Tests_Utils;
 
 procedure Runner is
    S : Ahven.Framework.Test_Suite_Access :=
@@ -33,7 +33,7 @@ procedure Runner is
    pragma Linker_Options ("-lpcsclite");
 begin
    Ahven.Framework.Add_Test (Suite => S.all,
-                             T     => new Utils_Tests.Test);
+                             T     => new Tests_Utils.Test);
 
    Ahven.Text_Runner.Run (Suite => S);
    Ahven.Framework.Release_Suite (T => S);
