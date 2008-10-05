@@ -47,13 +47,13 @@ package body PCSC.SCard.Utils is
       Temp   : Unsigned_8;
 
    begin
-      for I in Given'Range loop -- For each word
-         Temp := Given (I);
+      for Index in Given'Range loop -- For each word
+         Temp := Given (Index);
          for J in reverse 0 .. 2 - 1 loop
             Result (Where + J) := Hex (Integer (Temp and 16#F#) + 1);
             Temp := Shift_Right (Temp, 4);
          end loop;
-         if I /= Given'Last then
+         if Index /= Given'Last then
             exit when Where + 2 >= Result'Last;
             Where := Where + 2;
          end if;
@@ -179,21 +179,15 @@ package body PCSC.SCard.Utils is
    is
       use Interfaces;
 
-      Result : Long_Long_Integer := 0;
-
-      U1     : Unsigned_32 := Unsigned_32 (Given (1));
-      U2     : Unsigned_32 := Unsigned_32 (Given (2));
-      U3     : Unsigned_32 := Unsigned_32 (Given (3));
-      U4     : Unsigned_32 := Unsigned_32 (Given (4));
+      Result : Unsigned_64 := 0;
+      U      : Unsigned_64 := 0;
    begin
-      Result := Long_Long_Integer (Shift_Left (U4, 24)   or
-                                     Shift_Left (U3, 16) or
-                                     Shift_Left (U2, 8)  or
-                                     U1);
+      for Index in Given'Range loop
+         U := Unsigned_64 (Given (Index));
+         Result := Result or Shift_Left (U, (Index - 1) * 8);
+      end loop;
 
-      Ada.Text_IO.Put_Line (Long_Long_Integer'Image (Result));
-      return Result;
-
+      return Long_Long_Integer (Result);
    exception
       when Constraint_Error =>
          raise Number_Too_Big;
