@@ -32,4 +32,7 @@ package Tests_Utils is
    procedure Convert_Long_Long_Integer;
    --  Test Byte_Set to Long_Long_Integer conversion.
 
+   procedure Test_Byte_Set_To_String;
+   --  Test Byte_Set to String conversion (Byte_Set).
+
 end Tests_Utils;

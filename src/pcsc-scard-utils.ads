@@ -61,7 +61,8 @@ package PCSC.SCard.Utils is
    --  Return string representation of reader states.
 
    function To_String (Given : in Byte_Set := Null_Byte_Set) return String;
-   --  Return an array of characters from Byte_Set.
+   --  Return an array of characters from Byte_Set. Function does not remove
+   --  or trim newlines.
 
    function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
                                   return Long_Long_Integer;

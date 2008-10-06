@@ -157,14 +157,14 @@ package body PCSC.SCard.Utils is
    --------------------------
 
    function To_String (Given : in Byte_Set := Null_Byte_Set) return String is
-      New_String : String (1 .. Given'Length - 1);
+      New_String : String (1 .. Given'Last);
    begin
       if Given = Null_Byte_Set then
          return "0";
       end if;
 
-      for C in 1 .. Given'Length - 1 loop
-         New_String (C) := Character'Val (Given (C));
+      for Index in Given'First .. Given'Last loop
+         New_String (Index) := Character'Val (Given (Index));
       end loop;
 
       return New_String;

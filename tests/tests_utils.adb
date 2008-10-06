@@ -49,6 +49,9 @@ package body Tests_Utils is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Convert_Long_Long_Integer'Access,
                                   Name    => "Byte_Set to Long_Long_Integer");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_Byte_Set_To_String'Access,
+                                  Name    => "Byte_Set to String");
    end Initialize;
 
    ------------------------------------------
@@ -87,5 +90,19 @@ package body Tests_Utils is
       end;
 
    end Convert_Long_Long_Integer;
+
+   -----------------------------
+   -- Test_Byte_Set_To_String --
+   -----------------------------
+
+   procedure Test_Byte_Set_To_String is
+      Empty_Set : SCard.Byte_Set := SCard.Null_Byte_Set;
+      Test_Set  : SCard.Byte_Set (1 .. 4) := (16#70#, 16#63#, 16#73#, 16#63#);
+   begin
+      Assert (Condition => SCU.To_String (Given => Empty_Set) = "0",
+              Message   => "Returned string not '0'");
+      Assert (Condition => SCU.To_String (Given => Test_Set) = "pcsc",
+              Message   => "Returned string not 'pcsc'");
+   end Test_Byte_Set_To_String;
 
 end Tests_Utils;

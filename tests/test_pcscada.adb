@@ -231,7 +231,8 @@ begin
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is     : "
                             & SCU.To_String (Given => Attr_Vendor));
       Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size   : "
-        & Trim (Integer'Image (Attr_Vendor'Last), Ada.Strings.Left));
+        & Trim (Source => Integer'Image (Attr_Vendor'Last),
+                Side   => Ada.Strings.Left));
 
       Print_Testinfo (Text => "Testing Get_Attribute");
       SCard.Get_Attribute (Card        => Card,
