@@ -179,8 +179,7 @@ package body PCSC.SCard.Utils is
    is
       use Interfaces;
 
-      Result : Unsigned_64 := 0;
-      U      : Unsigned_64 := 0;
+      Result, U : Unsigned_64 := 0;
    begin
       for Index in Given'Range loop
          U := Unsigned_64 (Given (Index));

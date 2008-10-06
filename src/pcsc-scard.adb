@@ -34,8 +34,6 @@ package body PCSC.SCard is
 
    use IC;
 
-   package TR renames Thin.Reader;
-
    C_Scope : constant array (Scope) of Thin.DWORD
      := (Scope_User     => Thin.SCARD_SCOPE_USER,
          Scope_Terminal => Thin.SCARD_SCOPE_TERMINAL,
@@ -94,6 +92,8 @@ package body PCSC.SCard is
          PCI_T1  => Thin.SCARD_PCI_T1,
          PCI_RAW => Thin.SCARD_PCI_RAW);
    --  Map PCI to corresponding C SCARD_IO_REQUESTs
+
+   package TR renames Thin.Reader;
 
    C_Attr : constant array (Attribute) of Thin.DWORD
      := (Attr_Vendor_Name            => TR.SCARD_ATTR_VENDOR_NAME,
