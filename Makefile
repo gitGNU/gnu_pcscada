@@ -43,7 +43,7 @@ build_itests: create_dirs
 	@gnatmake -Ppcscada_itests
 
 create_dirs:
-	@mkdir -p obj lib
+	@mkdir -p obj/lib obj/itests obj/utests lib
 
 clean:
 	@rm -rf obj/*
@@ -55,12 +55,12 @@ distclean:
 
 # run unit tests
 utests: build_utests
-	@obj/runner
+	@obj/utests/runner
 
 # run 'integration' tests
 # you need a reader and smartcard for this to work
 itests: build_itests
-	@obj/test_pcscada
+	@obj/itests/test_pcscada
 
 install: install_lib
 
