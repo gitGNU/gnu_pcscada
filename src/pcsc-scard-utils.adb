@@ -37,22 +37,21 @@ package body PCSC.SCard.Utils is
       Len   : in Positive)
       return String
    is
-      use Interfaces;
-      use Interfaces.C;
+      use type Interfaces.Unsigned_8;
 
       Hex    : constant String := "0123456789ABCDEF";
 
       Result : String (1 .. Len) := (others => '0');
       Where  : Integer range Result'Range := Result'First;
 
-      Temp   : Unsigned_8;
+      Temp   : Interfaces.Unsigned_8;
 
    begin
       for Index in Given'Range loop -- For each word
          Temp := Given (Index);
          for J in reverse 0 .. 2 - 1 loop
             Result (Where + J) := Hex (Integer (Temp and 16#F#) + 1);
-            Temp := Shift_Right (Temp, 4);
+            Temp := Interfaces.Shift_Right (Temp, 4);
          end loop;
          if Index /= Given'Last then
             exit when Where + 2 >= Result'Last;
@@ -180,13 +179,13 @@ package body PCSC.SCard.Utils is
    function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
                                   return Long_Long_Integer
    is
-      use Interfaces;
+      use type Interfaces.Unsigned_64;
 
-      Result, U : Unsigned_64 := 0;
+      Result, U : Interfaces.Unsigned_64 := 0;
    begin
       for Index in Given'Range loop
-         U := Unsigned_64 (Given (Index));
-         Result := Result or Shift_Left (U, (Index - 1) * 8);
+         U := Interfaces.Unsigned_64 (Given (Index));
+         Result := Result or Interfaces.Shift_Left (U, (Index - 1) * 8);
       end loop;
 
       return Long_Long_Integer (Result);
@@ -203,16 +202,14 @@ package body PCSC.SCard.Utils is
      (Readers : in Reader_ID_Set;
       Call    : in Callback)
    is
-      use VOIDP;
-
-      Position : Cursor := Readers.Data.First;
+      Position : VOIDP.Cursor := Readers.Data.First;
       Reader   : Reader_ID;
    begin
-      while Has_Element (Position) loop
-         Reader := Element (Position);
+      while VOIDP.Has_Element (Position) loop
+         Reader := VOIDP.Element (Position);
          --  Perform action on specific reader.
          Call (Reader);
-         Next (Position);
+         VOIDP.Next (Position);
       end loop;
    end For_Every_Reader;
 

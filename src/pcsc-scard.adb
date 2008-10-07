@@ -669,7 +669,7 @@ package body PCSC.SCard is
    ---------------------------
 
    function First (Set : in Reader_ID_Set) return Reader_ID is
-      use Ada.Containers;
+      use type Ada.Containers.Count_Type;
    begin
       if Set.Data.Length = 0 then
          return Null_Reader_ID;
@@ -683,7 +683,7 @@ package body PCSC.SCard is
    ---------------------------
 
    function Empty (Set : in Reader_ID_Set) return Boolean is
-      use Ada.Containers;
+      use type Ada.Containers.Count_Type;
    begin
       if Set.Data.Length = 0 then
          return True;
@@ -740,12 +740,11 @@ package body PCSC.SCard is
 
    function Size (Atr : in SCard.ATR := Null_ATR) return String is
       Natural_ATR : Natural := Size (Atr);
-
-      use Ada.Strings.Fixed;
    begin
       --  Remove leading space
 
-      return Trim (Natural'Image (Natural_ATR), Ada.Strings.Left);
+      return Ada.Strings.Fixed.Trim (Source => Natural'Image (Natural_ATR),
+                                     Side   => Ada.Strings.Left);
    end Size;
 
    ----------------
@@ -805,26 +804,25 @@ package body PCSC.SCard is
 
    function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set
    is
-      use GNAT.String_Split;
-      use Ada.Strings.Maps;
+      use type GNAT.String_Split.Slice_Number;
 
       Readers  : Reader_ID_Set;
-      Lines    : Slice_Set;
+      Lines    : GNAT.String_Split.Slice_Set;
    begin
       --  Slice readers into parts.
       --  Who uses '\0' as separator anyway?
 
-      Create
+      GNAT.String_Split.Create
         (S          => Lines,
          From       => To_Slice (To_Slice'First .. To_Slice'Last),
-         Separators => To_Set (Ada.Characters.Latin_1.NUL),
-         Mode       => Single);
+         Separators => Ada.Strings.Maps.To_Set (Ada.Characters.Latin_1.NUL),
+         Mode       => GNAT.String_Split.Single);
 
       --  Minus two because \0\0 is used as termination.
 
-      for J in 1 .. Slice_Count (Lines) - 2 loop
+      for J in 1 .. GNAT.String_Split.Slice_Count (Lines) - 2 loop
          Readers.Data.Append (New_Item => To_Unbounded_String
-                              (Slice (Lines, J)));
+                              (GNAT.String_Split.Slice (Lines, J)));
       end loop;
 
       return Readers;
