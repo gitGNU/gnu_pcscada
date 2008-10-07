@@ -1,9 +1,9 @@
-* support multiple Current_States Readerstate
-* correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
-* add preferred protocols to SCard.Connect procedure
-* support 'or' operation for SCard.Connect preferred protocols
-* add default options or null/empty types for in params.
-* improve SCard.Transmit and corresponding buffer handling.
+* Support multiple Current_States Readerstate
+* Correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
+* Add preferred protocols to SCard.Connect procedure
+* Support 'or' operation for SCard.Connect preferred protocols
+* Add default options or null/empty types for in params.
+* Improve SCard.Transmit and corresponding buffer handling.
   o Remove Recv_Len param.
   o Allocate memory for buffer inside the binding, client does not
     know the required size before the call returns.
@@ -12,3 +12,5 @@
   o e.g. "16 3B 12 28"
 * Fix valgrinds "Syscall param write(buf) points to uninitialised byte(s)"
   error for SCard Control procedure.
+* Use better type names for Reader_Status, Reader_States.
+  o Confusing : similar names
