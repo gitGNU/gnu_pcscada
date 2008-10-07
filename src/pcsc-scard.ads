@@ -121,7 +121,7 @@ package PCSC.SCard is
       State_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
-   type Reader_States_Set is private;
+   type Reader_States_Set is tagged private;
    --  Set of reader states
 
 
@@ -306,7 +306,11 @@ package PCSC.SCard is
    --  Return the first reader in a reader ID set.
 
 
-   procedure Add_Reader
+   procedure Add (States : in out Reader_States_Set; State : in Reader_State);
+   --  Add a new reader state to Reader_States_Set.
+
+
+   procedure Add
      (States : in out Reader_Status_Set;
       State  : in Reader_Status);
    --  Add a new reader to reader status array. State specifies the assumed
@@ -315,16 +319,17 @@ package PCSC.SCard is
    function Size (States : in Reader_Status_Set) return Natural;
    --  Returns the size of a Reader_Status_Set.
 
+   function Get_Status (States : in Reader_Status_Set;
+                        Index  : in Natural)
+                        return Reader_Status;
+   --  Return Reader_Status type at index 'Index'.
+
+
    function Size (Atr : in SCard.ATR := Null_ATR) return Natural;
    --  Return current size of an ATR as Natural.
 
    function Size (Atr : in SCard.ATR := Null_ATR) return String;
    --  Return current size of an ATR as string.
-
-   function Get_Status (States : in Reader_Status_Set;
-                        Index  : in Natural)
-                        return Reader_Status;
-   --  Return Reader_Status type at index 'Index'.
 
 
    function Get_Return_Code return String;
@@ -414,7 +419,7 @@ private
    package VORSP renames Vector_Of_RStates_Package;
    subtype Vector_Of_RStates_Type is VORSP.Vector;
 
-   type Reader_States_Set is record
+   type Reader_States_Set is tagged record
       Data : Vector_Of_RStates_Type;
    end record;
 

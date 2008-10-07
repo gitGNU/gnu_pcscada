@@ -33,6 +33,9 @@ package Tests_Utils is
    --  Test Byte_Set to Long_Long_Integer conversion.
 
    procedure Test_Byte_Set_To_String;
-   --  Test Byte_Set to String conversion (Byte_Set).
+   --  Test Byte_Set to String conversion.
+
+   procedure Test_RStates_Set_To_String;
+   --  Test Reader_States_Set to String conversion.
 
 end Tests_Utils;

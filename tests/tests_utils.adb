@@ -20,11 +20,6 @@
 --  MA  02110-1301  USA
 --
 
---  Ada
-with Ada.Text_IO;
-with Ada.Exceptions;
-with Ada.IO_Exceptions;
-
 --  Ahven
 with Ahven; use Ahven;
 
@@ -52,6 +47,9 @@ package body Tests_Utils is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_Byte_Set_To_String'Access,
                                   Name    => "Byte_Set to String");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_RStates_Set_To_String'Access,
+                                  Name    => "Reader_States to String");
    end Initialize;
 
    ------------------------------------------
@@ -104,5 +102,21 @@ package body Tests_Utils is
       Assert (Condition => SCU.To_String (Given => Test_Set) = "pcsc",
               Message   => "Returned string not 'pcsc'");
    end Test_Byte_Set_To_String;
+
+   --------------------------------
+   -- Test_RStates_Set_To_String --
+   --------------------------------
+
+   procedure Test_RStates_Set_To_String is
+      Empty_RStates : SCard.Reader_States_Set;
+      RStates       : SCard.Reader_States_Set;
+   begin
+      RStates.Add (State => SCard.State_Unaware);
+      RStates.Add (State => SCard.State_Atrmatch);
+
+      Assert (Condition => SCU.To_String
+              (States => RStates) = "STATE_ATRMATCH STATE_UNAWARE",
+              Message   => "String incorrect");
+   end Test_RStates_Set_To_String;
 
 end Tests_Utils;

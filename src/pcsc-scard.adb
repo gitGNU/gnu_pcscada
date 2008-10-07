@@ -692,17 +692,29 @@ package body PCSC.SCard is
       return False;
    end Empty;
 
-   ----------------
-   -- Add_Reader --
-   ----------------
+   -------------------------
+   -- Add (Reader_Status) --
+   -------------------------
 
-   procedure Add_Reader
+   procedure Add
      (States : in out Reader_Status_Set;
       State  : in Reader_Status)
    is
    begin
       States.Data.Append (New_Item => State);
-   end Add_Reader;
+   end Add;
+
+   ------------------------
+   -- Add (Reader_State) --
+   ------------------------
+
+   procedure Add
+     (States : in out Reader_States_Set;
+      State  : in Reader_State)
+   is
+   begin
+      States.Data.Append (New_Item => State);
+   end Add;
 
    ------------------------------
    -- Size (Reader_Status_Set) --
@@ -899,9 +911,9 @@ package body PCSC.SCard is
               new Thin.READERSTATE'
                 (szReader       => Strings.New_String
                      (To_String (Item.Name)),
-                 pvUserData     => null,  --  not used atm
+                 pvUserData     => <>,  --  use default
                  dwCurrentState => C_Reader_State (Item.Current_State),
-                 dwEventState   => Thin.SCARD_STATE_UNAWARE,
+                 dwEventState   => <>,  --  use default
                  cbAtr          => Item.Card_ATR'Size,
                  rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
 

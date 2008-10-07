@@ -105,7 +105,7 @@ begin
 
    Reader1.Name := Readers.First;
    Reader1.Current_State := SCard.State_Empty;
-   Reader_Status.Add_Reader (Reader1);
+   Reader_Status.Add (Reader1);
 
    --  Detect status changes
 
@@ -242,7 +242,8 @@ begin
       Ada.Text_IO.Put_Line (">> Attr_ATR_String is      : "
         & SCU.To_Hex_String (Given => Attr_ATR));
       Ada.Text_IO.Put_Line (">> Attr_ATR_String size    : "
-        & Trim (Integer'Image (Attr_ATR'Last), Ada.Strings.Left));
+        & Trim (Source => Integer'Image (Attr_ATR'Last),
+                Side   => Ada.Strings.Left));
 
       Print_Testinfo (Text => "Testing Get_Attribute");
       SCard.Get_Attribute (Card        => Card,

@@ -22,6 +22,7 @@
 
 with Ada.Text_IO;
 with Ada.Strings.Unbounded;
+with Ada.Strings.Fixed;
 
 with Interfaces.C;
 
@@ -149,7 +150,9 @@ package body PCSC.SCard.Utils is
          Str_States := Reader_State'Image (State) & " " & Str_States;
          VORSP.Next (Position);
       end loop;
-      return To_String (Str_States);
+      --  TODO: find a better solution here!
+      return Ada.Strings.Fixed.Trim (Source => To_String (Str_States),
+                                     Side   => Ada.Strings.Right);
    end To_String;
 
    --------------------------
