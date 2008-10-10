@@ -117,6 +117,9 @@ package body Tests_Utils is
       RStates.Add (State => SCard.State_Unaware);
       RStates.Add (State => SCard.State_Atrmatch);
 
+      Assert (Condition => SCU.To_String (States => Empty_RStates) = "",
+              Message   => "String incorrect");
+
       Assert (Condition => SCU.To_String
               (States => RStates) = "STATE_ATRMATCH STATE_UNAWARE",
               Message   => "String incorrect");
