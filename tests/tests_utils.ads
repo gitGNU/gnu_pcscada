@@ -29,7 +29,7 @@ package Tests_Utils is
    procedure Initialize (T : in out Test);
    --  Initialize Test suite.
 
-   procedure Convert_Long_Long_Integer;
+   procedure Test_To_Long_Long_Integer;
    --  Test Byte_Set to Long_Long_Integer conversion.
 
    procedure Test_Byte_Set_To_String;

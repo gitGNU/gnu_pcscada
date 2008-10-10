@@ -42,7 +42,7 @@ package body Tests_Utils is
                 Name => "Tests for PCSC/Ada SCard Utils");
 
       Framework.Add_Test_Routine (T       => T,
-                                  Routine => Convert_Long_Long_Integer'Access,
+                                  Routine => Test_To_Long_Long_Integer'Access,
                                   Name    => "Byte_Set to Long_Long_Integer");
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_Byte_Set_To_String'Access,
@@ -56,7 +56,7 @@ package body Tests_Utils is
    -- Convert_Long_Long_Integer (Byte_Set) --
    ------------------------------------------
 
-   procedure Convert_Long_Long_Integer is
+   procedure Test_To_Long_Long_Integer is
       Set_Small   : SCard.Byte_Set (1 .. 2) :=
         (16#12#, 16#FF#);
       Set_Big     : SCard.Byte_Set (1 .. 4) :=
@@ -87,7 +87,7 @@ package body Tests_Utils is
             null;
       end;
 
-   end Convert_Long_Long_Integer;
+   end Test_To_Long_Long_Integer;
 
    -----------------------------
    -- Test_Byte_Set_To_String --
