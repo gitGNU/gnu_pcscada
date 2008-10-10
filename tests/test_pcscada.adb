@@ -143,9 +143,9 @@ begin
    --  Test status
 
    declare
-      Card_States    : SCard.Card_States_Set;
-      Reader_Proto   : SCard.Proto := SCard.Proto_Undefined;
-      Reader_ATR     : SCard.ATR;
+      Card_States  : SCard.Card_States_Set;
+      Reader_Proto : SCard.Proto := SCard.Proto_Undefined;
+      Reader_ATR   : SCard.ATR;
    begin
       Print_Testinfo (Text => "Testing Status");
       SCard.Status (Card    => Card,
@@ -204,7 +204,7 @@ begin
       Print_Result (Result => SCard.Get_Return_Code);
    exception
       when others =>
-         --  This is allowed to fail
+         --  This test is allowed to fail
          Print_Result (Result => "FAILED (don't PANIC)");
    end;
 
