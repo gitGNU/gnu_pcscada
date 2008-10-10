@@ -49,7 +49,10 @@ package body Tests_Utils is
                                   Name    => "Byte_Set to String");
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_RStates_Set_To_String'Access,
-                                  Name    => "Reader_States to String");
+                                  Name    => "Reader_States_Set to String");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_CStates_Set_To_String'Access,
+                                  Name    => "Card_States_Set to String");
    end Initialize;
 
    ------------------------------------------
@@ -118,5 +121,14 @@ package body Tests_Utils is
               (States => RStates) = "STATE_ATRMATCH STATE_UNAWARE",
               Message   => "String incorrect");
    end Test_RStates_Set_To_String;
+
+   --------------------------------
+   -- Test_CStates_Set_To_String --
+   --------------------------------
+
+   procedure Test_CStates_Set_To_String is
+   begin
+      Fail (Message => "not yet implemented");
+   end Test_CStates_Set_To_String;
 
 end Tests_Utils;
