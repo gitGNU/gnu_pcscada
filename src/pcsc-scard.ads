@@ -55,7 +55,7 @@ package PCSC.SCard is
    --  Null initialized ATR
 
 
-   subtype Reader_ID is Unbounded_String;
+   type Reader_ID is private;
    --  Reader friendly name
 
    Null_Reader_ID : constant Reader_ID;
@@ -385,7 +385,9 @@ private
 
    --  Reader IDs
 
-   Null_Reader_ID : constant Reader_ID := Null_Unbounded_String;
+   type Reader_ID is new Unbounded_String;
+
+   Null_Reader_ID : constant Reader_ID := Reader_ID (Null_Unbounded_String);
 
    package Vector_Of_ReaderID_Package is new
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,

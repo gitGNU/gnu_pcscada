@@ -41,4 +41,7 @@ package Tests_Utils is
    procedure Test_CStates_Set_To_String;
    --  Test Card_States_Set to String conversion.
 
+   procedure Test_ReaderID_To_String;
+   --  Test Reader_ID to String conversion.
+
 end Tests_Utils;

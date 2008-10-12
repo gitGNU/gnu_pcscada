@@ -109,7 +109,7 @@ package body PCSC.SCard.Utils is
                        return String
    is
    begin
-      return Ada.Strings.Unbounded.To_String (Reader);
+      return Ada.Strings.Unbounded.To_String (Unbounded_String (Reader));
    end To_String;
 
    ---------------------------------

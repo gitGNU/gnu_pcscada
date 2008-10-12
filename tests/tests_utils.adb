@@ -53,6 +53,9 @@ package body Tests_Utils is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_CStates_Set_To_String'Access,
                                   Name    => "Card_States_Set to String");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_ReaderID_To_String'Access,
+                                  Name    => "Reader_ID to String");
    end Initialize;
 
    ------------------------------------------
@@ -147,5 +150,16 @@ package body Tests_Utils is
                 "S_CARD_POWERED S_CARD_SWALLOWED",
               Message   => "String incorrect");
    end Test_CStates_Set_To_String;
+
+   -----------------------------
+   -- Test_ReaderID_To_String --
+   -----------------------------
+
+   procedure Test_ReaderID_To_String is
+      Null_Reader : SCard.Reader_ID := SCard.Null_Reader_ID;
+   begin
+      Assert (Condition => SCU.To_String (Reader => Null_Reader) = "",
+              Message   => "String incorrect");
+   end Test_ReaderID_To_String;
 
 end Tests_Utils;
