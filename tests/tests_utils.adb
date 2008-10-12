@@ -114,14 +114,16 @@ package body Tests_Utils is
       Empty_RStates : SCard.Reader_States_Set;
       RStates       : SCard.Reader_States_Set;
    begin
-      RStates.Add (State => SCard.State_Unaware);
-      RStates.Add (State => SCard.State_Atrmatch);
-
       Assert (Condition => SCU.To_String (States => Empty_RStates) = "",
               Message   => "String incorrect");
 
-      Assert (Condition => SCU.To_String
-              (States => RStates) = "STATE_ATRMATCH STATE_UNAWARE",
+      --  Fill RStates set
+
+      RStates.Add (State => SCard.S_Reader_Unaware);
+      RStates.Add (State => SCard.S_Reader_Atrmatch);
+
+      Assert (Condition => SCU.To_String (States => RStates) =
+                "S_READER_ATRMATCH S_READER_UNAWARE",
               Message   => "String incorrect");
    end Test_RStates_Set_To_String;
 
@@ -130,8 +132,20 @@ package body Tests_Utils is
    --------------------------------
 
    procedure Test_CStates_Set_To_String is
+      Empty_CStates : SCard.Card_States_Set;
+      CStates       : SCard.Card_States_Set;
    begin
-      Fail (Message => "not yet implemented");
+      Assert (Condition => SCU.To_String (States => Empty_CStates) = "",
+              Message   => "String incorrect");
+
+      --  Fill CStates set
+
+      CStates.Add (State => SCard.S_Card_Swallowed);
+      CStates.Add (State => SCard.S_Card_Powered);
+
+      Assert (Condition => SCU.To_String (States => CStates) =
+                "S_CARD_POWERED S_CARD_SWALLOWED",
+              Message   => "String incorrect");
    end Test_CStates_Set_To_String;
 
 end Tests_Utils;

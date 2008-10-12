@@ -63,28 +63,28 @@ package body PCSC.SCard is
    --  Map Action to corresponding C values
 
    C_Card_State : constant array (Card_State) of Thin.DWORD
-     := (Unknown    => Thin.SCARD_UNKNOWN,
-         Absent     => Thin.SCARD_ABSENT,
-         Present    => Thin.SCARD_PRESENT,
-         Swallowed  => Thin.SCARD_SWALLOWED,
-         Powered    => Thin.SCARD_POWERED,
-         Negotiable => Thin.SCARD_NEGOTIABLE,
-         Specific   => Thin.SCARD_SPECIFIC);
+     := (S_Card_Unknown    => Thin.SCARD_UNKNOWN,
+         S_Card_Absent     => Thin.SCARD_ABSENT,
+         S_Card_Present    => Thin.SCARD_PRESENT,
+         S_Card_Swallowed  => Thin.SCARD_SWALLOWED,
+         S_Card_Powered    => Thin.SCARD_POWERED,
+         S_Card_Negotiable => Thin.SCARD_NEGOTIABLE,
+         S_Card_Specific   => Thin.SCARD_SPECIFIC);
    --  Map Card_State to corresponding C values.
 
    C_Reader_State : constant array (Reader_State) of Thin.DWORD
-     := (State_Unaware     => Thin.SCARD_STATE_UNAWARE,
-         State_Ignore      => Thin.SCARD_STATE_IGNORE,
-         State_Changed     => Thin.SCARD_STATE_CHANGED,
-         State_Unknown     => Thin.SCARD_STATE_UNKNOWN,
-         State_Unavailable => Thin.SCARD_STATE_UNAVAILABLE,
-         State_Empty       => Thin.SCARD_STATE_EMPTY,
-         State_Present     => Thin.SCARD_STATE_PRESENT,
-         State_Atrmatch    => Thin.SCARD_STATE_ATRMATCH,
-         State_Exclusive   => Thin.SCARD_STATE_EXCLUSIVE,
-         State_Inuse       => Thin.SCARD_STATE_INUSE,
-         State_Mute        => Thin.SCARD_STATE_MUTE,
-         State_Unpowered   => Thin.SCARD_STATE_UNPOWERED);
+     := (S_Reader_Unaware     => Thin.SCARD_STATE_UNAWARE,
+         S_Reader_Ignore      => Thin.SCARD_STATE_IGNORE,
+         S_Reader_Changed     => Thin.SCARD_STATE_CHANGED,
+         S_Reader_Unknown     => Thin.SCARD_STATE_UNKNOWN,
+         S_Reader_Unavailable => Thin.SCARD_STATE_UNAVAILABLE,
+         S_Reader_Empty       => Thin.SCARD_STATE_EMPTY,
+         S_Reader_Present     => Thin.SCARD_STATE_PRESENT,
+         S_Reader_Atrmatch    => Thin.SCARD_STATE_ATRMATCH,
+         S_Reader_Exclusive   => Thin.SCARD_STATE_EXCLUSIVE,
+         S_Reader_Inuse       => Thin.SCARD_STATE_INUSE,
+         S_Reader_Mute        => Thin.SCARD_STATE_MUTE,
+         S_Reader_Unpowered   => Thin.SCARD_STATE_UNPOWERED);
    --  Map Reader_State to corresponding C values
 
    C_PCI : constant array (PCI) of Thin.SCARD_IO_REQUEST
@@ -711,6 +711,18 @@ package body PCSC.SCard is
    procedure Add
      (States : in out Reader_States_Set;
       State  : in Reader_State)
+   is
+   begin
+      States.Data.Append (New_Item => State);
+   end Add;
+
+   ----------------------
+   -- Add (Card_State) --
+   ----------------------
+
+   procedure Add
+     (States : in out Card_States_Set;
+      State  : in Card_State)
    is
    begin
       States.Data.Append (New_Item => State);

@@ -117,7 +117,7 @@ begin
      (">> Reader Name             : " &
       SCU.To_String (Reader_Status.Get_Status (Index => 1).Name));
    Ada.Text_IO.Put_Line
-     (">> Card Status             : " &
+     (">> Reader states           : " &
       SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
    Ada.Text_IO.Put_Line
      (">> Card ATR                : " &

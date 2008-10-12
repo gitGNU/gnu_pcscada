@@ -94,31 +94,31 @@ package PCSC.SCard is
    --  Desired action taken on the card/reader
 
    type Card_State is
-     (Unknown,    -- Unknown state
-      Absent,     -- Card is absent
-      Present,    -- Card is present
-      Swallowed,  -- Card not powered
-      Powered,    -- Card is powered
-      Negotiable, -- Ready for PTS
-      Specific);  -- PTS has been set
+     (S_Card_Unknown,    -- Unknown state
+      S_Card_Absent,     -- Card is absent
+      S_Card_Present,    -- Card is present
+      S_Card_Swallowed,  -- Card not powered
+      S_Card_Powered,    -- Card is powered
+      S_Card_Negotiable, -- Ready for PTS
+      S_Card_Specific);  -- PTS has been set
    --  Card states
 
-   type Card_States_Set is private;
+   type Card_States_Set is tagged private;
    --  Set of card states
 
    type Reader_State is
-     (State_Unaware,     --  App wants status
-      State_Ignore,      --  Ignore this reader
-      State_Changed,     --  State has changed
-      State_Unknown,     --  Reader unknown
-      State_Unavailable, --  Status unavailable
-      State_Empty,       --  Card removed
-      State_Present,     --  Card inserted
-      State_Atrmatch,    --  ATR matches card
-      State_Exclusive,   --  Exclusive Mode
-      State_Inuse,       --  Shared Mode
-      State_Mute,        --  Unresponsive card
-      State_Unpowered);  --  Unpowered card
+     (S_Reader_Unaware,     --  App wants status
+      S_Reader_Ignore,      --  Ignore this reader
+      S_Reader_Changed,     --  State has changed
+      S_Reader_Unknown,     --  Reader unknown
+      S_Reader_Unavailable, --  Status unavailable
+      S_Reader_Empty,       --  Card removed
+      S_Reader_Present,     --  Card inserted
+      S_Reader_Atrmatch,    --  ATR matches card
+      S_Reader_Exclusive,   --  Exclusive Mode
+      S_Reader_Inuse,       --  Shared Mode
+      S_Reader_Mute,        --  Unresponsive card
+      S_Reader_Unpowered);  --  Unpowered card
    --  Reader / Card states
 
    type Reader_States_Set is tagged private;
@@ -309,6 +309,9 @@ package PCSC.SCard is
    procedure Add (States : in out Reader_States_Set; State : in Reader_State);
    --  Add a new reader state to Reader_States_Set.
 
+   procedure Add (States : in out Card_States_Set; State : in Card_State);
+   --  Add a new card state to Card_States_Set.
+
 
    procedure Add
      (States : in out Reader_Status_Set;
@@ -405,7 +408,7 @@ private
    package VOCSP renames Vector_Of_CStates_Package;
    subtype Vector_Of_CStates_Type is VOCSP.Vector;
 
-   type Card_States_Set is record
+   type Card_States_Set is tagged record
       Data : Vector_Of_CStates_Type;
    end record;
 

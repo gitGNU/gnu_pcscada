@@ -129,7 +129,9 @@ package body PCSC.SCard.Utils is
          Str_States := Card_State'Image (State) & " " & Str_States;
          VOCSP.Next (Position);
       end loop;
-      return To_String (Str_States);
+      --  TODO: find a better solution here!
+      return Ada.Strings.Fixed.Trim (Source => To_String (Str_States),
+                                     Side   => Ada.Strings.Right);
    end To_String;
 
    -----------------------------------
