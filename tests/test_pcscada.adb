@@ -104,7 +104,7 @@ begin
    --  Use first reader for status change detection.
 
    Reader1.Name := Readers.First;
-   Reader1.Current_State := SCard.State_Empty;
+   Reader1.Current_State := SCard.S_Reader_Empty;
    Reader_Status.Add (Reader1);
 
    --  Detect status changes
@@ -159,7 +159,7 @@ begin
                             SCard.Size (Reader_ATR));
       Ada.Text_IO.Put_Line (">>  Protocol               : " &
                             SCard.Proto'Image (Reader_Proto));
-      Ada.Text_IO.Put_Line (">>  States                 : " &
+      Ada.Text_IO.Put_Line (">>  Card states            : " &
                             SCU.To_String (Card_States));
    end;
 
