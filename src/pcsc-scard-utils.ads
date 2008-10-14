@@ -29,8 +29,8 @@ use PCSC;
 package PCSC.SCard.Utils is
 
    type Callback is access procedure (ID : in Reader_ID := Null_Reader_ID);
-   --  Callback for reader ID handling. Provides flexible way to access
-   --  specific readers.
+   --  Callback for reader ID handling. Provides a flexible way to access
+   --  specific readers inside a Reader_ID_Set.
 
    function To_Hex_String
      (Given : in Byte_Set := Null_Byte_Set;
@@ -55,7 +55,7 @@ package PCSC.SCard.Utils is
    --  Return string from Reader_ID.
 
    function To_String (States : in Card_States_Set) return String;
-   --  Return string representation of card reader states.
+   --  Return string representation of card states.
 
    function To_String (States : in Reader_States_Set) return String;
    --  Return string representation of reader states.
@@ -74,7 +74,7 @@ package PCSC.SCard.Utils is
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;
       Call    : in Callback);
-   --  Call callback procedure for every reader in readers list.
+   --  Call 'Callback' procedure for every reader in readers list.
 
    procedure Print_ReaderID (ID : in Reader_ID);
    --  Print out specific reader ID to default output.
