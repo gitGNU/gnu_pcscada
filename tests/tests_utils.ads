@@ -44,4 +44,7 @@ package Tests_Utils is
    procedure Test_ReaderID_To_String;
    --  Test Reader_ID to String conversion.
 
+   procedure Test_ATR_To_Hex_String;
+   --  Test ATR to HEX String conversion.
+
 end Tests_Utils;

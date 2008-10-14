@@ -737,6 +737,30 @@ package body PCSC.SCard is
       return States.Data.Last_Index;
    end Size;
 
+   ------------
+   -- To_Atr --
+   ------------
+
+   function To_Atr (Bytes : in Byte_Set) return ATR is
+      New_Atr  : ATR;
+      Temp_Set : Byte_Set (ATR_Index'Range) := (others => Null_Byte);
+   begin
+      --  Raise exception if Byte_Set is too big.
+
+      if Bytes'Last > ATR_Index'Last then
+         raise Bytes_Too_Big;
+      end if;
+
+      --  Store Byte_Set in ATR_Type and set length accordingly.
+
+      Temp_Set (Bytes'First .. Bytes'Last) := Bytes;
+
+      New_Atr.Data   := ATR_Type (Temp_Set);
+      New_Atr.Length := Bytes'Length;
+
+      return New_Atr;
+   end To_Atr;
+
    ----------------
    -- Size (ATR) --
    ----------------

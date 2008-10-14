@@ -26,7 +26,12 @@
 package PCSC is
 
    SCard_Error : exception;
-   --  Raised by all PCSC.SCard routines in case of error
+   --  Raised by all PCSC.SCard routines in case of SCard errors
+
+   Bytes_Too_Big : exception;
+   --  Exception will be raised by utils and helper functions/procedures if a
+   --  given SCard.Byte_Set cannot be converted to a specific type because it
+   --  contains more bytes than the target type can store.
 
 private
    Version : constant String := "0.5";

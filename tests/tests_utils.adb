@@ -56,6 +56,9 @@ package body Tests_Utils is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_ReaderID_To_String'Access,
                                   Name    => "Reader_ID to String");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_ATR_To_Hex_String'Access,
+                                  Name    => "ATR to HEX String");
    end Initialize;
 
    ------------------------------------------
@@ -89,7 +92,7 @@ package body Tests_Utils is
          Result := SCU.To_Long_Long_Integer (Given => Set_Too_Big);
          Fail (Message => "No Number_Too_Big exception raised");
       exception
-         when SCU.Number_Too_Big =>
+         when Bytes_Too_Big =>
             null;
       end;
 
@@ -161,5 +164,23 @@ package body Tests_Utils is
       Assert (Condition => SCU.To_String (Reader => Null_Reader) = "",
               Message   => "String incorrect");
    end Test_ReaderID_To_String;
+
+   ----------------------------
+   -- Test_ATR_To_Hex_String --
+   ----------------------------
+
+   procedure Test_ATR_To_Hex_String is
+      Null_ATR      : SCard.ATR := SCard.Null_ATR;
+
+      ATR_Bytes     : SCard.Byte_Set := (16#2C#, 16#23#, 16#AB#, 16#8B#);
+      Reader_ATR    : SCard.ATR := SCard.To_Atr (Bytes => ATR_Bytes);
+   begin
+      Assert (Condition => SCU.To_Hex_String (Given => Null_ATR) = "0",
+              Message   => "Hex string incorrect");
+
+      Assert (Condition => SCU.To_Hex_String (Given => Reader_ATR) =
+                "2C23AB8B",
+              Message   => "Hex string incorrect");
+   end Test_ATR_To_Hex_String;
 
 end Tests_Utils;

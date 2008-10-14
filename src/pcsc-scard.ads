@@ -328,6 +328,10 @@ package PCSC.SCard is
    --  Return Reader_Status type at index 'Index'.
 
 
+   function To_Atr (Bytes : in Byte_Set) return ATR;
+   --  Create new ATR object from given Byte_Set. If 'Bytes is too big to be
+   --  converted into an ATR type, a 'Bytes_Too_Big' exception will be raised.
+
    function Size (Atr : in SCard.ATR := Null_ATR) return Natural;
    --  Return current size of an ATR as Natural.
 

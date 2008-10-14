@@ -71,11 +71,6 @@ package PCSC.SCard.Utils is
    --  contains a bigger number than Long_Long_Integer'Last, a
    --  "Number_Too_Big" exception will be raised.
 
-   Number_Too_Big : exception;
-   --  Exception will be raised by To_Long_Long_Integer function if a given
-   --  Byte_Set cannot be converted because it's bigger than
-   --  Long_Long_Integer'Last.
-
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;
       Call    : in Callback);

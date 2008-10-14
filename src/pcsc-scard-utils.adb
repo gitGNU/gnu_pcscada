@@ -193,7 +193,7 @@ package body PCSC.SCard.Utils is
       return Long_Long_Integer (Result);
    exception
       when Constraint_Error =>
-         raise Number_Too_Big;
+         raise Bytes_Too_Big;
    end To_Long_Long_Integer;
 
    ----------------------
