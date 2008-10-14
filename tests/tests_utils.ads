@@ -47,4 +47,10 @@ package Tests_Utils is
    procedure Test_ATR_To_Hex_String;
    --  Test ATR to HEX String conversion.
 
+   procedure Test_BArray_To_Hex_String;
+   --  Test Byte_Array to HEX String conversion.
+
+   procedure Test_BSet_To_Hex_String;
+   --  Test Byte_Set to HEX String conversion.
+
 end Tests_Utils;

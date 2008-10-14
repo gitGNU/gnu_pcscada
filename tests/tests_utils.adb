@@ -59,6 +59,12 @@ package body Tests_Utils is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_ATR_To_Hex_String'Access,
                                   Name    => "ATR to HEX String");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_BArray_To_Hex_String'Access,
+                                  Name    => "Byte_Array to HEX String");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_BSet_To_Hex_String'Access,
+                                  Name    => "Byte_Set to HEX String");
    end Initialize;
 
    ---------------------------------------
@@ -189,5 +195,23 @@ package body Tests_Utils is
                 "2C23AB8B",
               Message   => "Hex string incorrect");
    end Test_ATR_To_Hex_String;
+
+   -------------------------------
+   -- Test_BArray_To_Hex_String --
+   -------------------------------
+
+   procedure Test_BArray_To_Hex_String is
+   begin
+      Fail (Message => "not yet implemented");
+   end Test_BArray_To_Hex_String;
+
+   -----------------------------
+   -- Test_BSet_To_Hex_String --
+   -----------------------------
+
+   procedure Test_BSet_To_Hex_String is
+   begin
+      Fail (Message => "not yet implemented");
+   end Test_BSet_To_Hex_String;
 
 end Tests_Utils;
