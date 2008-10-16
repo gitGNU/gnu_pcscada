@@ -38,7 +38,6 @@ package PCSC.Thin is
 
    subtype Byte is Interfaces.Unsigned_8;
    type Byte_Array is array (C.size_t range <>) of aliased Byte;
-   type Byte_Array_Access is access all Byte;
 
    Null_Byte : constant Byte;
    Null_Byte_Array : constant Byte_Array;
@@ -408,7 +407,7 @@ package PCSC.Thin is
       pcchReaderLen  : access DWORD;
       pdwState       : access DWORD;
       pdwProtocol    : access DWORD;
-      pbAtr          : in Byte_Array_Access;
+      pbAtr          : access Byte;
       pcbAtrLen      : access DWORD)
       return DWORD;
    --  Get status from specific card
@@ -424,9 +423,9 @@ package PCSC.Thin is
    function SCardControl
      (hCard           : in SCARDHANDLE;
       dwControlCode   : in DWORD;
-      pbSendBuffer    : in Byte_Array_Access;
+      pbSendBuffer    : access Byte;
       cbSendLength    : in DWORD;
-      pbRecvBuffer    : in Byte_Array_Access;
+      pbRecvBuffer    : access Byte;
       cbRecvLength    : in DWORD;
       lpBytesReturned : access DWORD)
       return DWORD;
@@ -435,10 +434,10 @@ package PCSC.Thin is
    function SCardTransmit
      (hCard         : in SCARDHANDLE;
       pioSendPci    : access SCARD_IO_REQUEST;
-      pbSendBuffer  : in Byte_Array_Access;
+      pbSendBuffer  : access Byte;
       cbSendLength  : in DWORD;
       pioRecvPci    : access SCARD_IO_REQUEST;
-      pbRecvBuffer  : in Byte_Array_Access;
+      pbRecvBuffer  : access Byte;
       pcbRecvLength : access DWORD)
       return DWORD;
    --  Transmit APDUs to card
@@ -461,7 +460,7 @@ package PCSC.Thin is
    function SCardGetAttrib
      (hCard      : in SCARDHANDLE;
       dwAttrId   : in DWORD;
-      pbAttr     : in Byte_Array_Access;
+      pbAttr     : access Byte;
       pcbAttrLen : access DWORD)
       return DWORD;
    --  Get an attribute from the IFD handler
@@ -469,7 +468,7 @@ package PCSC.Thin is
    function SCardSetAttrib
      (hCard     : in SCARDHANDLE;
       dwAttrId  : in DWORD;
-      pbAttr    : in Byte_Array_Access;
+      pbAttr    : access Byte;
       cbAttrLen : in DWORD)
       return DWORD;
    --  Set an attribute of the IFD handler
