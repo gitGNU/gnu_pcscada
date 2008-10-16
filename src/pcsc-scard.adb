@@ -501,9 +501,9 @@ package body PCSC.SCard is
         (hCard          => Card.hCard,
          mszReaderNames => Strings.Null_Ptr,
          pcchReaderLen  => dwReaderLen'Access,
-         pdwState       => dwState'Unchecked_Access,
+         pdwState       => dwState'Access,
          pdwProtocol    => dwProtocol'Access,
-         pbAtr          => Atr.Data (Atr.Data'First)'Unchecked_Access,
+         pbAtr          => Atr.Data (Atr.Data'First)'Access,
          pcbAtrLen      => dwAtrLen'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -542,10 +542,10 @@ package body PCSC.SCard is
       Res := Thin.SCardTransmit
         (hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,
-         pbSendBuffer  => Send_Buffer (Send_Buffer'First)'Unchecked_Access,
+         pbSendBuffer  => Send_Buffer (Send_Buffer'First)'Access,
          cbSendLength  => Thin.DWORD (Send_Buffer'Length),
          pioRecvPci    => C_Recv_PCI'Access,
-         pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
+         pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Access,
          pcbRecvLength => Bytes_Returned'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -580,9 +580,9 @@ package body PCSC.SCard is
       Res := Thin.SCardControl
         (hCard           => Card.hCard,
          dwControlCode   => Thin.DWORD (Code),
-         pbSendBuffer    => Send_Buffer (Send_Buffer'First)'Unchecked_Access,
+         pbSendBuffer    => Send_Buffer (Send_Buffer'First)'Access,
          cbSendLength    => Thin.DWORD (Send_Buffer'Length),
-         pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
+         pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Access,
          cbRecvLength    => Recv_Length,
          lpBytesReturned => Bytes_Returned'Access);
 
@@ -613,7 +613,7 @@ package body PCSC.SCard is
       Res := Thin.SCardGetAttrib
         (hCard      => Card.hCard,
          dwAttrId   => C_Attr (Attr),
-         pbAttr     => Recv_Buffer (Recv_Buffer'First)'Unchecked_Access,
+         pbAttr     => Recv_Buffer (Recv_Buffer'First)'Access,
          pcbAttrLen => Len'Access);
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
