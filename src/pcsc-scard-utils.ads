@@ -41,7 +41,8 @@ package PCSC.SCard.Utils is
 
    function To_Hex_String (Given : in Byte_Set := Null_Byte_Set) return String;
    --  Returns hex-representation string of binary data (Byte_Set). The string
-   --  length will be the double length of the initial byte set.
+   --  length will be the double length of the initial byte set. If a
+   --  Null_Byte_Set is passed to this function, "0" string is returned.
 
    function To_Hex_String (Given : in Thin.Byte_Array; Len : in Positive)
                            return String;
@@ -49,7 +50,8 @@ package PCSC.SCard.Utils is
    --  defines the length of the returned string.
 
    function To_Hex_String (Given : in ATR := Null_ATR) return String;
-   --  Returns hex-representation string of an ATR.
+   --  Returns hex-representation string of an ATR. If a Null_ATR is passed,
+   --  "0" is returned.
 
    function To_String (Reader : in Reader_ID := Null_Reader_ID) return String;
    --  Return string from Reader_ID.
@@ -62,14 +64,16 @@ package PCSC.SCard.Utils is
 
    function To_String (Given : in Byte_Set := Null_Byte_Set) return String;
    --  Return an array of characters from Byte_Set. Function does not remove
-   --  or trim newlines.
+   --  or trim newlines. If Null_Byte_Set is passed for 'Given', a "0" string
+   --  is returned.
 
    function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
                                   return Long_Long_Integer;
    --  Return converted Long_Long_Integer value from Byte_Set. Maximal value
    --  which can be converted is Long_Long_Integer'Last. If given Byte_Set
    --  contains a bigger number than Long_Long_Integer'Last, a
-   --  "Number_Too_Big" exception will be raised.
+   --  "Number_Too_Big" exception will be raised. If a Null_Byte_Set is passed,
+   --  0 is returned.
 
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;

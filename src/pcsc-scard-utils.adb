@@ -73,7 +73,7 @@ package body PCSC.SCard.Utils is
       end if;
 
       return To_Hex_String (Given => Given,
-                            Len   => 2 * Given'Last);
+                            Len   => 2 * Given'Length);
    end To_Hex_String;
 
    ---------------------------------

@@ -210,8 +210,16 @@ package body Tests_Utils is
    -----------------------------
 
    procedure Test_BSet_To_Hex_String is
+      Empty_Set : SCard.Byte_Set := SCard.Null_Byte_Set;
+      Real_Set  : SCard.Byte_Set :=
+        (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
    begin
-      Fail (Message => "not yet implemented");
+      Assert (Condition => SCU.To_Hex_String (Given => Empty_Set) = "0",
+              Message   => "Hex string incorrect");
+
+      Assert (Condition => SCU.To_Hex_String (Given => Real_Set) =
+                "00A40000023F00",
+              Message   => "Hex string incorrect");
    end Test_BSet_To_Hex_String;
 
 end Tests_Utils;
