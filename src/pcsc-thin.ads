@@ -40,6 +40,9 @@ package PCSC.Thin is
    type Byte_Array is array (C.size_t range <>) of aliased Byte;
    type Byte_Array_Access is access all Byte;
 
+   Null_Byte : constant Byte;
+   Null_Byte_Array : constant Byte_Array;
+
 
    --  ATR
 
@@ -49,7 +52,7 @@ package PCSC.Thin is
    subtype ATR is Byte_Array (0 .. MAX_ATR_SIZE);
    --  Binary ATR data
 
-   Null_ATR : constant ATR := (others => 0);
+   Null_ATR : constant ATR;
    --  Null initialized ATR
 
 
@@ -476,6 +479,12 @@ package PCSC.Thin is
    --  Get stringified error message
 
 private
+
+   Null_ATR : constant ATR := (others => 0);
+
+   Null_Byte : constant Byte := 16#00#;
+
+   Null_Byte_Array : constant Byte_Array (1 .. 0) := (others => Null_Byte);
 
    --  Imports
 

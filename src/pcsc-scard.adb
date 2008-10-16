@@ -649,7 +649,7 @@ package body PCSC.SCard is
 
       --  TODO: extended return statement
       declare
-         B : Byte_Set (1 .. Positive (Len)) := (others => Null_Byte);
+         B : Byte_Set (1 .. Positive (Len)) := (others => Thin.Null_Byte);
       begin
          return B;
       end;
@@ -743,7 +743,7 @@ package body PCSC.SCard is
 
    function To_Atr (Bytes : in Byte_Set) return ATR is
       New_Atr  : ATR;
-      Temp_Set : Byte_Set (ATR_Index'Range) := (others => Null_Byte);
+      Temp_Set : Byte_Set (ATR_Index'Range) := (others => Thin.Null_Byte);
    begin
       --  Raise exception if Byte_Set is too big.
 

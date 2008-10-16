@@ -47,6 +47,10 @@ package body PCSC.SCard.Utils is
       Temp   : Interfaces.Unsigned_8;
 
    begin
+      if Given = Null_Byte_Set then
+         return "0";
+      end if;
+
       for Index in Given'Range loop -- For each word
          Temp := Given (Index);
          for J in reverse 0 .. 2 - 1 loop
@@ -80,10 +84,17 @@ package body PCSC.SCard.Utils is
    --  To_Hex_String (Byte_Array) --
    ---------------------------------
 
-   function To_Hex_String (Given : in Thin.Byte_Array; Len : in Positive)
-                           return String
+   function To_Hex_String
+     (Given : in Thin.Byte_Array := Thin.Null_Byte_Array;
+      Len   : in Positive)
+      return String
    is
+      use type Thin.Byte_Array;
    begin
+      if Given = Thin.Null_Byte_Array then
+         return "0";
+      end if;
+
       return To_Hex_String (Given => Byte_Set (Given), Len => Len);
    end To_Hex_String;
 

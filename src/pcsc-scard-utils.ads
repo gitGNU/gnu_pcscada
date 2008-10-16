@@ -37,15 +37,19 @@ package PCSC.SCard.Utils is
       Len   : in Positive)
       return String;
    --  Returns hex-representation string of binary data (Byte_Set). Len defines
-   --  the length of the returned string.
+   --  the length of the returned string, this is usally two times the length
+   --  of the initial byte set (because each byte is represented by two
+   --  'chars').
 
    function To_Hex_String (Given : in Byte_Set := Null_Byte_Set) return String;
    --  Returns hex-representation string of binary data (Byte_Set). The string
    --  length will be the double length of the initial byte set. If a
    --  Null_Byte_Set is passed to this function, "0" string is returned.
 
-   function To_Hex_String (Given : in Thin.Byte_Array; Len : in Positive)
-                           return String;
+   function To_Hex_String
+     (Given : in Thin.Byte_Array := Thin.Null_Byte_Array;
+      Len   : in Positive)
+      return String;
    --  Returns hex-representation string of binary data (Byte_Array). Len
    --  defines the length of the returned string.
 

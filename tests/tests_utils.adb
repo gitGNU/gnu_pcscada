@@ -24,6 +24,7 @@
 with Ahven; use Ahven;
 
 --  PCSC/Ada
+with PCSC.Thin;
 with PCSC.SCard.Utils;
 
 use PCSC;
@@ -141,8 +142,8 @@ package body Tests_Utils is
       RStates.Add (State => SCard.S_Reader_Unaware);
       RStates.Add (State => SCard.S_Reader_Atrmatch);
 
-      Assert (Condition => SCU.To_String (States => RStates) =
-                "S_READER_ATRMATCH S_READER_UNAWARE",
+      Assert (Condition => SCU.To_String
+              (States => RStates) = "S_READER_ATRMATCH S_READER_UNAWARE",
               Message   => "String incorrect");
    end Test_RStates_Set_To_String;
 
@@ -162,8 +163,8 @@ package body Tests_Utils is
       CStates.Add (State => SCard.S_Card_Swallowed);
       CStates.Add (State => SCard.S_Card_Powered);
 
-      Assert (Condition => SCU.To_String (States => CStates) =
-                "S_CARD_POWERED S_CARD_SWALLOWED",
+      Assert (Condition => SCU.To_String
+              (States => CStates) = "S_CARD_POWERED S_CARD_SWALLOWED",
               Message   => "String incorrect");
    end Test_CStates_Set_To_String;
 
@@ -191,8 +192,8 @@ package body Tests_Utils is
       Assert (Condition => SCU.To_Hex_String (Given => Null_ATR) = "0",
               Message   => "Hex string incorrect");
 
-      Assert (Condition => SCU.To_Hex_String (Given => Reader_ATR) =
-                "2C23AB8B",
+      Assert (Condition => SCU.To_Hex_String
+              (Given => Reader_ATR) = "2C23AB8B",
               Message   => "Hex string incorrect");
    end Test_ATR_To_Hex_String;
 
@@ -201,8 +202,16 @@ package body Tests_Utils is
    -------------------------------
 
    procedure Test_BArray_To_Hex_String is
+      Empty_Array : Thin.Byte_Array := Thin.Null_Byte_Array;
+      Real_Array  : Thin.Byte_Array := (16#2C#, 16#FF#, 16#78#, 16#AF#);
    begin
-      Fail (Message => "not yet implemented");
+      Assert (Condition => SCU.To_Hex_String (Given => Empty_Array,
+                                              Len   => 1234) = "0",
+              Message   => "Hex string incorrect");
+      Assert (Condition => SCU.To_Hex_String
+              (Given => Real_Array,
+               Len   => 2 * Real_Array'Length) = "2CFF78AF",
+              Message   => "Hex string incorrect");
    end Test_BArray_To_Hex_String;
 
    -----------------------------
@@ -217,8 +226,8 @@ package body Tests_Utils is
       Assert (Condition => SCU.To_Hex_String (Given => Empty_Set) = "0",
               Message   => "Hex string incorrect");
 
-      Assert (Condition => SCU.To_Hex_String (Given => Real_Set) =
-                "00A40000023F00",
+      Assert (Condition => SCU.To_Hex_String
+              (Given => Real_Set) = "00A40000023F00",
               Message   => "Hex string incorrect");
    end Test_BSet_To_Hex_String;
 

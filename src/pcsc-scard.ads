@@ -367,9 +367,7 @@ private
    end record;
 
 
-   Null_Byte : constant Thin.Byte := 16#00#;
-
-   Null_Byte_Set : constant Byte_Set (1 .. 0) := (others => Null_Byte);
+   Null_Byte_Set : constant Byte_Set (1 .. 0) := (others => Thin.Null_Byte);
 
 
    subtype ATR_Index is Natural range 0 .. Thin.MAX_ATR_SIZE;
@@ -383,7 +381,8 @@ private
       Length : ATR_Index;
    end record;
 
-   Null_ATR : constant ATR := ATR'(Data   => ATR_Type'(others => Null_Byte),
+   Null_ATR : constant ATR := ATR'(Data   => ATR_Type'
+                                     (others => Thin.Null_Byte),
                                    Length => 0);
 
 
