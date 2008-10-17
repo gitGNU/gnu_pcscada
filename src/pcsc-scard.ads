@@ -20,8 +20,8 @@
 --  MA  02110-1301  USA
 --
 
-with Interfaces.C;
-with Interfaces.C.Strings;
+private with Interfaces.C;
+private with Interfaces.C.Strings;
 
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -30,8 +30,6 @@ with PCSC.Thin;
 
 --  PC/SC thick-binding package
 package PCSC.SCard is
-
-   package IC renames Interfaces.C;
 
    type Context is limited private;
    --  This is the PC/SC-Context. This object is initialized by
@@ -343,6 +341,8 @@ package PCSC.SCard is
    --  Return string representation of last stored return code.
 
 private
+
+   package IC renames Interfaces.C;
 
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
    pragma No_Return (SCard_Exception);
