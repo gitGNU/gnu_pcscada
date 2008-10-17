@@ -1,0 +1,46 @@
+PCSC/Ada README
+===============
+
+Prerequisites
+-------------
+PCSC/Ada is written in Ada, so you need to have GNAT (GNU Ada Translator)
+installed to compile PCSC/Ada. For the unit tests to work, you further need to
+have Ahven installed (see 'Installation').
+GNAT is available for most distributions, make sure you have gcc version 4.1 or
+later installed.
+
+Installation
+------------
+For PCSC/Ada to compile, you need the following libraries/frameworks installed:
+
+* GNAT:
+  http://www.gnu.org/software/gnat/gnat.html[]
+
+* Ahven (Test-Framework):
+  http://home.gna.org/ahven/[]
+
+TIP: with Debian, typing `apt-get install gnat-4.3 libahven-dev` will do the job.
+
+The installation of PCSC/Ada is quite easy and straightforward. Just type
+in the following commands, you must be root to install the library system wide.
+
+.................
+  $ tar -xzf libpcscada-{revision}.tar.bz2
+  $ cd libpcscada-{revision}
+  $ make
+  $ make PREFIX=/usr/local install
+.................
+
+If no `PREFIX` is specified, `$(HOME)/libraries` is used as install destination.
+
+Obtaining PCSC/Ada
+------------------
+The latest PCSC/Ada version and online documentation can be found at
+http://www.nongnu.org/pcscada/[].
+
+COPYING
+-------
+---------------------------------------------------------------------------------
+Copyright (C) 2008 Reto Buerki. Free use of this software is granted under the
+terms of the GNU Lesser General Public License (LGPL).
+---------------------------------------------------------------------------------

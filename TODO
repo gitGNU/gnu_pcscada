@@ -1,18 +1,21 @@
-* Support multiple Current_States Readerstate
-* Correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
-* Add preferred protocols to SCard.Connect procedure
-* Support 'or' operation for SCard.Connect preferred protocols
-* Add default options or null/empty types for in params.
-* Improve SCard.Transmit and corresponding buffer handling.
-  o Remove Recv_Len param.
-  o Allocate memory for buffer inside the binding, client does not
+PCSC/Ada TODO List
+===================
+
+- Support multiple Current_States Readerstate
+- Correct handling of Empty_Reader_Status_Set in To_C (Reader_Status_Set)
+- Add preferred protocols to SCard.Connect procedure
+- Support 'or' operation for SCard.Connect preferred protocols
+- Add default options or null/empty types for in params.
+- Improve SCard.Transmit and corresponding buffer handling.
+  * Remove Recv_Len param.
+  * Allocate memory for buffer inside the binding, client does not
     know the required size before the call returns.
-  o For that we need Handles and Free() procedures.
-* Provide To_Byte_Set function which returns a Byte_Set from a String.
-  o e.g. "16 3B 12 28"
-* Fix valgrinds "Syscall param write(buf) points to uninitialised byte(s)"
+  * For that we need Handles and Free() procedures.
+- Provide To_Byte_Set function which returns a Byte_Set from a String.
+  * e.g. "16 3B 12 28"
+- Fix valgrinds "Syscall param write(buf) points to uninitialised byte(s)"
   error for SCard Control procedure.
-* Use better type names for Reader_Status, Reader_States.
-  o Confusing : similar names
-* Use 'private with' for PCSC.Thin in thick binding.
-  o A thick binding type for Thin.Byte is needed.
+- Use better type names for Reader_Status, Reader_States.
+  * Confusing : similar names
+- Use 'private with' for PCSC.Thin in thick binding.
+  * A thick binding type for Thin.Byte is needed.
