@@ -101,7 +101,7 @@ package body Tests_Utils is
          Set_Too_Big : SCard.Byte_Set (1 .. 8) :=
            (16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#);
       begin
-         --  Byte set 'Set_Too_Long' cannot be represented by
+         --  Byte set 'Set_Too_Big' cannot be represented by
          --  Long_Long_Integer, this test should raise Number_Too_Big exception
          Result := SCU.To_Long_Long_Integer (Given => Set_Too_Big);
          Fail (Message => "No Number_Too_Big exception raised");
