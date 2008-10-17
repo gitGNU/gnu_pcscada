@@ -134,7 +134,7 @@ package body Tests_Utils is
       Empty_RStates : SCard.Reader_States_Set;
       RStates       : SCard.Reader_States_Set;
    begin
-      Assert (Condition => SCU.To_String (States => Empty_RStates) = "",
+      Assert (Condition => SCU.To_String (States => Empty_RStates)'Length = 0,
               Message   => "String incorrect");
 
       --  Fill RStates set
@@ -155,7 +155,7 @@ package body Tests_Utils is
       Empty_CStates : SCard.Card_States_Set;
       CStates       : SCard.Card_States_Set;
    begin
-      Assert (Condition => SCU.To_String (States => Empty_CStates) = "",
+      Assert (Condition => SCU.To_String (States => Empty_CStates)'Length = 0,
               Message   => "String incorrect");
 
       --  Fill CStates set
@@ -175,7 +175,7 @@ package body Tests_Utils is
    procedure Test_ReaderID_To_String is
       Null_Reader : SCard.Reader_ID := SCard.Null_Reader_ID;
    begin
-      Assert (Condition => SCU.To_String (Reader => Null_Reader) = "",
+      Assert (Condition => SCU.To_String (Reader => Null_Reader)'Length = 0,
               Message   => "String incorrect");
    end Test_ReaderID_To_String;
 
