@@ -14,3 +14,5 @@
   error for SCard Control procedure.
 * Use better type names for Reader_Status, Reader_States.
   o Confusing : similar names
+* Use 'private with' for PCSC.Thin in thick binding.
+  o A thick binding type for Thin.Byte is needed.
