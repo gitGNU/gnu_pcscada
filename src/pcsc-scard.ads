@@ -445,10 +445,4 @@ private
       Data : Vector_Of_Status_Type;
    end record;
 
-   Empty_Vector_Of_Status_Type : constant Vector_Of_Status_Type
-     := VORSTP.Empty_Vector;
-
-   Empty_Reader_Status_Set : constant Reader_Status_Set :=
-     Reader_Status_Set'(Data => Empty_Vector_Of_Status_Type);
-
 end PCSC.SCard;

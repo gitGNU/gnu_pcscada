@@ -14,4 +14,3 @@
   error for SCard Control procedure.
 * Use better type names for Reader_Status, Reader_States.
   o Confusing : similar names
-* Add Empty_Reader_States_Set and Empty_Card_States_Set constants.
