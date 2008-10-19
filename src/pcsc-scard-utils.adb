@@ -24,8 +24,6 @@ with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 with Ada.Strings.Fixed;
 
-with Interfaces.C;
-
 package body PCSC.SCard.Utils is
 
    -------------------------------
