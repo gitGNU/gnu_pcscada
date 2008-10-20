@@ -24,7 +24,6 @@ with Ada.Exceptions;
 with Ada.Strings.Fixed;
 with Ada.Unchecked_Deallocation;
 
-with PCSC.Thin.Reader;
 with PCSC.SCard.Conversion;
 
 package body PCSC.SCard is
