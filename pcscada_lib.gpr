@@ -32,11 +32,15 @@ project PCSCAda_Lib is
    for Library_Version use "libpcscada.so." & Version;
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnat05", "-gnaty", "-g", "-gnato", "-fstack-check");
+      for Default_Switches ("ada") use ("-gnat05", "-gnaty", "-g", "-gnato", "-fstack-check", "-fPIC", "-gnatf");
    end Compiler;
 
    package Builder is
       for Default_Switches ("ada") use ("-g");
    end Builder;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-E");
+   end Binder;
 
 end PCSCAda_Lib;
