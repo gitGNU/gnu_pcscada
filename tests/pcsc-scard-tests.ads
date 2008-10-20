@@ -22,36 +22,15 @@
 
 with Ahven.Framework;
 
---  Test package for PCSC.SCard.Utils functions/procedures.
-package Tests_Utils is
+--  Test package for PCSC.SCard functions and procedures.
+package PCSC.SCard.Tests is
 
    type Test is new Ahven.Framework.Test_Case with null record;
 
    procedure Initialize (T : in out Test);
    --  Initialize Test suite.
 
-   procedure Test_To_Long_Long_Integer;
-   --  Test Byte_Set to Long_Long_Integer conversion.
+   procedure Test_Slice_Readerstring;
+   --  Test Slice_Readerstring function.
 
-   procedure Test_Byte_Set_To_String;
-   --  Test Byte_Set to String conversion.
-
-   procedure Test_RStates_Set_To_String;
-   --  Test Reader_States_Set to String conversion.
-
-   procedure Test_CStates_Set_To_String;
-   --  Test Card_States_Set to String conversion.
-
-   procedure Test_ReaderID_To_String;
-   --  Test Reader_ID to String conversion.
-
-   procedure Test_ATR_To_Hex_String;
-   --  Test ATR to HEX String conversion.
-
-   procedure Test_BArray_To_Hex_String;
-   --  Test Byte_Array to HEX String conversion.
-
-   procedure Test_BSet_To_Hex_String;
-   --  Test Byte_Set to HEX String conversion.
-
-end Tests_Utils;
+end PCSC.SCard.Tests;

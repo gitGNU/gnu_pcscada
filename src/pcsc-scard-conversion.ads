@@ -137,6 +137,10 @@ private package PCSC.SCard.Conversion is
    --  reader names. The string to slice has a format like:
    --  Reader A1\0Reader B1\0Reader C1\0\0
    --  \0 is used as separator, \0\0 as string termination.
+   --
+   --  If an invalid string is passed to Slice_Readerstring, an empty
+   --  Reader_ID_Set is returned. In this context, invalid means that To_Slice
+   --  is not in the format described above (e.g. no double NUL termination).
 
    function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Status_Set to the corresponding C

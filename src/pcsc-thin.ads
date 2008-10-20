@@ -23,7 +23,7 @@
 with Interfaces.C;
 with Interfaces.C.Strings;
 
---  PC/SC thin-binding package
+--  PC/SC thin-binding package.
 package PCSC.Thin is
 
    package C renames Interfaces.C;

@@ -25,6 +25,8 @@ with Ahven.Text_Runner;
 
 with Tests_Utils;
 
+with PCSC.SCard.Tests;
+
 procedure Runner is
    S : Ahven.Framework.Test_Suite_Access :=
      Ahven.Framework.Create_Suite (Suite_Name => "PCSC/Ada Unit Tests");
@@ -32,8 +34,13 @@ procedure Runner is
    pragma Linker_Options ("-lahven");
    pragma Linker_Options ("-lpcsclite");
 begin
+   --  Utilities tests
    Ahven.Framework.Add_Test (Suite => S.all,
                              T     => new Tests_Utils.Test);
+
+   --  SCard Ada <--> C conversion tests
+   Ahven.Framework.Add_Test (Suite => S.all,
+                             T     => new PCSC.SCard.Tests.Test);
 
    Ahven.Text_Runner.Run (Suite => S);
    Ahven.Framework.Release_Suite (T => S);

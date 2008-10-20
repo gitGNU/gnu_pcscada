@@ -115,13 +115,13 @@ begin
    Print_Result (Result => SCard.Get_Return_Code);
    Ada.Text_IO.Put_Line
      (">> Reader Name             : " &
-      SCU.To_String (Reader_Status.Get_Status (Index => 1).Name));
+      SCU.To_String (Reader_Status.Get (Index => 1).Name));
    Ada.Text_IO.Put_Line
      (">> Reader states           : " &
-      SCU.To_String (Reader_Status.Get_Status (Index => 1).Event_State));
+      SCU.To_String (Reader_Status.Get (Index => 1).Event_State));
    Ada.Text_IO.Put_Line
      (">> Card ATR                : " &
-      SCU.To_Hex_String (Reader_Status.Get_Status (Index => 1).Card_ATR));
+      SCU.To_Hex_String (Reader_Status.Get (Index => 1).Card_ATR));
 
    --  Connect to first reader
 

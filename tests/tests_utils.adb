@@ -20,10 +20,8 @@
 --  MA  02110-1301  USA
 --
 
---  Ahven
 with Ahven; use Ahven;
 
---  PCSC/Ada
 with PCSC.Thin;
 with PCSC.SCard.Utils;
 

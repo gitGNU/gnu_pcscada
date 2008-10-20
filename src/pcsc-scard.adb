@@ -550,6 +550,33 @@ package body PCSC.SCard is
       return Set.Data.First_Element;
    end First;
 
+   --------------------------
+   -- Last (Reader_ID_Set) --
+   --------------------------
+
+   function Last (Set : in Reader_ID_Set) return Reader_ID is
+      use type Ada.Containers.Count_Type;
+   begin
+      if Set.Data.Length = 0 then
+         return Null_Reader_ID;
+      end if;
+
+      return Set.Data.Last_Element;
+   end Last;
+
+   -------------------------
+   -- Get (Reader_ID_Set) --
+   -------------------------
+
+   function Get (Set   : in Reader_ID_Set;
+                 Index : in Natural)
+                 return Reader_ID
+   is
+   begin
+      --  TODO: bound checks on 'Index'
+      return Set.Data.Element (Index);
+   end Get;
+
    ---------------------------
    -- Empty (Reader_ID_Set) --
    ---------------------------
@@ -655,17 +682,18 @@ package body PCSC.SCard is
                                      Side   => Ada.Strings.Left);
    end Size;
 
-   ----------------
-   -- Get_Status --
-   ----------------
+   -----------------------------
+   -- Get (Reader_Status_Set) --
+   -----------------------------
 
-   function Get_Status (States : in Reader_Status_Set;
-                        Index  : in Natural)
-                        return Reader_Status
+   function Get (Set    : in Reader_Status_Set;
+                 Index  : in Natural)
+                 return Reader_Status
    is
    begin
-      return States.Data.Element (Index);
-   end Get_Status;
+      --  TODO: bound checks on 'Index'
+      return Set.Data.Element (Index);
+   end Get;
 
    ---------------------
    -- Get_Return_Code --

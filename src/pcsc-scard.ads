@@ -28,7 +28,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with PCSC.Thin;
 
---  PC/SC thick-binding package
+--  PC/SC thick-binding package.
 package PCSC.SCard is
 
    type Context is limited private;
@@ -297,11 +297,17 @@ package PCSC.SCard is
    --  Return protocol in use for a given card handle.
 
 
-   function Empty (Set : in Reader_ID_Set) return Boolean;
-   --  Function returns true if Reader_ID_Set contains no readers.
-
    function First (Set : in Reader_ID_Set) return Reader_ID;
    --  Return the first reader in a reader ID set.
+
+   function Last (Set : in Reader_ID_Set) return Reader_ID;
+   --  Return the last reader in a reader ID set.
+
+   function Get (Set : in Reader_ID_Set; Index : in Natural) return Reader_ID;
+   --  Return Reader_ID object at index 'Index'.
+
+   function Empty (Set : in Reader_ID_Set) return Boolean;
+   --  Function returns true if Reader_ID_Set contains no readers.
 
 
    procedure Add (States : in out Reader_States_Set; State : in Reader_State);
@@ -320,10 +326,10 @@ package PCSC.SCard is
    function Size (States : in Reader_Status_Set) return Natural;
    --  Returns the size of a Reader_Status_Set.
 
-   function Get_Status (States : in Reader_Status_Set;
-                        Index  : in Natural)
-                        return Reader_Status;
-   --  Return Reader_Status type at index 'Index'.
+   function Get (Set    : in Reader_Status_Set;
+                 Index  : in Natural)
+                 return Reader_Status;
+   --  Return Reader_Status object at index 'Index'.
 
 
    function To_Atr (Bytes : in Byte_Set) return ATR;
