@@ -42,6 +42,9 @@ package body PCSC.SCard.Tests is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_Slice_Readerstring'Access,
                                   Name    => "String to Reader_ID_Set");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_To_C_RStatus_Set'Access,
+                                  Name    => "To_C for Reader_Status_Set");
    end Initialize;
 
    -----------------------------
@@ -91,5 +94,14 @@ package body PCSC.SCard.Tests is
       Assert (Condition => Readers.Last = " Third _ Reader  II ",
               Message   => "Reader name does not match");
    end Test_Slice_Readerstring;
+
+   ---------------------------
+   -- Test_To_C_RStatus_Set --
+   ---------------------------
+
+   procedure Test_To_C_RStatus_Set is
+   begin
+      Fail (Message => "not yet implemented");
+   end Test_To_C_RStatus_Set;
 
 end PCSC.SCard.Tests;

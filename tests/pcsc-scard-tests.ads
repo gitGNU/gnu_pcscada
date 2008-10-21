@@ -33,4 +33,7 @@ package PCSC.SCard.Tests is
    procedure Test_Slice_Readerstring;
    --  Test Slice_Readerstring function.
 
+   procedure Test_To_C_RStatus_Set;
+   --  Test Reader_Status_Set to Thin.READERSTATE_Array conversion.
+
 end PCSC.SCard.Tests;

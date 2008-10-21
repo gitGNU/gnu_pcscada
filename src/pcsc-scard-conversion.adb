@@ -60,6 +60,39 @@ package body PCSC.SCard.Conversion is
 
    end Slice_Readerstring;
 
+   --------------------------------
+   -- To_C (Reader_Status_Set) --
+   --------------------------------
+
+   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array
+   is
+      use VORSTP;
+
+      Position : Cursor := States.Data.First;
+      C_States : Thin.READERSTATE_Array
+        (size_t (1) .. size_t (States.Data.Last_Index));
+   begin
+      while Has_Element (Position) loop
+         declare
+            Item : constant Reader_Status := Element (Position);
+         begin
+            C_States (size_t (To_Index (Position))) :=
+              new Thin.READERSTATE'
+                (szReader       => Strings.New_String
+                     (To_String (Item.Name)),
+                 pvUserData     => <>,  --  use default
+                 dwCurrentState => C_Reader_State (Item.Current_State),
+                 dwEventState   => <>,  --  use default
+                 cbAtr          => Item.Card_ATR'Size,
+                 rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
+
+            Next (Position);
+         end;
+      end loop;
+
+      return C_States;
+   end To_C;
+
    --------------
    -- To_LPSTR --
    --------------
@@ -118,38 +151,5 @@ package body PCSC.SCard.Conversion is
       end loop;
       return States;
    end To_Ada;
-
-   --------------------------------
-   -- To_C (Reader_Status_Set) --
-   --------------------------------
-
-   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array
-   is
-      use VORSTP;
-
-      Position : Cursor := States.Data.First;
-      C_States : Thin.READERSTATE_Array
-        (size_t (1) .. size_t (States.Data.Last_Index));
-   begin
-      while Has_Element (Position) loop
-         declare
-            Item : constant Reader_Status := Element (Position);
-         begin
-            C_States (size_t (To_Index (Position))) :=
-              new Thin.READERSTATE'
-                (szReader       => Strings.New_String
-                     (To_String (Item.Name)),
-                 pvUserData     => <>,  --  use default
-                 dwCurrentState => C_Reader_State (Item.Current_State),
-                 dwEventState   => <>,  --  use default
-                 cbAtr          => Item.Card_ATR'Size,
-                 rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
-
-            Next (Position);
-         end;
-      end loop;
-
-      return C_States;
-   end To_C;
 
 end PCSC.SCard.Conversion;
