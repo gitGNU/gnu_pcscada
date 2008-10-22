@@ -297,6 +297,9 @@ package PCSC.SCard is
    --  Return protocol in use for a given card handle.
 
 
+   function To_Reader_ID (Name : in String) return Reader_ID;
+   --  Return a new Reader_ID object initialized with 'Name' string.
+
    function First (Set : in Reader_ID_Set) return Reader_ID;
    --  Return the first reader in a reader ID set.
 
@@ -318,12 +321,12 @@ package PCSC.SCard is
 
 
    procedure Add
-     (States : in out Reader_Status_Set;
-      State  : in Reader_Status);
+     (Set    : in out Reader_Status_Set;
+      Status : in Reader_Status);
    --  Add a new reader to reader status array. State specifies the assumed
    --  initial state of the reader/card.
 
-   function Size (States : in Reader_Status_Set) return Natural;
+   function Size (Set : in Reader_Status_Set) return Natural;
    --  Returns the size of a Reader_Status_Set.
 
    function Get (Set    : in Reader_Status_Set;
@@ -384,7 +387,9 @@ private
 
    type ATR is record
       Data   : ATR_Type;
+      --  ATR data bytes
       Length : ATR_Index;
+      --  Bytes count
    end record;
 
    Null_ATR : constant ATR := ATR'(Data   => ATR_Type'

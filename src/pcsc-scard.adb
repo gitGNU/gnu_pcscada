@@ -536,6 +536,15 @@ package body PCSC.SCard is
       return Convert.To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
 
+   ------------------
+   -- To_Reader_ID --
+   ------------------
+
+   function To_Reader_ID (Name : in String) return Reader_ID is
+   begin
+      return Reader_ID'(To_Unbounded_String (Name));
+   end To_Reader_ID;
+
    ---------------------------
    -- First (Reader_ID_Set) --
    ---------------------------
@@ -596,11 +605,11 @@ package body PCSC.SCard is
    -------------------------
 
    procedure Add
-     (States : in out Reader_Status_Set;
-      State  : in Reader_Status)
+     (Set    : in out Reader_Status_Set;
+      Status : in Reader_Status)
    is
    begin
-      States.Data.Append (New_Item => State);
+      Set.Data.Append (New_Item => Status);
    end Add;
 
    ------------------------
@@ -631,9 +640,9 @@ package body PCSC.SCard is
    -- Size (Reader_Status_Set) --
    ------------------------------
 
-   function Size (States : in Reader_Status_Set) return Natural is
+   function Size (Set : in Reader_Status_Set) return Natural is
    begin
-      return States.Data.Last_Index;
+      return Set.Data.Last_Index;
    end Size;
 
    ------------
@@ -655,7 +664,7 @@ package body PCSC.SCard is
       Temp_Set (Bytes'First .. Bytes'Last) := Bytes;
 
       New_Atr.Data   := ATR_Type (Temp_Set);
-      New_Atr.Length := Bytes'Length;
+      New_Atr.Length := Bytes'Last;
 
       return New_Atr;
    end To_Atr;
