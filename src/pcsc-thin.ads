@@ -45,7 +45,7 @@ package PCSC.Thin is
 
    --  ATR
 
-   MAX_ATR_SIZE : constant := 33;
+   MAX_ATR_SIZE : constant := 32;
    --  Maximum ATR size
 
    subtype ATR is Byte_Array (0 .. MAX_ATR_SIZE);
