@@ -664,7 +664,7 @@ package body PCSC.SCard is
       Temp_Set (Bytes'First .. Bytes'Last) := Bytes;
 
       New_Atr.Data   := ATR_Type (Temp_Set);
-      New_Atr.Length := Bytes'Last;
+      New_Atr.Length := Bytes'Length;
 
       return New_Atr;
    end To_Atr;

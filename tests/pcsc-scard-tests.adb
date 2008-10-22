@@ -100,8 +100,110 @@ package body PCSC.SCard.Tests is
    ---------------------------
 
    procedure Test_To_C_RStatus_Set is
+      --  Empty set test
+      Empty_Set : Reader_Status_Set;
+
+      --  This should return an empty array
+      E_Result  : Thin.READERSTATE_Array := Convert.To_C (States => Empty_Set);
+
+      --  Construct a 'real' status set
+      Real_Set  : Reader_Status_Set;
+
+      Reader1   : Reader_Status;
+      Reader2   : Reader_Status;
+
+      Useless   : Reader_States_Set;
    begin
-      Fail (Message => "not yet implemented");
+      --  Empty
+      Assert (Condition => E_Result'Length = 0,
+              Message   => "array not empty");
+
+      --  Fill real set
+      Reader1.Name := To_Reader_ID ("Reader I");
+      Reader1.Current_State := S_Reader_Unavailable;
+      Reader2.Name := To_Reader_ID ("Reader II");
+      Reader2.Current_State := S_Reader_Unaware;
+
+      --  Setting Event_State of Reader2 should be ignored by the conversion,
+      --  defaults are used instead. Settting Event_State manually makes no
+      --  sense since they are updated by calling the Status_Change procedure.
+      Useless.Add (State => S_Reader_Ignore);
+      Useless.Add (State => S_Reader_Exclusive);
+      Reader2.Event_State := Useless;
+
+      Reader2.Card_ATR := To_Atr (Bytes => Byte_Set'(16#12#, 16#23#));
+
+      --  Add reader status to set set
+      Real_Set.Add (Status => Reader1);
+      Real_Set.Add (Status => Reader2);
+
+      declare
+         use Thin;
+         use Interfaces.C;
+
+         R_Result : Thin.READERSTATE_Array := Convert.To_C
+           (States => Real_Set);
+      begin
+         --  Test resulting size of array
+         Assert (Condition => R_Result'Length = 2,
+                 Message   => "array size mismatch");
+
+         --  Test individual values one by one
+
+         --  szReader names
+         Assert (Condition => String'(Strings.Value
+                 (R_Result (R_Result'First).szReader)) = "Reader I",
+                 Message   => "reader name mismatch");
+         Assert (Condition => String'(Strings.Value
+                 (R_Result (R_Result'Last).szReader)) = "Reader II",
+                 Message   => "reader name mismatch");
+
+         --  pvUserData must be null
+         Assert (Condition => R_Result (R_Result'First).pvUserData = null,
+                 Message   => "pvUserData not null");
+         Assert (Condition => R_Result (R_Result'Last).pvUserData = null,
+                 Message   => "pvUserData not null");
+
+         --  dwCurrentState
+         Assert (Condition => R_Result (R_Result'First).dwCurrentState =
+                   SCARD_STATE_UNAVAILABLE,
+                 Message   => "dwCurrentState incorrect");
+         Assert (Condition => R_Result (R_Result'Last).dwCurrentState =
+                   SCARD_STATE_UNAWARE,
+                 Message   => "dwCurrentState incorrect");
+
+         --  dwEventState must be set to default, even though we specified
+         --  Reader_States_Set 'Useless' above.
+         Assert (Condition => R_Result (R_Result'First).dwEventState = 0,
+                 Message   => "dwEventState incorrect");
+         Assert (Condition => R_Result (R_Result'Last).dwEventState = 0,
+                 Message   => "dwEventState incorrect");
+
+         --  cbAtr value must match Card_ATR.Data'Length
+         Assert (Condition => R_Result (R_Result'First).cbAtr =
+                   Reader1.Card_ATR.Data'Length,
+                 Message   => "cbAtr size incorrect");
+         Assert (Condition => R_Result (R_Result'Last).cbAtr =
+                   Reader2.Card_ATR.Data'Length,
+                 Message   => "cbAtr size incorrect");
+
+         --  rgbAtr (Byte_Array) length must match Card_ATR.Data'Length
+         Assert (Condition => R_Result (R_Result'First).rgbAtr'Length =
+                   Reader1.Card_ATR.Data'Length,
+                 Message   => "rgbAtr size incorrect");
+         Assert (Condition => R_Result (R_Result'Last).rgbAtr'Length =
+                   Reader2.Card_ATR.Data'Length,
+                 Message   => "rgbAtr size incorrect");
+
+         --  rgbAtr (Byte_Array) must match Card_ATR.Data for Reader2 and
+         --  Null_ATR for Reader1
+         Assert (Condition => ATR_Type (Byte_Set (R_Result
+                 (R_Result'First).rgbAtr)) = Null_ATR.Data,
+                 Message   => "ATR data mismatch");
+         Assert (Condition => ATR_Type (Byte_Set (R_Result
+                 (R_Result'Last).rgbAtr)) = Reader2.Card_ATR.Data,
+                 Message   => "ATR data mismatch");
+      end;
    end Test_To_C_RStatus_Set;
 
 end PCSC.SCard.Tests;

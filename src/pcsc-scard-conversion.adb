@@ -83,7 +83,7 @@ package body PCSC.SCard.Conversion is
                  pvUserData     => <>,  --  use default
                  dwCurrentState => C_Reader_State (Item.Current_State),
                  dwEventState   => <>,  --  use default
-                 cbAtr          => Item.Card_ATR'Size,
+                 cbAtr          => Item.Card_ATR.Data'Length,
                  rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
 
             Next (Position);

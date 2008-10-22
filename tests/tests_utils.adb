@@ -133,7 +133,7 @@ package body Tests_Utils is
       RStates       : SCard.Reader_States_Set;
    begin
       Assert (Condition => SCU.To_String (States => Empty_RStates)'Length = 0,
-              Message   => "String incorrect");
+              Message   => "String not empty");
 
       --  Fill RStates set
 
@@ -154,7 +154,7 @@ package body Tests_Utils is
       CStates       : SCard.Card_States_Set;
    begin
       Assert (Condition => SCU.To_String (States => Empty_CStates)'Length = 0,
-              Message   => "String incorrect");
+              Message   => "String not empty");
 
       --  Fill CStates set
 
@@ -188,7 +188,7 @@ package body Tests_Utils is
       Reader_ATR    : SCard.ATR := SCard.To_Atr (Bytes => ATR_Bytes);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Null_ATR) = "0",
-              Message   => "Hex string incorrect");
+              Message   => "Null Hex string incorrect");
 
       Assert (Condition => SCU.To_Hex_String
               (Given => Reader_ATR) = "2C23AB8B",
@@ -205,7 +205,7 @@ package body Tests_Utils is
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Empty_Array,
                                               Len   => 1234) = "0",
-              Message   => "Hex string incorrect");
+              Message   => "Hex string not '0'");
       Assert (Condition => SCU.To_Hex_String
               (Given => Real_Array,
                Len   => 2 * Real_Array'Length) = "2CFF78AF",
@@ -222,7 +222,7 @@ package body Tests_Utils is
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Empty_Set) = "0",
-              Message   => "Hex string incorrect");
+              Message   => "Hex string not '0'");
 
       Assert (Condition => SCU.To_Hex_String
               (Given => Real_Set) = "00A40000023F00",

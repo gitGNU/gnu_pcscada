@@ -105,7 +105,7 @@ begin
 
    Reader1.Name := Readers.First;
    Reader1.Current_State := SCard.S_Reader_Empty;
-   Reader_Status.Add (Reader1);
+   Reader_Status.Add (Status => Reader1);
 
    --  Detect status changes
 
