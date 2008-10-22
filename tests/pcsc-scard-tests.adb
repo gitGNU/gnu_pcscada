@@ -24,6 +24,7 @@ with Ada.Characters.Latin_1;
 
 with Ahven; use Ahven;
 
+with PCSC.SCard.Utils;
 with PCSC.SCard.Conversion;
 
 package body PCSC.SCard.Tests is
@@ -45,6 +46,9 @@ package body PCSC.SCard.Tests is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_To_C_RStatus_Set'Access,
                                   Name    => "To_C for Reader_Status_Set");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_To_Chars_Ptr'Access,
+                                  Name    => "Reader_ID to LPSTR");
    end Initialize;
 
    -----------------------------
@@ -205,5 +209,23 @@ package body PCSC.SCard.Tests is
                  Message   => "ATR data mismatch");
       end;
    end Test_To_C_RStatus_Set;
+
+   -----------------------
+   -- Test_To_Chars_Ptr --
+   -----------------------
+
+   procedure Test_To_Chars_Ptr is
+      use Interfaces.C;
+
+      ID  : Reader_ID := To_Reader_ID (Name => "Reader I");
+      Ptr : Strings.chars_ptr := Convert.To_Chars_Ptr (Reader => ID);
+   begin
+      Assert (Condition => String'(Strings.Value (Item => Ptr)) =
+                Utils.To_String (Reader => ID),
+              Message => "Reader name mismatch");
+
+      --  Free memory
+      Strings.Free (Item => Ptr);
+   end Test_To_Chars_Ptr;
 
 end PCSC.SCard.Tests;

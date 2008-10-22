@@ -36,4 +36,7 @@ package PCSC.SCard.Tests is
    procedure Test_To_C_RStatus_Set;
    --  Test Reader_Status_Set to Thin.READERSTATE_Array conversion.
 
+   procedure Test_To_Chars_Ptr;
+   --  Test Reader_ID to chars_ptr conversion.
+
 end PCSC.SCard.Tests;

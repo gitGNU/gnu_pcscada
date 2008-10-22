@@ -247,7 +247,7 @@ package body PCSC.SCard is
       Mode    : in SCard.Mode := Share_Shared)
    is
       Res      : Thin.DWORD;
-      C_Reader : Thin.LPSTR := Convert.To_LPSTR (Reader);
+      C_Reader : Thin.LPSTR := Convert.To_Chars_Ptr (Reader => Reader);
    begin
       Res := Thin.SCardConnect
         (hContext             => Context.hContext,

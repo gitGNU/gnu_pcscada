@@ -93,14 +93,14 @@ package body PCSC.SCard.Conversion is
       return C_States;
    end To_C;
 
-   --------------
-   -- To_LPSTR --
-   --------------
+   ------------------
+   -- To_Chars_Ptr --
+   ------------------
 
-   function To_LPSTR (Reader : in Reader_ID) return Strings.chars_ptr is
+   function To_Chars_Ptr (Reader : in Reader_ID) return Strings.chars_ptr is
    begin
       return Strings.New_String (To_String (Reader));
-   end To_LPSTR;
+   end To_Chars_Ptr;
 
    --------------------
    -- To_Ada (Proto) --

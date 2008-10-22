@@ -146,7 +146,7 @@ private package PCSC.SCard.Conversion is
    --  Convert Ada type Reader_Status_Set to the corresponding C
    --  READERSTATE_ARRAY.
 
-   function To_LPSTR (Reader : in Reader_ID) return IC.Strings.chars_ptr;
+   function To_Chars_Ptr (Reader : in Reader_ID) return IC.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory
    --  must be freed by calling Free.
 
