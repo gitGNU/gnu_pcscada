@@ -152,4 +152,16 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
+   ------------------------------
+   -- Free (READERSTATE_Array) --
+   ------------------------------
+
+   procedure Free (Name : in out Thin.READERSTATE_Array) is
+   begin
+      for Index in Name'Range loop
+         Strings.Free (Name (Index).szReader);
+         Free (Name (Index));
+      end loop;
+   end Free;
+
 end PCSC.SCard.Conversion;

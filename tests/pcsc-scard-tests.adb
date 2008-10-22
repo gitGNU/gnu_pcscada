@@ -207,6 +207,9 @@ package body PCSC.SCard.Tests is
          Assert (Condition => ATR_Type (Byte_Set (R_Result
                  (R_Result'Last).rgbAtr)) = Reader2.Card_ATR.Data,
                  Message   => "ATR data mismatch");
+
+         --  Free memory after test
+         Convert.Free (Name => R_Result);
       end;
    end Test_To_C_RStatus_Set;
 

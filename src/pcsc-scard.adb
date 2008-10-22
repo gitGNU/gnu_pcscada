@@ -22,7 +22,6 @@
 
 with Ada.Exceptions;
 with Ada.Strings.Fixed;
-with Ada.Unchecked_Deallocation;
 
 with PCSC.SCard.Conversion;
 
@@ -31,15 +30,6 @@ package body PCSC.SCard is
    use IC;
 
    package Convert renames PCSC.SCard.Conversion;
-
-   procedure Free is new Ada.Unchecked_Deallocation
-     (Object => Thin.READERSTATE,
-      Name   => Thin.READERSTATE_Access);
-   --  Free memory allocated by a C READERSTATE struct.
-
-   procedure Free (Name : in out Thin.READERSTATE_Array);
-   --  Free C Array of READERSTATES.
-
 
    -----------------------
    -- Establish_Context --
@@ -214,7 +204,7 @@ package body PCSC.SCard is
                       Process   => Update_Status_Set'Access);
 
       --  Free C_States
-      Free (C_States);
+      Convert.Free (Name => C_States);
 
    end Status_Change;
 
@@ -743,15 +733,4 @@ package body PCSC.SCard is
       Last_Return_Code := Code;
    end Store_Error;
 
-   ------------------------------
-   -- Free (READERSTATE_Array) --
-   ------------------------------
-
-   procedure Free (Name : in out Thin.READERSTATE_Array) is
-   begin
-      for Index in Name'Range loop
-         Strings.Free (Name (Index).szReader);
-         Free (Name (Index));
-      end loop;
-   end Free;
 end PCSC.SCard;

@@ -20,6 +20,8 @@
 --  MA  02110-1301  USA
 --
 
+with Ada.Unchecked_Deallocation;
+
 with PCSC.Thin.Reader;
 
 --  This package contains all mapping information and related conversion helper
@@ -144,11 +146,12 @@ private package PCSC.SCard.Conversion is
 
    function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Status_Set to the corresponding C
-   --  READERSTATE_ARRAY.
+   --  READERSTATE_Array. Memory allocated by the array must be freed by
+   --  calling Free (Thin.READERSTATE_Array) after usage.
 
    function To_Chars_Ptr (Reader : in Reader_ID) return IC.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory
-   --  must be freed by calling Free.
+   --  must be freed by calling Interfaces.C.Strings.Free.
 
    function To_Ada (C_Protocol : in Thin.DWORD) return Proto;
    --  Return Ada style Proto for C_Protocol (DWORD).
@@ -158,5 +161,13 @@ private package PCSC.SCard.Conversion is
 
    function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set;
    --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
+
+   procedure Free is new Ada.Unchecked_Deallocation
+     (Object => Thin.READERSTATE,
+      Name   => Thin.READERSTATE_Access);
+   --  Free memory allocated by a C READERSTATE struct.
+
+   procedure Free (Name : in out Thin.READERSTATE_Array);
+   --  Free C Array of READERSTATES.
 
 end PCSC.SCard.Conversion;
