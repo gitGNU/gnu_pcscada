@@ -55,6 +55,9 @@ package body PCSC.SCard.Tests is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_To_Card_States_Set'Access,
                                   Name    => "DWORD to Card_States_Set");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_To_Reader_States_Set'Access,
+                                  Name    => "DWORD to Reader_States_Set");
    end Initialize;
 
    -----------------------------
@@ -271,22 +274,67 @@ package body PCSC.SCard.Tests is
         (C_Cardstate => S3_Set);
    begin
       Assert (Condition => Convert.To_Ada (C_Cardstate => No_CSet).Data =
-                VOCSP.Empty_Vector,
+                Empty_Vector,
               Message   => "CStates_Set not empty");
 
       --  Test converted Real_Set
       Assert (Condition => Real_Set.Data.Length = 3,
               Message   => "Expected 3 Card_States");
 
+      --  Negative test first
+      Assert (Condition => Real_Set.Data.Find (Item => S_Card_Powered) =
+                No_Element,
+              Message   => "Invalid state found");
+
       Assert (Condition => Real_Set.Data.Find (Item => S_Card_Unknown) /=
-                VOCSP.No_Element,
+                No_Element,
               Message   => "Card_Powered not found");
       Assert (Condition => Real_Set.Data.Find (Item => S_Card_Absent) /=
-                VOCSP.No_Element,
+                No_Element,
               Message   => "Card_Absent not found");
       Assert (Condition => Real_Set.Data.Find (Item => S_Card_Swallowed) /=
-                VOCSP.No_Element,
+                No_Element,
               Message   => "Card_Swallowed not found");
    end Test_To_Card_States_Set;
+
+   -------------------------------
+   -- Test_To_Reader_States_Set --
+   -------------------------------
+
+   procedure Test_To_Reader_States_Set is
+      use VORSP;
+      use type Interfaces.C.unsigned_long;
+      use type Ada.Containers.Count_Type;
+
+      No_RSet  : constant Thin.DWORD := 0;
+
+      S3_Set   : constant Thin.DWORD := Thin.SCARD_STATE_PRESENT +
+        Thin.SCARD_STATE_EXCLUSIVE + Thin.SCARD_STATE_IGNORE;
+      Real_Set : constant Reader_States_Set := Convert.To_Ada
+        (C_Readerstate => S3_Set);
+   begin
+      Assert (Condition => Convert.To_Ada (C_Readerstate => No_RSet).Data =
+                VORSP.Empty_Vector,
+              Message   => "RStates_Set not empty");
+
+      --  Test converted Real_Set
+      Assert (Condition => Real_Set.Data.Length = 3,
+              Message   => "Expected 3 Reader_States");
+
+      --  Negative test first
+      Assert (Condition => Real_Set.Data.Find (Item => S_Reader_Empty) =
+                No_Element,
+              Message   => "Invalid state found");
+
+      Assert (Condition => Real_Set.Data.Find (Item => S_Reader_Present) /=
+                No_Element,
+              Message   => "Reader_Present not found");
+      Assert (Condition => Real_Set.Data.Find (Item => S_Reader_Exclusive) /=
+                No_Element,
+              Message   => "Reader_Exclusive not found");
+      Assert (Condition => Real_Set.Data.Find (Item => S_Reader_Ignore) /=
+                No_Element,
+              Message   => "Reader_Ignore not found");
+   end Test_To_Reader_States_Set;
 
 end PCSC.SCard.Tests;
