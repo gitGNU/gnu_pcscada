@@ -122,9 +122,9 @@ package body PCSC.SCard.Conversion is
       return Proto_Undefined;
    end To_Ada;
 
-   --------------------------------
-   -- To_Ada (Card_States_Array) --
-   --------------------------------
+   ------------------------------
+   -- To_Ada (Card_States_Set) --
+   ------------------------------
 
    function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set is
       States : Card_States_Set;

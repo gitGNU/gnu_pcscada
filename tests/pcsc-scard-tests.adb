@@ -52,6 +52,9 @@ package body PCSC.SCard.Tests is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_To_Ada_Proto'Access,
                                   Name    => "DWORD to Proto type");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_To_Card_States_Set'Access,
+                                  Name    => "DWORD to Card_States_Set");
    end Initialize;
 
    -----------------------------
@@ -251,5 +254,39 @@ package body PCSC.SCard.Tests is
       Assert (Condition => Convert.To_Ada (C_Protocol => RAW) = Proto_RAW,
               Message   => "Proto not Proto_RAW");
    end Test_To_Ada_Proto;
+
+   -----------------------------
+   -- Test_To_Card_States_Set --
+   -----------------------------
+
+   procedure Test_To_Card_States_Set is
+      use VOCSP;
+      use type Interfaces.C.unsigned_long;
+      use type Ada.Containers.Count_Type;
+
+      No_CSet  : constant Thin.DWORD := 0;
+      S3_Set   : constant Thin.DWORD := Thin.SCARD_UNKNOWN + Thin.SCARD_ABSENT
+        + Thin.SCARD_SWALLOWED;
+      Real_Set : constant Card_States_Set := Convert.To_Ada
+        (C_Cardstate => S3_Set);
+   begin
+      Assert (Condition => Convert.To_Ada (C_Cardstate => No_CSet).Data =
+                VOCSP.Empty_Vector,
+              Message   => "CStates_Set not empty");
+
+      --  Test converted Real_Set
+      Assert (Condition => Real_Set.Data.Length = 3,
+              Message   => "Expected 3 Card_States");
+
+      Assert (Condition => Real_Set.Data.Find (Item => S_Card_Unknown) /=
+                VOCSP.No_Element,
+              Message   => "Card_Powered not found");
+      Assert (Condition => Real_Set.Data.Find (Item => S_Card_Absent) /=
+                VOCSP.No_Element,
+              Message   => "Card_Absent not found");
+      Assert (Condition => Real_Set.Data.Find (Item => S_Card_Swallowed) /=
+                VOCSP.No_Element,
+              Message   => "Card_Swallowed not found");
+   end Test_To_Card_States_Set;
 
 end PCSC.SCard.Tests;

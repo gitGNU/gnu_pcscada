@@ -42,4 +42,7 @@ package PCSC.SCard.Tests is
    procedure Test_To_Ada_Proto;
    --  Test Thin.DWORD to Proto conversion.
 
+   procedure Test_To_Card_States_Set;
+   --  Test Thin.DWORD to Card_States_Set conversion.
+
 end PCSC.SCard.Tests;
