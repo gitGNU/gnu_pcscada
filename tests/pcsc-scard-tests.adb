@@ -49,6 +49,9 @@ package body PCSC.SCard.Tests is
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_To_Chars_Ptr'Access,
                                   Name    => "Reader_ID to LPSTR");
+      Framework.Add_Test_Routine (T       => T,
+                                  Routine => Test_To_Ada_Proto'Access,
+                                  Name    => "DWORD to Proto type");
    end Initialize;
 
    -----------------------------
@@ -60,15 +63,15 @@ package body PCSC.SCard.Tests is
       use type VOIDP.Vector;
 
       --  Separation and Termination chars
-      Sep     : Character := Ada.Characters.Latin_1.NUL;
-      Term    : String := Ada.Characters.Latin_1.NUL
+      Sep     : constant Character := Ada.Characters.Latin_1.NUL;
+      Term    : constant String := Ada.Characters.Latin_1.NUL
         & Ada.Characters.Latin_1.NUL;
 
       --  Input sources
-      Source1 : String := "This is not a reader string";
-      Source2 : String := "One Reader" & Term;
-      Source3 : String := "First  Reader" & Sep & "_SecondReader_" & Sep
-        & " Third _ Reader  II " & Term;
+      Source1 : constant String := "This is not a reader string";
+      Source2 : constant String := "One Reader" & Term;
+      Source3 : constant String := "First  Reader" & Sep & "_SecondReader_"
+        & Sep & " Third _ Reader  II " & Term;
 
       --  Resulting reader ID set
       Readers : Reader_ID_Set;
@@ -220,7 +223,7 @@ package body PCSC.SCard.Tests is
    procedure Test_To_Chars_Ptr is
       use Interfaces.C;
 
-      ID  : Reader_ID := To_Reader_ID (Name => "Reader I");
+      ID  : constant Reader_ID := To_Reader_ID (Name => "Reader I");
       Ptr : Strings.chars_ptr := Convert.To_Chars_Ptr (Reader => ID);
    begin
       Assert (Condition => String'(Strings.Value (Item => Ptr)) =
@@ -230,5 +233,23 @@ package body PCSC.SCard.Tests is
       --  Free memory
       Strings.Free (Item => Ptr);
    end Test_To_Chars_Ptr;
+
+   -----------------------
+   -- Test_To_Ada_Proto --
+   -----------------------
+
+   procedure Test_To_Ada_Proto is
+      No_Proto : constant Thin.DWORD := 16#FFFF_FFFF#;
+
+      RAW      : constant Thin.DWORD := Thin.SCARD_PROTOCOL_RAW;
+   begin
+      Assert (Condition => Convert.To_Ada (C_Protocol => No_Proto) =
+                Proto_Undefined,
+              Message   => "Proto not Proto_Undefined");
+
+      --  Just test one Thin.DWORD to Proto conversion, no need to test all
+      Assert (Condition => Convert.To_Ada (C_Protocol => RAW) = Proto_RAW,
+              Message   => "Proto not Proto_RAW");
+   end Test_To_Ada_Proto;
 
 end PCSC.SCard.Tests;

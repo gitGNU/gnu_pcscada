@@ -39,4 +39,7 @@ package PCSC.SCard.Tests is
    procedure Test_To_Chars_Ptr;
    --  Test Reader_ID to chars_ptr conversion.
 
+   procedure Test_To_Ada_Proto;
+   --  Test Thin.DWORD to Proto conversion.
+
 end PCSC.SCard.Tests;
