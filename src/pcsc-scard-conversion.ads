@@ -22,6 +22,8 @@
 
 with Ada.Unchecked_Deallocation;
 
+with Interfaces.C.Strings;
+
 with PCSC.Thin.Reader;
 
 --  This package contains all mapping information and related conversion helper
@@ -149,7 +151,8 @@ private package PCSC.SCard.Conversion is
    --  READERSTATE_Array. Memory allocated by the array must be freed by
    --  calling Free (Thin.READERSTATE_Array) after usage.
 
-   function To_Chars_Ptr (Reader : in Reader_ID) return IC.Strings.chars_ptr;
+   function To_Chars_Ptr (Reader : in Reader_ID)
+                          return Interfaces.C.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory
    --  must be freed by calling Interfaces.C.Strings.Free.
 

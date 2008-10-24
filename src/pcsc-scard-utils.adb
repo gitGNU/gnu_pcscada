@@ -24,6 +24,8 @@ with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 with Ada.Strings.Fixed;
 
+with Interfaces;
+
 package body PCSC.SCard.Utils is
 
    -------------------------------
@@ -127,8 +129,6 @@ package body PCSC.SCard.Utils is
 
    function To_String (States : in Card_States_Set) return String
    is
-      use Ada.Strings.Unbounded;
-
       Str_States : Unbounded_String;
       Position   : VOCSP.Cursor := States.Data.First;
       State      : Card_State;
@@ -149,8 +149,6 @@ package body PCSC.SCard.Utils is
 
    function To_String (States : in Reader_States_Set) return String
    is
-      use Ada.Strings.Unbounded;
-
       Str_States : Unbounded_String;
       Position   : VORSP.Cursor := States.Data.First;
       State      : Reader_State;

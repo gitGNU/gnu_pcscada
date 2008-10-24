@@ -28,7 +28,7 @@ with Tests_Utils;
 with PCSC.SCard.Tests;
 
 procedure Runner is
-   S : Ahven.Framework.Test_Suite_Access :=
+   S : constant Ahven.Framework.Test_Suite_Access :=
      Ahven.Framework.Create_Suite (Suite_Name => "PCSC/Ada Unit Tests");
 
    pragma Linker_Options ("-lahven");

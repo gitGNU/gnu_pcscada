@@ -23,11 +23,14 @@
 with Ada.Exceptions;
 with Ada.Strings.Fixed;
 
+with Interfaces.C;
+with Interfaces.C.Strings;
+
 with PCSC.SCard.Conversion;
 
 package body PCSC.SCard is
 
-   use IC;
+   use Interfaces.C;
 
    package Convert renames PCSC.SCard.Conversion;
 
@@ -128,8 +131,8 @@ package body PCSC.SCard is
          --  Convert to Ada types
 
          declare
-            Readers : String := To_Ada (Item     => C_Readers,
-                                        Trim_Nul => False);
+            Readers : constant String := To_Ada (Item     => C_Readers,
+                                                 Trim_Nul => False);
          begin
             return Convert.Slice_Readerstring (To_Slice => Readers);
          end;
@@ -434,7 +437,8 @@ package body PCSC.SCard is
    is
       Res            : Thin.DWORD;
 
-      Recv_Length    : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
+      Recv_Length    : aliased constant Thin.DWORD :=
+        Thin.DWORD (Recv_Buffer'Last);
       Bytes_Returned : aliased Thin.DWORD := 0;
    begin
       --  TODO: Send_Buffer needs to be 'in out', otherwise:
@@ -511,7 +515,8 @@ package body PCSC.SCard is
 
       --  TODO: extended return statement
       declare
-         B : Byte_Set (1 .. Positive (Len)) := (others => Thin.Null_Byte);
+         B : constant Byte_Set (1 .. Positive (Len)) :=
+           (others => Thin.Null_Byte);
       begin
          return B;
       end;
@@ -673,7 +678,7 @@ package body PCSC.SCard is
    ----------------
 
    function Size (Atr : in SCard.ATR := Null_ATR) return String is
-      Natural_ATR : Natural := Size (Atr);
+      Natural_ATR : constant Natural := Size (Atr);
    begin
       --  Remove leading space
 

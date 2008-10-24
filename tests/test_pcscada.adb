@@ -193,7 +193,7 @@ begin
       Send_Buffer  : SCard.Byte_Set :=
         (16#06#, 16#00#, 16#0A#, 16#01#, 16#01#, 16#10#, 16#00#);
       Recv_Len     : Natural := 0;
-      Control_Code : Integer := 16#42000001#;
+      Control_Code : constant Integer := 16#42000001#;
    begin
       Print_Testinfo (Text => "Testing Control");
       SCard.Control (Card        => Card,
@@ -214,8 +214,6 @@ begin
    declare
       Attr_Vendor      : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_Vendor_Name);
-      Attr_IFD_Version : SCard.Byte_Set := SCard.Init_Attribute_Set
-        (Card => Card, Attr => SCard.Attr_Vendor_IFD_Version);
 
       Attr_ATR         : SCard.Byte_Set := SCard.Init_Attribute_Set
         (Card => Card, Attr => SCard.Attr_ATR_String);

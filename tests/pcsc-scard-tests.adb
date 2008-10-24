@@ -24,6 +24,8 @@ with Ada.Characters.Latin_1;
 
 with Ahven; use Ahven;
 
+with Interfaces.C.Strings;
+
 with PCSC.SCard.Utils;
 with PCSC.SCard.Conversion;
 
@@ -117,7 +119,8 @@ package body PCSC.SCard.Tests is
       Empty_Set : Reader_Status_Set;
 
       --  This should return an empty array
-      E_Result  : Thin.READERSTATE_Array := Convert.To_C (States => Empty_Set);
+      E_Result  : constant Thin.READERSTATE_Array :=
+        Convert.To_C (States => Empty_Set);
 
       --  Construct a 'real' status set
       Real_Set  : Reader_Status_Set;
@@ -199,14 +202,6 @@ package body PCSC.SCard.Tests is
          Assert (Condition => R_Result (R_Result'Last).cbAtr =
                    Reader2.Card_ATR.Data'Length,
                  Message   => "cbAtr size incorrect");
-
-         --  rgbAtr (Byte_Array) length must match Card_ATR.Data'Length
-         Assert (Condition => R_Result (R_Result'First).rgbAtr'Length =
-                   Reader1.Card_ATR.Data'Length,
-                 Message   => "rgbAtr size incorrect");
-         Assert (Condition => R_Result (R_Result'Last).rgbAtr'Length =
-                   Reader2.Card_ATR.Data'Length,
-                 Message   => "rgbAtr size incorrect");
 
          --  rgbAtr (Byte_Array) must match Card_ATR.Data for Reader2 and
          --  Null_ATR for Reader1

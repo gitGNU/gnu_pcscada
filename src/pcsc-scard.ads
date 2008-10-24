@@ -20,9 +20,6 @@
 --  MA  02110-1301  USA
 --
 
-private with Interfaces.C;
-private with Interfaces.C.Strings;
-
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
@@ -350,8 +347,6 @@ package PCSC.SCard is
    --  Return string representation of last stored return code.
 
 private
-
-   package IC renames Interfaces.C;
 
    procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
    pragma No_Return (SCard_Exception);

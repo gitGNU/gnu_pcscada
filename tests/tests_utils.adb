@@ -71,11 +71,11 @@ package body Tests_Utils is
    ---------------------------------------
 
    procedure Test_To_Long_Long_Integer is
-      Null_Set    : SCard.Byte_Set := SCard.Null_Byte_Set;
+      Null_Set    : constant SCard.Byte_Set := SCard.Null_Byte_Set;
 
-      Small_Set   : SCard.Byte_Set (1 .. 2) :=
+      Small_Set   : constant SCard.Byte_Set (1 .. 2) :=
         (16#12#, 16#FF#);
-      Big_Set     : SCard.Byte_Set (1 .. 4) :=
+      Big_Set     : constant SCard.Byte_Set (1 .. 4) :=
         (16#AA#, 16#0A#, 16#BA#, 16#12#);
 
       Result  : Long_Long_Integer;
@@ -96,7 +96,7 @@ package body Tests_Utils is
               Message   => "result is not 65298");
 
       declare
-         Set_Too_Big : SCard.Byte_Set (1 .. 8) :=
+         Set_Too_Big : constant SCard.Byte_Set (1 .. 8) :=
            (16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#);
       begin
          --  Byte set 'Set_Too_Big' cannot be represented by
@@ -115,8 +115,9 @@ package body Tests_Utils is
    -----------------------------
 
    procedure Test_Byte_Set_To_String is
-      Empty_Set : SCard.Byte_Set := SCard.Null_Byte_Set;
-      Test_Set  : SCard.Byte_Set (1 .. 4) := (16#70#, 16#63#, 16#73#, 16#63#);
+      Empty_Set : constant SCard.Byte_Set := SCard.Null_Byte_Set;
+      Test_Set  : constant SCard.Byte_Set (1 .. 4) :=
+        (16#70#, 16#63#, 16#73#, 16#63#);
    begin
       Assert (Condition => SCU.To_String (Given => Empty_Set) = "0",
               Message   => "Returned string not '0'");
@@ -182,10 +183,11 @@ package body Tests_Utils is
    ----------------------------
 
    procedure Test_ATR_To_Hex_String is
-      Null_ATR      : SCard.ATR := SCard.Null_ATR;
+      Null_ATR      : constant SCard.ATR := SCard.Null_ATR;
 
-      ATR_Bytes     : SCard.Byte_Set := (16#2C#, 16#23#, 16#AB#, 16#8B#);
-      Reader_ATR    : SCard.ATR := SCard.To_Atr (Bytes => ATR_Bytes);
+      ATR_Bytes     : constant SCard.Byte_Set :=
+        (16#2C#, 16#23#, 16#AB#, 16#8B#);
+      Reader_ATR    : constant SCard.ATR := SCard.To_Atr (Bytes => ATR_Bytes);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Null_ATR) = "0",
               Message   => "Null Hex string incorrect");
@@ -200,8 +202,9 @@ package body Tests_Utils is
    -------------------------------
 
    procedure Test_BArray_To_Hex_String is
-      Empty_Array : Thin.Byte_Array := Thin.Null_Byte_Array;
-      Real_Array  : Thin.Byte_Array := (16#2C#, 16#FF#, 16#78#, 16#AF#);
+      Empty_Array : constant Thin.Byte_Array := Thin.Null_Byte_Array;
+      Real_Array  : constant Thin.Byte_Array :=
+        (16#2C#, 16#FF#, 16#78#, 16#AF#);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Empty_Array,
                                               Len   => 1234) = "0",
@@ -217,8 +220,8 @@ package body Tests_Utils is
    -----------------------------
 
    procedure Test_BSet_To_Hex_String is
-      Empty_Set : SCard.Byte_Set := SCard.Null_Byte_Set;
-      Real_Set  : SCard.Byte_Set :=
+      Empty_Set : constant SCard.Byte_Set := SCard.Null_Byte_Set;
+      Real_Set  : constant SCard.Byte_Set :=
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Empty_Set) = "0",

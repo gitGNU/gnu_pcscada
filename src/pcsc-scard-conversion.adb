@@ -27,7 +27,7 @@ with GNAT.String_Split;
 
 package body PCSC.SCard.Conversion is
 
-   use IC;
+   use Interfaces.C;
 
    ------------------------
    -- Slice_Readerstring --
