@@ -19,15 +19,18 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
+--  <PURPOSE>
+--    SCard utilities package. This package contains convenience functions and
+--    procedures which can be invoked from the client code for specific
+--    conversion or callback operations.
+--  </PURPOSE>
+--
 
 with PCSC.Thin;
 with PCSC.SCard;
 
 use PCSC;
 
---  SCard utilities package. This package contains convenience functions and
---  procedures which can be invoked from the client code for specific
---  conversion or callback operations.
 package PCSC.SCard.Utils is
 
    type Callback is access procedure (ID : in Reader_ID := Null_Reader_ID);

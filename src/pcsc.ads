@@ -19,10 +19,13 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
+--  <PURPOSE>
+--    This library provides bindings to PC/SC-middleware for the Ada
+--    programming language. The library allows you to communicate with smart
+--    cards using the SCard API with Ada.
+--  </PURPOSE>
+--
 
---  This library provides bindings to PC/SC-middleware for the Ada programming
---  language. The library allows you to communicate with smart cards using the
---  SCard API with Ada.
 package PCSC is
 
    SCard_Error : exception;

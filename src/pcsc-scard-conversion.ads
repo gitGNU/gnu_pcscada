@@ -19,6 +19,12 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
+--  <PURPOSE>
+--    This package contains all mapping information and related conversion
+--    helper functions to convert types from Ada to C and vice versa. The
+--    package is declared private and cannot be included from the client code.
+--  </PURPOSE>
+--
 
 with Ada.Unchecked_Deallocation;
 
@@ -26,9 +32,6 @@ with Interfaces.C.Strings;
 
 with PCSC.Thin.Reader;
 
---  This package contains all mapping information and related conversion helper
---  functions to convert types from Ada to C and vice versa. The package is
---  declared private and cannot be included from the client code.
 private package PCSC.SCard.Conversion is
 
    C_Scope : constant array (Scope) of Thin.DWORD

@@ -19,13 +19,17 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
+--  <PURPOSE>
+--    PC/SC thick-binding package. Provides abstraction from the C style
+--    functions and types provided in the thin binding in @PCSC.Thin@.
+--  </PURPOSE>
+--
 
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with PCSC.Thin;
 
---  PC/SC thick-binding package.
 package PCSC.SCard is
 
    type Context is limited private;
@@ -61,59 +65,100 @@ package PCSC.SCard is
 
 
    type Scope is
-     (Scope_User,     --  Scope in user space
-      Scope_Terminal, --  Scope in terminal
-      Scope_System);  --  Scope in system
-   --  Possible scope for PC/SC-context
+     (Scope_User,
+      --  Scope in user space
+      Scope_Terminal,
+      --  Scope in terminal
+      Scope_System
+      --  Scope in system
+     );
+   --  Possible scopes for a PC/SC-context
 
    type Mode is
-     (Share_Exclusive, -- Exclusive mode only
-      Share_Shared,    -- Shared mode only
-      Share_Direct);   -- Raw mode only
-   --  Possible Mode for SCard connects
+     (Share_Exclusive,
+      -- Exclusive mode only
+      Share_Shared,
+      -- Shared mode only
+      Share_Direct
+      -- Raw mode only
+     );
+   --  Possible share Modes for SCard connects
 
    type Proto is
-     (Proto_Undefined, --  Protocol not set
-      Proto_Unset,     --  Backward compatibility
-      Proto_T0,        --  T=0 active protocol
-      Proto_T1,        --  T=1 active protocol
-      Proto_RAW,       --  Raw active protocol
-      Proto_T15);      --  T=15 protocol
+     (Proto_Undefined,
+      --  Protocol not set
+      Proto_Unset,
+      --  Backward compatibility
+      Proto_T0,
+      --  T=0 active protocol
+      Proto_T1,
+      --  T=1 active protocol
+      Proto_RAW,
+      --  Raw active protocol
+      Proto_T15
+      --  T=15 protocol
+     );
    --  Possible Protos for SCard connects
 
    type Action is
-     (Leave_Card,   --  Do nothing on close
-      Reset_Card,   --  Reset on close
-      Unpower_Card, --  Power down on close
-      Eject_Card);  --  Eject on close
-   --  Desired action taken on the card/reader
+     (Leave_Card,
+      --  Do nothing on close
+      Reset_Card,
+      --  Reset on close
+      Unpower_Card,
+      --  Power down on close
+      Eject_Card
+      --  Eject on close
+     );
+   --  Possible card Actions
 
    type Card_State is
-     (S_Card_Unknown,    -- Unknown state
-      S_Card_Absent,     -- Card is absent
-      S_Card_Present,    -- Card is present
-      S_Card_Swallowed,  -- Card not powered
-      S_Card_Powered,    -- Card is powered
-      S_Card_Negotiable, -- Ready for PTS
-      S_Card_Specific);  -- PTS has been set
+     (S_Card_Unknown,
+      -- Unknown state
+      S_Card_Absent,
+      -- Card is absent
+      S_Card_Present,
+      -- Card is present
+      S_Card_Swallowed,
+      -- Card not powered
+      S_Card_Powered,
+      -- Card is powered
+      S_Card_Negotiable,
+      -- Ready for PTS
+      S_Card_Specific
+      -- PTS has been set
+     );
    --  Card states
 
    type Card_States_Set is tagged private;
    --  Set of card states
 
    type Reader_State is
-     (S_Reader_Unaware,     --  App wants status
-      S_Reader_Ignore,      --  Ignore this reader
-      S_Reader_Changed,     --  State has changed
-      S_Reader_Unknown,     --  Reader unknown
-      S_Reader_Unavailable, --  Status unavailable
-      S_Reader_Empty,       --  Card removed
-      S_Reader_Present,     --  Card inserted
-      S_Reader_Atrmatch,    --  ATR matches card
-      S_Reader_Exclusive,   --  Exclusive Mode
-      S_Reader_Inuse,       --  Shared Mode
-      S_Reader_Mute,        --  Unresponsive card
-      S_Reader_Unpowered);  --  Unpowered card
+     (S_Reader_Unaware,
+      --  App wants status
+      S_Reader_Ignore,
+      --  Ignore this reader
+      S_Reader_Changed,
+      --  State has changed
+      S_Reader_Unknown,
+      --  Reader unknown
+      S_Reader_Unavailable,
+      --  Status unavailable
+      S_Reader_Empty,
+      --  Card removed
+      S_Reader_Present,
+      --  Card inserted
+      S_Reader_Atrmatch,
+      --  ATR matches card
+      S_Reader_Exclusive,
+      --  Exclusive Mode
+      S_Reader_Inuse,
+      --  Shared Mode
+      S_Reader_Mute,
+      --  Unresponsive card
+      S_Reader_Unpowered
+      --  Unpowered card
+     );
    --  Reader / Card states
 
    type Reader_States_Set is tagged private;
@@ -135,9 +180,13 @@ package PCSC.SCard is
 
 
    type PCI is
-     (PCI_T0,   --  (PCI) for T=0
-      PCI_T1,   --  (PCI) for T=1
-      PCI_RAW); --  (PCI) for RAW protocol
+     (PCI_T0,
+      --  (PCI) for T=0
+      PCI_T1,
+      --  (PCI) for T=1
+      PCI_RAW
+      --  (PCI) for RAW protocol
+     );
    --  Protocol control information types
 
 

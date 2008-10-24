@@ -72,4 +72,8 @@ install_lib:
 	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib/pcscada
 	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
 
+docs:
+	@ls $(SOURCES).ads > pcscada.specs
+	@adabrowse -c adabrowse.cfg -p -t -is -I src/ -f@pcscada.specs -o doc/
+
 .PHONY: itests utests

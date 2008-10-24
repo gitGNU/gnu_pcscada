@@ -19,11 +19,17 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
+--  <PURPOSE>
+--    PC/SC thin-binding package specification. Imports PC/SC functions and
+--    provides Ada definitions of types needed to interface with the C API
+--    of PC/SC. You should not use this package directly, use the more abstract
+--    thick binding provided in the @PCSC.Scard@ package.
+--  </PURPOSE>
+--
 
 with Interfaces.C;
 with Interfaces.C.Strings;
 
---  PC/SC thin-binding package.
 package PCSC.Thin is
 
    package C renames Interfaces.C;

@@ -19,10 +19,13 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
+--  <PURPOSE>
+--    This package keeps a list of attributes which can be requested directly
+--    from the IFD handler. Use the @Init_Attribute_Set@ and @Get_Attribute@
+--    functions to do so.
+--  </PURPOSE>
+--
 
---  This package keeps a list of attributes which can be requested directly
---  from the IFD handler. Use the Init_Attribute_Set and Get_Attribute
---  functions to do so.
 package PCSC.Thin.Reader is
 
    SCARD_ATTR_VENDOR_NAME            : constant := 16#0001_0100#;
