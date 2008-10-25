@@ -74,6 +74,6 @@ install_lib:
 
 docs:
 	@ls $(SOURCES).ads > pcscada.specs
-	@adabrowse -c adabrowse.cfg -p -t -is -I src/ -f@pcscada.specs -o doc/
+	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs -o doc/
 
 .PHONY: itests utests
