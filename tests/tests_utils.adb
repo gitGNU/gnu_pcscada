@@ -172,7 +172,7 @@ package body Tests_Utils is
    -----------------------------
 
    procedure Test_ReaderID_To_String is
-      Null_Reader : SCard.Reader_ID := SCard.Null_Reader_ID;
+      Null_Reader : constant SCard.Reader_ID := SCard.Null_Reader_ID;
    begin
       Assert (Condition => SCU.To_String (Reader => Null_Reader)'Length = 0,
               Message   => "String incorrect");
