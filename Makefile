@@ -35,7 +35,7 @@ SO_LIBRARY = libpcscada.so.$(VERSION)
 all: build_lib
 
 build_lib: prepare
-	@gnatmake -Ppcscada_lib
+	@gnatmake -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)"
 
 build_utests: prepare
 	@gnatmake -Ppcscada_utests
