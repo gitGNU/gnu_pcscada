@@ -23,6 +23,7 @@
 with Ada.Text_IO;
 with Ada.Strings.Fixed;
 
+with PCSC.Version;
 with PCSC.SCard;
 with PCSC.SCard.Utils;
 
@@ -67,7 +68,8 @@ procedure Test_PCSCAda is
 begin
 
    Ada.Text_IO.New_Line;
-   Ada.Text_IO.Put_Line ("** PCSC/Ada Thick-Binding test program **");
+   Ada.Text_IO.Put_Line ("** PCSC/Ada Thick-Binding test program [version " &
+                         PCSC.Version.Version_String & "] **");
    Ada.Text_IO.New_Line;
 
    --  Establish context

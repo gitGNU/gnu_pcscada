@@ -20,30 +20,39 @@
 #  MA  02110-1301  USA
 #
 
-PREFIX?=$(HOME)/libraries
-INSTALL=install
+PREFIX ?= $(HOME)/libraries
+INSTALL = install
 
-VERSION=$(shell grep " Version" src/pcsc.ads | cut -d\" -f2)
-PCSCADA=libpcsc-$(VERSION)
-DISTFILES=`ls | grep -v libpcsc`
+VERSION = 0.5
+GIT_REV = $(shell git-show --pretty="format:%h" | head -n1)
+PCSCADA = libpcsc-$(VERSION)
+DISTFILES = `ls | grep -v libpcsc`
 
-SOURCES=src/*
-ALI_FILES=lib/*.ali
-SO_LIBRARY=libpcscada.so.$(VERSION)
+SOURCEDIR = src
+ALI_FILES = lib/*.ali
+SO_LIBRARY = libpcscada.so.$(VERSION)
 
 all: build_lib
 
-build_lib: create_dirs
+build_lib: prepare
 	@gnatmake -Ppcscada_lib
 
-build_utests: create_dirs
+build_utests: prepare
 	@gnatmake -Ppcscada_utests
 
-build_itests: create_dirs
+build_itests: prepare
 	@gnatmake -Ppcscada_itests
 
-create_dirs:
+prepare: $(SOURCEDIR)/pcsc-version.ads
 	@mkdir -p obj/lib obj/itests obj/utests lib
+
+$(SOURCEDIR)/pcsc-version.ads:
+	@echo "package PCSC.Version is"                        > $@
+	@echo "   Version_Number : constant Float  :="        >> $@
+	@echo "      $(VERSION);"                             >> $@
+	@echo "   Version_String : constant String :="        >> $@
+	@echo "     \"$(VERSION) (git $(GIT_REV))\";"         >> $@
+	@echo "end PCSC.Version;"                             >> $@
 
 clean:
 	@rm -rf obj/*
@@ -67,13 +76,13 @@ install: install_lib
 install_lib:
 	@mkdir -p $(PREFIX)/include/pcscada
 	@mkdir -p $(PREFIX)/lib/pcscada
-	$(INSTALL) -m 644 $(SOURCES) $(PREFIX)/include/pcscada
+	$(INSTALL) -m 644 $(SOURCEDIR)/* $(PREFIX)/include/pcscada
 	$(INSTALL) -m 444 $(ALI_FILES) $(PREFIX)/lib/pcscada
 	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib/pcscada
 	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
 
 docs:
-	@ls $(SOURCES).ads > pcscada.specs
+	@ls $(SOURCEDIR)/*.ads > pcscada.specs
 	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs -o doc/
 
 .PHONY: itests utests

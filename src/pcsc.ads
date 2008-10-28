@@ -36,8 +36,4 @@ package PCSC is
    --  given SCard.Byte_Set cannot be converted to a specific type because it
    --  contains more bytes than the target type can store.
 
-private
-   Version : constant String := "0.5";
-   --  PCSC/Ada version
-
 end PCSC;
