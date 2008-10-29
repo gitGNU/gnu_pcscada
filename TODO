@@ -12,8 +12,6 @@ PCSC/Ada TODO List
   * For that we need Handles and Free() procedures.
 - Provide To_Byte_Set function which returns a Byte_Set from a String.
   * e.g. "16 3B 12 28"
-- Fix valgrinds "Syscall param write(buf) points to uninitialised byte(s)"
-  error for SCard Control procedure.
 - Use better type names for Reader_Status, Reader_States.
   * Confusing : similar names
 - Use 'private with' for PCSC.Thin in thick binding.
