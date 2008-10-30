@@ -86,7 +86,7 @@ package PCSC.Thin is
    end record;
    --  Reader state type
 
-   type READERSTATE_Access is access all READERSTATE;
+   type READERSTATE_Access is access READERSTATE;
    --  Access type to reader state
 
    type READERSTATE_Array is array (C.size_t range <>) of aliased
