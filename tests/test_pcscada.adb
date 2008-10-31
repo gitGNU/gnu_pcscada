@@ -205,54 +205,63 @@ begin
                      Recv_Len    => Recv_Len);
       Print_Result (Result => SCard.Get_Return_Code);
    exception
-      when others =>
+      when SCard_Error =>
          --  This test is allowed to fail
-         Print_Result (Result => "FAILED (don't PANIC)");
+         Print_Result (Result => "FAILED (don't PANIC): "
+                       & SCard.Get_Return_Code);
    end;
 
    --  Test Get_Attribute
 
    Print_Testinfo (Text => "Testing Get_Attribute");
-   declare
-      Attr_Vendor      : SCard.Byte_Set := SCard.Init_Attribute_Set
-        (Card => Card, Attr => SCard.Attr_Vendor_Name);
-
-      Attr_ATR         : SCard.Byte_Set := SCard.Init_Attribute_Set
-        (Card => Card, Attr => SCard.Attr_ATR_String);
-      Attr_Maxinput    : SCard.Byte_Set := SCard.Init_Attribute_Set
-        (Card => Card, Attr => SCard.Attr_Maxinput);
-
-      use Ada.Strings.Fixed;
    begin
-      SCard.Get_Attribute (Card        => Card,
-                           Attr        => SCard.Attr_Vendor_Name,
-                           Recv_Buffer => Attr_Vendor);
-      Print_Result (Result => SCard.Get_Return_Code);
-      Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is     : "
-                            & SCU.To_String (Given => Attr_Vendor));
-      Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size   : "
-        & Trim (Source => Integer'Image (Attr_Vendor'Last),
-                Side   => Ada.Strings.Left));
+      declare
+         Attr_Vendor   : SCard.Byte_Set := SCard.Init_Attribute_Set
+           (Card => Card, Attr => SCard.Attr_Vendor_Name);
 
-      Print_Testinfo (Text => "Testing Get_Attribute");
-      SCard.Get_Attribute (Card        => Card,
-                           Attr        => SCard.Attr_ATR_String,
-                           Recv_Buffer => Attr_ATR);
-      Print_Result (Result => SCard.Get_Return_Code);
-      Ada.Text_IO.Put_Line (">> Attr_ATR_String is      : "
-        & SCU.To_Hex_String (Given => Attr_ATR));
-      Ada.Text_IO.Put_Line (">> Attr_ATR_String size    : "
-        & Trim (Source => Integer'Image (Attr_ATR'Last),
-                Side   => Ada.Strings.Left));
+         Attr_ATR      : SCard.Byte_Set := SCard.Init_Attribute_Set
+           (Card => Card, Attr => SCard.Attr_ATR_String);
+         Attr_Maxinput : SCard.Byte_Set := SCard.Init_Attribute_Set
+           (Card => Card, Attr => SCard.Attr_Maxinput);
 
-      Print_Testinfo (Text => "Testing Get_Attribute");
-      SCard.Get_Attribute (Card        => Card,
-                           Attr        => SCard.Attr_Maxinput,
-                           Recv_Buffer => Attr_Maxinput);
-      Print_Result (Result => SCard.Get_Return_Code);
-      Ada.Text_IO.Put_Line (">> Attr_Maxinput is        : "
-        & Trim (Long_Long_Integer'Image (SCU.To_Long_Long_Integer
-          (Given => Attr_Maxinput)), Ada.Strings.Left));
+         use Ada.Strings.Fixed;
+      begin
+         SCard.Get_Attribute (Card        => Card,
+                              Attr        => SCard.Attr_Vendor_Name,
+                              Recv_Buffer => Attr_Vendor);
+         Print_Result (Result => SCard.Get_Return_Code);
+         Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is     : "
+                               & SCU.To_String (Given => Attr_Vendor));
+         Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size   : "
+           & Trim (Source => Integer'Image (Attr_Vendor'Last),
+                   Side   => Ada.Strings.Left));
+
+         Print_Testinfo (Text => "Testing Get_Attribute");
+         SCard.Get_Attribute (Card        => Card,
+                              Attr        => SCard.Attr_ATR_String,
+                              Recv_Buffer => Attr_ATR);
+         Print_Result (Result => SCard.Get_Return_Code);
+         Ada.Text_IO.Put_Line (">> Attr_ATR_String is      : "
+                               & SCU.To_Hex_String (Given => Attr_ATR));
+         Ada.Text_IO.Put_Line (">> Attr_ATR_String size    : "
+           & Trim (Source => Integer'Image (Attr_ATR'Last),
+                   Side   => Ada.Strings.Left));
+
+         Print_Testinfo (Text => "Testing Get_Attribute");
+         SCard.Get_Attribute (Card        => Card,
+                              Attr        => SCard.Attr_Maxinput,
+                              Recv_Buffer => Attr_Maxinput);
+         Print_Result (Result => SCard.Get_Return_Code);
+         Ada.Text_IO.Put_Line (">> Attr_Maxinput is        : "
+           & Trim (Long_Long_Integer'Image (SCU.To_Long_Long_Integer
+             (Given => Attr_Maxinput)), Ada.Strings.Left));
+      end;
+   exception
+      when SCard_Error =>
+         --  Most likely this happens when GetAttribute feature is not
+         --  supported by the ifd handler of the reader.
+         Print_Result (Result => "FAILED (don't PANIC): " &
+                       SCard.Get_Return_Code);
    end;
 
    --  End transaction with first reader
