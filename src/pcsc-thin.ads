@@ -61,6 +61,10 @@ package PCSC.Thin is
    --  Null initialized ATR
 
 
+   MAX_BUFFER_SIZE : constant := 264;
+   --  Maximum size of a buffer
+
+
    type void is null record;
    pragma Convention (C, void);
 
