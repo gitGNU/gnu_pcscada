@@ -76,11 +76,11 @@ package PCSC.SCard is
 
    type Mode is
      (Share_Exclusive,
-      -- Exclusive mode only
+      --  Exclusive mode only
       Share_Shared,
-      -- Shared mode only
+      --  Shared mode only
       Share_Direct
-      -- Raw mode only
+      --  Raw mode only
      );
    --  Possible share Modes for SCard connects
 
@@ -114,19 +114,19 @@ package PCSC.SCard is
 
    type Card_State is
      (S_Card_Unknown,
-      -- Unknown state
+      --  Unknown state
       S_Card_Absent,
-      -- Card is absent
+      --  Card is absent
       S_Card_Present,
-      -- Card is present
+      --  Card is present
       S_Card_Swallowed,
-      -- Card not powered
+      --  Card not powered
       S_Card_Powered,
-      -- Card is powered
+      --  Card is powered
       S_Card_Negotiable,
-      -- Ready for PTS
+      --  Ready for PTS
       S_Card_Specific
-      -- PTS has been set
+      --  PTS has been set
      );
    --  Card states
 
