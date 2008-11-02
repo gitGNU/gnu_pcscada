@@ -128,10 +128,10 @@ begin
    --  Connect to first reader
 
    Print_Testinfo (Text => "Testing Connect");
-   SCard.Connect (Context  => Context,
-                  Card     => Card,
-                  Reader   => Readers.First,
-                  Mode     => SCard.Share_Shared);
+   SCard.Connect (Context => Context,
+                  Card    => Card,
+                  Reader  => Readers.First,
+                  Mode    => SCard.Share_Shared);
    Print_Result (Result => SCard.Get_Return_Code);
    Ada.Text_IO.Put_Line (">> Card uses protocol      : " & SCard.Proto'Image
                          (SCard.Get_Active_Proto (Card => Card)));
@@ -150,10 +150,10 @@ begin
       Reader_ATR   : SCard.ATR;
    begin
       Print_Testinfo (Text => "Testing Status");
-      SCard.Status (Card    => Card,
-                    State   => Card_States,
-                    Proto   => Reader_Proto,
-                    Atr     => Reader_ATR);
+      SCard.Status (Card  => Card,
+                    State => Card_States,
+                    Proto => Reader_Proto,
+                    Atr   => Reader_ATR);
       Print_Result (Result => SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">>  ATR                    : " &
                             SCU.To_Hex_String (Given => Reader_ATR));
