@@ -30,7 +30,7 @@ with PCSC.SCard.Utils;
 
 use PCSC;
 
---  Thin-binding test
+--  Thin-binding example
 procedure Thin_Example is
    hContext : aliased SCARDCONTEXT;
    ret      : DWORD;
@@ -73,8 +73,6 @@ begin
 
       pbAtr            : Byte_Array (1 .. MAX_ATR_SIZE);
 
-      String_Code      : LPSTR;
-
       --  Modify Reader_Name according to your test setup
 
       Reader_Name      : C.Strings.chars_ptr := C.Strings.New_String
@@ -87,6 +85,11 @@ begin
                                mszReaders  =>
                                  Interfaces.C.Strings.Null_Ptr,
                                pcchReaders => dwReaders'Access);
+
+      if not (ret = SCARD_S_SUCCESS) then
+         Ada.Text_IO.Put_Line ("could not get list of readers");
+         return;
+      end if;
 
       --  NULL termination is counted as well
 
@@ -101,6 +104,12 @@ begin
       ret := SCardListReaders (hContext    => hContext,
                                mszReaders  => mszReaders,
                                pcchReaders => dwReaders'Access);
+
+      if not (ret = SCARD_S_SUCCESS) then
+         Ada.Text_IO.Put_Line ("could not get list of readers");
+         return;
+      end if;
+
       Ada.Text_IO.Put_Line ("readers: " &
                             Interfaces.C.Strings.Value (mszReaders));
 
