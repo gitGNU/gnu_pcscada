@@ -342,6 +342,10 @@ package PCSC.SCard is
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
+   function Supports_SPE (Card : in SCard.Card) return Boolean;
+   --  Returns True if the reader supports SPE (secure PIN entry) PIN
+   --  verification, False if not.
+
 
    function To_Reader_ID (Name : in String) return Reader_ID;
    --  Return a new Reader_ID object initialized with 'Name' string.

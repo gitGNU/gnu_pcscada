@@ -28,6 +28,8 @@ with Interfaces.C.Strings;
 
 with PCSC.SCard.Conversion;
 
+with PCSC.Thin.Reader;
+
 package body PCSC.SCard is
 
    use Interfaces.C;
@@ -527,9 +529,9 @@ package body PCSC.SCard is
       Attr        : in Attribute)
       return Byte_Set
    is
-      Res      : Thin.DWORD;
+      Res : Thin.DWORD;
 
-      Len      : aliased Thin.DWORD := 0;
+      Len : aliased Thin.DWORD := 0;
    begin
       Res := Thin.SCardGetAttrib
         (hCard      => Card.hCard,
@@ -560,6 +562,29 @@ package body PCSC.SCard is
    begin
       return Convert.To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
+
+   ------------------
+   -- Supports_SPE --
+   ------------------
+
+   function Supports_SPE (Card : in SCard.Card) return Boolean is
+      package TR renames Thin.Reader;
+
+      bSendBuffer : constant Byte_Set := Null_Byte_Set;
+      bRecvBuffer : Byte_Set (1 .. Thin.MAX_BUFFER_SIZE);
+      RecvLength  : Natural := 0;
+   begin
+      Control (Card        => Card,
+               Code        => Integer (TR.CM_IOCTL_GET_FEATURE_REQUEST),
+               Send_Buffer => bSendBuffer,
+               Recv_Buffer => bRecvBuffer,
+               Recv_Len    => RecvLength);
+      return True;
+   exception
+      when SCard_Error =>
+         --  Transaction failed, reader does not support PIN verification
+         return False;
+   end Supports_SPE;
 
    ------------------
    -- To_Reader_ID --
