@@ -22,7 +22,8 @@
 --  <PURPOSE>
 --    This package keeps a list of attributes which can be requested directly
 --    from the IFD handler. Use the @Init_Attribute_Set@ and @Get_Attribute@
---    functions to do so.
+--    functions to do so. It also provides the constants and types needed for
+--    feature handling and PIN verification operations.
 --  </PURPOSE>
 --
 
@@ -146,5 +147,18 @@ package PCSC.Thin.Reader is
    SCARD_ATTR_DEVICE_SYSTEM_NAME_W   : constant := 16#7FFF_0006#;
 
    SCARD_ATTR_SUPRESS_T1_IFS_REQUEST : constant := 16#7FFF_0007#;
+
+
+   CM_IOCTL_GET_FEATURE_REQUEST      : constant DWORD := SCARD_CTL_CODE (3400);
+   --  Control code used to get features from card / reader.
+
+   type PCSC_TLV_STRUCTURE is record
+      tag    : Interfaces.Unsigned_8;
+      length : Interfaces.Unsigned_8;
+      value  : Interfaces.Unsigned_32;
+      --  This value is always in BIG ENDIAN format as documented in PCSC v2
+      --  part 10 ch 2.2 page 2.
+   end record;
+   --  PCSC Type-length-value data structure
 
 end PCSC.Thin.Reader;
