@@ -84,6 +84,18 @@ package PCSC.SCard.Utils is
    --  "Number_Too_Big" exception will be raised. If a Null_Byte_Set is passed,
    --  0 is returned.
 
+
+   procedure Action_Info (Text   : in String);
+   --  This function is used by all test and example programs of PCSC/Ada:
+   --  Pretty print some information about an operation to stdout. After the
+   --  action is complete, the Action_Result() function can be used to display
+   --  the result code of the operation.
+
+   procedure Action_Result (Result : in String);
+   --  Pretty print the result code of an operation to stdout. Before calling
+   --  this function, Action_Info() should be used to describe the operation.
+
+
    procedure For_Every_Reader
      (Readers : in Reader_ID_Set;
       Call    : in Callback);

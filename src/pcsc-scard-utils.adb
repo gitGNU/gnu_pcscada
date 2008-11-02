@@ -203,6 +203,27 @@ package body PCSC.SCard.Utils is
          raise Bytes_Too_Big;
    end To_Long_Long_Integer;
 
+   -----------------
+   -- Action_Info --
+   -----------------
+
+   procedure Action_Info (Text : in String) is
+   begin
+      Ada.Text_IO.Put (Item => Text);
+      Ada.Text_IO.Set_Col (To => 28);
+      Ada.Text_IO.Put (":");
+   end Action_Info;
+
+   -------------------
+   -- Action_Result --
+   -------------------
+
+   procedure Action_Result (Result : in String) is
+   begin
+      Ada.Text_IO.Set_Col (To => 30);
+      Ada.Text_IO.Put_Line (Item => Result);
+   end Action_Result;
+
    ----------------------
    -- For_Every_Reader --
    ----------------------
