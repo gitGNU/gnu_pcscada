@@ -20,30 +20,26 @@
 --  MA  02110-1301  USA
 --
 
-project PCSCAda_Lib is
+project Pcscada_Examples is
 
-   Version := external ("PCSCADA_VERSION", "0.1");
    for Languages use ("Ada");
-   for Source_Dirs use ("src");
-   for Object_Dir use "obj/lib";
-   for Library_Name use "pcscada";
-   for Library_Dir use "lib";
-   for Library_Kind use "dynamic";
-   for Library_Version use "libpcscada.so." & Version;
+   for Object_Dir use "obj/examples";
+   for Source_Dirs use ("src", "examples/pinverify", "examples/thin");
+   for Main use ("pinpad.adb", "thin_example.adb");
 
    package Compiler is
       for Default_Switches ("ada") use ("-gnat05", "-gnaty3abefhiklmprt",
                                         "-gnatwa", "-g", "-gnato",
-                                        "-fstack-check", "-fPIC", "-gnatf");
+                                        "-fstack-check", "-gnatf");
    end Compiler;
-
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
 
    package Binder is
       for Default_Switches ("ada") use ("-E");
    end Binder;
 
-end PCSCAda_Lib;
+   package Builder is
+      for Default_Switches ("ada") use ("-g");
+   end Builder;
+
+end Pcscada_Examples;
 

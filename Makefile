@@ -43,8 +43,11 @@ build_utests: prepare
 build_itests: prepare
 	@gnatmake -Ppcscada_itests
 
+build_examples: prepare
+	@gnatmake -Ppcscada_examples
+
 prepare: $(SOURCEDIR)/pcsc-version.ads
-	@mkdir -p obj/lib obj/itests obj/utests lib
+	@mkdir -p obj/lib obj/itests obj/utests obj/examples lib
 
 $(SOURCEDIR)/pcsc-version.ads:
 	@echo "package PCSC.Version is"                        > $@
@@ -70,6 +73,9 @@ utests: build_utests
 # you need a reader and smartcard for this to work
 itests: build_itests
 	@obj/itests/test_pcscada
+
+# build all examples
+examples: build_examples
 
 install: install_lib
 
