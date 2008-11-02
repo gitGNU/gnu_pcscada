@@ -24,7 +24,6 @@ with Ada.Text_IO;
 with Ada.Strings.Fixed;
 
 with PCSC.Version;
-with PCSC.SCard;
 with PCSC.SCard.Utils;
 
 use PCSC;
@@ -169,7 +168,7 @@ begin
 
    declare
       Recv_Buffer : SCard.Byte_Set (1 .. 10);
-      Send_Buffer : SCard.Byte_Set :=
+      Send_Buffer : constant SCard.Byte_Set :=
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
       Recv_Len    : Natural := 0;
    begin
@@ -192,7 +191,7 @@ begin
 
    declare
       Recv_Buffer  : SCard.Byte_Set (1 .. 10);
-      Send_Buffer  : SCard.Byte_Set :=
+      Send_Buffer  : constant SCard.Byte_Set :=
         (16#06#, 16#00#, 16#0A#, 16#01#, 16#01#, 16#10#, 16#00#);
       Recv_Len     : Natural := 0;
       Control_Code : constant Integer := 16#42000001#;
