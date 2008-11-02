@@ -138,7 +138,7 @@
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
 <PRE><CODE><STRONG>function</STRONG> <A NAME="54_13"><SPAN CLASS="definition">To_Hex_String</SPAN></A>
-  (Given : <STRONG>in</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#46_9">Byte_Array</A> := <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#49_4">Null_Byte_Array</A>;
+  (Given : <STRONG>in</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#46_9">Byte_Array</A> := <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#50_4">Null_Byte_Array</A>;
    Len   : <STRONG>in</STRONG> Positive)
    <STRONG>return</STRONG> String;</CODE></PRE>
 </TD></TR>
@@ -240,7 +240,37 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>procedure</STRONG> <A NAME="87_14"><SPAN CLASS="definition">For_Every_Reader</SPAN></A>
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="88_14"><SPAN CLASS="definition">Action_Info</SPAN></A> (Text   : <STRONG>in</STRONG> String);</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  This function is used by all test and example programs of PCSC/Ada:
+  Pretty print some information about an operation to stdout. After the
+  action is complete, the Action_Result() function can be used to display
+  the result code of the operation.
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="94_14"><SPAN CLASS="definition">Action_Result</SPAN></A> (Result : <STRONG>in</STRONG> String);</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Pretty print the result code of an operation to stdout. Before calling
+  this function, Action_Info() should be used to describe the operation.
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="99_14"><SPAN CLASS="definition">For_Every_Reader</SPAN></A>
   (Readers : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#63_9">Reader_ID_Set</A>;
    Call    : <STRONG>in</STRONG> <A HREF="#36_9">Callback</A>);</CODE></PRE>
 </TD></TR>
@@ -255,7 +285,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>procedure</STRONG> <A NAME="92_14"><SPAN CLASS="definition">Print_ReaderID</SPAN></A> (ID : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#57_9">Reader_ID</A>);</CODE></PRE>
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="104_14"><SPAN CLASS="definition">Print_ReaderID</SPAN></A> (ID : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#57_9">Reader_ID</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -270,6 +300,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-scard.html">SCard</A>.Utils;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-10-25 at 18:29:58 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:05 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>

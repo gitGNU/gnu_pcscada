@@ -53,7 +53,8 @@
   <DL><DT><STRONG>Purpose:</STRONG><DD><DIV>
     This package keeps a list of attributes which can be requested directly
     from the IFD handler. Use the <CODE>Init_Attribute_Set</CODE> and <CODE>Get_Attribute</CODE>
-    functions to do so.
+    functions to do so. It also provides the constants and types needed for
+    feature handling and PIN verification operations.
   </DIV></DL>
 </DIV>
 <HR>
@@ -62,17 +63,121 @@
 <H3 CLASS="subtitle">Header</H3>
 </TD></TR>
 <TR><TD COLSPAN=2 CLASS="odd">
-<PRE><CODE><STRONG>package</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-thin.html">Thin</A>.<A NAME="29_19"><SPAN CLASS="definition">Reader</SPAN></A> <STRONG>is</STRONG>
+<PRE><CODE><STRONG>package</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-thin.html">Thin</A>.<A NAME="30_19"><SPAN CLASS="definition">Reader</SPAN></A> <STRONG>is</STRONG>
 </CODE></PRE>
 </TD></TR>
 <TR><TD WIDTH="2%" CLASS="odd"><PRE> </PRE></TD>
 <TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD>
+<H3 CLASS="subtitle">Type Summary</H3>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
+<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
+<CODE><A HREF="#179_9">PCSC_TLV_STRUCTURE</A></CODE></TD></TR>
+</TABLE>
+</TD></TR>
+<TR><TD>
+<HR>
 <H3 CLASS="subtitle">Constants and Named Numbers</H3>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="117_4"><SPAN CLASS="definition">SCARD_ATTR_ATR_STRING</SPAN></A>             : <STRONG>constant</STRONG> := 16#0009_0303#;</CODE>
+<CODE><A NAME="152_4"><SPAN CLASS="definition">CM_IOCTL_GET_FEATURE_REQUEST</SPAN></A>      : <STRONG>constant</STRONG> <A HREF="pcsc-thin.html#40_12">DWORD</A> := <A HREF="pcsc-thin.html#491_13">SCARD_CTL_CODE</A> (3400);</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Control code used to get features from card / reader.
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="175_4"><SPAN CLASS="definition">FEATURE_ABORT</SPAN></A>                     : <STRONG>constant</STRONG> := 16#0B#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  SCM Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="163_4"><SPAN CLASS="definition">FEATURE_GET_KEY_PRESSED</SPAN></A>           : <STRONG>constant</STRONG> := 16#05#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  OMNIKEY Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="173_4"><SPAN CLASS="definition">FEATURE_IFD_PIN_PROP</SPAN></A>              : <STRONG>constant</STRONG> := 16#0A#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Gemplus Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="169_4"><SPAN CLASS="definition">FEATURE_MCT_READERDIRECT</SPAN></A>          : <STRONG>constant</STRONG> := 16#08#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  KOBIL Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="171_4"><SPAN CLASS="definition">FEATURE_MCT_UNIVERSAL</SPAN></A>             : <STRONG>constant</STRONG> := 16#09#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  KOBIL Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="167_4"><SPAN CLASS="definition">FEATURE_MODIFY_PIN_DIRECT</SPAN></A>         : <STRONG>constant</STRONG> := 16#07#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  USB CCID PIN Modify
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="161_4"><SPAN CLASS="definition">FEATURE_MODIFY_PIN_FINISH</SPAN></A>         : <STRONG>constant</STRONG> := 16#04#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  OMNIKEY Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="159_4"><SPAN CLASS="definition">FEATURE_MODIFY_PIN_START</SPAN></A>          : <STRONG>constant</STRONG> := 16#03#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  OMNIKEY Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="165_4"><SPAN CLASS="definition">FEATURE_VERIFY_PIN_DIRECT</SPAN></A>         : <STRONG>constant</STRONG> := 16#06#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  USB CCID PIN Verify
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="157_4"><SPAN CLASS="definition">FEATURE_VERIFY_PIN_FINISH</SPAN></A>         : <STRONG>constant</STRONG> := 16#02#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  OMNIKEY Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="155_4"><SPAN CLASS="definition">FEATURE_VERIFY_PIN_START</SPAN></A>          : <STRONG>constant</STRONG> := 16#01#;</CODE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  OMNIKEY Proposal
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="118_4"><SPAN CLASS="definition">SCARD_ATTR_ATR_STRING</SPAN></A>             : <STRONG>constant</STRONG> := 16#0009_0303#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -80,7 +185,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="44_4"><SPAN CLASS="definition">SCARD_ATTR_CHANNEL_ID</SPAN></A>             : <STRONG>constant</STRONG> := 16#0002_0110#;</CODE>
+<CODE><A NAME="45_4"><SPAN CLASS="definition">SCARD_ATTR_CHANNEL_ID</SPAN></A>             : <STRONG>constant</STRONG> := 16#0002_0110#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -89,7 +194,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="67_4"><SPAN CLASS="definition">SCARD_ATTR_CHARACTERISTICS</SPAN></A>        : <STRONG>constant</STRONG> := 16#0006_0150#;</CODE>
+<CODE><A NAME="68_4"><SPAN CLASS="definition">SCARD_ATTR_CHARACTERISTICS</SPAN></A>        : <STRONG>constant</STRONG> := 16#0006_0150#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -99,7 +204,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="96_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_BWT</SPAN></A>            : <STRONG>constant</STRONG> := 16#0008_0209#;</CODE>
+<CODE><A NAME="97_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_BWT</SPAN></A>            : <STRONG>constant</STRONG> := 16#0008_0209#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -107,7 +212,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="75_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_CLK</SPAN></A>            : <STRONG>constant</STRONG> := 16#0008_0202#;</CODE>
+<CODE><A NAME="76_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_CLK</SPAN></A>            : <STRONG>constant</STRONG> := 16#0008_0202#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -115,7 +220,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="99_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_CWT</SPAN></A>            : <STRONG>constant</STRONG> := 16#0008_020A#;</CODE>
+<CODE><A NAME="100_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_CWT</SPAN></A>            : <STRONG>constant</STRONG> := 16#0008_020A#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -123,7 +228,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="81_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_D</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0204#;</CODE>
+<CODE><A NAME="82_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_D</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0204#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -131,7 +236,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="102_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_EBC_ENCODING</SPAN></A>   : <STRONG>constant</STRONG> := 16#0008_020B#;</CODE>
+<CODE><A NAME="103_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_EBC_ENCODING</SPAN></A>   : <STRONG>constant</STRONG> := 16#0008_020B#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -139,7 +244,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="78_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_F</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0203#;</CODE>
+<CODE><A NAME="79_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_F</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0203#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -147,7 +252,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="90_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_IFSC</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008_0207#;</CODE>
+<CODE><A NAME="91_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_IFSC</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008_0207#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -155,7 +260,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="93_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_IFSD</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008_0208#;</CODE>
+<CODE><A NAME="94_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_IFSD</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008_0208#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -163,10 +268,10 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="115_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_IO_STATE</SPAN></A>       : <STRONG>constant</STRONG> := 16#0009_0302#;</CODE>
+<CODE><A NAME="116_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_IO_STATE</SPAN></A>       : <STRONG>constant</STRONG> := 16#0009_0302#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="84_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_N</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0205#;</CODE>
+<CODE><A NAME="85_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_N</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0205#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -174,7 +279,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="72_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_PROTOCOL_TYPE</SPAN></A>  : <STRONG>constant</STRONG> := 16#0008_0201#;</CODE>
+<CODE><A NAME="73_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_PROTOCOL_TYPE</SPAN></A>  : <STRONG>constant</STRONG> := 16#0008_0201#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -182,7 +287,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="87_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_W</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0206#;</CODE>
+<CODE><A NAME="88_4"><SPAN CLASS="definition">SCARD_ATTR_CURRENT_W</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008_0206#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -190,7 +295,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="48_4"><SPAN CLASS="definition">SCARD_ATTR_DEFAULT_CLK</SPAN></A>            : <STRONG>constant</STRONG> := 16#0003_0121#;</CODE>
+<CODE><A NAME="49_4"><SPAN CLASS="definition">SCARD_ATTR_DEFAULT_CLK</SPAN></A>            : <STRONG>constant</STRONG> := 16#0003_0121#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -198,7 +303,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="54_4"><SPAN CLASS="definition">SCARD_ATTR_DEFAULT_DATA_RATE</SPAN></A>      : <STRONG>constant</STRONG> := 16#0003_0123#;</CODE>
+<CODE><A NAME="55_4"><SPAN CLASS="definition">SCARD_ATTR_DEFAULT_DATA_RATE</SPAN></A>      : <STRONG>constant</STRONG> := 16#0003_0123#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -206,13 +311,13 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="140_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_FRIENDLY_NAME_A</SPAN></A> : <STRONG>constant</STRONG> := 16#7FFF_0003#;</CODE>
+<CODE><A NAME="141_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_FRIENDLY_NAME_A</SPAN></A> : <STRONG>constant</STRONG> := 16#7FFF_0003#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="144_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_FRIENDLY_NAME_W</SPAN></A> : <STRONG>constant</STRONG> := 16#7FFF_0005#;</CODE>
+<CODE><A NAME="145_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_FRIENDLY_NAME_W</SPAN></A> : <STRONG>constant</STRONG> := 16#7FFF_0005#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="137_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_IN_USE</SPAN></A>          : <STRONG>constant</STRONG> := 16#7FFF_0002#;</CODE>
+<CODE><A NAME="138_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_IN_USE</SPAN></A>          : <STRONG>constant</STRONG> := 16#7FFF_0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -220,13 +325,13 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="142_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_SYSTEM_NAME_A</SPAN></A>   : <STRONG>constant</STRONG> := 16#7FFF_0004#;</CODE>
+<CODE><A NAME="143_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_SYSTEM_NAME_A</SPAN></A>   : <STRONG>constant</STRONG> := 16#7FFF_0004#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="146_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_SYSTEM_NAME_W</SPAN></A>   : <STRONG>constant</STRONG> := 16#7FFF_0006#;</CODE>
+<CODE><A NAME="147_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_SYSTEM_NAME_W</SPAN></A>   : <STRONG>constant</STRONG> := 16#7FFF_0006#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="131_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_UNIT</SPAN></A>            : <STRONG>constant</STRONG> := 16#7FFF_0001#;</CODE>
+<CODE><A NAME="132_4"><SPAN CLASS="definition">SCARD_ATTR_DEVICE_UNIT</SPAN></A>            : <STRONG>constant</STRONG> := 16#7FFF_0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -237,16 +342,16 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="127_4"><SPAN CLASS="definition">SCARD_ATTR_ESC_AUTHREQUEST</SPAN></A>        : <STRONG>constant</STRONG> := 16#0007_A005#;</CODE>
+<CODE><A NAME="128_4"><SPAN CLASS="definition">SCARD_ATTR_ESC_AUTHREQUEST</SPAN></A>        : <STRONG>constant</STRONG> := 16#0007_A005#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="125_4"><SPAN CLASS="definition">SCARD_ATTR_ESC_CANCEL</SPAN></A>             : <STRONG>constant</STRONG> := 16#0007_A003#;</CODE>
+<CODE><A NAME="126_4"><SPAN CLASS="definition">SCARD_ATTR_ESC_CANCEL</SPAN></A>             : <STRONG>constant</STRONG> := 16#0007_A003#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="123_4"><SPAN CLASS="definition">SCARD_ATTR_ESC_RESET</SPAN></A>              : <STRONG>constant</STRONG> := 16#0007_A000#;</CODE>
+<CODE><A NAME="124_4"><SPAN CLASS="definition">SCARD_ATTR_ESC_RESET</SPAN></A>              : <STRONG>constant</STRONG> := 16#0007_A000#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="105_4"><SPAN CLASS="definition">SCARD_ATTR_EXTENDED_BWT</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008_020C#;</CODE>
+<CODE><A NAME="106_4"><SPAN CLASS="definition">SCARD_ATTR_EXTENDED_BWT</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008_020C#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -254,7 +359,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="111_4"><SPAN CLASS="definition">SCARD_ATTR_ICC_INTERFACE_STATUS</SPAN></A>   : <STRONG>constant</STRONG> := 16#0009_0301#;</CODE>
+<CODE><A NAME="112_4"><SPAN CLASS="definition">SCARD_ATTR_ICC_INTERFACE_STATUS</SPAN></A>   : <STRONG>constant</STRONG> := 16#0009_0301#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -263,7 +368,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="108_4"><SPAN CLASS="definition">SCARD_ATTR_ICC_PRESENCE</SPAN></A>           : <STRONG>constant</STRONG> := 16#0009_0300#;</CODE>
+<CODE><A NAME="109_4"><SPAN CLASS="definition">SCARD_ATTR_ICC_PRESENCE</SPAN></A>           : <STRONG>constant</STRONG> := 16#0009_0300#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -271,7 +376,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="120_4"><SPAN CLASS="definition">SCARD_ATTR_ICC_TYPE_PER_ATR</SPAN></A>       : <STRONG>constant</STRONG> := 16#0009_0304#;</CODE>
+<CODE><A NAME="121_4"><SPAN CLASS="definition">SCARD_ATTR_ICC_TYPE_PER_ATR</SPAN></A>       : <STRONG>constant</STRONG> := 16#0009_0304#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -279,7 +384,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="51_4"><SPAN CLASS="definition">SCARD_ATTR_MAX_CLK</SPAN></A>                : <STRONG>constant</STRONG> := 16#0003_0122#;</CODE>
+<CODE><A NAME="52_4"><SPAN CLASS="definition">SCARD_ATTR_MAX_CLK</SPAN></A>                : <STRONG>constant</STRONG> := 16#0003_0122#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -287,7 +392,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="57_4"><SPAN CLASS="definition">SCARD_ATTR_MAX_DATA_RATE</SPAN></A>          : <STRONG>constant</STRONG> := 16#0003_0124#;</CODE>
+<CODE><A NAME="58_4"><SPAN CLASS="definition">SCARD_ATTR_MAX_DATA_RATE</SPAN></A>          : <STRONG>constant</STRONG> := 16#0003_0124#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -295,7 +400,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="60_4"><SPAN CLASS="definition">SCARD_ATTR_MAX_IFSD</SPAN></A>               : <STRONG>constant</STRONG> := 16#0003_0125#;</CODE>
+<CODE><A NAME="61_4"><SPAN CLASS="definition">SCARD_ATTR_MAX_IFSD</SPAN></A>               : <STRONG>constant</STRONG> := 16#0003_0125#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -303,10 +408,10 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="129_4"><SPAN CLASS="definition">SCARD_ATTR_MAXINPUT</SPAN></A>               : <STRONG>constant</STRONG> := 16#0007_A007#;</CODE>
+<CODE><A NAME="130_4"><SPAN CLASS="definition">SCARD_ATTR_MAXINPUT</SPAN></A>               : <STRONG>constant</STRONG> := 16#0007_A007#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="63_4"><SPAN CLASS="definition">SCARD_ATTR_POWER_MGMT_SUPPORT</SPAN></A>     : <STRONG>constant</STRONG> := 16#0004_0131#;</CODE>
+<CODE><A NAME="64_4"><SPAN CLASS="definition">SCARD_ATTR_POWER_MGMT_SUPPORT</SPAN></A>     : <STRONG>constant</STRONG> := 16#0004_0131#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -315,10 +420,10 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="148_4"><SPAN CLASS="definition">SCARD_ATTR_SUPRESS_T1_IFS_REQUEST</SPAN></A> : <STRONG>constant</STRONG> := 16#7FFF_0007#;</CODE>
+<CODE><A NAME="149_4"><SPAN CLASS="definition">SCARD_ATTR_SUPRESS_T1_IFS_REQUEST</SPAN></A> : <STRONG>constant</STRONG> := 16#7FFF_0007#;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="41_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_IFD_SERIAL_NO</SPAN></A>   : <STRONG>constant</STRONG> := 16#0001_0103#;</CODE>
+<CODE><A NAME="42_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_IFD_SERIAL_NO</SPAN></A>   : <STRONG>constant</STRONG> := 16#0001_0103#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -326,7 +431,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="34_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_IFD_TYPE</SPAN></A>        : <STRONG>constant</STRONG> := 16#0001_0101#;</CODE>
+<CODE><A NAME="35_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_IFD_TYPE</SPAN></A>        : <STRONG>constant</STRONG> := 16#0001_0101#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -334,7 +439,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="37_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_IFD_VERSION</SPAN></A>     : <STRONG>constant</STRONG> := 16#0001_0102#;</CODE>
+<CODE><A NAME="38_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_IFD_VERSION</SPAN></A>     : <STRONG>constant</STRONG> := 16#0001_0102#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -343,11 +448,33 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="31_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_NAME</SPAN></A>            : <STRONG>constant</STRONG> := 16#0001_0100#;</CODE>
+<CODE><A NAME="32_4"><SPAN CLASS="definition">SCARD_ATTR_VENDOR_NAME</SPAN></A>            : <STRONG>constant</STRONG> := 16#0001_0100#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
   Vendor name
+</DIV>
+</TD></TR>
+</TABLE>
+</TD></TR>
+<TR><TD>
+<HR>
+<H3 CLASS="subtitle">Other Items:</H3>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>type</STRONG> <A NAME="179_9"><SPAN CLASS="definition">PCSC_TLV_STRUCTURE</SPAN></A> <STRONG>is</STRONG> <STRONG>record</STRONG>
+   <A NAME="180_7"><SPAN CLASS="definition">tag</SPAN></A>    : Interfaces.Unsigned_8;
+   <A NAME="181_7"><SPAN CLASS="definition">length</SPAN></A> : Interfaces.Unsigned_8;
+   <A NAME="182_7"><SPAN CLASS="definition">value</SPAN></A>  : Interfaces.Unsigned_32;
+   <EM><SPAN CLASS="comment">--  This value is always in BIG ENDIAN format as documented in PCSC v2</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  part 10 ch 2.2 page 2.</SPAN></EM>
+<STRONG>end</STRONG> <STRONG>record</STRONG>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  PCSC Type-length-value data structure, exactly 6 bytes long.
 </DIV>
 </TD></TR>
 </TABLE>
@@ -358,6 +485,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-thin.html">Thin</A>.Reader;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-10-25 at 18:29:59 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:05 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>

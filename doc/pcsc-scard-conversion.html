@@ -81,10 +81,10 @@
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="58_4"><SPAN CLASS="definition">C_Action</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#103_9">Action</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#104_7">Leave_Card</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#267_4">SCARD_LEAVE_CARD</A>,
-      <A HREF="pcsc-scard.html#106_7">Reset_Card</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#270_4">SCARD_RESET_CARD</A>,
-      <A HREF="pcsc-scard.html#108_7">Unpower_Card</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#273_4">SCARD_UNPOWER_CARD</A>,
-      <A HREF="pcsc-scard.html#110_7">Eject_Card</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#276_4">SCARD_EJECT_CARD</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#104_7">Leave_Card</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#272_4">SCARD_LEAVE_CARD</A>,
+      <A HREF="pcsc-scard.html#106_7">Reset_Card</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#275_4">SCARD_RESET_CARD</A>,
+      <A HREF="pcsc-scard.html#108_7">Unpower_Card</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#278_4">SCARD_UNPOWER_CARD</A>,
+      <A HREF="pcsc-scard.html#110_7">Eject_Card</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#281_4">SCARD_EJECT_CARD</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -93,46 +93,46 @@
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="98_4"><SPAN CLASS="definition">C_Attr</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#193_9">Attribute</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#194_7">Attr_Vendor_Name</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#31_4">SCARD_ATTR_VENDOR_NAME</A>,
-      <A HREF="pcsc-scard.html#195_7">Attr_Vendor_IFD_Type</A>        =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#34_4">SCARD_ATTR_VENDOR_IFD_TYPE</A>,
-      <A HREF="pcsc-scard.html#196_7">Attr_Vendor_IFD_Version</A>     =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#37_4">SCARD_ATTR_VENDOR_IFD_VERSION</A>,
-      <A HREF="pcsc-scard.html#197_7">Attr_Vendor_IFD_Serial</A>      =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#41_4">SCARD_ATTR_VENDOR_IFD_SERIAL_NO</A>,
-      <A HREF="pcsc-scard.html#198_7">Attr_Channel_ID</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#44_4">SCARD_ATTR_CHANNEL_ID</A>,
-      <A HREF="pcsc-scard.html#199_7">Attr_Default_CLK</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#48_4">SCARD_ATTR_DEFAULT_CLK</A>,
-      <A HREF="pcsc-scard.html#200_7">Attr_Max_CLK</A>                =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#51_4">SCARD_ATTR_MAX_CLK</A>,
-      <A HREF="pcsc-scard.html#201_7">Attr_Default_Data_Rate</A>      =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#54_4">SCARD_ATTR_DEFAULT_DATA_RATE</A>,
-      <A HREF="pcsc-scard.html#202_7">Attr_Max_Data_Rate</A>          =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#57_4">SCARD_ATTR_MAX_DATA_RATE</A>,
-      <A HREF="pcsc-scard.html#203_7">Attr_Max_IFSD</A>               =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#60_4">SCARD_ATTR_MAX_IFSD</A>,
-      <A HREF="pcsc-scard.html#204_7">Attr_Power_Mgmt_Support</A>     =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#63_4">SCARD_ATTR_POWER_MGMT_SUPPORT</A>,
-      <A HREF="pcsc-scard.html#205_7">Attr_Characteristics</A>        =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#67_4">SCARD_ATTR_CHARACTERISTICS</A>,
-      <A HREF="pcsc-scard.html#206_7">Attr_Current_Protocol_Type</A>  =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#72_4">SCARD_ATTR_CURRENT_PROTOCOL_TYPE</A>,
-      <A HREF="pcsc-scard.html#207_7">Attr_Current_CLK</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#75_4">SCARD_ATTR_CURRENT_CLK</A>,
-      <A HREF="pcsc-scard.html#208_7">Attr_Current_F</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#78_4">SCARD_ATTR_CURRENT_F</A>,
-      <A HREF="pcsc-scard.html#209_7">Attr_Current_D</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#81_4">SCARD_ATTR_CURRENT_D</A>,
-      <A HREF="pcsc-scard.html#210_7">Attr_Current_N</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#84_4">SCARD_ATTR_CURRENT_N</A>,
-      <A HREF="pcsc-scard.html#211_7">Attr_Current_W</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#87_4">SCARD_ATTR_CURRENT_W</A>,
-      <A HREF="pcsc-scard.html#212_7">Attr_Current_IFSC</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#90_4">SCARD_ATTR_CURRENT_IFSC</A>,
-      <A HREF="pcsc-scard.html#213_7">Attr_Current_IFSD</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#93_4">SCARD_ATTR_CURRENT_IFSD</A>,
-      <A HREF="pcsc-scard.html#214_7">Attr_Current_BWT</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#96_4">SCARD_ATTR_CURRENT_BWT</A>,
-      <A HREF="pcsc-scard.html#215_7">Attr_Current_CWT</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#99_4">SCARD_ATTR_CURRENT_CWT</A>,
-      <A HREF="pcsc-scard.html#216_7">Attr_Current_EBC_Encoding</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#102_4">SCARD_ATTR_CURRENT_EBC_ENCODING</A>,
-      <A HREF="pcsc-scard.html#217_7">Attr_Extended_BWT</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#105_4">SCARD_ATTR_EXTENDED_BWT</A>,
-      <A HREF="pcsc-scard.html#218_7">Attr_ICC_Presence</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#108_4">SCARD_ATTR_ICC_PRESENCE</A>,
-      <A HREF="pcsc-scard.html#219_7">Attr_ICC_Interface_Status</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#111_4">SCARD_ATTR_ICC_INTERFACE_STATUS</A>,
-      <A HREF="pcsc-scard.html#220_7">Attr_Current_IO_State</A>       =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#115_4">SCARD_ATTR_CURRENT_IO_STATE</A>,
-      <A HREF="pcsc-scard.html#221_7">Attr_ATR_String</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#117_4">SCARD_ATTR_ATR_STRING</A>,
-      <A HREF="pcsc-scard.html#222_7">Attr_ICC_Type_Per_ATR</A>       =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#120_4">SCARD_ATTR_ICC_TYPE_PER_ATR</A>,
-      <A HREF="pcsc-scard.html#223_7">Attr_ESC_Preset</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#123_4">SCARD_ATTR_ESC_RESET</A>,
-      <A HREF="pcsc-scard.html#224_7">Attr_ESC_Cancel</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#125_4">SCARD_ATTR_ESC_CANCEL</A>,
-      <A HREF="pcsc-scard.html#225_7">Attr_ESC_Authrequest</A>        =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#127_4">SCARD_ATTR_ESC_AUTHREQUEST</A>,
-      <A HREF="pcsc-scard.html#226_7">Attr_Maxinput</A>               =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#129_4">SCARD_ATTR_MAXINPUT</A>,
-      <A HREF="pcsc-scard.html#227_7">Attr_Device_Unit</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#131_4">SCARD_ATTR_DEVICE_UNIT</A>,
-      <A HREF="pcsc-scard.html#228_7">Attr_Device_In_Use</A>          =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#137_4">SCARD_ATTR_DEVICE_IN_USE</A>,
-      <A HREF="pcsc-scard.html#229_7">Attr_Device_Friendly_Name_A</A> =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#140_4">SCARD_ATTR_DEVICE_FRIENDLY_NAME_A</A>,
-      <A HREF="pcsc-scard.html#230_7">Attr_Device_System_Name_A</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#142_4">SCARD_ATTR_DEVICE_SYSTEM_NAME_A</A>,
-      <A HREF="pcsc-scard.html#231_7">Attr_Device_Friendly_Name_W</A> =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#144_4">SCARD_ATTR_DEVICE_FRIENDLY_NAME_W</A>,
-      <A HREF="pcsc-scard.html#232_7">Attr_Device_System_Name_W</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#146_4">SCARD_ATTR_DEVICE_SYSTEM_NAME_W</A>,
-      <A HREF="pcsc-scard.html#233_7">Attr_Supress_T1_IFS_Request</A> =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#148_4">SCARD_ATTR_SUPRESS_T1_IFS_REQUEST</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#194_7">Attr_Vendor_Name</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#32_4">SCARD_ATTR_VENDOR_NAME</A>,
+      <A HREF="pcsc-scard.html#195_7">Attr_Vendor_IFD_Type</A>        =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#35_4">SCARD_ATTR_VENDOR_IFD_TYPE</A>,
+      <A HREF="pcsc-scard.html#196_7">Attr_Vendor_IFD_Version</A>     =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#38_4">SCARD_ATTR_VENDOR_IFD_VERSION</A>,
+      <A HREF="pcsc-scard.html#197_7">Attr_Vendor_IFD_Serial</A>      =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#42_4">SCARD_ATTR_VENDOR_IFD_SERIAL_NO</A>,
+      <A HREF="pcsc-scard.html#198_7">Attr_Channel_ID</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#45_4">SCARD_ATTR_CHANNEL_ID</A>,
+      <A HREF="pcsc-scard.html#199_7">Attr_Default_CLK</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#49_4">SCARD_ATTR_DEFAULT_CLK</A>,
+      <A HREF="pcsc-scard.html#200_7">Attr_Max_CLK</A>                =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#52_4">SCARD_ATTR_MAX_CLK</A>,
+      <A HREF="pcsc-scard.html#201_7">Attr_Default_Data_Rate</A>      =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#55_4">SCARD_ATTR_DEFAULT_DATA_RATE</A>,
+      <A HREF="pcsc-scard.html#202_7">Attr_Max_Data_Rate</A>          =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#58_4">SCARD_ATTR_MAX_DATA_RATE</A>,
+      <A HREF="pcsc-scard.html#203_7">Attr_Max_IFSD</A>               =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#61_4">SCARD_ATTR_MAX_IFSD</A>,
+      <A HREF="pcsc-scard.html#204_7">Attr_Power_Mgmt_Support</A>     =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#64_4">SCARD_ATTR_POWER_MGMT_SUPPORT</A>,
+      <A HREF="pcsc-scard.html#205_7">Attr_Characteristics</A>        =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#68_4">SCARD_ATTR_CHARACTERISTICS</A>,
+      <A HREF="pcsc-scard.html#206_7">Attr_Current_Protocol_Type</A>  =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#73_4">SCARD_ATTR_CURRENT_PROTOCOL_TYPE</A>,
+      <A HREF="pcsc-scard.html#207_7">Attr_Current_CLK</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#76_4">SCARD_ATTR_CURRENT_CLK</A>,
+      <A HREF="pcsc-scard.html#208_7">Attr_Current_F</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#79_4">SCARD_ATTR_CURRENT_F</A>,
+      <A HREF="pcsc-scard.html#209_7">Attr_Current_D</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#82_4">SCARD_ATTR_CURRENT_D</A>,
+      <A HREF="pcsc-scard.html#210_7">Attr_Current_N</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#85_4">SCARD_ATTR_CURRENT_N</A>,
+      <A HREF="pcsc-scard.html#211_7">Attr_Current_W</A>              =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#88_4">SCARD_ATTR_CURRENT_W</A>,
+      <A HREF="pcsc-scard.html#212_7">Attr_Current_IFSC</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#91_4">SCARD_ATTR_CURRENT_IFSC</A>,
+      <A HREF="pcsc-scard.html#213_7">Attr_Current_IFSD</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#94_4">SCARD_ATTR_CURRENT_IFSD</A>,
+      <A HREF="pcsc-scard.html#214_7">Attr_Current_BWT</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#97_4">SCARD_ATTR_CURRENT_BWT</A>,
+      <A HREF="pcsc-scard.html#215_7">Attr_Current_CWT</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#100_4">SCARD_ATTR_CURRENT_CWT</A>,
+      <A HREF="pcsc-scard.html#216_7">Attr_Current_EBC_Encoding</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#103_4">SCARD_ATTR_CURRENT_EBC_ENCODING</A>,
+      <A HREF="pcsc-scard.html#217_7">Attr_Extended_BWT</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#106_4">SCARD_ATTR_EXTENDED_BWT</A>,
+      <A HREF="pcsc-scard.html#218_7">Attr_ICC_Presence</A>           =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#109_4">SCARD_ATTR_ICC_PRESENCE</A>,
+      <A HREF="pcsc-scard.html#219_7">Attr_ICC_Interface_Status</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#112_4">SCARD_ATTR_ICC_INTERFACE_STATUS</A>,
+      <A HREF="pcsc-scard.html#220_7">Attr_Current_IO_State</A>       =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#116_4">SCARD_ATTR_CURRENT_IO_STATE</A>,
+      <A HREF="pcsc-scard.html#221_7">Attr_ATR_String</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#118_4">SCARD_ATTR_ATR_STRING</A>,
+      <A HREF="pcsc-scard.html#222_7">Attr_ICC_Type_Per_ATR</A>       =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#121_4">SCARD_ATTR_ICC_TYPE_PER_ATR</A>,
+      <A HREF="pcsc-scard.html#223_7">Attr_ESC_Preset</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#124_4">SCARD_ATTR_ESC_RESET</A>,
+      <A HREF="pcsc-scard.html#224_7">Attr_ESC_Cancel</A>             =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#126_4">SCARD_ATTR_ESC_CANCEL</A>,
+      <A HREF="pcsc-scard.html#225_7">Attr_ESC_Authrequest</A>        =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#128_4">SCARD_ATTR_ESC_AUTHREQUEST</A>,
+      <A HREF="pcsc-scard.html#226_7">Attr_Maxinput</A>               =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#130_4">SCARD_ATTR_MAXINPUT</A>,
+      <A HREF="pcsc-scard.html#227_7">Attr_Device_Unit</A>            =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#132_4">SCARD_ATTR_DEVICE_UNIT</A>,
+      <A HREF="pcsc-scard.html#228_7">Attr_Device_In_Use</A>          =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#138_4">SCARD_ATTR_DEVICE_IN_USE</A>,
+      <A HREF="pcsc-scard.html#229_7">Attr_Device_Friendly_Name_A</A> =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#141_4">SCARD_ATTR_DEVICE_FRIENDLY_NAME_A</A>,
+      <A HREF="pcsc-scard.html#230_7">Attr_Device_System_Name_A</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#143_4">SCARD_ATTR_DEVICE_SYSTEM_NAME_A</A>,
+      <A HREF="pcsc-scard.html#231_7">Attr_Device_Friendly_Name_W</A> =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#145_4">SCARD_ATTR_DEVICE_FRIENDLY_NAME_W</A>,
+      <A HREF="pcsc-scard.html#232_7">Attr_Device_System_Name_W</A>   =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#147_4">SCARD_ATTR_DEVICE_SYSTEM_NAME_W</A>,
+      <A HREF="pcsc-scard.html#233_7">Attr_Supress_T1_IFS_Request</A> =&gt; <A HREF="#96_12">TR</A>.<A HREF="pcsc-thin-reader.html#149_4">SCARD_ATTR_SUPRESS_T1_IFS_REQUEST</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -141,13 +141,13 @@
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="65_4"><SPAN CLASS="definition">C_Card_State</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#115_9">Card_State</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#116_7">S_Card_Unknown</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#280_4">SCARD_UNKNOWN</A>,
-      <A HREF="pcsc-scard.html#118_7">S_Card_Absent</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#283_4">SCARD_ABSENT</A>,
-      <A HREF="pcsc-scard.html#120_7">S_Card_Present</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#286_4">SCARD_PRESENT</A>,
-      <A HREF="pcsc-scard.html#122_7">S_Card_Swallowed</A>  =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#289_4">SCARD_SWALLOWED</A>,
-      <A HREF="pcsc-scard.html#124_7">S_Card_Powered</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#292_4">SCARD_POWERED</A>,
-      <A HREF="pcsc-scard.html#126_7">S_Card_Negotiable</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#295_4">SCARD_NEGOTIABLE</A>,
-      <A HREF="pcsc-scard.html#128_7">S_Card_Specific</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#298_4">SCARD_SPECIFIC</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#116_7">S_Card_Unknown</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#285_4">SCARD_UNKNOWN</A>,
+      <A HREF="pcsc-scard.html#118_7">S_Card_Absent</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#288_4">SCARD_ABSENT</A>,
+      <A HREF="pcsc-scard.html#120_7">S_Card_Present</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#291_4">SCARD_PRESENT</A>,
+      <A HREF="pcsc-scard.html#122_7">S_Card_Swallowed</A>  =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#294_4">SCARD_SWALLOWED</A>,
+      <A HREF="pcsc-scard.html#124_7">S_Card_Powered</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#297_4">SCARD_POWERED</A>,
+      <A HREF="pcsc-scard.html#126_7">S_Card_Negotiable</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#300_4">SCARD_NEGOTIABLE</A>,
+      <A HREF="pcsc-scard.html#128_7">S_Card_Specific</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#303_4">SCARD_SPECIFIC</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -156,9 +156,9 @@
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="43_4"><SPAN CLASS="definition">C_Mode</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#77_9">Mode</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#78_7">Share_Exclusive</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#257_4">SCARD_SHARE_EXCLUSIVE</A>,
-      <A HREF="pcsc-scard.html#80_7">Share_Shared</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#260_4">SCARD_SHARE_SHARED</A>,
-      <A HREF="pcsc-scard.html#82_7">Share_Direct</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#263_4">SCARD_SHARE_DIRECT</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#78_7">Share_Exclusive</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#262_4">SCARD_SHARE_EXCLUSIVE</A>,
+      <A HREF="pcsc-scard.html#80_7">Share_Shared</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#265_4">SCARD_SHARE_SHARED</A>,
+      <A HREF="pcsc-scard.html#82_7">Share_Direct</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#268_4">SCARD_SHARE_DIRECT</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -166,10 +166,10 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<PRE><CODE><A NAME="90_4"><SPAN CLASS="definition">C_PCI</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#182_9">PCI</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#97_9">SCARD_IO_REQUEST</A>
-  := (<A HREF="pcsc-scard.html#183_7">PCI_T0</A>  =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#339_4">SCARD_PCI_T0</A>,
-      <A HREF="pcsc-scard.html#185_7">PCI_T1</A>  =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#343_4">SCARD_PCI_T1</A>,
-      <A HREF="pcsc-scard.html#187_7">PCI_RAW</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#347_4">SCARD_PCI_RAW</A>);</CODE></PRE>
+<PRE><CODE><A NAME="90_4"><SPAN CLASS="definition">C_PCI</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#182_9">PCI</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#102_9">SCARD_IO_REQUEST</A>
+  := (<A HREF="pcsc-scard.html#183_7">PCI_T0</A>  =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#344_4">SCARD_PCI_T0</A>,
+      <A HREF="pcsc-scard.html#185_7">PCI_T1</A>  =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#348_4">SCARD_PCI_T1</A>,
+      <A HREF="pcsc-scard.html#187_7">PCI_RAW</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#352_4">SCARD_PCI_RAW</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -178,12 +178,12 @@
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="49_4"><SPAN CLASS="definition">C_Proto</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#87_9">Proto</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#88_7">Proto_Undefined</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#239_4">SCARD_PROTOCOL_UNDEFINED</A>,
-      <A HREF="pcsc-scard.html#90_7">Proto_Unset</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#242_4">SCARD_PROTOCOL_UNSET</A>,
-      <A HREF="pcsc-scard.html#92_7">Proto_T0</A>        =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#245_4">SCARD_PROTOCOL_T0</A>,
-      <A HREF="pcsc-scard.html#94_7">Proto_T1</A>        =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#248_4">SCARD_PROTOCOL_T1</A>,
-      <A HREF="pcsc-scard.html#96_7">Proto_RAW</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#251_4">SCARD_PROTOCOL_RAW</A>,
-      <A HREF="pcsc-scard.html#98_7">Proto_T15</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#254_4">SCARD_PROTOCOL_T15</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#88_7">Proto_Undefined</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#244_4">SCARD_PROTOCOL_UNDEFINED</A>,
+      <A HREF="pcsc-scard.html#90_7">Proto_Unset</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#247_4">SCARD_PROTOCOL_UNSET</A>,
+      <A HREF="pcsc-scard.html#92_7">Proto_T0</A>        =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#250_4">SCARD_PROTOCOL_T0</A>,
+      <A HREF="pcsc-scard.html#94_7">Proto_T1</A>        =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#253_4">SCARD_PROTOCOL_T1</A>,
+      <A HREF="pcsc-scard.html#96_7">Proto_RAW</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#256_4">SCARD_PROTOCOL_RAW</A>,
+      <A HREF="pcsc-scard.html#98_7">Proto_T15</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#259_4">SCARD_PROTOCOL_T15</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -192,18 +192,18 @@
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="75_4"><SPAN CLASS="definition">C_Reader_State</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#136_9">Reader_State</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#137_7">S_Reader_Unaware</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#302_4">SCARD_STATE_UNAWARE</A>,
-      <A HREF="pcsc-scard.html#139_7">S_Reader_Ignore</A>      =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#305_4">SCARD_STATE_IGNORE</A>,
-      <A HREF="pcsc-scard.html#141_7">S_Reader_Changed</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#308_4">SCARD_STATE_CHANGED</A>,
-      <A HREF="pcsc-scard.html#143_7">S_Reader_Unknown</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#311_4">SCARD_STATE_UNKNOWN</A>,
-      <A HREF="pcsc-scard.html#145_7">S_Reader_Unavailable</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#314_4">SCARD_STATE_UNAVAILABLE</A>,
-      <A HREF="pcsc-scard.html#147_7">S_Reader_Empty</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#317_4">SCARD_STATE_EMPTY</A>,
-      <A HREF="pcsc-scard.html#149_7">S_Reader_Present</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#320_4">SCARD_STATE_PRESENT</A>,
-      <A HREF="pcsc-scard.html#151_7">S_Reader_Atrmatch</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#323_4">SCARD_STATE_ATRMATCH</A>,
-      <A HREF="pcsc-scard.html#153_7">S_Reader_Exclusive</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#326_4">SCARD_STATE_EXCLUSIVE</A>,
-      <A HREF="pcsc-scard.html#155_7">S_Reader_Inuse</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#329_4">SCARD_STATE_INUSE</A>,
-      <A HREF="pcsc-scard.html#157_7">S_Reader_Mute</A>        =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#332_4">SCARD_STATE_MUTE</A>,
-      <A HREF="pcsc-scard.html#159_7">S_Reader_Unpowered</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#335_4">SCARD_STATE_UNPOWERED</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#137_7">S_Reader_Unaware</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#307_4">SCARD_STATE_UNAWARE</A>,
+      <A HREF="pcsc-scard.html#139_7">S_Reader_Ignore</A>      =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#310_4">SCARD_STATE_IGNORE</A>,
+      <A HREF="pcsc-scard.html#141_7">S_Reader_Changed</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#313_4">SCARD_STATE_CHANGED</A>,
+      <A HREF="pcsc-scard.html#143_7">S_Reader_Unknown</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#316_4">SCARD_STATE_UNKNOWN</A>,
+      <A HREF="pcsc-scard.html#145_7">S_Reader_Unavailable</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#319_4">SCARD_STATE_UNAVAILABLE</A>,
+      <A HREF="pcsc-scard.html#147_7">S_Reader_Empty</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#322_4">SCARD_STATE_EMPTY</A>,
+      <A HREF="pcsc-scard.html#149_7">S_Reader_Present</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#325_4">SCARD_STATE_PRESENT</A>,
+      <A HREF="pcsc-scard.html#151_7">S_Reader_Atrmatch</A>    =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#328_4">SCARD_STATE_ATRMATCH</A>,
+      <A HREF="pcsc-scard.html#153_7">S_Reader_Exclusive</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#331_4">SCARD_STATE_EXCLUSIVE</A>,
+      <A HREF="pcsc-scard.html#155_7">S_Reader_Inuse</A>       =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#334_4">SCARD_STATE_INUSE</A>,
+      <A HREF="pcsc-scard.html#157_7">S_Reader_Mute</A>        =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#337_4">SCARD_STATE_MUTE</A>,
+      <A HREF="pcsc-scard.html#159_7">S_Reader_Unpowered</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#340_4">SCARD_STATE_UNPOWERED</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -212,9 +212,9 @@
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
 <PRE><CODE><A NAME="37_4"><SPAN CLASS="definition">C_Scope</SPAN></A> : <STRONG>constant</STRONG> <STRONG>array</STRONG> (<A HREF="pcsc-scard.html#67_9">Scope</A>) <STRONG>of</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#40_12">DWORD</A>
-  := (<A HREF="pcsc-scard.html#68_7">Scope_User</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#229_4">SCARD_SCOPE_USER</A>,
-      <A HREF="pcsc-scard.html#70_7">Scope_Terminal</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#232_4">SCARD_SCOPE_TERMINAL</A>,
-      <A HREF="pcsc-scard.html#72_7">Scope_System</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#235_4">SCARD_SCOPE_SYSTEM</A>);</CODE></PRE>
+  := (<A HREF="pcsc-scard.html#68_7">Scope_User</A>     =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#234_4">SCARD_SCOPE_USER</A>,
+      <A HREF="pcsc-scard.html#70_7">Scope_Terminal</A> =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#237_4">SCARD_SCOPE_TERMINAL</A>,
+      <A HREF="pcsc-scard.html#72_7">Scope_System</A>   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#240_4">SCARD_SCOPE_SYSTEM</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -259,7 +259,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="152_13"><SPAN CLASS="definition">To_C</SPAN></A> (States : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#178_9">Reader_Status_Set</A>) <STRONG>return</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#92_9">READERSTATE_Array</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="152_13"><SPAN CLASS="definition">To_C</SPAN></A> (States : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#178_9">Reader_Status_Set</A>) <STRONG>return</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#97_9">READERSTATE_Array</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -329,8 +329,8 @@
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
 <PRE><CODE><STRONG>procedure</STRONG> <A NAME="171_14"><SPAN CLASS="definition">Free</SPAN></A> <STRONG>is</STRONG> <STRONG>new</STRONG> Ada.Unchecked_Deallocation
-  (Object =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#79_9">READERSTATE</A>,
-   Name   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#89_9">READERSTATE_Access</A>);</CODE></PRE>
+  (Object =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#84_9">READERSTATE</A>,
+   Name   =&gt; <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#94_9">READERSTATE_Access</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -343,7 +343,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>procedure</STRONG> <A NAME="176_14"><SPAN CLASS="definition">Free</SPAN></A> (Name : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#92_9">READERSTATE_Array</A>);</CODE></PRE>
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="176_14"><SPAN CLASS="definition">Free</SPAN></A> (Name : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="pcsc-thin.html">Thin</A>.<A HREF="pcsc-thin.html#97_9">READERSTATE_Array</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -358,6 +358,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-scard.html">SCard</A>.Conversion;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-10-25 at 18:29:58 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:05 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>

@@ -82,10 +82,10 @@
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#50_9">ATR</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#388_13">Size</A></CODE>,
-<CODE><A HREF="#391_13">Size</A></CODE>,
+<CODE><A HREF="#392_13">Size</A></CODE>,
+<CODE><A HREF="#395_13">Size</A></CODE>,
 <CODE><A HREF="#298_14">Status</A></CODE>,
-<CODE><A HREF="#384_13">To_Atr</A></CODE>
+<CODE><A HREF="#388_13">To_Atr</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#193_9">Attribute</A></CODE></TD></TR>
@@ -104,6 +104,7 @@
 <CODE><A HREF="#333_13">Init_Attribute_Set</A></CODE>,
 <CODE><A HREF="#281_14">Reconnect</A></CODE>,
 <CODE><A HREF="#298_14">Status</A></CODE>,
+<CODE><A HREF="#345_13">Supports_SPE</A></CODE>,
 <CODE><A HREF="#307_14">Transmit</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
@@ -111,7 +112,7 @@
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#133_9">Card_States_Set</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#365_14">Add</A></CODE>,
+<CODE><A HREF="#369_14">Add</A></CODE>,
 <CODE><A HREF="#298_14">Status</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
@@ -135,18 +136,18 @@
 <CODE><A HREF="#57_9">Reader_ID</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
 <CODE><A HREF="#269_14">Connect</A></CODE>,
-<CODE><A HREF="#349_13">First</A></CODE>,
-<CODE><A HREF="#355_13">Get</A></CODE>,
-<CODE><A HREF="#352_13">Last</A></CODE>,
-<CODE><A HREF="#346_13">To_Reader_ID</A></CODE>
+<CODE><A HREF="#353_13">First</A></CODE>,
+<CODE><A HREF="#359_13">Get</A></CODE>,
+<CODE><A HREF="#356_13">Last</A></CODE>,
+<CODE><A HREF="#350_13">To_Reader_ID</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#63_9">Reader_ID_Set</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#358_13">Empty</A></CODE>,
-<CODE><A HREF="#349_13">First</A></CODE>,
-<CODE><A HREF="#355_13">Get</A></CODE>,
-<CODE><A HREF="#352_13">Last</A></CODE>,
+<CODE><A HREF="#362_13">Empty</A></CODE>,
+<CODE><A HREF="#353_13">First</A></CODE>,
+<CODE><A HREF="#359_13">Get</A></CODE>,
+<CODE><A HREF="#356_13">Last</A></CODE>,
 <CODE><A HREF="#249_13">List_Readers</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
@@ -154,20 +155,20 @@
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#164_9">Reader_States_Set</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#362_14">Add</A></CODE>
+<CODE><A HREF="#366_14">Add</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#168_9">Reader_Status</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#369_14">Add</A></CODE>,
-<CODE><A HREF="#378_13">Get</A></CODE>
+<CODE><A HREF="#373_14">Add</A></CODE>,
+<CODE><A HREF="#382_13">Get</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#178_9">Reader_Status_Set</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#369_14">Add</A></CODE>,
-<CODE><A HREF="#378_13">Get</A></CODE>,
-<CODE><A HREF="#375_13">Size</A></CODE>,
+<CODE><A HREF="#373_14">Add</A></CODE>,
+<CODE><A HREF="#382_13">Get</A></CODE>,
+<CODE><A HREF="#379_13">Size</A></CODE>,
 <CODE><A HREF="#253_14">Status_Change</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
@@ -312,11 +313,11 @@
 <TR><TD CLASS="code">
 <PRE><CODE><STRONG>type</STRONG> <A NAME="77_9"><SPAN CLASS="definition">Mode</SPAN></A> <STRONG>is</STRONG>
   (<A NAME="78_7"><SPAN CLASS="definition">Share_Exclusive</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Exclusive mode only</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Exclusive mode only</SPAN></EM>
    <A NAME="80_7"><SPAN CLASS="definition">Share_Shared</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Shared mode only</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Shared mode only</SPAN></EM>
    <A NAME="82_7"><SPAN CLASS="definition">Share_Direct</SPAN></A>
-   <EM><SPAN CLASS="comment">-- Raw mode only</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Raw mode only</SPAN></EM>
   );</CODE></PRE>
 </TD></TR>
 <TR><TD>
@@ -380,19 +381,19 @@
 <TR><TD CLASS="code">
 <PRE><CODE><STRONG>type</STRONG> <A NAME="115_9"><SPAN CLASS="definition">Card_State</SPAN></A> <STRONG>is</STRONG>
   (<A NAME="116_7"><SPAN CLASS="definition">S_Card_Unknown</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Unknown state</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Unknown state</SPAN></EM>
    <A NAME="118_7"><SPAN CLASS="definition">S_Card_Absent</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Card is absent</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Card is absent</SPAN></EM>
    <A NAME="120_7"><SPAN CLASS="definition">S_Card_Present</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Card is present</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Card is present</SPAN></EM>
    <A NAME="122_7"><SPAN CLASS="definition">S_Card_Swallowed</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Card not powered</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Card not powered</SPAN></EM>
    <A NAME="124_7"><SPAN CLASS="definition">S_Card_Powered</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Card is powered</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Card is powered</SPAN></EM>
    <A NAME="126_7"><SPAN CLASS="definition">S_Card_Negotiable</SPAN></A>,
-   <EM><SPAN CLASS="comment">-- Ready for PTS</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  Ready for PTS</SPAN></EM>
    <A NAME="128_7"><SPAN CLASS="definition">S_Card_Specific</SPAN></A>
-   <EM><SPAN CLASS="comment">-- PTS has been set</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  PTS has been set</SPAN></EM>
   );</CODE></PRE>
 </TD></TR>
 <TR><TD>
@@ -769,7 +770,7 @@
 <PRE><CODE><STRONG>procedure</STRONG> <A NAME="307_14"><SPAN CLASS="definition">Transmit</SPAN></A>
   (Card        : <STRONG>in</STRONG> SCard.<A HREF="#39_9">Card</A>;
    Send_Pci    : <STRONG>in</STRONG> <A HREF="#182_9">PCI</A>;
-   Send_Buffer : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#43_9">Byte_Set</A>;
+   Send_Buffer : <STRONG>in</STRONG> <A HREF="#43_9">Byte_Set</A> := <A HREF="#46_4">Null_Byte_Set</A>;
    Recv_Pci    : <STRONG>in</STRONG> <A HREF="#182_9">PCI</A>;
    Recv_Buffer : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#43_9">Byte_Set</A>;
    Recv_Len    : <STRONG>in</STRONG> <STRONG>out</STRONG> Natural);</CODE></PRE>
@@ -788,7 +789,7 @@
 <PRE><CODE><STRONG>procedure</STRONG> <A NAME="316_14"><SPAN CLASS="definition">Control</SPAN></A>
   (Card        : <STRONG>in</STRONG> SCard.<A HREF="#39_9">Card</A>;
    Code        : <STRONG>in</STRONG> Natural;
-   Send_Buffer : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#43_9">Byte_Set</A>;
+   Send_Buffer : <STRONG>in</STRONG> <A HREF="#43_9">Byte_Set</A> := <A HREF="#46_4">Null_Byte_Set</A>;
    Recv_Buffer : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#43_9">Byte_Set</A>;
    Recv_Len    : <STRONG>in</STRONG> <STRONG>out</STRONG> Natural);</CODE></PRE>
 </TD></TR>
@@ -854,7 +855,21 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="346_13"><SPAN CLASS="definition">To_Reader_ID</SPAN></A> (Name : <STRONG>in</STRONG> String) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="345_13"><SPAN CLASS="definition">Supports_SPE</SPAN></A> (Card : <STRONG>in</STRONG> SCard.<A HREF="#39_9">Card</A>) <STRONG>return</STRONG> Boolean;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Returns True if the reader supports SPE (secure PIN entry) PIN
+  verification, False if not.
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>function</STRONG> <A NAME="350_13"><SPAN CLASS="definition">To_Reader_ID</SPAN></A> (Name : <STRONG>in</STRONG> String) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -867,7 +882,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="349_13"><SPAN CLASS="definition">First</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="353_13"><SPAN CLASS="definition">First</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -880,7 +895,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="352_13"><SPAN CLASS="definition">Last</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="356_13"><SPAN CLASS="definition">Last</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -893,7 +908,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="355_13"><SPAN CLASS="definition">Get</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>; Index : <STRONG>in</STRONG> Natural) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="359_13"><SPAN CLASS="definition">Get</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>; Index : <STRONG>in</STRONG> Natural) <STRONG>return</STRONG> <A HREF="#57_9">Reader_ID</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -906,7 +921,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="358_13"><SPAN CLASS="definition">Empty</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>) <STRONG>return</STRONG> Boolean;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="362_13"><SPAN CLASS="definition">Empty</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#63_9">Reader_ID_Set</A>) <STRONG>return</STRONG> Boolean;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -919,7 +934,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>procedure</STRONG> <A NAME="362_14"><SPAN CLASS="definition">Add</SPAN></A> (States : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#164_9">Reader_States_Set</A>; State : <STRONG>in</STRONG> <A HREF="#136_9">Reader_State</A>);</CODE></PRE>
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="366_14"><SPAN CLASS="definition">Add</SPAN></A> (States : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#164_9">Reader_States_Set</A>; State : <STRONG>in</STRONG> <A HREF="#136_9">Reader_State</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -932,7 +947,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>procedure</STRONG> <A NAME="365_14"><SPAN CLASS="definition">Add</SPAN></A> (States : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#133_9">Card_States_Set</A>; State : <STRONG>in</STRONG> <A HREF="#115_9">Card_State</A>);</CODE></PRE>
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="369_14"><SPAN CLASS="definition">Add</SPAN></A> (States : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#133_9">Card_States_Set</A>; State : <STRONG>in</STRONG> <A HREF="#115_9">Card_State</A>);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -945,7 +960,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>procedure</STRONG> <A NAME="369_14"><SPAN CLASS="definition">Add</SPAN></A>
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="373_14"><SPAN CLASS="definition">Add</SPAN></A>
   (Set    : <STRONG>in</STRONG> <STRONG>out</STRONG> <A HREF="#178_9">Reader_Status_Set</A>;
    Status : <STRONG>in</STRONG> <A HREF="#168_9">Reader_Status</A>);</CODE></PRE>
 </TD></TR>
@@ -961,7 +976,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="375_13"><SPAN CLASS="definition">Size</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#178_9">Reader_Status_Set</A>) <STRONG>return</STRONG> Natural;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="379_13"><SPAN CLASS="definition">Size</SPAN></A> (Set : <STRONG>in</STRONG> <A HREF="#178_9">Reader_Status_Set</A>) <STRONG>return</STRONG> Natural;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -974,7 +989,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="378_13"><SPAN CLASS="definition">Get</SPAN></A> (Set    : <STRONG>in</STRONG> <A HREF="#178_9">Reader_Status_Set</A>;
+<PRE><CODE><STRONG>function</STRONG> <A NAME="382_13"><SPAN CLASS="definition">Get</SPAN></A> (Set    : <STRONG>in</STRONG> <A HREF="#178_9">Reader_Status_Set</A>;
               Index  : <STRONG>in</STRONG> Natural)
               <STRONG>return</STRONG> <A HREF="#168_9">Reader_Status</A>;</CODE></PRE>
 </TD></TR>
@@ -989,7 +1004,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="384_13"><SPAN CLASS="definition">To_Atr</SPAN></A> (Bytes : <STRONG>in</STRONG> <A HREF="#43_9">Byte_Set</A>) <STRONG>return</STRONG> <A HREF="#50_9">ATR</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="388_13"><SPAN CLASS="definition">To_Atr</SPAN></A> (Bytes : <STRONG>in</STRONG> <A HREF="#43_9">Byte_Set</A>) <STRONG>return</STRONG> <A HREF="#50_9">ATR</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1003,7 +1018,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="388_13"><SPAN CLASS="definition">Size</SPAN></A> (Atr : <STRONG>in</STRONG> SCard.<A HREF="#50_9">ATR</A> := <A HREF="#53_4">Null_ATR</A>) <STRONG>return</STRONG> Natural;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="392_13"><SPAN CLASS="definition">Size</SPAN></A> (Atr : <STRONG>in</STRONG> SCard.<A HREF="#50_9">ATR</A> := <A HREF="#53_4">Null_ATR</A>) <STRONG>return</STRONG> Natural;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1016,7 +1031,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="391_13"><SPAN CLASS="definition">Size</SPAN></A> (Atr : <STRONG>in</STRONG> SCard.<A HREF="#50_9">ATR</A> := <A HREF="#53_4">Null_ATR</A>) <STRONG>return</STRONG> String;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="395_13"><SPAN CLASS="definition">Size</SPAN></A> (Atr : <STRONG>in</STRONG> SCard.<A HREF="#50_9">ATR</A> := <A HREF="#53_4">Null_ATR</A>) <STRONG>return</STRONG> String;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1029,7 +1044,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="395_13"><SPAN CLASS="definition">Get_Return_Code</SPAN></A> <STRONG>return</STRONG> String;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="399_13"><SPAN CLASS="definition">Get_Return_Code</SPAN></A> <STRONG>return</STRONG> String;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1051,6 +1066,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.SCard;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-10-25 at 18:29:58 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:05 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>
