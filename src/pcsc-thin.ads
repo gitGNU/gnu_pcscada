@@ -488,6 +488,10 @@ package PCSC.Thin is
    function pcsc_stringify_error (status : DWORD) return C.Strings.chars_ptr;
    --  Get stringified error message
 
+   function SCARD_CTL_CODE (Code : in DWORD) return DWORD;
+   --  Return SCard Control Code for given code. Used to provide source
+   --  compatibility on different platforms.
+
 private
 
    Null_ATR : constant ATR := (others => 0);
