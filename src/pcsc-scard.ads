@@ -307,7 +307,7 @@ package PCSC.SCard is
    procedure Transmit
      (Card        : in SCard.Card;
       Send_Pci    : in PCI;
-      Send_Buffer : in out Byte_Set;
+      Send_Buffer : in Byte_Set := Null_Byte_Set;
       Recv_Pci    : in PCI;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
@@ -316,7 +316,7 @@ package PCSC.SCard is
    procedure Control
      (Card        : in SCard.Card;
       Code        : in Natural;
-      Send_Buffer : in out Byte_Set;
+      Send_Buffer : in Byte_Set := Null_Byte_Set;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
    --  This procedure sends a control command to the reader connected to by

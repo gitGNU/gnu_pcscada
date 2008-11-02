@@ -44,6 +44,7 @@ package PCSC.Thin is
 
    subtype Byte is Interfaces.Unsigned_8;
    type Byte_Array is array (C.size_t range <>) of aliased Byte;
+   type Byte_Access is access all Byte;
 
    Null_Byte : constant Byte;
    Null_Byte_Array : constant Byte_Array;

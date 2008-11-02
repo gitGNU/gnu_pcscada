@@ -389,12 +389,15 @@ package body PCSC.SCard is
    procedure Transmit
      (Card        : in SCard.Card;
       Send_Pci    : in PCI;
-      Send_Buffer : in out Byte_Set;
+      Send_Buffer : in Byte_Set := Null_Byte_Set;
       Recv_Pci    : in PCI;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
       Res            : Thin.DWORD;
+
+      Send_First     : aliased Thin.Byte;
+      Send_First_Ptr : Thin.Byte_Access;
 
       C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST :=
         Convert.C_PCI (Send_Pci);
@@ -402,12 +405,24 @@ package body PCSC.SCard is
         Convert.C_PCI (Recv_Pci);
       Bytes_Returned : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
    begin
-      --  TODO: Send_Buffer needs to be 'in out', otherwise:
-      --        access-to-variable designates constant => fix
+      --  Empty send buffer makes no sense, return without doing anything
+      if Send_Buffer = Null_Byte_Set then
+         return;
+      end if;
+
+      --  Assign first byte of send buffer to local variable 'Send_First'. This
+      --  is needed because we cannot directly pass the 'in' Parameter
+      --  Send_Buffer as Send_Buffer (Send_Buffer'First)'Access to the thin
+      --  binding, otherwise the compiler complains:
+      --        access-to-variable designates constant
+
+      Send_First     := Send_Buffer (Send_Buffer'First);
+      Send_First_Ptr := Send_First'Unchecked_Access;
+
       Res := Thin.SCardTransmit
         (hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,
-         pbSendBuffer  => Send_Buffer (Send_Buffer'First)'Access,
+         pbSendBuffer  => Send_First_Ptr,
          cbSendLength  => Thin.DWORD (Send_Buffer'Length),
          pioRecvPci    => C_Recv_PCI'Access,
          pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Access,
@@ -431,22 +446,37 @@ package body PCSC.SCard is
    procedure Control
      (Card        : in SCard.Card;
       Code        : in Natural;
-      Send_Buffer : in out Byte_Set;
+      Send_Buffer : in Byte_Set := Null_Byte_Set;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
       Res            : Thin.DWORD;
 
+      Send_First     : aliased Thin.Byte;
+      Send_First_Ptr : Thin.Byte_Access;
+
       Recv_Length    : aliased constant Thin.DWORD :=
         Thin.DWORD (Recv_Buffer'Last);
       Bytes_Returned : aliased Thin.DWORD := 0;
    begin
-      --  TODO: Send_Buffer needs to be 'in out', otherwise:
-      --        access-to-variable designates constant => fix
+      --  Assign first byte of send buffer to local variable 'Send_First'. This
+      --  is needed because we cannot directly pass the 'in' Parameter
+      --  Send_Buffer as Send_Buffer (Send_Buffer'First)'Access to the thin
+      --  binding, otherwise the compiler complains:
+      --        access-to-variable designates constant
+
+      --  The send buffer can also by empty, replace with null ptr if it is
+      if Send_Buffer = Null_Byte_Set then
+         Send_First_Ptr := null;
+      else
+         Send_First     := Send_Buffer (Send_Buffer'First);
+         Send_First_Ptr := Send_First'Unchecked_Access;
+      end if;
+
       Res := Thin.SCardControl
         (hCard           => Card.hCard,
          dwControlCode   => Thin.DWORD (Code),
-         pbSendBuffer    => Send_Buffer (Send_Buffer'First)'Access,
+         pbSendBuffer    => Send_First_Ptr,
          cbSendLength    => Thin.DWORD (Send_Buffer'Length),
          pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Access,
          cbRecvLength    => Recv_Length,
