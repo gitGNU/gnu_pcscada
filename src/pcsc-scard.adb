@@ -570,20 +570,112 @@ package body PCSC.SCard is
    function Supports_SPE (Card : in SCard.Card) return Boolean is
       package TR renames Thin.Reader;
 
-      bSendBuffer : constant Byte_Set := Null_Byte_Set;
-      bRecvBuffer : Byte_Set (1 .. Thin.MAX_BUFFER_SIZE);
-      RecvLength  : Natural := 0;
+      Res         : Thin.DWORD;
+
+      bRecvBuffer : Thin.Byte_Array (1 .. Thin.MAX_BUFFER_SIZE);
+      Length      : aliased Thin.DWORD := 0;
+      Elements    : Natural := 0;
    begin
-      Control (Card        => Card,
-               Code        => Integer (TR.CM_IOCTL_GET_FEATURE_REQUEST),
-               Send_Buffer => bSendBuffer,
-               Recv_Buffer => bRecvBuffer,
-               Recv_Len    => RecvLength);
-      return True;
-   exception
-      when SCard_Error =>
-         --  Transaction failed, reader does not support PIN verification
+      Res := Thin.SCardControl
+        (hCard           => Card.hCard,
+         dwControlCode   => TR.CM_IOCTL_GET_FEATURE_REQUEST,
+         pbSendBuffer    => null,
+         cbSendLength    => 0,
+         pbRecvBuffer    => bRecvBuffer (bRecvBuffer'First)'Access,
+         cbRecvLength    => Thin.DWORD (bRecvBuffer'Last),
+         lpBytesReturned => Length'Access);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
          return False;
+      end if;
+      Store_Error (Code => Res);
+
+      --  Verify the result
+
+      if (Length mod 6) > (TR.PCSC_TLV_STRUCTURE'Size / 8) then
+         --  Received buffer can not be used, return False
+         return False;
+      end if;
+
+      --  Get number of TLV elements instead of the complete size
+      Elements := Integer (Length) / (TR.PCSC_TLV_STRUCTURE'Size / 8);
+
+      --  Create TLV structure from bytes received
+      declare
+         use type Interfaces.Unsigned_8;
+
+         TLV_Array     : array (size_t (1) .. size_t (Elements)) of
+           TR.PCSC_TLV_STRUCTURE;
+
+         T             : size_t := bRecvBuffer'First;
+         Index         : size_t := TLV_Array'First;
+
+         Verify_Struct : TR.PIN_VERIFY_STRUCTURE;
+         Verify_Ctl    : Interfaces.Unsigned_32;
+
+      begin
+         loop
+            exit when T >= size_t (Length);
+            TLV_Array (Index).tag    := bRecvBuffer (T);
+            TLV_Array (Index).length := bRecvBuffer (T + 1);
+            TLV_Array (Index).value  := Interfaces.Unsigned_32
+              (bRecvBuffer (T + 2) + bRecvBuffer (T + 3) +
+                 bRecvBuffer (T + 4) + bRecvBuffer (T + 5));
+            T     := T + 6;
+            Index := Index + 1;
+         end loop;
+
+         --  Test for FEATURE_VERIFY_PIN_DIRECT flag
+
+         for Index in size_t range TLV_Array'Range loop
+            if TLV_Array (Index).tag = TR.FEATURE_VERIFY_PIN_DIRECT then
+               Verify_Ctl := TLV_Array (Index).value;
+
+               Verify_Struct.bTimerOut      := 0;
+               Verify_Struct.bTimerOut2     := 0;
+               Verify_Struct.bmFormatString := 16#82#;
+               Verify_Struct.bmPINBlockString := 16#04#;
+               Verify_Struct.bmPINLengthFormat := 0;
+               Verify_Struct.wPINMaxExtraDigit := 16#0408#;
+               Verify_Struct.bEntryValidationCondition := 16#02#;
+               Verify_Struct.bNumberMessage := 16#01#;
+               Verify_Struct.wLangId := 16#0904#;
+               Verify_Struct.bMsgIndex := 0;
+               Verify_Struct.abData (1)  := 16#00#;
+               Verify_Struct.abData (2)  := 16#20#;
+               Verify_Struct.abData (3)  := 16#00#;
+               Verify_Struct.abData (4)  := 16#00#;
+               Verify_Struct.abData (5)  := 16#08#;
+               Verify_Struct.abData (6)  := 16#30#;
+               Verify_Struct.abData (7)  := 16#30#;
+               Verify_Struct.abData (8)  := 16#30#;
+               Verify_Struct.abData (9)  := 16#30#;
+               Verify_Struct.abData (10) := 16#00#;
+               Verify_Struct.abData (11) := 16#00#;
+               Verify_Struct.abData (12) := 16#00#;
+               Verify_Struct.abData (13) := 16#00#;
+               Verify_Struct.ulDataLength := 13;
+
+               Length := 0;
+               Res := Thin.SCardControl
+                 (hCard           => Card.hCard,
+                  dwControlCode   => Thin.DWORD (Verify_Ctl),
+                  pbSendBuffer    => Verify_Struct.bTimerOut'Access,
+                  cbSendLength    => 32,
+                  pbRecvBuffer    => bRecvBuffer (bRecvBuffer'First)'Access,
+                  cbRecvLength    => Thin.DWORD (bRecvBuffer'Last),
+                  lpBytesReturned => Length'Access);
+
+               if Res /= Thin.SCARD_S_SUCCESS then
+                  SCard_Exception (Code    => Res,
+                                   Message => "Verify control failed");
+               end if;
+               return True;
+            end if;
+         end loop;
+      end;
+
+      return False;
    end Supports_SPE;
 
    ------------------
