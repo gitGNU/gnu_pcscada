@@ -91,6 +91,7 @@ begin
                  State => Card_States,
                  Proto => Card_Proto,
                  Atr   => Card_ATR);
+   SCU.Action_Result (Result => SCard.Get_Return_Code);
 
    --  TODO: add Is_In() function to Card_States, Reader_States Sets so one can
    --  test for the existence of a specific state.
