@@ -195,4 +195,39 @@ package PCSC.Thin.Reader is
    for PCSC_TLV_STRUCTURE'Size use 48;
    --  The PCSC_TLV_STRUCTURE must be exactly 6 bytes long
 
+
+   type PIN_VERIFY_STRUCTURE is record
+      bTimerOut                 : aliased Byte;
+      --  Timeout is seconds (00 means use default timeout)
+      bTimerOut2                : Byte;
+      --  Timeout in seconds after first key stroke
+      bmFormatString            : Byte;
+      --  Formatting options
+      bmPINBlockString          : Byte;
+      --  Bits 7-4 bit size of PIN length in APDU, bits 3-0 PIN block size in
+      --  bytes after justification and formatting
+      bmPINLengthFormat         : Byte;
+      --  Bits 7-5 RFU, bit 4 set if system units are bytes, clear if system
+      --  units are bits, bits 3-0 PIN length position in system units
+      wPINMaxExtraDigit         : Interfaces.Unsigned_16;
+      --  0xXXYY where XX is minimum PIN size in digits, and YY is maximum PIN
+      --  size in digits
+      bEntryValidationCondition : Byte;
+      --  Conditions under which PIN entry should be considered complete
+      bNumberMessage            : Byte;
+      --  Number of messages to display for PIN verification
+      wLangId                   : Interfaces.Unsigned_16;
+      --  Language for messages
+      bMsgIndex                 : Byte := 0;
+      --  Message index (should be 00)
+      bTeoPrologue              : Byte_Array (1 .. 3)
+        := (others => 0);
+      --  T=1 block prologue field to use (filled with 00)
+      ulDataLength              : Interfaces.Unsigned_32;
+      --  Length of Data to be sent to the ICC
+      abData                    : Byte_Array (1 .. MAX_BUFFER_SIZE)
+        := (others => 0);
+      --  Data to send to the ICC
+   end record;
+
 end PCSC.Thin.Reader;
