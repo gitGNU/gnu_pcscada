@@ -36,10 +36,14 @@ procedure Pinpad is
 
    pragma Linker_Options ("-lpcsclite");
 
-   Context       : SCard.Context;
-   Card          : SCard.Card;
+   Context     : SCard.Context;
+   Card        : SCard.Card;
 
-   Readers       : SCard.Reader_ID_Set;
+   Readers     : SCard.Reader_ID_Set;
+
+   Card_States : SCard.Card_States_Set;
+   Card_Proto  : SCard.Proto := SCard.Proto_Undefined;
+   Card_ATR    : SCard.ATR;
 begin
 
    Ada.Text_IO.New_Line;
@@ -71,7 +75,7 @@ begin
    SCU.For_Every_Reader (Readers => Readers,
                          Call    => SCU.Print_ReaderID'Access);
 
-   --  Connect to first reader, even without inserted card
+   --  Connect to first reader
 
    SCU.Action_Info (Text => "Connecting to first reader");
    SCard.Connect (Context => Context,
@@ -79,6 +83,17 @@ begin
                   Reader  => Readers.First,
                   Mode    => SCard.Share_Shared);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
+
+   --  Get card status, return if no card is present
+
+   SCU.Action_Info (Text => "Testing card status");
+   SCard.Status (Card  => Card,
+                 State => Card_States,
+                 Proto => Card_Proto,
+                 Atr   => Card_ATR);
+
+   --  TODO: add Is_In() function to Card_States, Reader_States Sets so one can
+   --  test for the existence of a specific state.
 
    --  Test if reader supports PIN verification
 
