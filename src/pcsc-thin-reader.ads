@@ -152,6 +152,30 @@ package PCSC.Thin.Reader is
    CM_IOCTL_GET_FEATURE_REQUEST      : constant DWORD := SCARD_CTL_CODE (3400);
    --  Control code used to get features from card / reader.
 
+   FEATURE_VERIFY_PIN_START          : constant := 16#01#;
+   --  OMNIKEY Proposal
+   FEATURE_VERIFY_PIN_FINISH         : constant := 16#02#;
+   --  OMNIKEY Proposal
+   FEATURE_MODIFY_PIN_START          : constant := 16#03#;
+   --  OMNIKEY Proposal
+   FEATURE_MODIFY_PIN_FINISH         : constant := 16#04#;
+   --  OMNIKEY Proposal
+   FEATURE_GET_KEY_PRESSED           : constant := 16#05#;
+   --  OMNIKEY Proposal
+   FEATURE_VERIFY_PIN_DIRECT         : constant := 16#06#;
+   --  USB CCID PIN Verify
+   FEATURE_MODIFY_PIN_DIRECT         : constant := 16#07#;
+   --  USB CCID PIN Modify
+   FEATURE_MCT_READERDIRECT          : constant := 16#08#;
+   --  KOBIL Proposal
+   FEATURE_MCT_UNIVERSAL             : constant := 16#09#;
+   --  KOBIL Proposal
+   FEATURE_IFD_PIN_PROP              : constant := 16#0A#;
+   --  Gemplus Proposal
+   FEATURE_ABORT                     : constant := 16#0B#;
+   --  SCM Proposal
+
+
    type PCSC_TLV_STRUCTURE is record
       tag    : Interfaces.Unsigned_8;
       length : Interfaces.Unsigned_8;
