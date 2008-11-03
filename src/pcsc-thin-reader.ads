@@ -190,7 +190,7 @@ package PCSC.Thin.Reader is
       length at 0 range 8  .. 15;
       value  at 0 range 16 .. 47;
    end record;
-   --  Representation clause for PCSC_TLV_STRUCTURE type.
+   --  Representation clause for PCSC_TLV_STRUCTURE type
 
    for PCSC_TLV_STRUCTURE'Size use 48;
    --  The PCSC_TLV_STRUCTURE must be exactly 6 bytes long
@@ -229,5 +229,22 @@ package PCSC.Thin.Reader is
         := (others => 0);
       --  Data to send to the ICC
    end record;
+
+   for PIN_VERIFY_STRUCTURE use record
+      bTimerOut                 at 0  range 0 .. 7;
+      bTimerOut2                at 1  range 0 .. 7;
+      bmFormatString            at 2  range 0 .. 7;
+      bmPINBlockString          at 3  range 0 .. 7;
+      bmPINLengthFormat         at 4  range 0 .. 7;
+      wPINMaxExtraDigit         at 5  range 0 .. 15;
+      bEntryValidationCondition at 7  range 0 .. 7;
+      bNumberMessage            at 8  range 0 .. 7;
+      wLangId                   at 9  range 0 .. 15;
+      bMsgIndex                 at 11 range 0 .. 7;
+      bTeoPrologue              at 12 range 0 .. 23;
+      ulDataLength              at 15 range 0 .. 31;
+      abData                    at 19 range 0 .. (MAX_BUFFER_SIZE * 8) - 1;
+   end record;
+   --  Representation clause for PIN_VERIFY_STRUCTURE type
 
 end PCSC.Thin.Reader;
