@@ -71,6 +71,14 @@ begin
    SCU.Action_Info (Text => "Asking for readers");
    Readers := SCard.List_Readers (Context => Context);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
+
+   if Readers.Empty then
+      Ada.Text_IO.New_Line;
+      Ada.Text_IO.Put_Line ("No Readers found!");
+      SCard.Release_Context (Context => Context);
+      return;
+   end if;
+
    Ada.Text_IO.Put_Line ("> Readers found            : ");
    SCU.For_Every_Reader (Readers => Readers,
                          Call    => SCU.Print_ReaderID'Access);
