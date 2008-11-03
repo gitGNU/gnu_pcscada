@@ -29,6 +29,7 @@ with Interfaces.C.Strings;
 with PCSC.SCard.Conversion;
 
 with PCSC.Thin.Reader;
+with PCSC.SCard.Utils;
 
 package body PCSC.SCard is
 
@@ -611,16 +612,22 @@ package body PCSC.SCard is
          Index         : size_t := TLV_Array'First;
 
          Verify_Struct : TR.PIN_VERIFY_STRUCTURE;
-         Verify_Ctl    : Interfaces.Unsigned_32;
+         Verify_Ctl    : Thin.DWORD;
+         Value         : Byte_Set (1 .. 4);
 
       begin
          loop
             exit when T >= size_t (Length);
             TLV_Array (Index).tag    := bRecvBuffer (T);
             TLV_Array (Index).length := bRecvBuffer (T + 1);
+
+            --  Value is stored in Big endian format
+            Value (4) := bRecvBuffer (T + 2);
+            Value (3) := bRecvBuffer (T + 3);
+            Value (2) := bRecvBuffer (T + 4);
+            Value (1) := bRecvBuffer (T + 5);
             TLV_Array (Index).value  := Interfaces.Unsigned_32
-              (bRecvBuffer (T + 2) + bRecvBuffer (T + 3) +
-                 bRecvBuffer (T + 4) + bRecvBuffer (T + 5));
+              (Utils.To_Long_Long_Integer (Given => Value));
             T     := T + 6;
             Index := Index + 1;
          end loop;
@@ -629,37 +636,37 @@ package body PCSC.SCard is
 
          for Index in size_t range TLV_Array'Range loop
             if TLV_Array (Index).tag = TR.FEATURE_VERIFY_PIN_DIRECT then
-               Verify_Ctl := TLV_Array (Index).value;
+               Verify_Ctl := Thin.DWORD (TLV_Array (Index).value);
 
-               Verify_Struct.bTimerOut      := 0;
-               Verify_Struct.bTimerOut2     := 0;
-               Verify_Struct.bmFormatString := 16#82#;
-               Verify_Struct.bmPINBlockString := 16#04#;
-               Verify_Struct.bmPINLengthFormat := 0;
-               Verify_Struct.wPINMaxExtraDigit := 16#0408#;
+               Verify_Struct.bTimerOut                 := 0;
+               Verify_Struct.bTimerOut2                := 0;
+               Verify_Struct.bmFormatString            := 16#82#;
+               Verify_Struct.bmPINBlockString          := 16#04#;
+               Verify_Struct.bmPINLengthFormat         := 0;
+               Verify_Struct.wPINMaxExtraDigit         := 16#0408#;
                Verify_Struct.bEntryValidationCondition := 16#02#;
-               Verify_Struct.bNumberMessage := 16#01#;
-               Verify_Struct.wLangId := 16#0904#;
-               Verify_Struct.bMsgIndex := 0;
-               Verify_Struct.abData (1)  := 16#00#;
-               Verify_Struct.abData (2)  := 16#20#;
-               Verify_Struct.abData (3)  := 16#00#;
-               Verify_Struct.abData (4)  := 16#00#;
-               Verify_Struct.abData (5)  := 16#08#;
-               Verify_Struct.abData (6)  := 16#30#;
-               Verify_Struct.abData (7)  := 16#30#;
-               Verify_Struct.abData (8)  := 16#30#;
-               Verify_Struct.abData (9)  := 16#30#;
-               Verify_Struct.abData (10) := 16#00#;
-               Verify_Struct.abData (11) := 16#00#;
-               Verify_Struct.abData (12) := 16#00#;
-               Verify_Struct.abData (13) := 16#00#;
-               Verify_Struct.ulDataLength := 13;
+               Verify_Struct.bNumberMessage            := 16#01#;
+               Verify_Struct.wLangId                   := 16#0904#;
+               Verify_Struct.bMsgIndex                 := 0;
+               Verify_Struct.abData (1)                := 16#00#;
+               Verify_Struct.abData (2)                := 16#20#;
+               Verify_Struct.abData (3)                := 16#00#;
+               Verify_Struct.abData (4)                := 16#00#;
+               Verify_Struct.abData (5)                := 16#08#;
+               Verify_Struct.abData (6)                := 16#30#;
+               Verify_Struct.abData (7)                := 16#30#;
+               Verify_Struct.abData (8)                := 16#30#;
+               Verify_Struct.abData (9)                := 16#30#;
+               Verify_Struct.abData (10)               := 16#00#;
+               Verify_Struct.abData (11)               := 16#00#;
+               Verify_Struct.abData (12)               := 16#00#;
+               Verify_Struct.abData (13)               := 16#00#;
+               Verify_Struct.ulDataLength              := 13;
 
                Length := 0;
                Res := Thin.SCardControl
                  (hCard           => Card.hCard,
-                  dwControlCode   => Thin.DWORD (Verify_Ctl),
+                  dwControlCode   => Verify_Ctl,
                   pbSendBuffer    => Verify_Struct.bTimerOut'Access,
                   cbSendLength    => 32,
                   pbRecvBuffer    => bRecvBuffer (bRecvBuffer'First)'Access,
