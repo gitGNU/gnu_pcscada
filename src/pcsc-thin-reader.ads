@@ -161,4 +161,14 @@ package PCSC.Thin.Reader is
    end record;
    --  PCSC Type-length-value data structure
 
+   for PCSC_TLV_STRUCTURE use record
+      tag    at 0 range 0  .. 7;
+      length at 0 range 8  .. 15;
+      value  at 0 range 16 .. 47;
+   end record;
+   --  Representation clause for PCSC_TLV_STRUCTURE type.
+
+   for PCSC_TLV_STRUCTURE'Size use 48;
+   --  The PCSC_TLV_STRUCTURE must be exactly 6 bytes long
+
 end PCSC.Thin.Reader;
