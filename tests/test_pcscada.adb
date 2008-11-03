@@ -128,22 +128,22 @@ begin
    --  Test status
 
    declare
-      Card_States  : SCard.Card_States_Set;
-      Reader_Proto : SCard.Proto := SCard.Proto_Undefined;
-      Reader_ATR   : SCard.ATR;
+      Card_States : SCard.Card_States_Set;
+      Card_Proto  : SCard.Proto := SCard.Proto_Undefined;
+      Card_ATR    : SCard.ATR;
    begin
       SCU.Action_Info (Text => "Testing Status");
       SCard.Status (Card  => Card,
                     State => Card_States,
-                    Proto => Reader_Proto,
-                    Atr   => Reader_ATR);
+                    Proto => Card_Proto,
+                    Atr   => Card_ATR);
       SCU.Action_Result (Result => SCard.Get_Return_Code);
       Ada.Text_IO.Put_Line (">>  ATR                    : " &
-                            SCU.To_Hex_String (Given => Reader_ATR));
+                            SCU.To_Hex_String (Given => Card_ATR));
       Ada.Text_IO.Put_Line (">>  ATR Size               : " &
-                            SCard.Size (Reader_ATR));
+                            SCard.Size (Card_ATR));
       Ada.Text_IO.Put_Line (">>  Protocol               : " &
-                            SCard.Proto'Image (Reader_Proto));
+                            SCard.Proto'Image (Card_Proto));
       Ada.Text_IO.Put_Line (">>  Card states            : " &
                             SCU.To_String (Card_States));
    end;
