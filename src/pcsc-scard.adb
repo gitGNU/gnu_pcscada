@@ -712,8 +712,8 @@ package body PCSC.SCard is
       end if;
 
       --  Store Bytes returned from reader in Result byte set
-      --  TODO: this assumes return code to be two bytes. Fix by using
-      --  a more flexible way of Byte_Set size handling (handles to byte sets?)
+      --  TODO: this assumes return code to be two bytes. Fix by using a more
+      --        flexible way of Byte_Set size handling (handles to byte sets?)
       for Index in Result'Range loop
          Result (Index) := Recv_Buffer (size_t (Index));
       end loop;
