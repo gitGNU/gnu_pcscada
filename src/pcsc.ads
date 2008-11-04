@@ -29,7 +29,11 @@
 package PCSC is
 
    SCard_Error : exception;
-   --  Raised by all PCSC.SCard routines in case of SCard errors
+   --  Raised by all PCSC.SCard routines in case of PC/SC SCard errors.
+
+   SCard_Not_Supported : exception;
+   --  Raised if an operation has been requested which is not supported by
+   --  the reader or card.
 
    Bytes_Too_Big : exception;
    --  Exception will be raised by utils and helper functions/procedures if a
