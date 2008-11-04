@@ -342,9 +342,20 @@ package PCSC.SCard is
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
    --  Return protocol in use for a given card handle.
 
-   function Supports_SPE (Card : in SCard.Card) return Boolean;
-   --  Returns True if the reader supports SPE (secure PIN entry) PIN
-   --  verification, False if not.
+
+   procedure SPE_Init (Card : in out SCard.Card; Result : in out Boolean);
+   --  Procedure checks if a reader connected by 'Card' handle supports SPE
+   --  (secure PIN entry) operation. If it does, 'Result' will be True,
+   --  otherwise 'Result' will be False.
+
+   procedure SPE_Exec (Card : in out SCard.Card; Result : in out Byte_Set);
+   --  Request the reader connected to by 'Card' to perform a secure PIN entry
+   --  operation. If not already done by the client code, this procedure will
+   --  use the SPE_Init() procedure to check if the reader supports SPE and to
+   --  initialize the verify ctrl code. If the SPE operation is not supported
+   --  or does not work as expected, an SCard_Not_Supported exception is
+   --  raised. If the SPE operation is successful, the bytes returned from the
+   --  reader will be stored in 'Result' byte set.
 
 
    function To_Reader_ID (Name : in String) return Reader_ID;
