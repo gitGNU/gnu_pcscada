@@ -106,12 +106,30 @@ begin
 
    --  Test if reader supports PIN verification
 
-   SCU.Action_Info (Text => "Testing for verify feature");
-   if not SCard.Supports_SPE (Card => Card) then
-      SCU.Action_Result (Result => "Not supported by reader.");
-   else
-      SCU.Action_Result (Result => "Supported.");
-   end if;
+   declare
+      Recv_Buffer : SCard.Byte_Set (1 .. 2);
+      Supported   : Boolean := False;
+
+   begin
+      SCU.Action_Info (Text => "Testing for verify feature");
+      SCard.SPE_Init (Card   => Card,
+                      Result => Supported);
+      if not Supported then
+         SCU.Action_Result (Result => "Not supported by reader.");
+         return;
+      end if;
+      SCU.Action_Result (Result => "Supported by reader.");
+
+      --  Execute SPE operation
+      SCU.Action_Info (Text => "Use reader to enter PIN");
+      SCard.SPE_Exec (Card   => Card,
+                      Result => Recv_Buffer);
+      SCU.Action_Result (Result => SCard.Get_Return_Code);
+
+      --  Display return code
+      SCU.Action_Info (Text => "Return code from reader");
+      SCU.Action_Result (Result => SCU.To_Hex_String (Given => Recv_Buffer));
+   end;
 
    --  Disconnect from first reader
 
