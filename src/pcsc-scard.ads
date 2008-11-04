@@ -420,7 +420,11 @@ private
 
    type Card is limited record
       hCard        : aliased Thin.SCARDHANDLE;
+      --  Card handle used by the thin binding
       Active_Proto : aliased Thin.DWORD := Thin.SCARD_PROTOCOL_UNDEFINED;
+      --  Current protocol used by the card
+      Verify_Ctrl  : Thin.DWORD := 0;
+      --  Verify control code needed to perform SPE
    end record;
 
 
