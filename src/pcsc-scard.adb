@@ -149,7 +149,7 @@ package body PCSC.SCard is
    procedure Status_Change
      (Context    : in SCard.Context;
       Timeout    : in Natural := 0;
-      Status_Set : in out Reader_Status_Set)
+      Status_Set : in out Reader_Condition_Set)
    is
       use type VORSTP.Vector;
 
@@ -163,10 +163,11 @@ package body PCSC.SCard is
 
       procedure Update_Status_Set (Position : in VORSTP.Cursor) is
 
-         procedure Update_Reader_Status (Element : in out Reader_Status);
-         --  Forward declaration of Update_Reader_Status
+         procedure Update_Reader_Condition (Element : in out Reader_Condition);
+         --  Forward declaration of Update_Reader_Condition
 
-         procedure Update_Reader_Status (Element : in out Reader_Status) is
+         procedure Update_Reader_Condition (Element : in out Reader_Condition)
+         is
          begin
             Element.Event_State     := Convert.To_Ada
               (C_States (C_States'First).dwEventState);
@@ -174,11 +175,11 @@ package body PCSC.SCard is
               (C_States (size_t (VORSTP.To_Index (Position))).rgbAtr);
             Element.Card_ATR.Length := ATR_Index
               (C_States (size_t (VORSTP.To_Index (Position))).cbAtr);
-         end Update_Reader_Status;
+         end Update_Reader_Condition;
 
       begin
          Status_Set.Data.Update_Element
-           (Position => Position, Process => Update_Reader_Status'Access);
+           (Position => Position, Process => Update_Reader_Condition'Access);
       end Update_Status_Set;
 
    begin
@@ -526,8 +527,8 @@ package body PCSC.SCard is
    ------------------------
 
    function Init_Attribute_Set
-     (Card        : in SCard.Card;
-      Attr        : in Attribute)
+     (Card : in SCard.Card;
+      Attr : in Attribute)
       return Byte_Set
    is
       Res : Thin.DWORD;
@@ -783,18 +784,6 @@ package body PCSC.SCard is
       return False;
    end Empty;
 
-   -------------------------
-   -- Add (Reader_Status) --
-   -------------------------
-
-   procedure Add
-     (Set    : in out Reader_Status_Set;
-      Status : in Reader_Status)
-   is
-   begin
-      Set.Data.Append (New_Item => Status);
-   end Add;
-
    ------------------------
    -- Add (Reader_State) --
    ------------------------
@@ -853,14 +842,39 @@ package body PCSC.SCard is
       return True;
    end Is_In;
 
-   ------------------------------
-   -- Size (Reader_Status_Set) --
-   ------------------------------
+   ----------------------------
+   -- Add (Reader_Condition) --
+   ----------------------------
 
-   function Size (Set : in Reader_Status_Set) return Natural is
+   procedure Add
+     (Set    : in out Reader_Condition_Set;
+      Status : in Reader_Condition)
+   is
+   begin
+      Set.Data.Append (New_Item => Status);
+   end Add;
+
+   ---------------------------------
+   -- Size (Reader_Condition_Set) --
+   ---------------------------------
+
+   function Size (Set : in Reader_Condition_Set) return Natural is
    begin
       return Set.Data.Last_Index;
    end Size;
+
+   --------------------------------
+   -- Get (Reader_Condition_Set) --
+   --------------------------------
+
+   function Get (Set    : in Reader_Condition_Set;
+                 Index  : in Natural)
+                 return Reader_Condition
+   is
+   begin
+      --  TODO: bound checks on 'Index'
+      return Set.Data.Element (Index);
+   end Get;
 
    ------------
    -- To_Atr --
@@ -907,19 +921,6 @@ package body PCSC.SCard is
       return Ada.Strings.Fixed.Trim (Source => Natural'Image (Natural_ATR),
                                      Side   => Ada.Strings.Left);
    end Size;
-
-   -----------------------------
-   -- Get (Reader_Status_Set) --
-   -----------------------------
-
-   function Get (Set    : in Reader_Status_Set;
-                 Index  : in Natural)
-                 return Reader_Status
-   is
-   begin
-      --  TODO: bound checks on 'Index'
-      return Set.Data.Element (Index);
-   end Get;
 
    ---------------------
    -- Get_Return_Code --

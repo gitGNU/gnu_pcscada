@@ -60,11 +60,12 @@ package body PCSC.SCard.Conversion is
 
    end Slice_Readerstring;
 
-   --------------------------------
-   -- To_C (Reader_Status_Set) --
-   --------------------------------
+   ---------------------------------
+   -- To_C (Reader_Condition_Set) --
+   ---------------------------------
 
-   function To_C (States : in Reader_Status_Set) return Thin.READERSTATE_Array
+   function To_C (States : in Reader_Condition_Set)
+                  return Thin.READERSTATE_Array
    is
       use VORSTP;
 
@@ -74,7 +75,7 @@ package body PCSC.SCard.Conversion is
    begin
       while Has_Element (Position) loop
          declare
-            Item : constant Reader_Status := Element (Position);
+            Item : constant Reader_Condition := Element (Position);
          begin
             C_States (size_t (To_Index (Position))) :=
               new Thin.READERSTATE'

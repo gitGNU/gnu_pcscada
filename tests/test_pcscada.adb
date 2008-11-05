@@ -45,8 +45,8 @@ procedure Test_PCSCAda is
 
    Readers       : SCard.Reader_ID_Set;
 
-   Reader_Status : SCard.Reader_Status_Set;
-   Reader1       : SCard.Reader_Status;
+   Reader_Status : SCard.Reader_Condition_Set;
+   Reader1       : SCard.Reader_Condition;
 
 begin
 

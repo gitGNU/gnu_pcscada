@@ -165,17 +165,17 @@ package PCSC.SCard is
    --  Set of reader states
 
 
-   type Reader_Status is record
+   type Reader_Condition is record
       Name          : Reader_ID := Null_Reader_ID;
       Current_State : Reader_State;
       Event_State   : Reader_States_Set;
       Card_ATR      : ATR := Null_ATR;
    end record;
-   --  Reader status type for status change handling. Current_State defines
+   --  Reader condition type for status change handling. Current_State defines
    --  the current assumed state. Event_State and Card_ATR is updated by
-   --  calling Status_Change procedure.
+   --  calling the Status_Change() procedure.
 
-   type Reader_Status_Set is tagged private;
+   type Reader_Condition_Set is tagged private;
    --  Set of reader status types
 
 
@@ -253,8 +253,8 @@ package PCSC.SCard is
    procedure Status_Change
      (Context    : in SCard.Context;
       Timeout    : in Natural := 0;
-      Status_Set : in out Reader_Status_Set);
-   --  This procedure takes a Reader_Status_Set type containing reader names
+      Status_Set : in out Reader_Condition_Set);
+   --  This procedure takes a Reader_Condition_Set type containing reader names
    --  and assumed initial state. It then blocks maximum 'Timeout' milliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
    --  used, which will block forever. When a status change occurs, the
@@ -396,18 +396,18 @@ package PCSC.SCard is
 
 
    procedure Add
-     (Set    : in out Reader_Status_Set;
-      Status : in Reader_Status);
-   --  Add a new reader to reader status array. State specifies the assumed
+     (Set    : in out Reader_Condition_Set;
+      Status : in Reader_Condition);
+   --  Add a new reader to reader condition array. State specifies the assumed
    --  initial state of the reader/card.
 
-   function Size (Set : in Reader_Status_Set) return Natural;
-   --  Returns the size of a Reader_Status_Set.
+   function Size (Set : in Reader_Condition_Set) return Natural;
+   --  Returns the size of a Reader_Condition_Set.
 
-   function Get (Set    : in Reader_Status_Set;
+   function Get (Set    : in Reader_Condition_Set;
                  Index  : in Natural)
-                 return Reader_Status;
-   --  Return Reader_Status object at index 'Index'.
+                 return Reader_Condition;
+   --  Return Reader_Condition object at index 'Index'.
 
 
    function To_Atr (Bytes : in Byte_Set) return ATR;
@@ -524,12 +524,12 @@ private
 
    package Vector_Of_Status_Package is new
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
-                                        Element_Type => Reader_Status);
+                                        Element_Type => Reader_Condition);
 
    package VORSTP renames Vector_Of_Status_Package;
    subtype Vector_Of_Status_Type is VORSTP.Vector;
 
-   type Reader_Status_Set is tagged record
+   type Reader_Condition_Set is tagged record
       Data : Vector_Of_Status_Type;
    end record;
 

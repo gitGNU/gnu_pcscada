@@ -46,8 +46,8 @@ package body PCSC.SCard.Tests is
                                   Routine => Test_Slice_Readerstring'Access,
                                   Name    => "String to Reader_ID_Set");
       Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_C_RStatus_Set'Access,
-                                  Name    => "To_C for Reader_Status_Set");
+                                  Routine => Test_To_C_RCond_Set'Access,
+                                  Name    => "To_C for Reader_Condition_Set");
       Framework.Add_Test_Routine (T       => T,
                                   Routine => Test_To_Chars_Ptr'Access,
                                   Name    => "Reader_ID to LPSTR");
@@ -110,23 +110,23 @@ package body PCSC.SCard.Tests is
               Message   => "Reader name does not match");
    end Test_Slice_Readerstring;
 
-   ---------------------------
-   -- Test_To_C_RStatus_Set --
-   ---------------------------
+   -------------------------
+   -- Test_To_C_RCond_Set --
+   -------------------------
 
-   procedure Test_To_C_RStatus_Set is
+   procedure Test_To_C_RCond_Set is
       --  Empty set test
-      Empty_Set : Reader_Status_Set;
+      Empty_Set : Reader_Condition_Set;
 
       --  This should return an empty array
       E_Result  : constant Thin.READERSTATE_Array :=
         Convert.To_C (States => Empty_Set);
 
-      --  Construct a 'real' status set
-      Real_Set  : Reader_Status_Set;
+      --  Construct a 'real' condition set
+      Real_Set  : Reader_Condition_Set;
 
-      Reader1   : Reader_Status;
-      Reader2   : Reader_Status;
+      Reader1   : Reader_Condition;
+      Reader2   : Reader_Condition;
 
       Useless   : Reader_States_Set;
    begin
@@ -215,7 +215,7 @@ package body PCSC.SCard.Tests is
          --  Free memory after test
          Convert.Free (Name => R_Result);
       end;
-   end Test_To_C_RStatus_Set;
+   end Test_To_C_RCond_Set;
 
    -----------------------
    -- Test_To_Chars_Ptr --
