@@ -377,8 +377,22 @@ package PCSC.SCard is
    procedure Add (States : in out Reader_States_Set; State : in Reader_State);
    --  Add a new reader state to Reader_States_Set.
 
+   function Is_In
+     (States : in Reader_States_Set;
+      State  : in Reader_State)
+      return Boolean;
+   --  Function returns True if given Reader_State 'State' is found in Reader
+   --  states set 'States'.
+
    procedure Add (States : in out Card_States_Set; State : in Card_State);
    --  Add a new card state to Card_States_Set.
+
+   function Is_In
+     (States : in Card_States_Set;
+      State  : in Card_State)
+      return Boolean;
+   --  Function returns True if given Card_State 'State' is found in Card
+   --  states set 'States'.
 
 
    procedure Add

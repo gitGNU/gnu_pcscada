@@ -807,6 +807,23 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add;
 
+   --------------------------
+   -- Is_In (Reader_State) --
+   --------------------------
+
+   function Is_In
+     (States : in Reader_States_Set;
+      State  : in Reader_State)
+      return Boolean
+   is
+      use type VORSP.Cursor;
+   begin
+      if States.Data.Find (Item => State) = VORSP.No_Element then
+         return False;
+      end if;
+      return True;
+   end Is_In;
+
    ----------------------
    -- Add (Card_State) --
    ----------------------
@@ -818,6 +835,23 @@ package body PCSC.SCard is
    begin
       States.Data.Append (New_Item => State);
    end Add;
+
+   ------------------------
+   -- Is_In (Card_State) --
+   ------------------------
+
+   function Is_In
+     (States : in Card_States_Set;
+      State  : in Card_State)
+      return Boolean
+   is
+      use type VOCSP.Cursor;
+   begin
+      if States.Data.Find (Item => State) = VOCSP.No_Element then
+         return False;
+      end if;
+      return True;
+   end Is_In;
 
    ------------------------------
    -- Size (Reader_Status_Set) --
