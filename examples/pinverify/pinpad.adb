@@ -89,7 +89,7 @@ begin
    SCard.Connect (Context => Context,
                   Card    => Card,
                   Reader  => Readers.First,
-                  Mode    => SCard.Share_Shared);
+                  Mode    => SCard.Share_Direct);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 
    --  Get card status, return if no card is present
@@ -101,8 +101,11 @@ begin
                  Atr   => Card_ATR);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 
-   --  TODO: add Is_In() function to Card_States, Reader_States Sets so one can
-   --  test for the existence of a specific state.
+   if Card_States.Is_In (State => SCard.S_Card_Absent) then
+      Ada.Text_IO.New_Line;
+      Ada.Text_IO.Put_Line ("No card inserted!");
+      return;
+   end if;
 
    --  Test if reader supports PIN verification
 
@@ -121,7 +124,7 @@ begin
       SCU.Action_Result (Result => "Supported by reader.");
 
       --  Execute SPE operation
-      SCU.Action_Info (Text => "Use reader to enter PIN");
+      SCU.Action_Info (Text => "Enter PIN on pinpad");
       SCard.SPE_Exec (Card   => Card,
                       Result => Recv_Buffer);
       SCU.Action_Result (Result => SCard.Get_Return_Code);
