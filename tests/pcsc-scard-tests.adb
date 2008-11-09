@@ -120,7 +120,7 @@ package body PCSC.SCard.Tests is
 
       --  This should return an empty array
       E_Result  : constant Thin.READERSTATE_Array :=
-        Convert.To_C (States => Empty_Set);
+        Convert.To_C (Conditions => Empty_Set);
 
       --  Construct a 'real' condition set
       Real_Set  : Reader_Condition_Set;
@@ -158,7 +158,7 @@ package body PCSC.SCard.Tests is
          use Interfaces.C;
 
          R_Result : Thin.READERSTATE_Array := Convert.To_C
-           (States => Real_Set);
+           (Conditions => Real_Set);
       begin
          --  Test resulting size of array
          Assert (Condition => R_Result'Length = 2,

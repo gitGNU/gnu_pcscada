@@ -149,14 +149,14 @@ package body PCSC.SCard is
    procedure Status_Change
      (Context    : in SCard.Context;
       Timeout    : in Natural := 0;
-      Status_Set : in out Reader_Condition_Set)
+      Conditions : in out Reader_Condition_Set)
    is
       use type VORSTP.Vector;
 
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
       C_States  : Thin.READERSTATE_Array := Convert.To_C
-        (States => Status_Set);
+        (Conditions => Conditions);
 
       procedure Update_Status_Set (Position : in VORSTP.Cursor);
       --  Forward declaration of Update_Status_Set
@@ -178,7 +178,7 @@ package body PCSC.SCard is
          end Update_Reader_Condition;
 
       begin
-         Status_Set.Data.Update_Element
+         Conditions.Data.Update_Element
            (Position => Position, Process => Update_Reader_Condition'Access);
       end Update_Status_Set;
 
@@ -188,7 +188,7 @@ package body PCSC.SCard is
          C_Timeout := Thin.INFINITE;
       end if;
 
-      if Status_Set.Data = VORSTP.Empty_Vector then
+      if Conditions.Data = VORSTP.Empty_Vector then
          return;
       else
          Res := Thin.SCardGetStatusChange
@@ -207,7 +207,7 @@ package body PCSC.SCard is
       --  Update Ada type with values returned by C API function
       --  TODO: what happens when a reader vanishes?
 
-      VORSTP.Iterate (Container => Status_Set.Data,
+      VORSTP.Iterate (Container => Conditions.Data,
                       Process   => Update_Status_Set'Access);
 
       --  Free C_States

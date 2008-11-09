@@ -253,12 +253,12 @@ package PCSC.SCard is
    procedure Status_Change
      (Context    : in SCard.Context;
       Timeout    : in Natural := 0;
-      Status_Set : in out Reader_Condition_Set);
+      Conditions : in out Reader_Condition_Set);
    --  This procedure takes a Reader_Condition_Set type containing reader names
-   --  and assumed initial state. It then blocks maximum 'Timeout' milliseconds
+   --  with their assumed state. It then blocks maximum 'Timeout' milliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
    --  used, which will block forever. When a status change occurs, the
-   --  Reader_States type is updated to reflect this new state.
+   --  Conditions object is updated to reflect the change(s).
 
    procedure Wait_For_Readers (Context : in SCard.Context);
    --  This procedure calls SCardGetStatusChange for reader detection. If there

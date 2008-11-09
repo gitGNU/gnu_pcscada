@@ -149,7 +149,7 @@ private package PCSC.SCard.Conversion is
    --  Reader_ID_Set is returned. In this context, invalid means that To_Slice
    --  is not in the format described above (e.g. no double NUL termination).
 
-   function To_C (States : in Reader_Condition_Set)
+   function To_C (Conditions : in Reader_Condition_Set)
                   return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Condition_Set to the corresponding C
    --  READERSTATE_Array. Memory allocated by the array must be freed by

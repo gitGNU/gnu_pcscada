@@ -96,7 +96,7 @@ begin
 
    SCU.Action_Info (Text => "Waiting for card insertion");
    SCard.Status_Change (Context    => Context,
-                        Status_Set => Reader_Table);
+                        Conditions => Reader_Table);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
    Ada.Text_IO.Put_Line
      (">> Reader Name             : " &
