@@ -45,7 +45,7 @@ procedure Test_PCSCAda is
 
    Readers       : SCard.Reader_ID_Set;
 
-   Reader_Status : SCard.Reader_Condition_Set;
+   Reader_Table  : SCard.Reader_Condition_Set;
    Reader1       : SCard.Reader_Condition;
 
 begin
@@ -70,7 +70,7 @@ begin
    end if;
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 
-   --  Status change detection
+   --  Wait for first reader to appear
 
    Ada.Text_IO.Put_Line ("Testing Wait_For_Readers");
    SCU.Action_Info (Text => "Please connect a reader");
@@ -90,23 +90,23 @@ begin
 
    Reader1.Name := Readers.First;
    Reader1.Current_State := SCard.S_Reader_Empty;
-   Reader_Status.Add (Status => Reader1);
+   Reader_Table.Add (Status => Reader1);
 
    --  Detect status changes
 
    SCU.Action_Info (Text => "Waiting for card insertion");
    SCard.Status_Change (Context    => Context,
-                        Status_Set => Reader_Status);
+                        Status_Set => Reader_Table);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
    Ada.Text_IO.Put_Line
      (">> Reader Name             : " &
-      SCU.To_String (Reader_Status.Get (Index => 1).Name));
+      SCU.To_String (Reader_Table.Get (Index => 1).Name));
    Ada.Text_IO.Put_Line
      (">> Reader states           : " &
-      SCU.To_String (Reader_Status.Get (Index => 1).Event_State));
+      SCU.To_String (Reader_Table.Get (Index => 1).Event_State));
    Ada.Text_IO.Put_Line
      (">> Card ATR                : " &
-      SCU.To_Hex_String (Reader_Status.Get (Index => 1).Card_ATR));
+      SCU.To_Hex_String (Reader_Table.Get (Index => 1).Card_ATR));
 
    --  Connect to first reader
 
