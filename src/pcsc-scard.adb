@@ -956,11 +956,13 @@ package body PCSC.SCard is
 
    function Get (Set    : in Reader_Condition_Set;
                  Index  : in Natural)
-                 return Reader_Condition
+                 return Reader_Condition_Handle
    is
+      Item : aliased Reader_Condition;
    begin
       --  TODO: bound checks on 'Index'
-      return Set.Data.Element (Index);
+      Item := Set.Data.Element (Index);
+      return Item'Access;
    end Get;
 
    ------------

@@ -175,6 +175,9 @@ package PCSC.SCard is
    --  the current assumed state. Event_State and Card_ATR is updated by
    --  calling the Status_Change() procedure.
 
+   type Reader_Condition_Handle is access all Reader_Condition;
+   --  Handle to Reader_Condition type.
+
    type Reader_Condition_Set is tagged private;
    --  Set of reader status types
 
@@ -437,7 +440,7 @@ package PCSC.SCard is
 
    function Get (Set    : in Reader_Condition_Set;
                  Index  : in Natural)
-                 return Reader_Condition;
+                 return Reader_Condition_Handle;
    --  Returns Reader_Condition object at index 'Index'.
 
 
