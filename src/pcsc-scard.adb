@@ -729,11 +729,11 @@ package body PCSC.SCard is
       return Reader_ID'(To_Unbounded_String (Name));
    end To_Reader_ID;
 
-   ---------------------------
-   -- First (Reader_ID_Set) --
-   ---------------------------
+   ----------------
+   -- First_Item --
+   ----------------
 
-   function First (Set : in Reader_ID_Set) return Reader_ID is
+   function First_Item (Set : in Reader_ID_Set) return Reader_ID is
       use type Ada.Containers.Count_Type;
    begin
       if Set.Data.Length = 0 then
@@ -741,13 +741,13 @@ package body PCSC.SCard is
       end if;
 
       return Set.Data.First_Element;
-   end First;
+   end First_Item;
 
-   --------------------------
-   -- Last (Reader_ID_Set) --
-   --------------------------
+   ---------------
+   -- Last_Item --
+   ---------------
 
-   function Last (Set : in Reader_ID_Set) return Reader_ID is
+   function Last_Item (Set : in Reader_ID_Set) return Reader_ID is
       use type Ada.Containers.Count_Type;
    begin
       if Set.Data.Length = 0 then
@@ -755,11 +755,29 @@ package body PCSC.SCard is
       end if;
 
       return Set.Data.Last_Element;
-   end Last;
+   end Last_Item;
 
-   -------------------------
-   -- Get (Reader_ID_Set) --
-   -------------------------
+   -----------------
+   -- First_Index --
+   -----------------
+
+   function First_Index (Set : in Reader_ID_Set) return Natural is
+   begin
+      return Set.Data.First_Index;
+   end First_Index;
+
+   ----------------
+   -- Last_Index --
+   ----------------
+
+   function Last_Index (Set : in Reader_ID_Set) return Natural is
+   begin
+      return Set.Data.Last_Index;
+   end Last_Index;
+
+   ---------
+   -- Get --
+   ---------
 
    function Get (Set   : in Reader_ID_Set;
                  Index : in Natural)
@@ -770,9 +788,9 @@ package body PCSC.SCard is
       return Set.Data.Element (Index);
    end Get;
 
-   ---------------------------
-   -- Empty (Reader_ID_Set) --
-   ---------------------------
+   -----------
+   -- Empty --
+   -----------
 
    function Empty (Set : in Reader_ID_Set) return Boolean is
       use type Ada.Containers.Count_Type;
@@ -784,9 +802,9 @@ package body PCSC.SCard is
       return False;
    end Empty;
 
-   ------------------------
-   -- Add (Reader_State) --
-   ------------------------
+   ---------
+   -- Add --
+   ---------
 
    procedure Add
      (States : in out Reader_States_Set;
@@ -796,9 +814,60 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add;
 
-   --------------------------
-   -- Is_In (Reader_State) --
-   --------------------------
+   ----------------
+   -- First_Item --
+   ----------------
+
+   function First_Item (Set : in Reader_States_Set) return Reader_State is
+      use type Ada.Containers.Count_Type;
+   begin
+      return Set.Data.First_Element;
+   end First_Item;
+
+   ---------------
+   -- Last_Item --
+   ---------------
+
+   function Last_Item (Set : in Reader_States_Set) return Reader_State is
+      use type Ada.Containers.Count_Type;
+   begin
+      return Set.Data.Last_Element;
+   end Last_Item;
+
+   -----------------
+   -- First_Index --
+   -----------------
+
+   function First_Index (Set : in Reader_States_Set) return Natural is
+   begin
+      return Set.Data.First_Index;
+   end First_Index;
+
+   ----------------
+   -- Last_Index --
+   ----------------
+
+   function Last_Index (Set : in Reader_States_Set) return Natural is
+   begin
+      return Set.Data.Last_Index;
+   end Last_Index;
+
+   ---------
+   -- Get --
+   ---------
+
+   function Get (Set   : in Reader_States_Set;
+                 Index : in Natural)
+                 return Reader_State
+   is
+   begin
+      --  TODO: bound checks on 'Index'
+      return Set.Data.Element (Index);
+   end Get;
+
+   -----------
+   -- Is_In --
+   -----------
 
    function Is_In
      (States : in Reader_States_Set;
@@ -813,9 +882,9 @@ package body PCSC.SCard is
       return True;
    end Is_In;
 
-   ----------------------
-   -- Add (Card_State) --
-   ----------------------
+   ---------
+   -- Add --
+   ---------
 
    procedure Add
      (States : in out Card_States_Set;
@@ -825,9 +894,9 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add;
 
-   ------------------------
-   -- Is_In (Card_State) --
-   ------------------------
+   -----------
+   -- Is_In --
+   -----------
 
    function Is_In
      (States : in Card_States_Set;
@@ -842,9 +911,9 @@ package body PCSC.SCard is
       return True;
    end Is_In;
 
-   ----------------------------
-   -- Add (Reader_Condition) --
-   ----------------------------
+   ---------
+   -- Add --
+   ---------
 
    procedure Add
      (Set    : in out Reader_Condition_Set;
@@ -854,18 +923,36 @@ package body PCSC.SCard is
       Set.Data.Append (New_Item => Status);
    end Add;
 
-   ---------------------------------
-   -- Size (Reader_Condition_Set) --
-   ---------------------------------
+   -----------------
+   -- First_Index --
+   -----------------
 
-   function Size (Set : in Reader_Condition_Set) return Natural is
+   function First_Index (Set : in Reader_Condition_Set) return Natural is
+   begin
+      return Set.Data.First_Index;
+   end First_Index;
+
+   ----------------
+   -- Last_Index --
+   ----------------
+
+   function Last_Index (Set : in Reader_Condition_Set) return Natural is
    begin
       return Set.Data.Last_Index;
-   end Size;
+   end Last_Index;
 
-   --------------------------------
-   -- Get (Reader_Condition_Set) --
-   --------------------------------
+   ------------
+   -- Length --
+   ------------
+
+   function Length (Set : in Reader_Condition_Set) return Natural is
+   begin
+      return Natural (Set.Data.Length);
+   end Length;
+
+   ---------
+   -- Get --
+   ---------
 
    function Get (Set    : in Reader_Condition_Set;
                  Index  : in Natural)
@@ -900,18 +987,18 @@ package body PCSC.SCard is
       return New_Atr;
    end To_Atr;
 
-   ----------------
-   -- Size (ATR) --
-   ----------------
+   ----------
+   -- Size --
+   ----------
 
    function Size (Atr : in SCard.ATR := Null_ATR) return Natural is
    begin
       return Natural (Atr.Length);
    end Size;
 
-   ----------------
-   -- Size (ATR) --
-   ----------------
+   ----------
+   -- Size --
+   ----------
 
    function Size (Atr : in SCard.ATR := Null_ATR) return String is
       Natural_ATR : constant Natural := Size (Atr);

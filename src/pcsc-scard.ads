@@ -167,7 +167,7 @@ package PCSC.SCard is
 
    type Reader_Condition is record
       Name          : Reader_ID := Null_Reader_ID;
-      Current_State : Reader_State;
+      Current_State : Reader_States_Set;
       Event_State   : Reader_States_Set;
       Card_ATR      : ATR := Null_ATR;
    end record;
@@ -359,16 +359,22 @@ package PCSC.SCard is
 
 
    function To_Reader_ID (Name : in String) return Reader_ID;
-   --  Return a new Reader_ID object initialized with 'Name' string.
+   --  Returns a new Reader_ID object initialized with 'Name' string.
 
-   function First (Set : in Reader_ID_Set) return Reader_ID;
-   --  Return the first reader in a reader ID set.
+   function First_Item (Set : in Reader_ID_Set) return Reader_ID;
+   --  Returns the first reader ID in a reader ID set.
 
-   function Last (Set : in Reader_ID_Set) return Reader_ID;
-   --  Return the last reader in a reader ID set.
+   function Last_Item (Set : in Reader_ID_Set) return Reader_ID;
+   --  Returns the last reader ID in a reader ID set.
+
+   function First_Index (Set : in Reader_ID_Set) return Natural;
+   --  Returns the first index of a Reader_ID_Set.
+
+   function Last_Index (Set : in Reader_ID_Set) return Natural;
+   --  Returns the last index of a Reader_ID_Set.
 
    function Get (Set : in Reader_ID_Set; Index : in Natural) return Reader_ID;
-   --  Return Reader_ID object at index 'Index'.
+   --  Returns Reader_ID object at index 'Index'.
 
    function Empty (Set : in Reader_ID_Set) return Boolean;
    --  Function returns true if Reader_ID_Set contains no readers.
@@ -377,12 +383,31 @@ package PCSC.SCard is
    procedure Add (States : in out Reader_States_Set; State : in Reader_State);
    --  Add a new reader state to Reader_States_Set.
 
+   function First_Item (Set : in Reader_States_Set) return Reader_State;
+   --  Returns the first Reader_State in a Reader_States_Set.
+
+   function Last_Item (Set : in Reader_States_Set) return Reader_State;
+   --  Returns the last Reader_State in a Reader_States_Set.
+
+   function First_Index (Set : in Reader_States_Set) return Natural;
+   --  Returns the first index of a Reader_States_Set.
+
+   function Last_Index (Set : in Reader_States_Set) return Natural;
+   --  Returns the last index of a Reader_States_Set.
+
+   function Get
+     (Set   : in Reader_States_Set;
+      Index : in Natural)
+      return Reader_State;
+   --  Returns Reader_State object at index 'Index'.
+
    function Is_In
      (States : in Reader_States_Set;
       State  : in Reader_State)
       return Boolean;
    --  Function returns True if given Reader_State 'State' is found in Reader
    --  states set 'States'.
+
 
    procedure Add (States : in out Card_States_Set; State : in Card_State);
    --  Add a new card state to Card_States_Set.
@@ -401,13 +426,19 @@ package PCSC.SCard is
    --  Add a new reader to reader condition array. State specifies the assumed
    --  initial state of the reader/card.
 
-   function Size (Set : in Reader_Condition_Set) return Natural;
-   --  Returns the size of a Reader_Condition_Set.
+   function First_Index (Set : in Reader_Condition_Set) return Natural;
+   --  Returns the first index of a Reader_Condition_Set.
+
+   function Last_Index (Set : in Reader_Condition_Set) return Natural;
+   --  Returns the last index of a Reader_Condition_Set.
+
+   function Length (Set : in Reader_Condition_Set) return Natural;
+   --  Returns the length of a Reader_Condition_Set.
 
    function Get (Set    : in Reader_Condition_Set;
                  Index  : in Natural)
                  return Reader_Condition;
-   --  Return Reader_Condition object at index 'Index'.
+   --  Returns Reader_Condition object at index 'Index'.
 
 
    function To_Atr (Bytes : in Byte_Set) return ATR;

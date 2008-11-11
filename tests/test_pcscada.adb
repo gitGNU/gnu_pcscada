@@ -88,8 +88,8 @@ begin
 
    --  Use first reader for status change detection.
 
-   Reader1.Name := Readers.First;
-   Reader1.Current_State := SCard.S_Reader_Empty;
+   Reader1.Name := Readers.First_Item;
+   Reader1.Current_State.Add (State => SCard.S_Reader_Empty);
    Reader_Table.Add (Status => Reader1);
 
    --  Detect status changes
@@ -113,7 +113,7 @@ begin
    SCU.Action_Info (Text => "Testing Connect");
    SCard.Connect (Context => Context,
                   Card    => Card,
-                  Reader  => Readers.First,
+                  Reader  => Readers.First_Item,
                   Mode    => SCard.Share_Shared);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
    Ada.Text_IO.Put_Line (">> Card uses protocol      : " & SCard.Proto'Image

@@ -60,9 +60,9 @@ package body PCSC.SCard.Conversion is
 
    end Slice_Readerstring;
 
-   ---------------------------------
-   -- To_C (Reader_Condition_Set) --
-   ---------------------------------
+   ----------
+   -- To_C --
+   ----------
 
    function To_C (Conditions : in Reader_Condition_Set)
                   return Thin.READERSTATE_Array
@@ -75,14 +75,21 @@ package body PCSC.SCard.Conversion is
    begin
       while Has_Element (Position) loop
          declare
-            Item : constant Reader_Condition := Element (Position);
+            Item     : constant Reader_Condition := Element (Position);
+            C_RState : Thin.DWORD := 0;
          begin
+            for S in Natural range Item.Current_State.First_Index ..
+              Item.Current_State.Last_Index loop
+               C_RState := C_RState or C_Reader_State
+                 (Item.Current_State.Get (Index => S));
+            end loop;
+
             C_States (size_t (To_Index (Position))) :=
               new Thin.READERSTATE'
                 (szReader       => Strings.New_String
                      (To_String (Item.Name)),
                  pvUserData     => <>,  --  use default
-                 dwCurrentState => C_Reader_State (Item.Current_State),
+                 dwCurrentState => C_RState,
                  dwEventState   => <>,  --  use default
                  cbAtr          => Item.Card_ATR.Data'Length,
                  rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
@@ -103,9 +110,9 @@ package body PCSC.SCard.Conversion is
       return Strings.New_String (To_String (Reader));
    end To_Chars_Ptr;
 
-   --------------------
-   -- To_Ada (Proto) --
-   --------------------
+   ------------
+   -- To_Ada --
+   ------------
 
    function To_Ada (C_Protocol : in Thin.DWORD) return Proto is
    begin
@@ -123,9 +130,9 @@ package body PCSC.SCard.Conversion is
       return Proto_Undefined;
    end To_Ada;
 
-   ------------------------------
-   -- To_Ada (Card_States_Set) --
-   ------------------------------
+   ------------
+   -- To_Ada --
+   ------------
 
    function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set is
       States : Card_States_Set;
@@ -138,9 +145,9 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
-   ----------------------------------
-   -- To_Ada (Reader_States_Set) --
-   ----------------------------------
+   ------------
+   -- To_Ada --
+   ------------
 
    function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set is
       States : Reader_States_Set;
@@ -153,9 +160,9 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
-   ------------------------------
-   -- Free (READERSTATE_Array) --
-   ------------------------------
+   ----------
+   -- Free --
+   ----------
 
    procedure Free (Name : in out Thin.READERSTATE_Array) is
    begin

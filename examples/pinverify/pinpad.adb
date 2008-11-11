@@ -88,7 +88,7 @@ begin
    SCU.Action_Info (Text => "Connecting to first reader");
    SCard.Connect (Context => Context,
                   Card    => Card,
-                  Reader  => Readers.First,
+                  Reader  => Readers.First_Item,
                   Mode    => SCard.Share_Direct);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 

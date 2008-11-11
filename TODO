@@ -1,7 +1,6 @@
 PCSC/Ada TODO List
 ===================
 
-- Support multiple Current_States Readerstate
 - Add preferred protocols to SCard.Connect procedure
 - Support 'or' operation for SCard.Connect preferred protocols
 - Add default options or null/empty types for in params.

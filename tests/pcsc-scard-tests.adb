@@ -95,18 +95,18 @@ package body PCSC.SCard.Tests is
 
       Assert (Condition => Readers.Data.Length = 1,
               Message   => "Slicing failed");
-      Assert (Condition => Readers.First = "One Reader",
+      Assert (Condition => Readers.First_Item = "One Reader",
               Message   => "Reader name does not match");
 
       --  Test slicing of multiple readers
       Readers := Convert.Slice_Readerstring (To_Slice => Source3);
       Assert (Condition => Readers.Data.Length = 3,
               Message   => "Slicing failed");
-      Assert (Condition => Readers.First = "First  Reader",
+      Assert (Condition => Readers.First_Item = "First  Reader",
               Message   => "Reader name does not match");
       Assert (Condition => Readers.Get (Index => 2) = "_SecondReader_",
               Message   => "Reader name does not match");
-      Assert (Condition => Readers.Last = " Third _ Reader  II ",
+      Assert (Condition => Readers.Last_Item = " Third _ Reader  II ",
               Message   => "Reader name does not match");
    end Test_Slice_Readerstring;
 
@@ -136,9 +136,9 @@ package body PCSC.SCard.Tests is
 
       --  Fill real set
       Reader1.Name := To_Reader_ID ("Reader I");
-      Reader1.Current_State := S_Reader_Unavailable;
+      Reader1.Current_State.Add (State => S_Reader_Unavailable);
       Reader2.Name := To_Reader_ID ("Reader II");
-      Reader2.Current_State := S_Reader_Unaware;
+      Reader2.Current_State.Add (State => S_Reader_Unaware);
 
       --  Setting Event_State of Reader2 should be ignored by the conversion,
       --  defaults are used instead. Settting Event_State manually makes no
