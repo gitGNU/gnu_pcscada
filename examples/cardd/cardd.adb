@@ -24,6 +24,7 @@ with Ada.Text_IO;
 
 with PCSC.Version;
 with PCSC.SCard.Utils;
+with PCSC.SCard.Monitor;
 
 use PCSC;
 
@@ -33,18 +34,6 @@ procedure Cardd is
    pragma Linker_Options ("-lpcsclite");
 
    Context      : SCard.Context;
-   Reader_IDs   : SCard.Reader_ID_Set;
-   Reader_Table : SCard.Reader_Condition_Set;
-
-   function Create_Condition (Reader : SCard.Reader_ID)
-                              return SCard.Reader_Condition is
-      New_Condition : SCard.Reader_Condition;
-   begin
-      New_Condition.Name := Reader;
-      New_Condition.Current_State.Add (State => SCard.S_Reader_Unaware);
-      return New_Condition;
-   end Create_Condition;
-
 begin
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("** PCSC/Ada card daemon [version " &
@@ -58,40 +47,8 @@ begin
                             Scope   => SCard.Scope_System);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 
-   --  Wait for the first reader
-
-   SCU.Action_Info (Text => "Waiting for first reader");
-   SCard.Wait_For_Readers (Context => Context);
-   SCU.Action_Result (Result => SCard.Get_Return_Code);
-
-   --  Create reader list and check status changes
-
-   SCU.Action_Info (Text => "Creating readers list");
-   Reader_IDs := SCard.List_Readers (Context => Context);
-   SCU.Action_Result (Result => SCard.Get_Return_Code);
-   Ada.Text_IO.Put_Line ("> Readers found            : ");
-   SCU.For_Every_Reader (Readers => Reader_IDs,
-                         Call    => SCU.Print_ReaderID'Access);
-
-   for R in Natural range Reader_IDs.First_Index .. Reader_IDs.Last_Index loop
-      Reader_Table.Add (Status => Create_Condition
-                        (Reader => Reader_IDs.Get (R)));
-   end loop;
-
-   --  Enter main loop: detect status changes
-
-   Ada.Text_IO.Put_Line ("Starting main loop ...");
-   loop
-      SCard.Status_Change (Context    => Context,
-                           Conditions => Reader_Table);
-      --  Update states
---        for C in Natural range Reader_Table.First_Index ..
---          Reader_Table.Last_Index loop
---           Reader_Table.Get (Index => C).Current_State :=
---             Reader_Table.Get (Index => C).Event_State;
---        end loop;
-
-   end loop;
+   --  Start the monitoring 'thread'
+   SCard.Monitor.Run (Context => Context);
 
    --  Release context
 
