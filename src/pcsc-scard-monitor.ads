@@ -20,7 +20,7 @@
 --  MA  02110-1301  USA
 --
 --  <PURPOSE>
---    SCard monitoring package.
+--    SCard reader monitoring package.
 --  </PURPOSE>
 --
 

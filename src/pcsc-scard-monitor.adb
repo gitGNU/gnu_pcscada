@@ -34,7 +34,6 @@ package body PCSC.SCard.Monitor is
 
       Reader_IDs   : SCard.Reader_ID_Set;
       Reader_Table : SCard.Reader_Condition_Set;
-      First_Run    : Boolean := True;
 
       function Create_Condition (Reader : SCard.Reader_ID)
                                  return SCard.Reader_Condition
@@ -80,13 +79,13 @@ package body PCSC.SCard.Monitor is
          begin
             while VORCP.Has_Element (Position) loop
                Item := VORCP.Element (Position);
-               if Item.Event_State.Is_In
-                 (State => SCard.S_Reader_Changed) and not First_Run then
+               if Item.Event_State.Is_In (State => SCard.S_Reader_Changed) then
+                  Item.Event_State.Remove (State => SCard.S_Reader_Changed);
                   Item.Current_State := Item.Event_State;
                   Reader_Table.Data.Replace_Element (Position => Position,
                                                      New_Item => Item);
 
-                  --  Dump new states for all changed states
+                  --  Dump new reader states
 
                   Ada.Text_IO.Put_Line (Utils.To_String (Item.Name) & " : " &
                                         Utils.To_String (Item.Current_State));
@@ -94,7 +93,6 @@ package body PCSC.SCard.Monitor is
                VORCP.Next (Position);
             end loop;
          end;
-         First_Run := False;
       end loop;
    end Run;
 
