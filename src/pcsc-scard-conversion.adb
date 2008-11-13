@@ -67,7 +67,7 @@ package body PCSC.SCard.Conversion is
    function To_C (Conditions : in Reader_Condition_Set)
                   return Thin.READERSTATE_Array
    is
-      use VORSTP;
+      use VORCP;
 
       Position : Cursor := Conditions.Data.First;
       C_States : Thin.READERSTATE_Array

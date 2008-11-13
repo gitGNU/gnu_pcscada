@@ -438,9 +438,9 @@ package PCSC.SCard is
    function Length (Set : in Reader_Condition_Set) return Natural;
    --  Returns the length of a Reader_Condition_Set.
 
-   function Get (Set    : in Reader_Condition_Set;
-                 Index  : in Natural)
-                 return Reader_Condition_Handle;
+   function Get (Set   : in Reader_Condition_Set;
+                 Index : in Natural)
+                 return Reader_Condition;
    --  Returns Reader_Condition object at index 'Index'.
 
 
@@ -560,11 +560,11 @@ private
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
                                         Element_Type => Reader_Condition);
 
-   package VORSTP renames Vector_Of_Status_Package;
-   subtype Vector_Of_Status_Type is VORSTP.Vector;
+   package VORCP renames Vector_Of_Status_Package;
+   subtype Vector_Of_Condition_Type is VORCP.Vector;
 
    type Reader_Condition_Set is tagged record
-      Data : Vector_Of_Status_Type;
+      Data : Vector_Of_Condition_Type;
    end record;
 
 end PCSC.SCard;

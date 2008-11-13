@@ -151,17 +151,17 @@ package body PCSC.SCard is
       Timeout    : in Natural := 0;
       Conditions : in out Reader_Condition_Set)
    is
-      use type VORSTP.Vector;
+      use type VORCP.Vector;
 
       Res       : Thin.DWORD;
       C_Timeout : Thin.DWORD;
       C_States  : Thin.READERSTATE_Array := Convert.To_C
         (Conditions => Conditions);
 
-      procedure Update_Status_Set (Position : in VORSTP.Cursor);
+      procedure Update_Status_Set (Position : in VORCP.Cursor);
       --  Forward declaration of Update_Status_Set
 
-      procedure Update_Status_Set (Position : in VORSTP.Cursor) is
+      procedure Update_Status_Set (Position : in VORCP.Cursor) is
 
          procedure Update_Reader_Condition (Element : in out Reader_Condition);
          --  Forward declaration of Update_Reader_Condition
@@ -172,9 +172,9 @@ package body PCSC.SCard is
             Element.Event_State     := Convert.To_Ada
               (C_States (C_States'First).dwEventState);
             Element.Card_ATR.Data   := ATR_Type
-              (C_States (size_t (VORSTP.To_Index (Position))).rgbAtr);
+              (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
             Element.Card_ATR.Length := ATR_Index
-              (C_States (size_t (VORSTP.To_Index (Position))).cbAtr);
+              (C_States (size_t (VORCP.To_Index (Position))).cbAtr);
          end Update_Reader_Condition;
 
       begin
@@ -188,7 +188,7 @@ package body PCSC.SCard is
          C_Timeout := Thin.INFINITE;
       end if;
 
-      if Conditions.Data = VORSTP.Empty_Vector then
+      if Conditions.Data = VORCP.Empty_Vector then
          return;
       else
          Res := Thin.SCardGetStatusChange
@@ -207,8 +207,8 @@ package body PCSC.SCard is
       --  Update Ada type with values returned by C API function
       --  TODO: what happens when a reader vanishes?
 
-      VORSTP.Iterate (Container => Conditions.Data,
-                      Process   => Update_Status_Set'Access);
+      VORCP.Iterate (Container => Conditions.Data,
+                     Process   => Update_Status_Set'Access);
 
       --  Free C_States
       Convert.Free (Name => C_States);
@@ -954,15 +954,13 @@ package body PCSC.SCard is
    -- Get --
    ---------
 
-   function Get (Set    : in Reader_Condition_Set;
-                 Index  : in Natural)
-                 return Reader_Condition_Handle
+   function Get (Set   : in Reader_Condition_Set;
+                 Index : in Natural)
+                 return Reader_Condition
    is
-      Item : aliased Reader_Condition;
    begin
       --  TODO: bound checks on 'Index'
-      Item := Set.Data.Element (Index);
-      return Item'Access;
+      return Set.Data.Element (Index);
    end Get;
 
    ------------
