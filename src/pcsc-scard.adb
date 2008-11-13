@@ -952,6 +952,28 @@ package body PCSC.SCard is
       Set.Data.Append (New_Item => Status);
    end Add;
 
+   ----------
+   -- Find --
+   ----------
+
+   function Find
+     (Set       : in Reader_Condition_Set;
+      Reader_ID : in SCard.Reader_ID)
+      return Boolean
+   is
+      Position : VORCP.Cursor := Set.Data.First;
+      Item     : Reader_Condition;
+   begin
+      while VORCP.Has_Element (Position) loop
+         Item := VORCP.Element (Position);
+         if Item.Name = Reader_ID then
+            return True;
+         end if;
+         VORCP.Next (Position);
+      end loop;
+      return False;
+   end Find;
+
    -----------------
    -- First_Index --
    -----------------

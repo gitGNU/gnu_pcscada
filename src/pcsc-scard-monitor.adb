@@ -33,9 +33,10 @@ package body PCSC.SCard.Monitor is
    procedure Run (Context : in SCard.Context) is
 
       Reader_IDs   : SCard.Reader_ID_Set;
+      Reader_IDnew : SCard.Reader_ID_Set;
       Reader_Table : SCard.Reader_Condition_Set;
 
-      function Create_Condition (Reader : SCard.Reader_ID)
+      function Create_Condition (Reader : in SCard.Reader_ID)
                                  return SCard.Reader_Condition
       is
          New_Condition : SCard.Reader_Condition;
@@ -45,6 +46,21 @@ package body PCSC.SCard.Monitor is
          return New_Condition;
       end Create_Condition;
 
+      procedure Update_Reader_Table
+        (Table : in out SCard.Reader_Condition_Set;
+         IDs   : in SCard.Reader_ID_Set)
+      is
+      begin
+         for R in Natural range IDs.First_Index .. IDs.Last_Index
+         loop
+            --  Skip already known readers
+            if not Table.Find (Reader_ID => IDs.Get (R)) then
+               Table.Add (Status => Create_Condition
+                          (Reader => IDs.Get (R)));
+            end if;
+         end loop;
+      end Update_Reader_Table;
+
    begin
       --  Wait for the first reader
 
@@ -53,11 +69,10 @@ package body PCSC.SCard.Monitor is
       --  Create reader table
 
       Reader_IDs := SCard.List_Readers (Context => Context);
-      for R in Natural range Reader_IDs.First_Index .. Reader_IDs.Last_Index
-      loop
-         Reader_Table.Add (Status => Create_Condition
-                           (Reader => Reader_IDs.Get (R)));
-      end loop;
+      Utils.For_Every_Reader (Readers => Reader_IDs,
+                              Call    => Utils.Print_ReaderID'Access);
+      Update_Reader_Table (Table => Reader_Table,
+                           IDs   => Reader_IDs);
 
       --  Enter main loop: detect status changes
 
@@ -66,8 +81,16 @@ package body PCSC.SCard.Monitor is
          SCard.Status_Change (Context    => Context,
                               Conditions => Reader_Table);
 
-         --  TODO: check for new readers
-         --        if new ones -> add to Reader_Table
+         --  Check for new readers; if new ones are found, add them to the
+         --  Reader_Table
+         Reader_IDnew := SCard.List_Readers (Context => Context);
+         if Reader_IDnew /= Reader_IDs then
+            Update_Reader_Table (Table => Reader_Table,
+                                 IDs   => Reader_IDnew);
+            Reader_IDs := Reader_IDnew;
+            Utils.For_Every_Reader (Readers => Reader_IDs,
+                                    Call    => Utils.Print_ReaderID'Access);
+         end if;
 
          --  Loop through reader table and check for state S_Reader_Changed.
          --  If Event_State contains S_Reader_Changed, update Current_State

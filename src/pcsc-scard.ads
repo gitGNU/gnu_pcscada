@@ -438,6 +438,13 @@ package PCSC.SCard is
    --  Add a new reader to reader condition array. State specifies the assumed
    --  initial state of the reader/card.
 
+   function Find
+     (Set       : in Reader_Condition_Set;
+      Reader_ID : in SCard.Reader_ID)
+      return Boolean;
+   --  Search a given Reader_ID in Reader_Condition_Set. If found, True is
+   --  returned, False if not found.
+
    function First_Index (Set : in Reader_Condition_Set) return Natural;
    --  Returns the first index of a Reader_Condition_Set.
 
