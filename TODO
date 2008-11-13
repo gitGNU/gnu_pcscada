@@ -1,7 +1,8 @@
 PCSC/Ada TODO List
 ===================
 
-- Improve / optimize Set operations.
+- Improve / optimize Set operations, add unit tests for all
+  set operations.
 - Add preferred protocols to SCard.Connect procedure
 - Support 'or' operation for SCard.Connect preferred protocols
 - Add default options or null/empty types for in params.
