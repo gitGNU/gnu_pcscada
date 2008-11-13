@@ -814,6 +814,19 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add;
 
+   ------------
+   -- Remove --
+   ------------
+
+   procedure Remove
+     (States : in out Reader_States_Set;
+      State  : in Reader_State)
+   is
+   begin
+      --  TODO: error handling when state is not found
+      States.Data.Delete (Index => States.Data.Find_Index (Item => State));
+   end Remove;
+
    ----------------
    -- First_Item --
    ----------------

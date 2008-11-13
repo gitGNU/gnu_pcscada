@@ -386,6 +386,11 @@ package PCSC.SCard is
    procedure Add (States : in out Reader_States_Set; State : in Reader_State);
    --  Add a new reader state to Reader_States_Set.
 
+   procedure Remove
+     (States : in out Reader_States_Set;
+      State  : in Reader_State);
+   --  Remove Reader_State 'state' from Reader_States_Set.
+
    function First_Item (Set : in Reader_States_Set) return Reader_State;
    --  Returns the first Reader_State in a Reader_States_Set.
 
