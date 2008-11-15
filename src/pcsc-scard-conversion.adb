@@ -72,6 +72,25 @@ package body PCSC.SCard.Conversion is
       Position : Cursor := Conditions.Data.First;
       C_States : Thin.READERSTATE_Array
         (size_t (1) .. size_t (Conditions.Data.Last_Index));
+
+      --  Helper function to create a new Thin.READERSTATE object from
+      --  Reader_Condition
+
+      function Create_Readerstate (Condition : in Reader_Condition;
+                                   State     : in Thin.DWORD)
+                                   return Thin.READERSTATE
+      is
+      begin
+         return Thin.READERSTATE'
+           (szReader       => Strings.New_String
+              (To_String (Condition.Name)),
+            pvUserData     => <>,  --  use default
+            dwCurrentState => State,
+            dwEventState   => <>,  --  use default
+            cbAtr          => Condition.Card_ATR.Data'Length,
+            rgbAtr         => Thin.Byte_Array (Condition.Card_ATR.Data));
+      end Create_Readerstate;
+
    begin
       while Has_Element (Position) loop
          declare
@@ -84,15 +103,9 @@ package body PCSC.SCard.Conversion is
                  (Item.Current_State.Get (Index => S));
             end loop;
 
-            C_States (size_t (To_Index (Position))) :=
-              new Thin.READERSTATE'
-                (szReader       => Strings.New_String
-                     (To_String (Item.Name)),
-                 pvUserData     => <>,  --  use default
-                 dwCurrentState => C_RState,
-                 dwEventState   => <>,  --  use default
-                 cbAtr          => Item.Card_ATR.Data'Length,
-                 rgbAtr         => Thin.Byte_Array (Item.Card_ATR.Data));
+            C_States (size_t (To_Index (Position))) :=  Create_Readerstate
+              (Condition => Item,
+               State     => C_RState);
 
             Next (Position);
          end;
@@ -168,7 +181,6 @@ package body PCSC.SCard.Conversion is
    begin
       for Index in Name'Range loop
          Strings.Free (Name (Index).szReader);
-         Free (Name (Index));
       end loop;
    end Free;
 

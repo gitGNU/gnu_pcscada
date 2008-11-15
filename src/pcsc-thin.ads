@@ -91,12 +91,9 @@ package PCSC.Thin is
    end record;
    --  Reader state type
 
-   type READERSTATE_Access is access READERSTATE;
-   --  Access type to reader state
-
    type READERSTATE_Array is array (C.size_t range <>) of aliased
-     READERSTATE_Access;
-   --  Array of access to reader states
+     READERSTATE;
+   --  Array of reader states
 
 
    type SCARD_IO_REQUEST is record
@@ -426,7 +423,7 @@ package PCSC.Thin is
    function SCardGetStatusChange
      (hContext       : in SCARDCONTEXT;
       dwTimeout      : in DWORD;
-      rgReaderStates : in READERSTATE_Access := null;
+      rgReaderStates : access READERSTATE := null;
       cReaders       : in DWORD := 0)
       return DWORD;
    --  Used to track status changes of readers

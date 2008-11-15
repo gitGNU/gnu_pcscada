@@ -194,7 +194,7 @@ package body PCSC.SCard is
          Res := Thin.SCardGetStatusChange
            (hContext       => Context.hContext,
             dwTimeout      => C_Timeout,
-            rgReaderStates => C_States (C_States'First),
+            rgReaderStates => C_States (C_States'First)'Access,
             cReaders       => Thin.DWORD (C_States'Last));
       end if;
 

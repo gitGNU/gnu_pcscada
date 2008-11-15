@@ -26,8 +26,6 @@
 --  </PURPOSE>
 --
 
-with Ada.Unchecked_Deallocation;
-
 with Interfaces.C.Strings;
 
 with PCSC.Thin.Reader;
@@ -169,10 +167,6 @@ private package PCSC.SCard.Conversion is
    function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set;
    --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
 
-   procedure Free is new Ada.Unchecked_Deallocation
-     (Object => Thin.READERSTATE,
-      Name   => Thin.READERSTATE_Access);
-   --  Free memory allocated by a C READERSTATE struct.
 
    procedure Free (Name : in out Thin.READERSTATE_Array);
    --  Free C Array of READERSTATES.
