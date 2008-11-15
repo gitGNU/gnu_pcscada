@@ -158,19 +158,13 @@ package body PCSC.SCard is
       C_States  : Thin.READERSTATE_Array := Convert.To_C
         (Conditions => Conditions);
 
-      procedure Update_Status_Set (Position : in VORCP.Cursor);
-      --  Forward declaration of Update_Status_Set
-
-      procedure Update_Status_Set (Position : in VORCP.Cursor) is
-
-         procedure Update_Reader_Condition (Element : in out Reader_Condition);
-         --  Forward declaration of Update_Reader_Condition
-
+      procedure Update_Status_Set (Position : in VORCP.Cursor)
+      is
          procedure Update_Reader_Condition (Element : in out Reader_Condition)
          is
          begin
             Element.Event_State     := Convert.To_Ada
-              (C_States (C_States'First).dwEventState);
+              (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
             Element.Card_ATR.Data   := ATR_Type
               (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
             Element.Card_ATR.Length := ATR_Index
@@ -179,7 +173,8 @@ package body PCSC.SCard is
 
       begin
          Conditions.Data.Update_Element
-           (Position => Position, Process => Update_Reader_Condition'Access);
+           (Position => Position,
+            Process  => Update_Reader_Condition'Access);
       end Update_Status_Set;
 
    begin
