@@ -50,15 +50,34 @@ package body PCSC.SCard.Monitor is
         (Table : in out SCard.Reader_Condition_Set;
          IDs   : in SCard.Reader_ID_Set)
       is
+         use type VOIDP.Cursor;
+
+         Position : VORCP.Cursor := Table.Data.First;
+         Item     : Reader_Condition;
       begin
+         --  Remove vanished readers
+         while VORCP.Has_Element (Position) loop
+            Item := VORCP.Element (Position);
+            if IDs.Data.Find (Item.Name) = VOIDP.No_Element then
+               Ada.Text_IO.Put_Line ("Removing reader " &
+                                     Utils.To_String (Reader => Item.Name));
+               Table.Data.Delete (Position);
+            end if;
+            VORCP.Next (Position);
+         end loop;
+
+         --  Add new readers to table
          for R in Natural range IDs.First_Index .. IDs.Last_Index
          loop
             --  Skip already known readers
             if not Table.Find (Reader_ID => IDs.Get (R)) then
+               Ada.Text_IO.Put_Line ("Adding reader " &
+                                     Utils.To_String (Reader => IDs.Get (R)));
                Table.Add (Status => Create_Condition
                           (Reader => IDs.Get (R)));
             end if;
          end loop;
+
       end Update_Reader_Table;
 
    begin
@@ -69,8 +88,6 @@ package body PCSC.SCard.Monitor is
       --  Create reader table
 
       Reader_IDs := SCard.List_Readers (Context => Context);
-      Utils.For_Every_Reader (Readers => Reader_IDs,
-                              Call    => Utils.Print_ReaderID'Access);
       Update_Reader_Table (Table => Reader_Table,
                            IDs   => Reader_IDs);
 
@@ -88,8 +105,6 @@ package body PCSC.SCard.Monitor is
             Update_Reader_Table (Table => Reader_Table,
                                  IDs   => Reader_IDnew);
             Reader_IDs := Reader_IDnew;
-            Utils.For_Every_Reader (Readers => Reader_IDs,
-                                    Call    => Utils.Print_ReaderID'Access);
          end if;
 
          --  Loop through reader table and check for state S_Reader_Changed.
