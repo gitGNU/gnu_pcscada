@@ -428,6 +428,11 @@ package PCSC.Thin is
       return DWORD;
    --  Used to track status changes of readers
 
+   function SCardCancel (hContext : in SCARDCONTEXT) return DWORD;
+   --  Cancel all pending blocking requests on the SCardGetStatusChange()
+   --  function
+
+
    function SCardControl
      (hCard           : in SCARDHANDLE;
       dwControlCode   : in DWORD;
@@ -532,6 +537,9 @@ private
    pragma Import (Convention    => C,
                   Entity        => SCardGetStatusChange,
                   External_Name => "SCardGetStatusChange");
+   pragma Import (Convention    => C,
+                  Entity        => SCardCancel,
+                  External_Name => "SCardCancel");
    pragma Import (Convention    => C,
                   Entity        => SCardControl,
                   External_Name => "SCardControl");
