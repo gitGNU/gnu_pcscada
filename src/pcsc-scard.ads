@@ -263,6 +263,10 @@ package PCSC.SCard is
    --  used, which will block forever. When a status change occurs, the
    --  Conditions object is updated to reflect the change(s).
 
+   procedure Cancel (Context : in SCard.Context);
+   --  This procedure cancels all pending blocking requests on the
+   --  Status_Change() procedure for a given SCard 'Context'.
+
    procedure Wait_For_Readers (Context : in SCard.Context);
    --  This procedure calls SCardGetStatusChange for reader detection. If there
    --  is no reader available, the call will block until a reader is connected.

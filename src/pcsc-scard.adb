@@ -215,6 +215,22 @@ package body PCSC.SCard is
 
    end Status_Change;
 
+   ------------
+   -- Cancel --
+   ------------
+
+   procedure Cancel (Context : in SCard.Context) is
+      Res : Thin.DWORD;
+   begin
+      Res := Thin.SCardCancel (hContext => Context.hContext);
+
+      if Res /= Thin.SCARD_S_SUCCESS then
+         SCard_Exception (Code    => Res,
+                          Message => "Cancel operation failed");
+      end if;
+      Store_Error (Code => Res);
+   end Cancel;
+
    ----------------------
    -- Wait_For_Readers --
    ----------------------
