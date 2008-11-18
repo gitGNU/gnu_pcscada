@@ -162,6 +162,9 @@ package body PCSC.SCard is
       is
          procedure Update_Reader_Condition (Element : in out Reader_Condition)
          is
+            use type Interfaces.Unsigned_64;
+
+            Counter : Interfaces.Unsigned_64;
          begin
             Element.Event_State     := Convert.To_Ada
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
@@ -169,6 +172,14 @@ package body PCSC.SCard is
               (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
             Element.Card_ATR.Length := ATR_Index
               (C_States (size_t (VORCP.To_Index (Position))).cbAtr);
+
+            --  Update event counter for this condition
+            Counter := Interfaces.Unsigned_64
+              (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
+            Counter := Interfaces.Shift_Right (Value  => Counter,
+                                               Amount => 16);
+            Counter := Counter and 16#FFFF#;
+            Element.Event_Counter := Natural (Counter);
          end Update_Reader_Condition;
 
       begin

@@ -169,11 +169,13 @@ package PCSC.SCard is
       Name          : Reader_ID := Null_Reader_ID;
       Current_State : Reader_States_Set;
       Event_State   : Reader_States_Set;
+      Event_Counter : Natural := 0;
       Card_ATR      : ATR := Null_ATR;
    end record;
    --  Reader condition type for status change handling. Current_State defines
    --  the current assumed state. Event_State and Card_ATR is updated by
-   --  calling the Status_Change() procedure.
+   --  calling the Status_Change() procedure. Event_Counter stores the event
+   --  count for the reader identified by 'Name'.
 
    type Reader_Condition_Handle is access all Reader_Condition;
    --  Handle to Reader_Condition type.

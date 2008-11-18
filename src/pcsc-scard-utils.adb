@@ -55,7 +55,8 @@ package body PCSC.SCard.Utils is
          Temp := Given (Index);
          for J in reverse 0 .. 2 - 1 loop
             Result (Where + J) := Hex (Integer (Temp and 16#F#) + 1);
-            Temp := Interfaces.Shift_Right (Temp, 4);
+            Temp := Interfaces.Shift_Right (Value  => Temp,
+                                            Amount => 4);
          end loop;
          if Index /= Given'Last then
             exit when Where + 2 >= Result'Last;
@@ -194,7 +195,8 @@ package body PCSC.SCard.Utils is
    begin
       for Index in Given'Range loop
          U := Interfaces.Unsigned_64 (Given (Index));
-         Result := Result or Interfaces.Shift_Left (U, (Index - 1) * 8);
+         Result := Result or Interfaces.Shift_Left (Value  => U,
+                                                    Amount => (Index - 1) * 8);
       end loop;
 
       return Long_Long_Integer (Result);

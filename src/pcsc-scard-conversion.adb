@@ -80,12 +80,21 @@ package body PCSC.SCard.Conversion is
                                    State     : in Thin.DWORD)
                                    return Thin.READERSTATE
       is
+         Current_State : Thin.DWORD := State;
+         Temp          : Interfaces.Unsigned_64;
       begin
+         --  Add event counter in the upper word of dwCurrentState
+         Current_State := State and 16#FFFF#;
+         Temp          := Interfaces.Unsigned_64 (Condition.Event_Counter);
+         Current_State := Current_State or Thin.DWORD
+           (Interfaces.Shift_Left (Value  => Temp,
+                                   Amount => 16));
+
          return Thin.READERSTATE'
            (szReader       => Strings.New_String
               (To_String (Condition.Name)),
             pvUserData     => <>,  --  use default
-            dwCurrentState => State,
+            dwCurrentState => Current_State,
             dwEventState   => <>,  --  use default
             cbAtr          => Condition.Card_ATR.Data'Length,
             rgbAtr         => Thin.Byte_Array (Condition.Card_ATR.Data));
