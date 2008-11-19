@@ -174,6 +174,7 @@ package body PCSC.SCard is
               (C_States (size_t (VORCP.To_Index (Position))).cbAtr);
 
             --  Update event counter for this condition
+
             Counter := Interfaces.Unsigned_64
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
             Counter := Interfaces.Shift_Right (Value  => Counter,
@@ -189,6 +190,16 @@ package body PCSC.SCard is
       end Update_Status_Set;
 
    begin
+
+      --  Check for empty reader conditions
+
+      if Conditions.Data = VORCP.Empty_Vector then
+
+         --  Just wait for readers to appear, then return
+
+         Wait_For_Readers (Context => Context);
+         return;
+      end if;
 
       if Timeout = 0 then
          C_Timeout := Thin.INFINITE;
@@ -217,6 +228,7 @@ package body PCSC.SCard is
                      Process   => Update_Status_Set'Access);
 
       --  Free C_States
+
       Convert.Free (Name => C_States);
 
    end Status_Change;

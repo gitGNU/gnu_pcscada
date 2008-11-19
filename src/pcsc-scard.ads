@@ -263,7 +263,9 @@ package PCSC.SCard is
    --  with their assumed state. It then blocks maximum 'Timeout' milliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
    --  used, which will block forever. When a status change occurs, the
-   --  Conditions object is updated to reflect the change(s).
+   --  Conditions object is updated to reflect the change(s). If this procedure
+   --  is called with an empty Conditions object, Wait_For_Readers() is used
+   --  to wait for a reader to appear, then the procedure returns.
 
    procedure Cancel (Context : in SCard.Context);
    --  This procedure cancels all pending blocking requests on the
