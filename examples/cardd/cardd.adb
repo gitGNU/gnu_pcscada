@@ -47,8 +47,14 @@ begin
                             Scope   => SCard.Scope_System);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 
-   --  Start the monitoring 'thread'
-   SCard.Monitor.Run (Context => Context);
+   SCU.Action_Info (Text => "Starting Reader Monitor");
+
+   --  Start the monitoring task
+   declare
+      Monitor : SCard.Monitor.Reader_Monitor;
+   begin
+      SCU.Action_Result (Result => "DONE");
+   end;
 
    --  Release context
 

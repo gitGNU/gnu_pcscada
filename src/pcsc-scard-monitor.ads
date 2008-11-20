@@ -26,7 +26,9 @@
 
 package PCSC.SCard.Monitor is
 
-   procedure Run (Context : in SCard.Context);
-   --  Starts the monitoring code, very simple at the moment
+   task type Reader_Monitor is
+      entry Run (Context : in SCard.Context);
+   end Reader_Monitor;
+   --  Reader monitoring task
 
 end PCSC.SCard.Monitor;
