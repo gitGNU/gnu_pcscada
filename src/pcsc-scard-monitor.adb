@@ -26,7 +26,6 @@ with PCSC.SCard.Utils;
 
 package body PCSC.SCard.Monitor is
 
-
    task body Reader_Monitor is
 
       Reader_IDs   : SCard.Reader_ID_Set;
@@ -52,7 +51,9 @@ package body PCSC.SCard.Monitor is
          Position : VORCP.Cursor := Table.Data.First;
          Item     : Reader_Condition;
       begin
+
          --  Remove vanished readers
+
          while VORCP.Has_Element (Position) loop
             Item := VORCP.Element (Position);
             if IDs.Data.Find (Item.Name) = VOIDP.No_Element then
@@ -64,9 +65,12 @@ package body PCSC.SCard.Monitor is
          end loop;
 
          --  Add new readers to table
+
          for R in Natural range IDs.First_Index .. IDs.Last_Index
          loop
+
             --  Skip already known readers
+
             if not Table.Find (Reader_ID => IDs.Get (R)) then
                Ada.Text_IO.Put_Line ("Adding reader " &
                                      Utils.To_String (Reader => IDs.Get (R)));
@@ -74,11 +78,11 @@ package body PCSC.SCard.Monitor is
                           (Reader => IDs.Get (R)));
             end if;
          end loop;
-
       end Update_Reader_Table;
 
    begin
       accept Run (Context : in SCard.Context) do
+
          --  Wait for the first reader
 
          SCard.Wait_For_Readers (Context => Context);
@@ -98,6 +102,7 @@ package body PCSC.SCard.Monitor is
 
             --  Check for new readers; if new ones are found, add them to the
             --  Reader_Table
+
             Reader_IDnew := SCard.List_Readers (Context => Context);
             if Reader_IDnew /= Reader_IDs then
                Update_Reader_Table (Table => Reader_Table,
