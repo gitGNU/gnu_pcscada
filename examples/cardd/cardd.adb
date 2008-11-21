@@ -53,6 +53,7 @@ begin
    declare
       Monitor : SCard.Monitor.Reader_Monitor;
    begin
+      Monitor.Run (Context => Context);
       SCU.Action_Result (Result => "DONE");
    end;
 
