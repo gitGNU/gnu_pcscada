@@ -397,7 +397,7 @@ package PCSC.SCard is
    procedure Remove
      (States : in out Reader_States_Set;
       State  : in Reader_State);
-   --  Remove Reader_State 'state' from Reader_States_Set.
+   --  Remove Reader_State 'State' from Reader_States_Set 'States'.
 
    function First_Item (Set : in Reader_States_Set) return Reader_State;
    --  Returns the first Reader_State in a Reader_States_Set.
