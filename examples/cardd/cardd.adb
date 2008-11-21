@@ -66,11 +66,11 @@ begin
    Ada.Text_IO.Put_Line ("DONE!");
    Ada.Text_IO.New_Line;
 
---  exception
---     when others =>
---        SCU.Action_Result (Result => "FAILED: " & SCard.Get_Return_Code);
---
---        if SCard.Is_Valid (Context => Context) then
---           SCard.Release_Context (Context => Context);
---        end if;
+exception
+   when others =>
+      SCU.Action_Result (Result => "FAILED: " & SCard.Get_Return_Code);
+
+      if SCard.Is_Valid (Context => Context) then
+         SCard.Release_Context (Context => Context);
+      end if;
 end Cardd;
