@@ -83,36 +83,38 @@ package body PCSC.SCard.Monitor is
    begin
       accept Run (Context : in SCard.Context) do
 
-         --  Wait for the first reader
-
-         SCard.Wait_For_Readers (Context => Context);
-
-         --  Create reader table
-
-         Reader_IDs := SCard.List_Readers (Context => Context);
-         Update_Reader_Table (Table => Reader_Table,
-                              IDs   => Reader_IDs);
-
          --  Enter main loop: detect status changes
 
-         Ada.Text_IO.Put_Line ("Monitoring thread running ...");
+         Ada.Text_IO.Put_Line (" Monitoring thread running ...");
          loop
             SCard.Status_Change (Context    => Context,
                                  Conditions => Reader_Table);
 
             --  Check for new readers; if new ones are found, add them to the
-            --  Reader_Table
+            --  Reader_Table. If none found, an exception is thrown.
 
-            Reader_IDnew := SCard.List_Readers (Context => Context);
-            if Reader_IDnew /= Reader_IDs then
-               Update_Reader_Table (Table => Reader_Table,
-                                    IDs   => Reader_IDnew);
-               Reader_IDs := Reader_IDnew;
-            end if;
+            begin
+               Reader_IDnew := SCard.List_Readers (Context => Context);
+               if Reader_IDnew /= Reader_IDs then
+                  Update_Reader_Table (Table => Reader_Table,
+                                       IDs   => Reader_IDnew);
+                  Reader_IDs := Reader_IDnew;
+               end if;
+
+            exception
+               when SCard_Error =>
+
+                  --  No readers present, set empty vectors
+
+                  Ada.Text_IO.Put_Line ("All readers vanished ... ");
+
+                  Reader_Table.Data := VORCP.Empty_Vector;
+                  Reader_IDs.Data   := VOIDP.Empty_Vector;
+            end;
 
             --  Loop through reader table and check for state S_Reader_Changed.
             --  If Event_State contains S_Reader_Changed, update Current_State
-            --  with Event_State reader states.
+            --  with new Event_State.
 
             declare
                Position : VORCP.Cursor := Reader_Table.Data.First;
