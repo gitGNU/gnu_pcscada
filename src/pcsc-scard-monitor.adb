@@ -32,6 +32,10 @@ package body PCSC.SCard.Monitor is
       Reader_IDnew : SCard.Reader_ID_Set;
       Reader_Table : SCard.Reader_Condition_Set;
 
+      ----------------------
+      -- Create_Condition --
+      ----------------------
+
       function Create_Condition (Reader : in SCard.Reader_ID)
                                  return SCard.Reader_Condition
       is
@@ -41,6 +45,10 @@ package body PCSC.SCard.Monitor is
          New_Condition.Current_State.Add (State => SCard.S_Reader_Unaware);
          return New_Condition;
       end Create_Condition;
+
+      -------------------------
+      -- Update_Reader_Table --
+      -------------------------
 
       procedure Update_Reader_Table
         (Table : in out SCard.Reader_Condition_Set;
