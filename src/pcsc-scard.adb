@@ -164,6 +164,11 @@ package body PCSC.SCard is
 
       procedure Update_Status_Set (Position : in VORCP.Cursor)
       is
+
+         -----------------------------
+         -- Update_Reader_Condition --
+         -----------------------------
+
          procedure Update_Reader_Condition (Element : in out Reader_Condition)
          is
             use type Interfaces.Unsigned_64;
