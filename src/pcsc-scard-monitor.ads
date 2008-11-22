@@ -26,8 +26,11 @@
 
 package PCSC.SCard.Monitor is
 
+   type Context_Handle is access all SCard.Context;
+   --  Handle to Context object
+
    task type Reader_Monitor is
-      entry Run (Context : in SCard.Context);
+      entry Start (Context : in Context_Handle);
    end Reader_Monitor;
    --  Reader monitoring task
 

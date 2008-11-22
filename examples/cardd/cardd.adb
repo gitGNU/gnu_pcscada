@@ -33,7 +33,8 @@ procedure Cardd is
 
    pragma Linker_Options ("-lpcsclite");
 
-   Context      : SCard.Context;
+   Context : aliased SCard.Context;
+   Monitor : SCard.Monitor.Reader_Monitor;
 begin
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("** PCSC/Ada card daemon [version " &
@@ -47,31 +48,9 @@ begin
                             Scope   => SCard.Scope_System);
    SCU.Action_Result (Result => SCard.Get_Return_Code);
 
-   SCU.Action_Info (Text => "Starting Reader Monitor");
-
    --  Start the monitoring task
 
-   declare
-      Monitor : SCard.Monitor.Reader_Monitor;
-   begin
-      Monitor.Run (Context => Context);
-   end;
+   SCU.Action_Info (Text => "Starting Reader Monitor");
+   Monitor.Start (Context => Context'Unchecked_Access);
 
-   --  Release context
-
-   SCU.Action_Info (Text => "Releasing context");
-   SCard.Release_Context (Context => Context);
-   SCU.Action_Result (Result => SCard.Get_Return_Code);
-
-   Ada.Text_IO.New_Line;
-   Ada.Text_IO.Put_Line ("DONE!");
-   Ada.Text_IO.New_Line;
-
-exception
-   when others =>
-      SCU.Action_Result (Result => "FAILED: " & SCard.Get_Return_Code);
-
-      if SCard.Is_Valid (Context => Context) then
-         SCard.Release_Context (Context => Context);
-      end if;
 end Cardd;
