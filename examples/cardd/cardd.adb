@@ -50,6 +50,7 @@ begin
    SCU.Action_Info (Text => "Starting Reader Monitor");
 
    --  Start the monitoring task
+
    declare
       Monitor : SCard.Monitor.Reader_Monitor;
    begin

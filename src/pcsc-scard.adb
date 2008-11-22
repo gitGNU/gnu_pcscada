@@ -646,6 +646,7 @@ package body PCSC.SCard is
       end if;
 
       --  Get number of TLV elements instead of the complete size
+
       Elements := Integer (Recv_Len) / (TR.PCSC_TLV_STRUCTURE'Size / 8);
 
       --  Create TLV structure from bytes received
@@ -668,6 +669,7 @@ package body PCSC.SCard is
             TLV_Array (Index).length := Recv_Buffer (T + 1);
 
             --  Value is stored in Big endian format
+
             Value (4) := Recv_Buffer (T + 2);
             Value (3) := Recv_Buffer (T + 3);
             Value (2) := Recv_Buffer (T + 4);
@@ -706,7 +708,9 @@ package body PCSC.SCard is
       Recv_Len      : aliased Thin.DWORD := 0;
       Supported     : Boolean := False;
    begin
+
       --  Check control code of this card
+
       if Card.Verify_Ctrl = 0 then
          SPE_Init (Card   => Card,
                    Result => Supported);
@@ -716,6 +720,7 @@ package body PCSC.SCard is
       end if;
 
       --  Construct PC/SC v2.0.2 Part 10 PIN verification data structure
+
       Verify_Struct.bTimerOut                 := 0;
       Verify_Struct.bTimerOut2                := 0;
       Verify_Struct.bmFormatString            := 16#82#;
@@ -758,6 +763,7 @@ package body PCSC.SCard is
       --  Store Bytes returned from reader in Result byte set
       --  TODO: this assumes return code to be two bytes. Fix by using a more
       --        flexible way of Byte_Set size handling (handles to byte sets?)
+
       for Index in Result'Range loop
          Result (Index) := Recv_Buffer (size_t (Index));
       end loop;
