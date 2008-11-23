@@ -36,4 +36,18 @@ package PCSC.SCard.Monitor is
    end Reader_Monitor;
    --  Reader monitoring task
 
+private
+   function Create_Condition
+     (Reader : in SCard.Reader_ID)
+      return SCard.Reader_Condition;
+   --  Create a new Reader_Conditon object from Reader_ID given.
+
+   procedure Update_Reader_Table
+     (Table : in out SCard.Reader_Condition_Set;
+      IDs   : in SCard.Reader_ID_Set);
+   --  Update given reader condition table with Reader_ID_Set list of reader
+   --  IDs. New readers, which are not already in the condition set 'Table',
+   --  are added by calling Create_Condition(), vanished IDs are removed from
+   --  the Reader_Condition_Set 'Table'.
+
 end PCSC.SCard.Monitor;

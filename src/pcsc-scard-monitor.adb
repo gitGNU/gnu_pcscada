@@ -35,63 +35,6 @@ package body PCSC.SCard.Monitor is
       Current_Context : Context_Handle;
 
       Do_Cancel       : Boolean := False;
-
-      ----------------------
-      -- Create_Condition --
-      ----------------------
-
-      function Create_Condition (Reader : in SCard.Reader_ID)
-                                 return SCard.Reader_Condition
-      is
-         New_Condition : SCard.Reader_Condition;
-      begin
-         New_Condition.Name := Reader;
-         New_Condition.Current_State.Add (State => SCard.S_Reader_Unaware);
-         return New_Condition;
-      end Create_Condition;
-
-      -------------------------
-      -- Update_Reader_Table --
-      -------------------------
-
-      procedure Update_Reader_Table
-        (Table : in out SCard.Reader_Condition_Set;
-         IDs   : in SCard.Reader_ID_Set)
-      is
-         use type VOIDP.Cursor;
-
-         Position : VORCP.Cursor := Table.Data.First;
-         Item     : Reader_Condition;
-      begin
-
-         --  Remove vanished readers
-
-         while VORCP.Has_Element (Position) loop
-            Item := VORCP.Element (Position);
-            if IDs.Data.Find (Item.Name) = VOIDP.No_Element then
-               Ada.Text_IO.Put_Line ("Removing reader " &
-                                     Utils.To_String (Reader => Item.Name));
-               Table.Data.Delete (Position);
-            end if;
-            VORCP.Next (Position);
-         end loop;
-
-         --  Add new readers to table
-
-         for R in Natural range IDs.First_Index .. IDs.Last_Index
-         loop
-
-            --  Skip already known readers
-
-            if not Table.Find (Reader_ID => IDs.Get (R)) then
-               Ada.Text_IO.Put_Line ("Adding reader " &
-                                     Utils.To_String (Reader => IDs.Get (R)));
-               Table.Add (Status => Create_Condition
-                          (Reader => IDs.Get (R)));
-            end if;
-         end loop;
-      end Update_Reader_Table;
-
    begin
       accept Init (Context : in Context_Handle) do
          Current_Context := Context;
@@ -172,5 +115,62 @@ package body PCSC.SCard.Monitor is
          end select;
       end loop;
    end Reader_Monitor;
+
+   ----------------------
+   -- Create_Condition --
+   ----------------------
+
+   function Create_Condition
+     (Reader : in SCard.Reader_ID)
+      return SCard.Reader_Condition
+   is
+      New_Condition : SCard.Reader_Condition;
+   begin
+      New_Condition.Name := Reader;
+      New_Condition.Current_State.Add (State => SCard.S_Reader_Unaware);
+      return New_Condition;
+   end Create_Condition;
+
+   -------------------------
+   -- Update_Reader_Table --
+   -------------------------
+
+   procedure Update_Reader_Table
+     (Table : in out SCard.Reader_Condition_Set;
+      IDs   : in SCard.Reader_ID_Set)
+   is
+      use type VOIDP.Cursor;
+
+      Position : VORCP.Cursor := Table.Data.First;
+      Item     : Reader_Condition;
+   begin
+
+      --  Remove vanished readers
+
+      while VORCP.Has_Element (Position) loop
+         Item := VORCP.Element (Position);
+         if IDs.Data.Find (Item.Name) = VOIDP.No_Element then
+            Ada.Text_IO.Put_Line ("Removing reader " &
+                                  Utils.To_String (Reader => Item.Name));
+            Table.Data.Delete (Position);
+         end if;
+         VORCP.Next (Position);
+      end loop;
+
+      --  Add new readers to table
+
+      for R in Natural range IDs.First_Index .. IDs.Last_Index
+      loop
+
+         --  Skip already known readers
+
+         if not Table.Find (Reader_ID => IDs.Get (R)) then
+            Ada.Text_IO.Put_Line ("Adding reader " &
+                                  Utils.To_String (Reader => IDs.Get (R)));
+            Table.Add (Status => Create_Condition
+                       (Reader => IDs.Get (R)));
+         end if;
+      end loop;
+   end Update_Reader_Table;
 
 end PCSC.SCard.Monitor;
