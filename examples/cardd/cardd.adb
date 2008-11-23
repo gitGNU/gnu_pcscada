@@ -51,6 +51,7 @@ begin
    --  Start the monitoring task
 
    SCU.Action_Info (Text => "Starting Reader Monitor");
-   Monitor.Start (Context => Context'Unchecked_Access);
+   Monitor.Init (Context => Context'Unchecked_Access);
+   Monitor.Run;
 
 end Cardd;
