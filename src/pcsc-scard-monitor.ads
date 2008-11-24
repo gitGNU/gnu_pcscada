@@ -31,12 +31,13 @@ package PCSC.SCard.Monitor is
 
    task type Reader_Monitor is
       entry Init (Context : in Context_Handle);
-      entry Run;
-      entry Cancel;
+      entry Start;
+      entry Stop;
    end Reader_Monitor;
    --  Reader monitoring task
 
 private
+
    function Create_Condition
      (Reader : in SCard.Reader_ID)
       return SCard.Reader_Condition;
