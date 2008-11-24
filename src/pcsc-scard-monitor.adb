@@ -26,86 +26,12 @@ with PCSC.SCard.Utils;
 
 package body PCSC.SCard.Monitor is
 
+   --------------------
+   -- Reader_Monitor --
+   --------------------
+
    task body Reader_Monitor is
-
-      Reader_IDs      : SCard.Reader_ID_Set;
-      Reader_IDnew    : SCard.Reader_ID_Set;
-      Reader_Table    : SCard.Reader_Condition_Set;
-
-      Current_Context : Context_Handle;
-
-      Do_Cancel       : Boolean := False;
-
-      task Status_Observer is
-         entry Run;
-      end Status_Observer;
-      --  Status_Observer task. This task will check for status changes on all
-      --  known readers.
-
-      task body Status_Observer is
-      begin
-         accept Run;
-         loop
-            SCard.Status_Change (Context    => Current_Context.all,
-                                 Conditions => Reader_Table);
-
-            exit when Do_Cancel;
-
-            --  Check for new readers; if new ones are found, add them to the
-            --  Reader_Table. If none found, an exception is thrown.
-
-            begin
-               Reader_IDnew := SCard.List_Readers
-                 (Context => Current_Context.all);
-
-               if Reader_IDnew /= Reader_IDs then
-                  Update_Reader_Table (Table => Reader_Table,
-                                       IDs   => Reader_IDnew);
-                  Reader_IDs := Reader_IDnew;
-               end if;
-
-            exception
-               when SCard_Error =>
-
-                  --  No readers present, set empty vectors
-
-                  Ada.Text_IO.Put_Line ("All readers vanished ... ");
-
-                  Reader_Table.Data := VORCP.Empty_Vector;
-                  Reader_IDs.Data   := VOIDP.Empty_Vector;
-            end;
-
-            --  Loop through reader table and check for state S_Reader_Changed
-
-            declare
-               Position : VORCP.Cursor := Reader_Table.Data.First;
-               Item     : Reader_Condition;
-            begin
-               while VORCP.Has_Element (Position) loop
-                  Item := VORCP.Element (Position);
-                  if Item.Event_State.Is_In
-                    (State => SCard.S_Reader_Changed) then
-
-                     --  Event_State contains S_Reader_Changed, update
-                     --  Current_State with new Event_State.
-
-                     Item.Event_State.Remove (State => SCard.S_Reader_Changed);
-                     Item.Current_State := Item.Event_State;
-                     Reader_Table.Data.Replace_Element (Position => Position,
-                                                        New_Item => Item);
-
-                     --  Dump new reader states
-
-                     Ada.Text_IO.Put_Line
-                       (Utils.To_String (Item.Name) & " : " &
-                        Utils.To_String (Item.Current_State));
-                  end if;
-                  VORCP.Next (Position);
-               end loop;
-            end;
-         end loop;
-      end Status_Observer;
-
+      Observer : Status_Observer;
    begin
       accept Init (Context : in Context_Handle) do
          Current_Context := Context;
@@ -115,7 +41,7 @@ package body PCSC.SCard.Monitor is
          exit when Do_Cancel;
          select
             accept Start;
-            Status_Observer.Run;
+            Observer.Run;
          or
             when not Do_Cancel =>
                accept Stop do
@@ -127,6 +53,77 @@ package body PCSC.SCard.Monitor is
          end select;
       end loop;
    end Reader_Monitor;
+
+   ---------------------
+   -- Status_Observer --
+   ---------------------
+
+   task body Status_Observer is
+      Reader_IDs      : SCard.Reader_ID_Set;
+      Reader_IDnew    : SCard.Reader_ID_Set;
+      Reader_Table    : SCard.Reader_Condition_Set;
+   begin
+      accept Run;
+      loop
+         SCard.Status_Change (Context    => Current_Context.all,
+                              Conditions => Reader_Table);
+
+         exit when Do_Cancel;
+
+         --  Check for new readers; if new ones are found, add them to the
+         --  Reader_Table. If none found, an exception is thrown.
+
+         begin
+            Reader_IDnew := SCard.List_Readers
+              (Context => Current_Context.all);
+
+            if Reader_IDnew /= Reader_IDs then
+               Update_Reader_Table (Table => Reader_Table,
+                                    IDs   => Reader_IDnew);
+               Reader_IDs := Reader_IDnew;
+            end if;
+
+         exception
+            when SCard_Error =>
+
+               --  No readers present, set empty vectors
+
+               Ada.Text_IO.Put_Line ("All readers vanished ... ");
+
+               Reader_Table.Data := VORCP.Empty_Vector;
+               Reader_IDs.Data   := VOIDP.Empty_Vector;
+         end;
+
+         --  Loop through reader table and check for state S_Reader_Changed
+
+         declare
+            Position : VORCP.Cursor := Reader_Table.Data.First;
+            Item     : Reader_Condition;
+         begin
+            while VORCP.Has_Element (Position) loop
+               Item := VORCP.Element (Position);
+               if Item.Event_State.Is_In
+                 (State => SCard.S_Reader_Changed) then
+
+                  --  Event_State contains S_Reader_Changed, update
+                  --  Current_State with new Event_State.
+
+                  Item.Event_State.Remove (State => SCard.S_Reader_Changed);
+                  Item.Current_State := Item.Event_State;
+                  Reader_Table.Data.Replace_Element (Position => Position,
+                                                     New_Item => Item);
+
+                  --  Dump new reader states
+
+                  Ada.Text_IO.Put_Line
+                    (Utils.To_String (Item.Name) & " : " &
+                     Utils.To_String (Item.Current_State));
+               end if;
+               VORCP.Next (Position);
+            end loop;
+         end;
+      end loop;
+   end Status_Observer;
 
    ----------------------
    -- Create_Condition --

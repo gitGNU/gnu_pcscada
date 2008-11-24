@@ -34,9 +34,21 @@ package PCSC.SCard.Monitor is
       entry Start;
       entry Stop;
    end Reader_Monitor;
-   --  Reader monitoring task
+   --  Reader monitoring control task
 
 private
+
+   Current_Context : Context_Handle;
+   --  Handle to current SCard.Context in use
+
+   Do_Cancel : Boolean := False;
+   --  Flag to signal monitor shutdown
+
+   task type Status_Observer is
+      entry Run;
+   end Status_Observer;
+   --  Status_Observer task type. An object of this type will check for status
+   --  changes on all known readers.
 
    function Create_Condition
      (Reader : in SCard.Reader_ID)
