@@ -62,7 +62,7 @@ clean:
 	@rm -rf lib/*
 
 distclean:
-	@rm $(SOURCEDIR)/pcsc-version.ads
+	@rm -f $(SOURCEDIR)/pcsc-version.ads
 	@rm -rf obj
 	@rm -rf lib
 
