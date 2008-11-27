@@ -423,7 +423,7 @@ package PCSC.Thin is
    function SCardGetStatusChange
      (hContext       : in SCARDCONTEXT;
       dwTimeout      : in DWORD;
-      rgReaderStates : access READERSTATE := null;
+      rgReaderStates : access READERSTATE;
       cReaders       : in DWORD := 0)
       return DWORD;
    --  Used to track status changes of readers
