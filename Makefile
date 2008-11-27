@@ -1,6 +1,6 @@
 #
 #  Copyright (c) 2008,
-#  Reto Buerki <buerki@swiss-it.ch>
+#  Reto Buerki <reet@codelabs.ch>
 #
 #  This file is part of PCSC/Ada.
 #
