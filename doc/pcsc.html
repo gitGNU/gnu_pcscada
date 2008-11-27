@@ -31,7 +31,7 @@
 <H3 CLASS="subtitle">Description</H3>
 <DIV>
   Copyright (c) 2008,
-  Reto Buerki &lt;buerki@swiss-it.ch&gt;
+  Reto Buerki &lt;reet@codelabs.ch&gt;
 <P>
   This file is part of PCSC/Ada.
 <P>
@@ -72,7 +72,7 @@
 <H3 CLASS="subtitle">Exceptions</H3>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="34_4"><SPAN CLASS="definition">Bytes_Too_Big</SPAN></A></CODE></TD></TR>
+<CODE><A NAME="38_4"><SPAN CLASS="definition">Bytes_Too_Big</SPAN></A></CODE></TD></TR>
 <TR><TD>
 <DIV>
   Exception will be raised by utils and helper functions/procedures if a
@@ -84,7 +84,15 @@
 <CODE><A NAME="31_4"><SPAN CLASS="definition">SCard_Error</SPAN></A></CODE></TD></TR>
 <TR><TD>
 <DIV>
-  Raised by all PCSC.SCard routines in case of SCard errors
+  Raised by all PCSC.SCard routines in case of PC/SC SCard errors.
+</DIV>
+</TD></TR>
+<TR><TD ALIGN="LEFT" CLASS="code">
+<CODE><A NAME="34_4"><SPAN CLASS="definition">SCard_Not_Supported</SPAN></A></CODE></TD></TR>
+<TR><TD>
+<DIV>
+  Raised if an operation has been requested which is not supported by
+  the reader or card.
 </DIV>
 </TD></TR>
 </TABLE>
@@ -95,6 +103,6 @@
 <PRE><CODE><STRONG>end</STRONG> PCSC;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:04 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-27 at 21:10:19 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>

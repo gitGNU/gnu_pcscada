@@ -31,7 +31,7 @@
 <H3 CLASS="subtitle">Description</H3>
 <DIV>
   Copyright (c) 2008,
-  Reto Buerki &lt;buerki@swiss-it.ch&gt;
+  Reto Buerki &lt;reet@codelabs.ch&gt;
 <P>
   This file is part of PCSC/Ada.
 <P>
@@ -74,6 +74,8 @@
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#179_9">PCSC_TLV_STRUCTURE</A></CODE></TD></TR>
+<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
+<CODE><A HREF="#199_9">PIN_VERIFY_STRUCTURE</A></CODE></TD></TR>
 </TABLE>
 </TD></TR>
 <TR><TD>
@@ -81,7 +83,7 @@
 <H3 CLASS="subtitle">Constants and Named Numbers</H3>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="152_4"><SPAN CLASS="definition">CM_IOCTL_GET_FEATURE_REQUEST</SPAN></A>      : <STRONG>constant</STRONG> <A HREF="pcsc-thin.html#40_12">DWORD</A> := <A HREF="pcsc-thin.html#491_13">SCARD_CTL_CODE</A> (3400);</CODE>
+<CODE><A NAME="152_4"><SPAN CLASS="definition">CM_IOCTL_GET_FEATURE_REQUEST</SPAN></A>      : <STRONG>constant</STRONG> <A HREF="pcsc-thin.html#40_12">DWORD</A> := <A HREF="pcsc-thin.html#493_13">SCARD_CTL_CODE</A> (3400);</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -470,11 +472,79 @@
    <A NAME="182_7"><SPAN CLASS="definition">value</SPAN></A>  : Interfaces.Unsigned_32;
    <EM><SPAN CLASS="comment">--  This value is always in BIG ENDIAN format as documented in PCSC v2</SPAN></EM>
    <EM><SPAN CLASS="comment">--  part 10 ch 2.2 page 2.</SPAN></EM>
+<STRONG>end</STRONG> <STRONG>record</STRONG>;
+<A NAME="188_4"><SPAN CLASS="definition"><STRONG>for</STRONG></SPAN></A> <A HREF="#179_9">PCSC_TLV_STRUCTURE</A> <STRONG>use</STRONG> <STRONG>record</STRONG>
+   <A HREF="#180_7">tag</A>    <STRONG>at</STRONG> 0 <STRONG>range</STRONG> 0  .. 7;
+   <A HREF="#181_7">length</A> <STRONG>at</STRONG> 0 <STRONG>range</STRONG> 8  .. 15;
+   <A HREF="#182_7">value</A>  <STRONG>at</STRONG> 0 <STRONG>range</STRONG> 16 .. 47;
+<STRONG>end</STRONG> <STRONG>record</STRONG>;
+<A NAME="195_4"><SPAN CLASS="definition"><STRONG>for</STRONG></SPAN></A> <A HREF="#179_9">PCSC_TLV_STRUCTURE</A>'<STRONG>Size</STRONG> <STRONG>use</STRONG> 48;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  PCSC Type-length-value data structure
+  Representation clause for PCSC_TLV_STRUCTURE type
+  The PCSC_TLV_STRUCTURE must be exactly 6 bytes long
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>type</STRONG> <A NAME="199_9"><SPAN CLASS="definition">PIN_VERIFY_STRUCTURE</SPAN></A> <STRONG>is</STRONG> <STRONG>record</STRONG>
+   <A NAME="200_7"><SPAN CLASS="definition">bTimerOut</SPAN></A>                 : <STRONG>aliased</STRONG> <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Timeout is seconds (00 means use default timeout)</SPAN></EM>
+   <A NAME="202_7"><SPAN CLASS="definition">bTimerOut2</SPAN></A>                : <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Timeout in seconds after first key stroke</SPAN></EM>
+   <A NAME="204_7"><SPAN CLASS="definition">bmFormatString</SPAN></A>            : <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Formatting options</SPAN></EM>
+   <A NAME="206_7"><SPAN CLASS="definition">bmPINBlockString</SPAN></A>          : <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Bits 7-4 bit size of PIN length in APDU, bits 3-0 PIN block size in</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  bytes after justification and formatting</SPAN></EM>
+   <A NAME="209_7"><SPAN CLASS="definition">bmPINLengthFormat</SPAN></A>         : <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Bits 7-5 RFU, bit 4 set if system units are bytes, clear if system</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  units are bits, bits 3-0 PIN length position in system units</SPAN></EM>
+   <A NAME="212_7"><SPAN CLASS="definition">wPINMaxExtraDigit</SPAN></A>         : Interfaces.Unsigned_16;
+   <EM><SPAN CLASS="comment">--  0xXXYY where XX is minimum PIN size in digits, and YY is maximum PIN</SPAN></EM>
+   <EM><SPAN CLASS="comment">--  size in digits</SPAN></EM>
+   <A NAME="215_7"><SPAN CLASS="definition">bEntryValidationCondition</SPAN></A> : <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Conditions under which PIN entry should be considered complete</SPAN></EM>
+   <A NAME="217_7"><SPAN CLASS="definition">bNumberMessage</SPAN></A>            : <A HREF="pcsc-thin.html#45_12">Byte</A>;
+   <EM><SPAN CLASS="comment">--  Number of messages to display for PIN verification</SPAN></EM>
+   <A NAME="219_7"><SPAN CLASS="definition">wLangId</SPAN></A>                   : Interfaces.Unsigned_16;
+   <EM><SPAN CLASS="comment">--  Language for messages</SPAN></EM>
+   <A NAME="221_7"><SPAN CLASS="definition">bMsgIndex</SPAN></A>                 : <A HREF="pcsc-thin.html#45_12">Byte</A> := 0;
+   <EM><SPAN CLASS="comment">--  Message index (should be 00)</SPAN></EM>
+   <A NAME="223_7"><SPAN CLASS="definition">bTeoPrologue</SPAN></A>              : <A HREF="pcsc-thin.html#46_9">Byte_Array</A> (1 .. 3)
+     := (<STRONG>others</STRONG> =&gt; 0);
+   <EM><SPAN CLASS="comment">--  T=1 block prologue field to use (filled with 00)</SPAN></EM>
+   <A NAME="226_7"><SPAN CLASS="definition">ulDataLength</SPAN></A>              : Interfaces.Unsigned_32;
+   <EM><SPAN CLASS="comment">--  Length of Data to be sent to the ICC</SPAN></EM>
+   <A NAME="228_7"><SPAN CLASS="definition">abData</SPAN></A>                    : <A HREF="pcsc-thin.html#46_9">Byte_Array</A> (1 .. <A HREF="pcsc-thin.html#65_4">MAX_BUFFER_SIZE</A>)
+     := (<STRONG>others</STRONG> =&gt; 0);
+   <EM><SPAN CLASS="comment">--  Data to send to the ICC</SPAN></EM>
+<STRONG>end</STRONG> <STRONG>record</STRONG>;
+<A NAME="233_4"><SPAN CLASS="definition"><STRONG>for</STRONG></SPAN></A> <A HREF="#199_9">PIN_VERIFY_STRUCTURE</A> <STRONG>use</STRONG> <STRONG>record</STRONG>
+   <A HREF="#200_7">bTimerOut</A>                 <STRONG>at</STRONG> 0  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#202_7">bTimerOut2</A>                <STRONG>at</STRONG> 1  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#204_7">bmFormatString</A>            <STRONG>at</STRONG> 2  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#206_7">bmPINBlockString</A>          <STRONG>at</STRONG> 3  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#209_7">bmPINLengthFormat</A>         <STRONG>at</STRONG> 4  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#212_7">wPINMaxExtraDigit</A>         <STRONG>at</STRONG> 5  <STRONG>range</STRONG> 0 .. 15;
+   <A HREF="#215_7">bEntryValidationCondition</A> <STRONG>at</STRONG> 7  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#217_7">bNumberMessage</A>            <STRONG>at</STRONG> 8  <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#219_7">wLangId</A>                   <STRONG>at</STRONG> 9  <STRONG>range</STRONG> 0 .. 15;
+   <A HREF="#221_7">bMsgIndex</A>                 <STRONG>at</STRONG> 11 <STRONG>range</STRONG> 0 .. 7;
+   <A HREF="#223_7">bTeoPrologue</A>              <STRONG>at</STRONG> 12 <STRONG>range</STRONG> 0 .. 23;
+   <A HREF="#226_7">ulDataLength</A>              <STRONG>at</STRONG> 15 <STRONG>range</STRONG> 0 .. 31;
+   <A HREF="#228_7">abData</A>                    <STRONG>at</STRONG> 19 <STRONG>range</STRONG> 0 .. (<A HREF="pcsc-thin.html#65_4">MAX_BUFFER_SIZE</A> * 8) - 1;
 <STRONG>end</STRONG> <STRONG>record</STRONG>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
-  PCSC Type-length-value data structure, exactly 6 bytes long.
+  Representation clause for PIN_VERIFY_STRUCTURE type
 </DIV>
 </TD></TR>
 </TABLE>
@@ -485,6 +555,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-thin.html">Thin</A>.Reader;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:05 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-27 at 21:10:21 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>

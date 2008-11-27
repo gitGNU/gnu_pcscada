@@ -36,7 +36,7 @@
 <H3 CLASS="subtitle">Description</H3>
 <DIV>
   Copyright (c) 2008,
-  Reto Buerki &lt;buerki@swiss-it.ch&gt;
+  Reto Buerki &lt;reet@codelabs.ch&gt;
 <P>
   This file is part of PCSC/Ada.
 <P>
@@ -87,14 +87,15 @@
 <CODE><A HREF="#72_9">LPVOID</A></CODE></TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#84_9">READERSTATE</A></CODE></TD></TR>
-<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
-<CODE><A HREF="#94_9">READERSTATE_Access</A></CODE></TD></TR>
-<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
-<CODE><A HREF="#97_9">READERSTATE_Array</A></CODE></TD></TR>
-<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
-<CODE><A HREF="#102_9">SCARD_IO_REQUEST</A></CODE></TD></TR>
 <TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
-<CODE><A HREF="#445_13">SCardTransmit</A></CODE>
+<CODE><A HREF="#423_13">SCardGetStatusChange</A></CODE>
+</TD></TR>
+<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
+<CODE><A HREF="#94_9">READERSTATE_Array</A></CODE></TD></TR>
+<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
+<CODE><A HREF="#99_9">SCARD_IO_REQUEST</A></CODE></TD></TR>
+<TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
+<CODE><A HREF="#447_13">SCardTransmit</A></CODE>
 </TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
 <CODE><A HREF="#69_9">void</A></CODE></TD></TR>
@@ -105,7 +106,7 @@
 <H3 CLASS="subtitle">Constants and Named Numbers</H3>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="357_4"><SPAN CLASS="definition">INFINITE</SPAN></A>                     : <STRONG>constant</STRONG> := 16#FFFF_FFFF#;</CODE>
+<CODE><A NAME="354_4"><SPAN CLASS="definition">INFINITE</SPAN></A>                     : <STRONG>constant</STRONG> := 16#FFFF_FFFF#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -143,7 +144,7 @@
 <CODE><A NAME="50_4"><SPAN CLASS="definition">Null_Byte_Array</SPAN></A> : <STRONG>constant</STRONG> <A HREF="#46_9">Byte_Array</A>;</CODE>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="288_4"><SPAN CLASS="definition">SCARD_ABSENT</SPAN></A>                 : <STRONG>constant</STRONG> := 16#0002#;</CODE>
+<CODE><A NAME="285_4"><SPAN CLASS="definition">SCARD_ABSENT</SPAN></A>                 : <STRONG>constant</STRONG> := 16#0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -151,7 +152,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="118_4"><SPAN CLASS="definition">SCARD_E_CANCELLED</SPAN></A>            : <STRONG>constant</STRONG> := 16#8010_0002#;</CODE>
+<CODE><A NAME="115_4"><SPAN CLASS="definition">SCARD_E_CANCELLED</SPAN></A>            : <STRONG>constant</STRONG> := 16#8010_0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -159,7 +160,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="158_4"><SPAN CLASS="definition">SCARD_E_CANT_DISPOSE</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_000E#;</CODE>
+<CODE><A NAME="155_4"><SPAN CLASS="definition">SCARD_E_CANT_DISPOSE</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_000E#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -167,7 +168,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="220_4"><SPAN CLASS="definition">SCARD_E_CARD_UNSUPPORTED</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_001C#;</CODE>
+<CODE><A NAME="217_4"><SPAN CLASS="definition">SCARD_E_CARD_UNSUPPORTED</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_001C#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -175,7 +176,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="217_4"><SPAN CLASS="definition">SCARD_E_DUPLICATE_READER</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_001B#;</CODE>
+<CODE><A NAME="214_4"><SPAN CLASS="definition">SCARD_E_DUPLICATE_READER</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_001B#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -183,7 +184,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="137_4"><SPAN CLASS="definition">SCARD_E_INSUFFICIENT_BUFFER</SPAN></A>  : <STRONG>constant</STRONG> := 16#8010_0008#;</CODE>
+<CODE><A NAME="134_4"><SPAN CLASS="definition">SCARD_E_INSUFFICIENT_BUFFER</SPAN></A>  : <STRONG>constant</STRONG> := 16#8010_0008#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -192,7 +193,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="182_4"><SPAN CLASS="definition">SCARD_E_INVALID_ATR</SPAN></A>          : <STRONG>constant</STRONG> := 16#8010_0015#;</CODE>
+<CODE><A NAME="179_4"><SPAN CLASS="definition">SCARD_E_INVALID_ATR</SPAN></A>          : <STRONG>constant</STRONG> := 16#8010_0015#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -200,7 +201,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="121_4"><SPAN CLASS="definition">SCARD_E_INVALID_HANDLE</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0003#;</CODE>
+<CODE><A NAME="118_4"><SPAN CLASS="definition">SCARD_E_INVALID_HANDLE</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0003#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -208,7 +209,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="124_4"><SPAN CLASS="definition">SCARD_E_INVALID_PARAMETER</SPAN></A>    : <STRONG>constant</STRONG> := 16#8010_0004#;</CODE>
+<CODE><A NAME="121_4"><SPAN CLASS="definition">SCARD_E_INVALID_PARAMETER</SPAN></A>    : <STRONG>constant</STRONG> := 16#8010_0004#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -217,7 +218,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="128_4"><SPAN CLASS="definition">SCARD_E_INVALID_TARGET</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0005#;</CODE>
+<CODE><A NAME="125_4"><SPAN CLASS="definition">SCARD_E_INVALID_TARGET</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0005#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -225,7 +226,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="168_4"><SPAN CLASS="definition">SCARD_E_INVALID_VALUE</SPAN></A>        : <STRONG>constant</STRONG> := 16#8010_0011#;</CODE>
+<CODE><A NAME="165_4"><SPAN CLASS="definition">SCARD_E_INVALID_VALUE</SPAN></A>        : <STRONG>constant</STRONG> := 16#8010_0011#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -234,7 +235,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="131_4"><SPAN CLASS="definition">SCARD_E_NO_MEMORY</SPAN></A>            : <STRONG>constant</STRONG> := 16#8010_0006#;</CODE>
+<CODE><A NAME="128_4"><SPAN CLASS="definition">SCARD_E_NO_MEMORY</SPAN></A>            : <STRONG>constant</STRONG> := 16#8010_0006#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -242,7 +243,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="229_4"><SPAN CLASS="definition">SCARD_E_NO_READERS_AVAILABLE</SPAN></A> : <STRONG>constant</STRONG> := 16#8010_002E#;</CODE>
+<CODE><A NAME="226_4"><SPAN CLASS="definition">SCARD_E_NO_READERS_AVAILABLE</SPAN></A> : <STRONG>constant</STRONG> := 16#8010_002E#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -250,7 +251,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="223_4"><SPAN CLASS="definition">SCARD_E_NO_SERVICE</SPAN></A>           : <STRONG>constant</STRONG> := 16#8010_001D#;</CODE>
+<CODE><A NAME="220_4"><SPAN CLASS="definition">SCARD_E_NO_SERVICE</SPAN></A>           : <STRONG>constant</STRONG> := 16#8010_001D#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -258,7 +259,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="151_4"><SPAN CLASS="definition">SCARD_E_NO_SMARTCARD</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_000C#;</CODE>
+<CODE><A NAME="148_4"><SPAN CLASS="definition">SCARD_E_NO_SMARTCARD</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_000C#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -267,7 +268,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="165_4"><SPAN CLASS="definition">SCARD_E_NOT_READY</SPAN></A>            : <STRONG>constant</STRONG> := 16#8010_0010#;</CODE>
+<CODE><A NAME="162_4"><SPAN CLASS="definition">SCARD_E_NOT_READY</SPAN></A>            : <STRONG>constant</STRONG> := 16#8010_0010#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -275,7 +276,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="185_4"><SPAN CLASS="definition">SCARD_E_NOT_TRANSACTED</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0016#;</CODE>
+<CODE><A NAME="182_4"><SPAN CLASS="definition">SCARD_E_NOT_TRANSACTED</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0016#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -283,7 +284,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="211_4"><SPAN CLASS="definition">SCARD_E_PCI_TOO_SMALL</SPAN></A>        : <STRONG>constant</STRONG> := 16#8010_0019#;</CODE>
+<CODE><A NAME="208_4"><SPAN CLASS="definition">SCARD_E_PCI_TOO_SMALL</SPAN></A>        : <STRONG>constant</STRONG> := 16#8010_0019#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -291,7 +292,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="161_4"><SPAN CLASS="definition">SCARD_E_PROTO_MISMATCH</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_000F#;</CODE>
+<CODE><A NAME="158_4"><SPAN CLASS="definition">SCARD_E_PROTO_MISMATCH</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_000F#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -300,7 +301,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="188_4"><SPAN CLASS="definition">SCARD_E_READER_UNAVAILABLE</SPAN></A>   : <STRONG>constant</STRONG> := 16#8010_0017#;</CODE>
+<CODE><A NAME="185_4"><SPAN CLASS="definition">SCARD_E_READER_UNAVAILABLE</SPAN></A>   : <STRONG>constant</STRONG> := 16#8010_0017#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -308,7 +309,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="214_4"><SPAN CLASS="definition">SCARD_E_READER_UNSUPPORTED</SPAN></A>   : <STRONG>constant</STRONG> := 16#8010_001A#;</CODE>
+<CODE><A NAME="211_4"><SPAN CLASS="definition">SCARD_E_READER_UNSUPPORTED</SPAN></A>   : <STRONG>constant</STRONG> := 16#8010_001A#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -316,7 +317,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="226_4"><SPAN CLASS="definition">SCARD_E_SERVICE_STOPPED</SPAN></A>      : <STRONG>constant</STRONG> := 16#8010_001E#;</CODE>
+<CODE><A NAME="223_4"><SPAN CLASS="definition">SCARD_E_SERVICE_STOPPED</SPAN></A>      : <STRONG>constant</STRONG> := 16#8010_001E#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -324,7 +325,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="147_4"><SPAN CLASS="definition">SCARD_E_SHARING_VIOLATION</SPAN></A>    : <STRONG>constant</STRONG> := 16#8010_000B#;</CODE>
+<CODE><A NAME="144_4"><SPAN CLASS="definition">SCARD_E_SHARING_VIOLATION</SPAN></A>    : <STRONG>constant</STRONG> := 16#8010_000B#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -333,7 +334,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="172_4"><SPAN CLASS="definition">SCARD_E_SYSTEM_CANCELLED</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_0012#;</CODE>
+<CODE><A NAME="169_4"><SPAN CLASS="definition">SCARD_E_SYSTEM_CANCELLED</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_0012#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -342,7 +343,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="144_4"><SPAN CLASS="definition">SCARD_E_TIMEOUT</SPAN></A>              : <STRONG>constant</STRONG> := 16#8010_000A#;</CODE>
+<CODE><A NAME="141_4"><SPAN CLASS="definition">SCARD_E_TIMEOUT</SPAN></A>              : <STRONG>constant</STRONG> := 16#8010_000A#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -350,7 +351,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="155_4"><SPAN CLASS="definition">SCARD_E_UNKNOWN_CARD</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_000D#;</CODE>
+<CODE><A NAME="152_4"><SPAN CLASS="definition">SCARD_E_UNKNOWN_CARD</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_000D#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -358,7 +359,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="141_4"><SPAN CLASS="definition">SCARD_E_UNKNOWN_READER</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0009#;</CODE>
+<CODE><A NAME="138_4"><SPAN CLASS="definition">SCARD_E_UNKNOWN_READER</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0009#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -366,7 +367,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="281_4"><SPAN CLASS="definition">SCARD_EJECT_CARD</SPAN></A>             : <STRONG>constant</STRONG> := 16#0003#;</CODE>
+<CODE><A NAME="278_4"><SPAN CLASS="definition">SCARD_EJECT_CARD</SPAN></A>             : <STRONG>constant</STRONG> := 16#0003#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -374,7 +375,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="176_4"><SPAN CLASS="definition">SCARD_F_COMM_ERROR</SPAN></A>           : <STRONG>constant</STRONG> := 16#8010_0013#;</CODE>
+<CODE><A NAME="173_4"><SPAN CLASS="definition">SCARD_F_COMM_ERROR</SPAN></A>           : <STRONG>constant</STRONG> := 16#8010_0013#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -382,7 +383,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="115_4"><SPAN CLASS="definition">SCARD_F_INTERNAL_ERROR</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0001#;</CODE>
+<CODE><A NAME="112_4"><SPAN CLASS="definition">SCARD_F_INTERNAL_ERROR</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -390,7 +391,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="179_4"><SPAN CLASS="definition">SCARD_F_UNKNOWN_ERROR</SPAN></A>        : <STRONG>constant</STRONG> := 16#8010_0014#;</CODE>
+<CODE><A NAME="176_4"><SPAN CLASS="definition">SCARD_F_UNKNOWN_ERROR</SPAN></A>        : <STRONG>constant</STRONG> := 16#8010_0014#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -398,7 +399,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="134_4"><SPAN CLASS="definition">SCARD_F_WAITED_TOO_LONG</SPAN></A>      : <STRONG>constant</STRONG> := 16#8010_0007#;</CODE>
+<CODE><A NAME="131_4"><SPAN CLASS="definition">SCARD_F_WAITED_TOO_LONG</SPAN></A>      : <STRONG>constant</STRONG> := 16#8010_0007#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -406,7 +407,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="272_4"><SPAN CLASS="definition">SCARD_LEAVE_CARD</SPAN></A>             : <STRONG>constant</STRONG> := 16#0000#;</CODE>
+<CODE><A NAME="269_4"><SPAN CLASS="definition">SCARD_LEAVE_CARD</SPAN></A>             : <STRONG>constant</STRONG> := 16#0000#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -414,7 +415,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="300_4"><SPAN CLASS="definition">SCARD_NEGOTIABLE</SPAN></A>             : <STRONG>constant</STRONG> := 16#0020#;</CODE>
+<CODE><A NAME="297_4"><SPAN CLASS="definition">SCARD_NEGOTIABLE</SPAN></A>             : <STRONG>constant</STRONG> := 16#0020#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -422,7 +423,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="297_4"><SPAN CLASS="definition">SCARD_POWERED</SPAN></A>                : <STRONG>constant</STRONG> := 16#0010#;</CODE>
+<CODE><A NAME="294_4"><SPAN CLASS="definition">SCARD_POWERED</SPAN></A>                : <STRONG>constant</STRONG> := 16#0010#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -430,7 +431,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="291_4"><SPAN CLASS="definition">SCARD_PRESENT</SPAN></A>                : <STRONG>constant</STRONG> := 16#0004#;</CODE>
+<CODE><A NAME="288_4"><SPAN CLASS="definition">SCARD_PRESENT</SPAN></A>                : <STRONG>constant</STRONG> := 16#0004#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -438,7 +439,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="256_4"><SPAN CLASS="definition">SCARD_PROTOCOL_RAW</SPAN></A>           : <STRONG>constant</STRONG> := 16#0004#;</CODE>
+<CODE><A NAME="253_4"><SPAN CLASS="definition">SCARD_PROTOCOL_RAW</SPAN></A>           : <STRONG>constant</STRONG> := 16#0004#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -446,7 +447,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="250_4"><SPAN CLASS="definition">SCARD_PROTOCOL_T0</SPAN></A>            : <STRONG>constant</STRONG> := 16#0001#;</CODE>
+<CODE><A NAME="247_4"><SPAN CLASS="definition">SCARD_PROTOCOL_T0</SPAN></A>            : <STRONG>constant</STRONG> := 16#0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -454,7 +455,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="253_4"><SPAN CLASS="definition">SCARD_PROTOCOL_T1</SPAN></A>            : <STRONG>constant</STRONG> := 16#0002#;</CODE>
+<CODE><A NAME="250_4"><SPAN CLASS="definition">SCARD_PROTOCOL_T1</SPAN></A>            : <STRONG>constant</STRONG> := 16#0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -462,7 +463,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="259_4"><SPAN CLASS="definition">SCARD_PROTOCOL_T15</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008#;</CODE>
+<CODE><A NAME="256_4"><SPAN CLASS="definition">SCARD_PROTOCOL_T15</SPAN></A>           : <STRONG>constant</STRONG> := 16#0008#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -470,7 +471,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="244_4"><SPAN CLASS="definition">SCARD_PROTOCOL_UNDEFINED</SPAN></A>     : <STRONG>constant</STRONG> := 16#0000#;</CODE>
+<CODE><A NAME="241_4"><SPAN CLASS="definition">SCARD_PROTOCOL_UNDEFINED</SPAN></A>     : <STRONG>constant</STRONG> := 16#0000#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -478,7 +479,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="247_4"><SPAN CLASS="definition">SCARD_PROTOCOL_UNSET</SPAN></A>         : <STRONG>constant</STRONG> := 16#0000#;</CODE>
+<CODE><A NAME="244_4"><SPAN CLASS="definition">SCARD_PROTOCOL_UNSET</SPAN></A>         : <STRONG>constant</STRONG> := 16#0000#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -486,7 +487,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="275_4"><SPAN CLASS="definition">SCARD_RESET_CARD</SPAN></A>             : <STRONG>constant</STRONG> := 16#0001#;</CODE>
+<CODE><A NAME="272_4"><SPAN CLASS="definition">SCARD_RESET_CARD</SPAN></A>             : <STRONG>constant</STRONG> := 16#0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -494,7 +495,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="112_4"><SPAN CLASS="definition">SCARD_S_SUCCESS</SPAN></A>              : <STRONG>constant</STRONG> := 16#0000_0000#;</CODE>
+<CODE><A NAME="109_4"><SPAN CLASS="definition">SCARD_S_SUCCESS</SPAN></A>              : <STRONG>constant</STRONG> := 16#0000_0000#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -502,7 +503,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="240_4"><SPAN CLASS="definition">SCARD_SCOPE_SYSTEM</SPAN></A>           : <STRONG>constant</STRONG> := 16#0002#;</CODE>
+<CODE><A NAME="237_4"><SPAN CLASS="definition">SCARD_SCOPE_SYSTEM</SPAN></A>           : <STRONG>constant</STRONG> := 16#0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -510,7 +511,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="237_4"><SPAN CLASS="definition">SCARD_SCOPE_TERMINAL</SPAN></A>         : <STRONG>constant</STRONG> := 16#0001#;</CODE>
+<CODE><A NAME="234_4"><SPAN CLASS="definition">SCARD_SCOPE_TERMINAL</SPAN></A>         : <STRONG>constant</STRONG> := 16#0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -518,7 +519,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="234_4"><SPAN CLASS="definition">SCARD_SCOPE_USER</SPAN></A>             : <STRONG>constant</STRONG> := 16#0000#;</CODE>
+<CODE><A NAME="231_4"><SPAN CLASS="definition">SCARD_SCOPE_USER</SPAN></A>             : <STRONG>constant</STRONG> := 16#0000#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -526,7 +527,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="268_4"><SPAN CLASS="definition">SCARD_SHARE_DIRECT</SPAN></A>           : <STRONG>constant</STRONG> := 16#0003#;</CODE>
+<CODE><A NAME="265_4"><SPAN CLASS="definition">SCARD_SHARE_DIRECT</SPAN></A>           : <STRONG>constant</STRONG> := 16#0003#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -534,7 +535,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="262_4"><SPAN CLASS="definition">SCARD_SHARE_EXCLUSIVE</SPAN></A>        : <STRONG>constant</STRONG> := 16#0001#;</CODE>
+<CODE><A NAME="259_4"><SPAN CLASS="definition">SCARD_SHARE_EXCLUSIVE</SPAN></A>        : <STRONG>constant</STRONG> := 16#0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -542,7 +543,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="265_4"><SPAN CLASS="definition">SCARD_SHARE_SHARED</SPAN></A>           : <STRONG>constant</STRONG> := 16#0002#;</CODE>
+<CODE><A NAME="262_4"><SPAN CLASS="definition">SCARD_SHARE_SHARED</SPAN></A>           : <STRONG>constant</STRONG> := 16#0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -550,7 +551,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="303_4"><SPAN CLASS="definition">SCARD_SPECIFIC</SPAN></A>               : <STRONG>constant</STRONG> := 16#0040#;</CODE>
+<CODE><A NAME="300_4"><SPAN CLASS="definition">SCARD_SPECIFIC</SPAN></A>               : <STRONG>constant</STRONG> := 16#0040#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -558,7 +559,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="328_4"><SPAN CLASS="definition">SCARD_STATE_ATRMATCH</SPAN></A>         : <STRONG>constant</STRONG> := 16#0040#;</CODE>
+<CODE><A NAME="325_4"><SPAN CLASS="definition">SCARD_STATE_ATRMATCH</SPAN></A>         : <STRONG>constant</STRONG> := 16#0040#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -566,7 +567,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="313_4"><SPAN CLASS="definition">SCARD_STATE_CHANGED</SPAN></A>          : <STRONG>constant</STRONG> := 16#0002#;</CODE>
+<CODE><A NAME="310_4"><SPAN CLASS="definition">SCARD_STATE_CHANGED</SPAN></A>          : <STRONG>constant</STRONG> := 16#0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -574,7 +575,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="322_4"><SPAN CLASS="definition">SCARD_STATE_EMPTY</SPAN></A>            : <STRONG>constant</STRONG> := 16#0010#;</CODE>
+<CODE><A NAME="319_4"><SPAN CLASS="definition">SCARD_STATE_EMPTY</SPAN></A>            : <STRONG>constant</STRONG> := 16#0010#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -582,7 +583,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="331_4"><SPAN CLASS="definition">SCARD_STATE_EXCLUSIVE</SPAN></A>        : <STRONG>constant</STRONG> := 16#0080#;</CODE>
+<CODE><A NAME="328_4"><SPAN CLASS="definition">SCARD_STATE_EXCLUSIVE</SPAN></A>        : <STRONG>constant</STRONG> := 16#0080#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -590,7 +591,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="310_4"><SPAN CLASS="definition">SCARD_STATE_IGNORE</SPAN></A>           : <STRONG>constant</STRONG> := 16#0001#;</CODE>
+<CODE><A NAME="307_4"><SPAN CLASS="definition">SCARD_STATE_IGNORE</SPAN></A>           : <STRONG>constant</STRONG> := 16#0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -598,7 +599,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="334_4"><SPAN CLASS="definition">SCARD_STATE_INUSE</SPAN></A>            : <STRONG>constant</STRONG> := 16#0100#;</CODE>
+<CODE><A NAME="331_4"><SPAN CLASS="definition">SCARD_STATE_INUSE</SPAN></A>            : <STRONG>constant</STRONG> := 16#0100#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -606,7 +607,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="337_4"><SPAN CLASS="definition">SCARD_STATE_MUTE</SPAN></A>             : <STRONG>constant</STRONG> := 16#0200#;</CODE>
+<CODE><A NAME="334_4"><SPAN CLASS="definition">SCARD_STATE_MUTE</SPAN></A>             : <STRONG>constant</STRONG> := 16#0200#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -614,7 +615,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="325_4"><SPAN CLASS="definition">SCARD_STATE_PRESENT</SPAN></A>          : <STRONG>constant</STRONG> := 16#0020#;</CODE>
+<CODE><A NAME="322_4"><SPAN CLASS="definition">SCARD_STATE_PRESENT</SPAN></A>          : <STRONG>constant</STRONG> := 16#0020#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -622,7 +623,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="319_4"><SPAN CLASS="definition">SCARD_STATE_UNAVAILABLE</SPAN></A>      : <STRONG>constant</STRONG> := 16#0008#;</CODE>
+<CODE><A NAME="316_4"><SPAN CLASS="definition">SCARD_STATE_UNAVAILABLE</SPAN></A>      : <STRONG>constant</STRONG> := 16#0008#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -630,7 +631,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="307_4"><SPAN CLASS="definition">SCARD_STATE_UNAWARE</SPAN></A>          : <STRONG>constant</STRONG> := 16#0000#;</CODE>
+<CODE><A NAME="304_4"><SPAN CLASS="definition">SCARD_STATE_UNAWARE</SPAN></A>          : <STRONG>constant</STRONG> := 16#0000#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -638,7 +639,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="316_4"><SPAN CLASS="definition">SCARD_STATE_UNKNOWN</SPAN></A>          : <STRONG>constant</STRONG> := 16#0004#;</CODE>
+<CODE><A NAME="313_4"><SPAN CLASS="definition">SCARD_STATE_UNKNOWN</SPAN></A>          : <STRONG>constant</STRONG> := 16#0004#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -646,7 +647,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="340_4"><SPAN CLASS="definition">SCARD_STATE_UNPOWERED</SPAN></A>        : <STRONG>constant</STRONG> := 16#0400#;</CODE>
+<CODE><A NAME="337_4"><SPAN CLASS="definition">SCARD_STATE_UNPOWERED</SPAN></A>        : <STRONG>constant</STRONG> := 16#0400#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -654,7 +655,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="294_4"><SPAN CLASS="definition">SCARD_SWALLOWED</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008#;</CODE>
+<CODE><A NAME="291_4"><SPAN CLASS="definition">SCARD_SWALLOWED</SPAN></A>              : <STRONG>constant</STRONG> := 16#0008#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -662,7 +663,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="285_4"><SPAN CLASS="definition">SCARD_UNKNOWN</SPAN></A>                : <STRONG>constant</STRONG> := 16#0001#;</CODE>
+<CODE><A NAME="282_4"><SPAN CLASS="definition">SCARD_UNKNOWN</SPAN></A>                : <STRONG>constant</STRONG> := 16#0001#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -670,7 +671,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="278_4"><SPAN CLASS="definition">SCARD_UNPOWER_CARD</SPAN></A>           : <STRONG>constant</STRONG> := 16#0002#;</CODE>
+<CODE><A NAME="275_4"><SPAN CLASS="definition">SCARD_UNPOWER_CARD</SPAN></A>           : <STRONG>constant</STRONG> := 16#0002#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -678,7 +679,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="206_4"><SPAN CLASS="definition">SCARD_W_REMOVED_CARD</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_0069#;</CODE>
+<CODE><A NAME="203_4"><SPAN CLASS="definition">SCARD_W_REMOVED_CARD</SPAN></A>         : <STRONG>constant</STRONG> := 16#8010_0069#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -687,7 +688,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="202_4"><SPAN CLASS="definition">SCARD_W_RESET_CARD</SPAN></A>           : <STRONG>constant</STRONG> := 16#8010_0068#;</CODE>
+<CODE><A NAME="199_4"><SPAN CLASS="definition">SCARD_W_RESET_CARD</SPAN></A>           : <STRONG>constant</STRONG> := 16#8010_0068#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -696,7 +697,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="198_4"><SPAN CLASS="definition">SCARD_W_UNPOWERED_CARD</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0067#;</CODE>
+<CODE><A NAME="195_4"><SPAN CLASS="definition">SCARD_W_UNPOWERED_CARD</SPAN></A>       : <STRONG>constant</STRONG> := 16#8010_0067#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -705,7 +706,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="195_4"><SPAN CLASS="definition">SCARD_W_UNRESPONSIVE_CARD</SPAN></A>    : <STRONG>constant</STRONG> := 16#8010_0066#;</CODE>
+<CODE><A NAME="192_4"><SPAN CLASS="definition">SCARD_W_UNRESPONSIVE_CARD</SPAN></A>    : <STRONG>constant</STRONG> := 16#8010_0066#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -713,7 +714,7 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<CODE><A NAME="191_4"><SPAN CLASS="definition">SCARD_W_UNSUPPORTED_CARD</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_0065#;</CODE>
+<CODE><A NAME="188_4"><SPAN CLASS="definition">SCARD_W_UNSUPPORTED_CARD</SPAN></A>     : <STRONG>constant</STRONG> := 16#8010_0065#;</CODE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -728,8 +729,8 @@
 <H3 CLASS="subtitle">Variables</H3>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<PRE><CODE><A NAME="352_4"><SPAN CLASS="definition">SCARD_PCI_RAW</SPAN></A> : <STRONG>aliased</STRONG> <A HREF="#102_9">SCARD_IO_REQUEST</A> :=
-  (<A HREF="#103_7">dwProtocol</A>  =&gt; <A HREF="#256_4">SCARD_PROTOCOL_RAW</A>, <A HREF="#104_7">cbPciLength</A> =&gt; 8);</CODE></PRE>
+<PRE><CODE><A NAME="349_4"><SPAN CLASS="definition">SCARD_PCI_RAW</SPAN></A> : <STRONG>aliased</STRONG> <A HREF="#99_9">SCARD_IO_REQUEST</A> :=
+  (<A HREF="#100_7">dwProtocol</A>  =&gt; <A HREF="#253_4">SCARD_PROTOCOL_RAW</A>, <A HREF="#101_7">cbPciLength</A> =&gt; 8);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -737,8 +738,8 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<PRE><CODE><A NAME="344_4"><SPAN CLASS="definition">SCARD_PCI_T0</SPAN></A>  : <STRONG>aliased</STRONG> <A HREF="#102_9">SCARD_IO_REQUEST</A> :=
-  (<A HREF="#103_7">dwProtocol</A>  =&gt; <A HREF="#250_4">SCARD_PROTOCOL_T0</A>, <A HREF="#104_7">cbPciLength</A> =&gt; 8);</CODE></PRE>
+<PRE><CODE><A NAME="341_4"><SPAN CLASS="definition">SCARD_PCI_T0</SPAN></A>  : <STRONG>aliased</STRONG> <A HREF="#99_9">SCARD_IO_REQUEST</A> :=
+  (<A HREF="#100_7">dwProtocol</A>  =&gt; <A HREF="#247_4">SCARD_PROTOCOL_T0</A>, <A HREF="#101_7">cbPciLength</A> =&gt; 8);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -746,8 +747,8 @@
 </DIV>
 </TD></TR>
 <TR><TD ALIGN="LEFT" CLASS="code">
-<PRE><CODE><A NAME="348_4"><SPAN CLASS="definition">SCARD_PCI_T1</SPAN></A>  : <STRONG>aliased</STRONG> <A HREF="#102_9">SCARD_IO_REQUEST</A> :=
-  (<A HREF="#103_7">dwProtocol</A>  =&gt; <A HREF="#253_4">SCARD_PROTOCOL_T1</A>, <A HREF="#104_7">cbPciLength</A> =&gt; 8);</CODE></PRE>
+<PRE><CODE><A NAME="345_4"><SPAN CLASS="definition">SCARD_PCI_T1</SPAN></A>  : <STRONG>aliased</STRONG> <A HREF="#99_9">SCARD_IO_REQUEST</A> :=
+  (<A HREF="#100_7">dwProtocol</A>  =&gt; <A HREF="#250_4">SCARD_PROTOCOL_T1</A>, <A HREF="#101_7">cbPciLength</A> =&gt; 8);</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -915,11 +916,12 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>type</STRONG> <A NAME="94_9"><SPAN CLASS="definition">READERSTATE_Access</SPAN></A> <STRONG>is</STRONG> <STRONG>access</STRONG> <A HREF="#84_9">READERSTATE</A>;</CODE></PRE>
+<PRE><CODE><STRONG>type</STRONG> <A NAME="94_9"><SPAN CLASS="definition">READERSTATE_Array</SPAN></A> <STRONG>is</STRONG> <STRONG>array</STRONG> (<A HREF="#35_12">C</A>.size_t <STRONG>range</STRONG> &lt;&gt;) <STRONG>of</STRONG> <STRONG>aliased</STRONG>
+  <A HREF="#84_9">READERSTATE</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
-  Access type to reader state
+  Array of reader states
 </DIV>
 </TD></TR>
 </TABLE>
@@ -928,23 +930,9 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>type</STRONG> <A NAME="97_9"><SPAN CLASS="definition">READERSTATE_Array</SPAN></A> <STRONG>is</STRONG> <STRONG>array</STRONG> (<A HREF="#35_12">C</A>.size_t <STRONG>range</STRONG> &lt;&gt;) <STRONG>of</STRONG> <STRONG>aliased</STRONG>
-  <A HREF="#94_9">READERSTATE_Access</A>;</CODE></PRE>
-</TD></TR>
-<TR><TD>
-<DIV>
-  Array of access to reader states
-</DIV>
-</TD></TR>
-</TABLE>
-<HR>
-</TD></TR>
-<TR><TD>
-<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
-<TR><TD CLASS="code">
-<PRE><CODE><STRONG>type</STRONG> <A NAME="102_9"><SPAN CLASS="definition">SCARD_IO_REQUEST</SPAN></A> <STRONG>is</STRONG> <STRONG>record</STRONG>
-   <A NAME="103_7"><SPAN CLASS="definition">dwProtocol</SPAN></A>  : <A HREF="#40_12">DWORD</A>;
-   <A NAME="104_7"><SPAN CLASS="definition">cbPciLength</SPAN></A> : <A HREF="#40_12">DWORD</A>;
+<PRE><CODE><STRONG>type</STRONG> <A NAME="99_9"><SPAN CLASS="definition">SCARD_IO_REQUEST</SPAN></A> <STRONG>is</STRONG> <STRONG>record</STRONG>
+   <A NAME="100_7"><SPAN CLASS="definition">dwProtocol</SPAN></A>  : <A HREF="#40_12">DWORD</A>;
+   <A NAME="101_7"><SPAN CLASS="definition">cbPciLength</SPAN></A> : <A HREF="#40_12">DWORD</A>;
 <STRONG>end</STRONG> <STRONG>record</STRONG>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
@@ -958,7 +946,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>subtype</STRONG> <A NAME="109_12"><SPAN CLASS="definition">Return_Code</SPAN></A> <STRONG>is</STRONG> <A HREF="#40_12">DWORD</A> <STRONG>range</STRONG> 16#0000_0000# .. 16#8010_0069#;</CODE></PRE>
+<PRE><CODE><STRONG>subtype</STRONG> <A NAME="106_12"><SPAN CLASS="definition">Return_Code</SPAN></A> <STRONG>is</STRONG> <A HREF="#40_12">DWORD</A> <STRONG>range</STRONG> 16#0000_0000# .. 16#8010_0069#;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -971,7 +959,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="361_13"><SPAN CLASS="definition">SCardEstablishContext</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="358_13"><SPAN CLASS="definition">SCardEstablishContext</SPAN></A>
   (dwScope     : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
    pvReserved1 : <STRONG>in</STRONG> <A HREF="#74_9">LPCVOID</A> := <STRONG>null</STRONG>;
    pvReserver2 : <STRONG>in</STRONG> <A HREF="#74_9">LPCVOID</A> := <STRONG>null</STRONG>;
@@ -989,7 +977,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="369_13"><SPAN CLASS="definition">SCardReleaseContext</SPAN></A> (hContext : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="366_13"><SPAN CLASS="definition">SCardReleaseContext</SPAN></A> (hContext : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1002,7 +990,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="372_13"><SPAN CLASS="definition">SCardIsValidContext</SPAN></A> (hContext : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="369_13"><SPAN CLASS="definition">SCardIsValidContext</SPAN></A> (hContext : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1015,7 +1003,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="376_13"><SPAN CLASS="definition">SCardConnect</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="373_13"><SPAN CLASS="definition">SCardConnect</SPAN></A>
   (hContext             : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>;
    szReader             : <STRONG>in</STRONG> <A HREF="#41_12">LPSTR</A>;
    dwShareMode          : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
@@ -1035,7 +1023,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="386_13"><SPAN CLASS="definition">SCardReconnect</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="383_13"><SPAN CLASS="definition">SCardReconnect</SPAN></A>
   (hCard                : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
    dwShareMode          : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
    dwPreferredProtocols : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
@@ -1054,7 +1042,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="395_13"><SPAN CLASS="definition">SCardDisconnect</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="392_13"><SPAN CLASS="definition">SCardDisconnect</SPAN></A>
   (hCard         : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
    dwDisposition : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>)
    <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
@@ -1070,7 +1058,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="402_13"><SPAN CLASS="definition">SCardBeginTransaction</SPAN></A> (hCard : <A HREF="#80_12">SCARDHANDLE</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="399_13"><SPAN CLASS="definition">SCardBeginTransaction</SPAN></A> (hCard : <A HREF="#80_12">SCARDHANDLE</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1083,7 +1071,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="405_13"><SPAN CLASS="definition">SCardEndTransaction</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="402_13"><SPAN CLASS="definition">SCardEndTransaction</SPAN></A>
   (hCard         : <A HREF="#80_12">SCARDHANDLE</A>;
    dwDisposition : <A HREF="#40_12">DWORD</A>)
    <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
@@ -1099,7 +1087,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="411_13"><SPAN CLASS="definition">SCardCancelTransaction</SPAN></A> (hCard : <A HREF="#80_12">SCARDHANDLE</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="408_13"><SPAN CLASS="definition">SCardCancelTransaction</SPAN></A> (hCard : <A HREF="#80_12">SCARDHANDLE</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1112,7 +1100,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="415_13"><SPAN CLASS="definition">SCardStatus</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="412_13"><SPAN CLASS="definition">SCardStatus</SPAN></A>
   (hCard          : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
    mszReaderNames : <STRONG>in</STRONG> <A HREF="#41_12">LPSTR</A>;
    pcchReaderLen  : <STRONG>access</STRONG> <A HREF="#40_12">DWORD</A>;
@@ -1133,10 +1121,10 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="426_13"><SPAN CLASS="definition">SCardGetStatusChange</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="423_13"><SPAN CLASS="definition">SCardGetStatusChange</SPAN></A>
   (hContext       : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>;
    dwTimeout      : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
-   rgReaderStates : <STRONG>in</STRONG> <A HREF="#94_9">READERSTATE_Access</A> := <STRONG>null</STRONG>;
+   rgReaderStates : <STRONG>access</STRONG> <A HREF="#84_9">READERSTATE</A>;
    cReaders       : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A> := 0)
    <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
 </TD></TR>
@@ -1151,7 +1139,21 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="434_13"><SPAN CLASS="definition">SCardControl</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="431_13"><SPAN CLASS="definition">SCardCancel</SPAN></A> (hContext : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Cancel all pending blocking requests on the SCardGetStatusChange()
+  function
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>function</STRONG> <A NAME="436_13"><SPAN CLASS="definition">SCardControl</SPAN></A>
   (hCard           : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
    dwControlCode   : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
    pbSendBuffer    : <STRONG>access</STRONG> <A HREF="#45_12">Byte</A>;
@@ -1172,12 +1174,12 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="445_13"><SPAN CLASS="definition">SCardTransmit</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="447_13"><SPAN CLASS="definition">SCardTransmit</SPAN></A>
   (hCard         : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
-   pioSendPci    : <STRONG>access</STRONG> <A HREF="#102_9">SCARD_IO_REQUEST</A>;
+   pioSendPci    : <STRONG>access</STRONG> <A HREF="#99_9">SCARD_IO_REQUEST</A>;
    pbSendBuffer  : <STRONG>access</STRONG> <A HREF="#45_12">Byte</A>;
    cbSendLength  : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
-   pioRecvPci    : <STRONG>access</STRONG> <A HREF="#102_9">SCARD_IO_REQUEST</A>;
+   pioRecvPci    : <STRONG>access</STRONG> <A HREF="#99_9">SCARD_IO_REQUEST</A>;
    pbRecvBuffer  : <STRONG>access</STRONG> <A HREF="#45_12">Byte</A>;
    pcbRecvLength : <STRONG>access</STRONG> <A HREF="#40_12">DWORD</A>)
    <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
@@ -1193,7 +1195,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="456_13"><SPAN CLASS="definition">SCardListReaders</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="458_13"><SPAN CLASS="definition">SCardListReaders</SPAN></A>
   (hContext    : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>;
    mszGroups   : <STRONG>in</STRONG> <A HREF="#41_12">LPSTR</A> := <A HREF="#35_12">C</A>.Strings.Null_Ptr;
    mszReaders  : <STRONG>in</STRONG> <A HREF="#41_12">LPSTR</A>;
@@ -1211,7 +1213,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="464_13"><SPAN CLASS="definition">SCardListReaderGroups</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="466_13"><SPAN CLASS="definition">SCardListReaderGroups</SPAN></A>
   (hContext   : <STRONG>in</STRONG> <A HREF="#77_12">SCARDCONTEXT</A>;
    mszGroups  : <STRONG>in</STRONG> <A HREF="#41_12">LPSTR</A>;
    pcchGroups : <STRONG>access</STRONG> <A HREF="#40_12">DWORD</A>)
@@ -1228,7 +1230,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="471_13"><SPAN CLASS="definition">SCardGetAttrib</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="473_13"><SPAN CLASS="definition">SCardGetAttrib</SPAN></A>
   (hCard      : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
    dwAttrId   : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
    pbAttr     : <STRONG>access</STRONG> <A HREF="#45_12">Byte</A>;
@@ -1246,7 +1248,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="479_13"><SPAN CLASS="definition">SCardSetAttrib</SPAN></A>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="481_13"><SPAN CLASS="definition">SCardSetAttrib</SPAN></A>
   (hCard     : <STRONG>in</STRONG> <A HREF="#80_12">SCARDHANDLE</A>;
    dwAttrId  : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>;
    pbAttr    : <STRONG>access</STRONG> <A HREF="#45_12">Byte</A>;
@@ -1264,7 +1266,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="488_13"><SPAN CLASS="definition">pcsc_stringify_error</SPAN></A> (status : <A HREF="#40_12">DWORD</A>) <STRONG>return</STRONG> <A HREF="#35_12">C</A>.Strings.chars_ptr;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="490_13"><SPAN CLASS="definition">pcsc_stringify_error</SPAN></A> (status : <A HREF="#40_12">DWORD</A>) <STRONG>return</STRONG> <A HREF="#35_12">C</A>.Strings.chars_ptr;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1277,7 +1279,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>function</STRONG> <A NAME="491_13"><SPAN CLASS="definition">SCARD_CTL_CODE</SPAN></A> (Code : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
+<PRE><CODE><STRONG>function</STRONG> <A NAME="493_13"><SPAN CLASS="definition">SCARD_CTL_CODE</SPAN></A> (Code : <STRONG>in</STRONG> <A HREF="#40_12">DWORD</A>) <STRONG>return</STRONG> <A HREF="#40_12">DWORD</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -1300,6 +1302,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.Thin;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-02 at 23:50:05 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-27 at 21:10:21 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>
