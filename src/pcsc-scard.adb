@@ -267,7 +267,8 @@ package body PCSC.SCard is
    begin
       Res := Thin.SCardGetStatusChange
         (hContext       => Context.hContext,
-         dwTimeout      => Thin.INFINITE);
+         dwTimeout      => Thin.INFINITE,
+         rgReaderStates => null);
 
       if Res /= Thin.SCARD_S_SUCCESS then
          SCard_Exception (Code    => Res,
