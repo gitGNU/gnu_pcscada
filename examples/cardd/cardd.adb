@@ -22,6 +22,8 @@
 
 with Ada.Text_IO;
 
+with Reader_Observer;
+
 with PCSC.Version;
 with PCSC.SCard.Utils;
 with PCSC.SCard.Monitor;
@@ -59,11 +61,22 @@ begin
    --  Start the monitoring task
 
    declare
-      Monitor : SCard.Monitor.Reader_Monitor;
+      Monitor   : SCard.Monitor.Reader_Monitor;
+      Observer  : aliased Reader_Observer.Instance;
    begin
+
+      --  Add all the states we are interested in
+
+      Observer.States.Add (State => SCard.S_Reader_Present);
+      Observer.States.Add (State => SCard.S_Reader_Empty);
+
       SCU.Action_Info (Text => "Starting Reader Monitor");
       Monitor.Init (Context => Context'Unchecked_Access);
       Monitor.Start;
+
+      --  Register our observer to the reader monitoring task
+
+      Monitor.Register (O => Observer);
    end;
 
 end Cardd;

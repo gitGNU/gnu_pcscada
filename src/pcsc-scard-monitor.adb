@@ -20,11 +20,28 @@
 --  MA  02110-1301  USA
 --
 
-with Ada.Text_IO;
-
-with PCSC.SCard.Utils;
-
 package body PCSC.SCard.Monitor is
+
+   -------------------
+   -- Is_Interested --
+   -------------------
+
+   function Is_Interested (O      : in Observer;
+                           States : in Reader_States_Set) return Boolean
+   is
+      use type VORSP.Cursor;
+
+      Position : VORSP.Cursor := O.States.Data.First;
+   begin
+      while VORSP.Has_Element (Position) loop
+         if States.Data.Find (Item => VORSP.Element (Position))
+           /= VORSP.No_Element then
+            return True;
+         end if;
+         VORSP.Next (Position);
+      end loop;
+      return False;
+   end Is_Interested;
 
    --------------------
    -- Reader_Monitor --
@@ -50,6 +67,11 @@ package body PCSC.SCard.Monitor is
                      SCard.Cancel (Context => Current_Context.all);
                   end if;
                end Stop;
+         or
+            when not Do_Cancel =>
+               accept Register (O : in Observer_Class) do
+                  Observer_Set.Insert (Observer => O);
+               end Register;
          end select;
       end loop;
    end Reader_Monitor;
@@ -59,9 +81,9 @@ package body PCSC.SCard.Monitor is
    ---------------------
 
    task body Status_Observer is
-      Reader_IDs      : SCard.Reader_ID_Set;
-      Reader_IDnew    : SCard.Reader_ID_Set;
-      Reader_Table    : SCard.Reader_Condition_Set;
+      Reader_IDs   : SCard.Reader_ID_Set;
+      Reader_IDnew : SCard.Reader_ID_Set;
+      Reader_Table : SCard.Reader_Condition_Set;
    begin
       accept Run;
       loop
@@ -87,8 +109,7 @@ package body PCSC.SCard.Monitor is
             when SCard_Error =>
 
                --  No readers present, set empty vectors
-
-               Ada.Text_IO.Put_Line ("All readers vanished ... ");
+               --  TODO: add possibility to notify this event
 
                Reader_Table.Data := VORCP.Empty_Vector;
                Reader_IDs.Data   := VOIDP.Empty_Vector;
@@ -113,17 +134,42 @@ package body PCSC.SCard.Monitor is
                   Reader_Table.Data.Replace_Element (Position => Position,
                                                      New_Item => Item);
 
-                  --  Dump new reader states
+                  --  Notify all interested observers
 
-                  Ada.Text_IO.Put_Line
-                    (Utils.To_String (Item.Name) & " : " &
-                     Utils.To_String (Item.Current_State));
+                  Observer_Set.Notify_All (Condition => Item);
                end if;
                VORCP.Next (Position);
             end loop;
          end;
       end loop;
    end Status_Observer;
+
+   ----------------------------
+   -- Protected_Observer_Set --
+   ----------------------------
+
+   protected body Protected_Observer_Set is
+      entry Insert (Observer : in Observer_Class) when not Notifying is
+      begin
+         My_Set.Append (New_Item => Observer);
+      end Insert;
+
+      procedure Notify_All (Condition : in Reader_Condition) is
+         Position : VOOBP.Cursor := My_Set.First;
+      begin
+         Notifying := True;
+
+         while VOOBP.Has_Element (Position) loop
+            if VOOBP.Element (Position).Is_Interested
+              (States => Condition.Current_State) then
+               VOOBP.Element (Position).Notify (Condition);
+            end if;
+            VOOBP.Next (Position);
+         end loop;
+
+         Notifying := False;
+      end Notify_All;
+   end Protected_Observer_Set;
 
    ----------------------
    -- Create_Condition --
@@ -159,8 +205,7 @@ package body PCSC.SCard.Monitor is
       while VORCP.Has_Element (Position) loop
          Item := VORCP.Element (Position);
          if IDs.Data.Find (Item.Name) = VOIDP.No_Element then
-            Ada.Text_IO.Put_Line ("Removing reader " &
-                                  Utils.To_String (Reader => Item.Name));
+            --  TODO: add possibility to notify a reader vanished event
             Table.Data.Delete (Position);
          end if;
          VORCP.Next (Position);
@@ -174,8 +219,7 @@ package body PCSC.SCard.Monitor is
          --  Skip already known readers
 
          if not Table.Find (Reader_ID => IDs.Get (R)) then
-            Ada.Text_IO.Put_Line ("Adding reader " &
-                                  Utils.To_String (Reader => IDs.Get (R)));
+            --  TODO: add possibility to notify a new reader event
             Table.Add (Status => Create_Condition
                        (Reader => IDs.Get (R)));
          end if;

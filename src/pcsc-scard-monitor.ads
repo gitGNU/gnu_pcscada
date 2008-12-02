@@ -29,10 +29,36 @@ package PCSC.SCard.Monitor is
    type Context_Handle is access all SCard.Context;
    --  Handle to Context object
 
+   type Observer is abstract tagged record
+      States : Reader_States_Set;
+      --  Reader states this observer is interested in
+   end record;
+   --  Abstract reader observer type. Valid Reader_Monitor observers must
+   --  extend this type.
+
+   subtype Observer_Class is Observer'Class;
+   --  Observer class subtype
+
+   procedure Notify (O         : in Observer;
+                     Condition : in Reader_Condition) is abstract;
+   --  This procedure is called to inform an observer about status changes in
+   --  reader states for all states this observer is interested in.
+
+   function Is_Interested (O      : in Observer;
+                           States : in Reader_States_Set) return Boolean;
+   --  Function is used to check whether an observer is interested in one of
+   --  the states given by 'States' set.
+
+
    task type Reader_Monitor is
       entry Init (Context : in Context_Handle);
+      --  Initialization entry for a Reader_Monitor task
       entry Start;
+      --  Start the Reader_Monitor task
       entry Stop;
+      --  Stop the Reader_Monitor task
+      entry Register (O : in Observer_Class);
+      --  Register a new observer to the Reader_Monitor
    end Reader_Monitor;
    --  Reader monitoring control task
 
@@ -49,6 +75,33 @@ private
    end Status_Observer;
    --  Status_Observer task type. An object of this type will check for status
    --  changes on all known readers.
+
+   package Vector_Of_Observer_Package is new
+     Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
+                                        Element_Type => Observer_Class);
+
+   package VOOBP renames Vector_Of_Observer_Package;
+   subtype Vector_Of_Observer_Type is VOOBP.Vector;
+
+   protected type Protected_Observer_Set is
+      entry Insert (Observer : in Observer_Class);
+      --  Insert a new observer into set.
+      procedure Notify_All (Condition : in Reader_Condition);
+      --  Notify all registered observers that a reader state has changed.
+   private
+      My_Set    : Vector_Of_Observer_Type;
+      --  Vector of observers
+      Notifying : Boolean := False;
+      --  Barrier condition to indicate whether a notification is currently in
+      --  progress.
+   end Protected_Observer_Set;
+   --  Protected type observer set. Used to store observers which are
+   --  registered by the client code by calling the Register() entry of the
+   --  Reader_Monitor task type.
+
+   Observer_Set : Protected_Observer_Set;
+   --  Set of registered observers.
+
 
    function Create_Condition
      (Reader : in SCard.Reader_ID)
