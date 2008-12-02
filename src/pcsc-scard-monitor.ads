@@ -64,11 +64,8 @@ package PCSC.SCard.Monitor is
 
 private
 
-   Current_Context : Context_Handle;
-   --  Handle to current SCard.Context in use
-
    task type Status_Peeker is
-      entry Run;
+      entry Run (Peek_Context : Context_Handle);
       entry Stop;
    end Status_Peeker;
    --  Status_Peeker task type. An object of this type can be used to detect
@@ -99,7 +96,8 @@ private
    --  Reader_Monitor task type.
 
    Observer_Set : Protected_Observer_Set;
-   --  Set of registered observers.
+   --  Set of registered observers. Accessed by Reader_Monitor and
+   --  Status_Peeker tasks.
 
 
    function Create_Condition

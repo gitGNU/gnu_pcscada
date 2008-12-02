@@ -48,9 +48,11 @@ package body PCSC.SCard.Monitor is
    --------------------
 
    task body Reader_Monitor is
-      Peeker       : Status_Peeker;
-
-      Stop_Monitor : Boolean := False;
+      Current_Context : Context_Handle;
+      --  Handle to current SCard.Context in use
+      Peeker          : Status_Peeker;
+      --  Status peeker task
+      Stop_Monitor    : Boolean := False;
       --  Flag to signal monitor shutdown
    begin
       accept Init (Context : in Context_Handle) do
@@ -64,7 +66,7 @@ package body PCSC.SCard.Monitor is
 
             --  Start status peeker task
 
-            Peeker.Run;
+            Peeker.Run (Peek_Context => Current_Context);
          or
             when not Stop_Monitor =>
                accept Stop do
@@ -91,17 +93,22 @@ package body PCSC.SCard.Monitor is
    -------------------
 
    task body Status_Peeker is
-      Reader_IDs   : SCard.Reader_ID_Set;
-      Reader_IDnew : SCard.Reader_ID_Set;
-      Reader_Table : SCard.Reader_Condition_Set;
-
-      Stop_Peeker  : Boolean := False;
+      Reader_IDs      : SCard.Reader_ID_Set;
+      Reader_IDnew    : SCard.Reader_ID_Set;
+      Reader_Table    : SCard.Reader_Condition_Set;
+      Current_Context : Context_Handle;
+      Stop_Peeker     : Boolean := False;
       --  Flag to signal peeker shutdown
    begin
       loop
          exit when Stop_Peeker;
          select
-            accept Run;
+            accept Run (Peek_Context : Context_Handle) do
+               Current_Context := Peek_Context;
+            end Run;
+
+            --  Main status detection loop
+
             loop
                SCard.Status_Change (Context    => Current_Context.all,
                                     Conditions => Reader_Table);
