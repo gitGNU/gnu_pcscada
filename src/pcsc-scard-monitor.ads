@@ -20,7 +20,12 @@
 --  MA  02110-1301  USA
 --
 --  <PURPOSE>
---    SCard reader monitoring package.
+--    SCard reader monitoring package. This package provides types and
+--    functions / procedures to monitor card readers.  The abstract type
+--    Observer can be extended to create new observers for specific reader
+--    state changes. Observers can be registered to a Reader_Monitor task by
+--    calling the Register() entry. A running Reader_Monitor task will inform
+--    all registered observers when a change in reader state occurs.
 --  </PURPOSE>
 --
 
