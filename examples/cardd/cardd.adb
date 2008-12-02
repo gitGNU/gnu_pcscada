@@ -59,11 +59,9 @@ begin
    end;
    Ada.Text_IO.New_Line;
 
-   --  Start the monitoring task
-
    declare
-      Monitor   : SCard.Monitor.Reader_Monitor;
-      Observer  : aliased Reader_Observer.Instance;
+      Monitor  : SCard.Monitor.Reader_Monitor;
+      Observer : aliased Reader_Observer.Instance;
    begin
 
       --  Add all the states we are interested in
@@ -74,11 +72,14 @@ begin
 
       Ada.Text_IO.Put_Line ("Starting reader monitoring task ... ");
       Monitor.Init (Context => Context'Unchecked_Access);
-      Monitor.Start;
 
       --  Register our observer to the reader monitoring task
 
       Monitor.Register (O => Observer);
+
+      --  Start the monitoring task
+
+      Monitor.Start;
    end;
 
 end Cardd;
