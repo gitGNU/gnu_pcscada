@@ -57,6 +57,7 @@ begin
          SCU.Action_Result (Result => "Unknown error.");
          return;
    end;
+   Ada.Text_IO.New_Line;
 
    --  Start the monitoring task
 

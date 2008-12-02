@@ -35,8 +35,16 @@ package body Reader_Observer is
    procedure Notify (O : in Instance; Condition : in SCard.Reader_Condition)
    is
    begin
-      Ada.Text_IO.Put_Line (Utils.To_String (Condition.Name) & " : " &
-                            Utils.To_String (Condition.Current_State));
+      Ada.Text_IO.Put_Line ("[observer (" & Utils.To_String
+                            (States => O.States) & ") ]");
+      Ada.Text_IO.Put_Line ("Reader : " & Utils.To_String (Condition.Name));
+      Ada.Text_IO.Put_Line ("State  : " & Utils.To_String
+                            (Condition.Current_State));
+      if Condition.Current_State.Is_In (State => SCard.S_Reader_Present) then
+         Ada.Text_IO.Put_Line ("ATR    : " & Utils.To_Hex_String
+                               (Given => Condition.Card_ATR));
+      end if;
+      Ada.Text_IO.New_Line;
    end Notify;
 
 end Reader_Observer;
