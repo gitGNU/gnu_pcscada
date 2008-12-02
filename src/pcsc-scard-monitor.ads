@@ -67,11 +67,9 @@ private
    Current_Context : Context_Handle;
    --  Handle to current SCard.Context in use
 
-   Do_Cancel : Boolean := False;
-   --  Flag to signal monitor shutdown
-
    task type Status_Peeker is
       entry Run;
+      entry Stop;
    end Status_Peeker;
    --  Status_Peeker task type. An object of this type can be used to detect
    --  condition changes for all readers of a SCard.Context. Condition changes

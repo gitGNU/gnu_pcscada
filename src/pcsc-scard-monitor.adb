@@ -48,27 +48,37 @@ package body PCSC.SCard.Monitor is
    --------------------
 
    task body Reader_Monitor is
-      Peeker : Status_Peeker;
+      Peeker       : Status_Peeker;
+
+      Stop_Monitor : Boolean := False;
+      --  Flag to signal monitor shutdown
    begin
       accept Init (Context : in Context_Handle) do
          Current_Context := Context;
       end Init;
 
       loop
-         exit when Do_Cancel;
+         exit when Stop_Monitor;
          select
             accept Start;
+
+            --  Start status peeker task
+
             Peeker.Run;
          or
-            when not Do_Cancel =>
+            when not Stop_Monitor =>
                accept Stop do
-                  Do_Cancel := True;
+                  Stop_Monitor := True;
                   if SCard.Is_Valid (Context => Current_Context.all) then
                      SCard.Cancel (Context => Current_Context.all);
                   end if;
                end Stop;
+
+               --  Stop status peeker task
+
+               Peeker.Stop;
          or
-            when not Do_Cancel =>
+            when not Stop_Monitor =>
                accept Register (O : in Observer_Class) do
                   Observer_Set.Insert (Observer => O);
                end Register;
@@ -84,63 +94,77 @@ package body PCSC.SCard.Monitor is
       Reader_IDs   : SCard.Reader_ID_Set;
       Reader_IDnew : SCard.Reader_ID_Set;
       Reader_Table : SCard.Reader_Condition_Set;
+
+      Stop_Peeker  : Boolean := False;
+      --  Flag to signal peeker shutdown
    begin
-      accept Run;
       loop
-         SCard.Status_Change (Context    => Current_Context.all,
-                              Conditions => Reader_Table);
+         exit when Stop_Peeker;
+         select
+            accept Run;
+            loop
+               SCard.Status_Change (Context    => Current_Context.all,
+                                    Conditions => Reader_Table);
 
-         exit when Do_Cancel;
+               --  Check for new readers; if new ones are found, add them to
+               --  the Reader_Table. If none found, an exception is thrown.
 
-         --  Check for new readers; if new ones are found, add them to the
-         --  Reader_Table. If none found, an exception is thrown.
+               begin
+                  Reader_IDnew := SCard.List_Readers
+                    (Context => Current_Context.all);
 
-         begin
-            Reader_IDnew := SCard.List_Readers
-              (Context => Current_Context.all);
+                  if Reader_IDnew /= Reader_IDs then
+                     Update_Reader_Table (Table => Reader_Table,
+                                          IDs   => Reader_IDnew);
+                     Reader_IDs := Reader_IDnew;
+                  end if;
 
-            if Reader_IDnew /= Reader_IDs then
-               Update_Reader_Table (Table => Reader_Table,
-                                    IDs   => Reader_IDnew);
-               Reader_IDs := Reader_IDnew;
-            end if;
+               exception
+                  when SCard_Error =>
 
-         exception
-            when SCard_Error =>
+                     --  No readers present, set empty vectors
+                     --  TODO: add possibility to notify this event
 
-               --  No readers present, set empty vectors
-               --  TODO: add possibility to notify this event
+                     Reader_Table.Data := VORCP.Empty_Vector;
+                     Reader_IDs.Data   := VOIDP.Empty_Vector;
+               end;
 
-               Reader_Table.Data := VORCP.Empty_Vector;
-               Reader_IDs.Data   := VOIDP.Empty_Vector;
-         end;
+               --  Loop through reader table and check for state
+               --  S_Reader_Changed
 
-         --  Loop through reader table and check for state S_Reader_Changed
+               declare
+                  Position : VORCP.Cursor := Reader_Table.Data.First;
+                  Item     : Reader_Condition;
+               begin
+                  while VORCP.Has_Element (Position) loop
+                     Item := VORCP.Element (Position);
+                     if Item.Event_State.Is_In
+                       (State => SCard.S_Reader_Changed) then
 
-         declare
-            Position : VORCP.Cursor := Reader_Table.Data.First;
-            Item     : Reader_Condition;
-         begin
-            while VORCP.Has_Element (Position) loop
-               Item := VORCP.Element (Position);
-               if Item.Event_State.Is_In
-                 (State => SCard.S_Reader_Changed) then
+                        --  Event_State contains S_Reader_Changed, update
+                        --  Current_State with new Event_State.
 
-                  --  Event_State contains S_Reader_Changed, update
-                  --  Current_State with new Event_State.
+                        Item.Event_State.Remove
+                          (State => SCard.S_Reader_Changed);
+                        Item.Current_State := Item.Event_State;
+                        Reader_Table.Data.Replace_Element
+                          (Position => Position,
+                           New_Item => Item);
 
-                  Item.Event_State.Remove (State => SCard.S_Reader_Changed);
-                  Item.Current_State := Item.Event_State;
-                  Reader_Table.Data.Replace_Element (Position => Position,
-                                                     New_Item => Item);
+                        --  Notify all interested observers
 
-                  --  Notify all interested observers
-
-                  Observer_Set.Notify_All (Condition => Item);
-               end if;
-               VORCP.Next (Position);
+                        Observer_Set.Notify_All (Condition => Item);
+                     end if;
+                     VORCP.Next (Position);
+                  end loop;
+               end;
             end loop;
-         end;
+         or
+            when not Stop_Peeker =>
+               accept Stop do
+                  Stop_Peeker := True;
+               end Stop;
+         end select;
       end loop;
    end Status_Peeker;
 
