@@ -48,7 +48,7 @@ package body PCSC.SCard.Monitor is
    --------------------
 
    task body Reader_Monitor is
-      Observer : Status_Observer;
+      Peeker : Status_Peeker;
    begin
       accept Init (Context : in Context_Handle) do
          Current_Context := Context;
@@ -58,7 +58,7 @@ package body PCSC.SCard.Monitor is
          exit when Do_Cancel;
          select
             accept Start;
-            Observer.Run;
+            Peeker.Run;
          or
             when not Do_Cancel =>
                accept Stop do
@@ -76,11 +76,11 @@ package body PCSC.SCard.Monitor is
       end loop;
    end Reader_Monitor;
 
-   ---------------------
-   -- Status_Observer --
-   ---------------------
+   -------------------
+   -- Status_Peeker --
+   -------------------
 
-   task body Status_Observer is
+   task body Status_Peeker is
       Reader_IDs   : SCard.Reader_ID_Set;
       Reader_IDnew : SCard.Reader_ID_Set;
       Reader_Table : SCard.Reader_Condition_Set;
@@ -142,7 +142,7 @@ package body PCSC.SCard.Monitor is
             end loop;
          end;
       end loop;
-   end Status_Observer;
+   end Status_Peeker;
 
    ----------------------------
    -- Protected_Observer_Set --

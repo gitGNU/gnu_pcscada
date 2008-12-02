@@ -70,11 +70,12 @@ private
    Do_Cancel : Boolean := False;
    --  Flag to signal monitor shutdown
 
-   task type Status_Observer is
+   task type Status_Peeker is
       entry Run;
-   end Status_Observer;
-   --  Status_Observer task type. An object of this type will check for status
-   --  changes on all known readers.
+   end Status_Peeker;
+   --  Status_Peeker task type. An object of this type can be used to detect
+   --  condition changes for all readers of a SCard.Context. Condition changes
+   --  are detected by calling the SCard.Status_Change procedure.
 
    package Vector_Of_Observer_Package is new
      Ada.Containers.Indefinite_Vectors (Index_Type   => Positive,
