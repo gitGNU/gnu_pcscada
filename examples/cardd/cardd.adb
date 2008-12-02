@@ -69,8 +69,9 @@ begin
 
       Observer.States.Add (State => SCard.S_Reader_Present);
       Observer.States.Add (State => SCard.S_Reader_Empty);
+      Observer.States.Add (State => SCard.S_Reader_Unavailable);
 
-      SCU.Action_Info (Text => "Starting Reader Monitor");
+      Ada.Text_IO.Put_Line ("Starting reader monitoring task ... ");
       Monitor.Init (Context => Context'Unchecked_Access);
       Monitor.Start;
 
