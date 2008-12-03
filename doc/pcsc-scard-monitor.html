@@ -51,7 +51,12 @@
   MA  02110-1301  USA
 
   <DL><DT><STRONG>Purpose:</STRONG><DD><DIV>
-    SCard reader monitoring package.
+    SCard reader monitoring package. This package provides types and
+    functions / procedures to monitor card readers.  The abstract type
+    Observer can be extended to create new observers for specific reader
+    state changes. Observers can be registered to a Reader_Monitor task by
+    calling the Register() entry. A running Reader_Monitor task will inform
+    all registered observers when a change in reader state occurs.
   </DIV></DL>
 </DIV>
 <HR>
@@ -60,7 +65,7 @@
 <H3 CLASS="subtitle">Header</H3>
 </TD></TR>
 <TR><TD COLSPAN=2 CLASS="odd">
-<PRE><CODE><STRONG>package</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-scard.html">SCard</A>.<A NAME="27_20"><SPAN CLASS="definition">Monitor</SPAN></A> <STRONG>is</STRONG>
+<PRE><CODE><STRONG>package</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-scard.html">SCard</A>.<A NAME="32_20"><SPAN CLASS="definition">Monitor</SPAN></A> <STRONG>is</STRONG>
 </CODE></PRE>
 </TD></TR>
 <TR><TD WIDTH="2%" CLASS="odd"><PRE> </PRE></TD>
@@ -70,9 +75,15 @@
 <H3 CLASS="subtitle">Type Summary</H3>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
-<CODE><A HREF="#29_9">Context_Handle</A></CODE></TD></TR>
+<CODE><A HREF="#34_9">Context_Handle</A></CODE></TD></TR>
 <TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
-<CODE><A HREF="#32_14">Reader_Monitor</A></CODE> (task type)</TD></TR>
+<CODE><A HREF="#37_9">Observer</A></CODE></TD></TR>
+<TR><TD VALIGN="TOP">Primitive&nbsp;Operations:&nbsp;</TD><TD WIDTH="100%">
+<CODE><A HREF="#52_13">Is_Interested</A></CODE>,
+<CODE><A HREF="#47_14">Notify</A></CODE>
+</TD></TR>
+<TR><TD COLSPAN=2 ALIGN="LEFT" CLASS="type">
+<CODE><A HREF="#58_14">Reader_Monitor</A></CODE> (task type)</TD></TR>
 </TABLE>
 </TD></TR>
 <TR><TD>
@@ -82,7 +93,7 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>type</STRONG> <A NAME="29_9"><SPAN CLASS="definition">Context_Handle</SPAN></A> <STRONG>is</STRONG> <STRONG>access</STRONG> <STRONG>all</STRONG> <A HREF="pcsc-scard.html">SCard</A>.<A HREF="pcsc-scard.html#35_9">Context</A>;</CODE></PRE>
+<PRE><CODE><STRONG>type</STRONG> <A NAME="34_9"><SPAN CLASS="definition">Context_Handle</SPAN></A> <STRONG>is</STRONG> <STRONG>access</STRONG> <STRONG>all</STRONG> <A HREF="pcsc-scard.html">SCard</A>.<A HREF="pcsc-scard.html#35_9">Context</A>;</CODE></PRE>
 </TD></TR>
 <TR><TD>
 <DIV>
@@ -93,9 +104,69 @@
 <HR>
 </TD></TR>
 <TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>type</STRONG> <A NAME="37_9"><SPAN CLASS="definition">Observer</SPAN></A> <STRONG>is</STRONG> <STRONG>abstract</STRONG> <STRONG>tagged</STRONG> <STRONG>record</STRONG>
+   <A NAME="38_7"><SPAN CLASS="definition">States</SPAN></A> : <A HREF="pcsc-scard.html#164_9">Reader_States_Set</A>;
+   <EM><SPAN CLASS="comment">--  Reader states this observer is interested in</SPAN></EM>
+<STRONG>end</STRONG> <STRONG>record</STRONG>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Abstract reader observer type. Valid Reader_Monitor observers must
+  extend this type.
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>subtype</STRONG> <A NAME="44_12"><SPAN CLASS="definition">Observer_Class</SPAN></A> <STRONG>is</STRONG> <A HREF="#37_9">Observer</A>'<STRONG>Class</STRONG>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Observer class subtype
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>procedure</STRONG> <A NAME="47_14"><SPAN CLASS="definition">Notify</SPAN></A> (O         : <STRONG>in</STRONG> <A HREF="#37_9">Observer</A>;
+                  Condition : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#168_9">Reader_Condition</A>) <STRONG>is</STRONG> <STRONG>abstract</STRONG>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  This procedure is called to inform an observer about status changes in
+  reader states for all states this observer is interested in.
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>function</STRONG> <A NAME="52_13"><SPAN CLASS="definition">Is_Interested</SPAN></A> (O      : <STRONG>in</STRONG> <A HREF="#37_9">Observer</A>;
+                        States : <STRONG>in</STRONG> <A HREF="pcsc-scard.html#164_9">Reader_States_Set</A>) <STRONG>return</STRONG> Boolean;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Function is used to check whether an observer is interested in one of
+  the states given by 'States' set.
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
 <TABLE WIDTH="100%" BORDER=1 CELLSPACING=0 CELLPADDING=0>
 <TR><TD COLSPAN=2 CLASS="even">
-<PRE><CODE><STRONG>task</STRONG> <STRONG>type</STRONG> <A NAME="32_14"><SPAN CLASS="definition">Reader_Monitor</SPAN></A> <STRONG>is</STRONG>
+<PRE><CODE><STRONG>task</STRONG> <STRONG>type</STRONG> <A NAME="58_14"><SPAN CLASS="definition">Reader_Monitor</SPAN></A> <STRONG>is</STRONG>
 </CODE></PRE>
 </TD></TR>
 <TR><TD WIDTH="2%" CLASS="even"><PRE> </PRE></TD>
@@ -104,7 +175,12 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>entry</STRONG> <A NAME="33_13"><SPAN CLASS="definition">Init</SPAN></A> (Context : <STRONG>in</STRONG> <A HREF="#29_9">Context_Handle</A>);</CODE></PRE>
+<PRE><CODE><STRONG>entry</STRONG> <A NAME="59_13"><SPAN CLASS="definition">Init</SPAN></A> (Context : <STRONG>in</STRONG> <A HREF="#34_9">Context_Handle</A>);</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Initialization entry for a Reader_Monitor task
+</DIV>
 </TD></TR>
 </TABLE>
 <HR>
@@ -112,7 +188,12 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>entry</STRONG> <A NAME="34_13"><SPAN CLASS="definition">Start</SPAN></A>;</CODE></PRE>
+<PRE><CODE><STRONG>entry</STRONG> <A NAME="61_13"><SPAN CLASS="definition">Start</SPAN></A>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Start the Reader_Monitor task
+</DIV>
 </TD></TR>
 </TABLE>
 <HR>
@@ -120,7 +201,25 @@
 <TR><TD>
 <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
 <TR><TD CLASS="code">
-<PRE><CODE><STRONG>entry</STRONG> <A NAME="35_13"><SPAN CLASS="definition">Stop</SPAN></A>;</CODE></PRE>
+<PRE><CODE><STRONG>entry</STRONG> <A NAME="63_13"><SPAN CLASS="definition">Stop</SPAN></A>;</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Stop the Reader_Monitor task
+</DIV>
+</TD></TR>
+</TABLE>
+<HR>
+</TD></TR>
+<TR><TD>
+<TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=0>
+<TR><TD CLASS="code">
+<PRE><CODE><STRONG>entry</STRONG> <A NAME="65_13"><SPAN CLASS="definition">Register</SPAN></A> (O : <STRONG>in</STRONG> <A HREF="#44_12">Observer_Class</A>);</CODE></PRE>
+</TD></TR>
+<TR><TD>
+<DIV>
+  Register a new observer to the Reader_Monitor
+</DIV>
 </TD></TR>
 </TABLE>
 </TD></TR>
@@ -144,6 +243,6 @@
 <PRE><CODE><STRONG>end</STRONG> <A HREF="pcsc.html">PCSC</A>.<A HREF="pcsc-scard.html">SCard</A>.Monitor;</CODE></PRE>
 </TD></TR>
 </TABLE>
-<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-11-27 at 21:10:21 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
+<!-- --><HR><TABLE WIDTH="100%" CLASS="footer" BORDER=0 CELLSPACING=0 CELLPADDING=5><TR><TD><FONT SIZE=-1><!-- -->Generated on 2008-12-03 at 11:56:14 by <A HREF="http://home.tiscalinet.ch/t_wolf/tw/ada95/adabrowse/" TARGET="_top">AdaBrowse 4.0.2</A> using configuration file adabrowse.cfg.</FONT></TD></TR></TABLE>
 </BODY>
 </HTML>
