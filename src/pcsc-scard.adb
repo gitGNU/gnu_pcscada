@@ -436,7 +436,6 @@ package body PCSC.SCard is
 
    procedure Transmit
      (Card        : in SCard.Card;
-      Send_Pci    : in PCI;
       Send_Buffer : in Byte_Set := Null_Byte_Set;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
@@ -451,8 +450,7 @@ package body PCSC.SCard is
       --  to the thin binding. If we try, the compiler complains:
       --    access-to-variable designates constant
 
-      C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST :=
-        Convert.C_PCI (Send_Pci);
+      C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST;
       C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST := Recv_Pci;
       Bytes_Returned : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
    begin
@@ -462,6 +460,20 @@ package body PCSC.SCard is
       if Send_Buffer = Null_Byte_Set then
          return;
       end if;
+
+      --  Assign correct send PCI depending on active proto of card
+
+      if Card.Active_Proto = Thin.SCARD_PROTOCOL_T0 then
+         C_Send_PCI := Thin.SCARD_PCI_T0;
+      elsif Card.Active_Proto = Thin.SCARD_PROTOCOL_T1 then
+         C_Send_PCI := Thin.SCARD_PCI_T1;
+      elsif Card.Active_Proto = Thin.SCARD_PROTOCOL_RAW then
+         C_Send_PCI := Thin.SCARD_PCI_RAW;
+      else
+         raise No_PCI_for_Proto;
+      end if;
+
+      --  Call thin binding SCardTransmit
 
       Res := Thin.SCardTransmit
         (hCard         => Card.hCard,

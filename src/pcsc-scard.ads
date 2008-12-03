@@ -197,7 +197,6 @@ package PCSC.SCard is
      );
    --  Protocol control information types
 
-
    type Attribute is
      (Attr_Vendor_Name,
       Attr_Vendor_IFD_Type,
@@ -320,7 +319,6 @@ package PCSC.SCard is
 
    procedure Transmit
      (Card        : in SCard.Card;
-      Send_Pci    : in PCI;
       Send_Buffer : in Byte_Set := Null_Byte_Set;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;

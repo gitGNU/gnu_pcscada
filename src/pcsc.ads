@@ -40,4 +40,8 @@ package PCSC is
    --  given SCard.Byte_Set cannot be converted to a specific type because it
    --  contains more bytes than the target type can store.
 
+   No_PCI_for_Proto : exception;
+   --  Exception will be raised if the card uses a protocol we don't know a
+   --  valid PCI (protocol control information) for.
+
 end PCSC;

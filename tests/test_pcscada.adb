@@ -159,7 +159,6 @@ begin
    begin
       SCU.Action_Info (Text => "Testing Transmit");
       SCard.Transmit (Card        => Card,
-                      Send_Pci    => SCard.PCI_T1,
                       Send_Buffer => Send_Buffer,
                       Recv_Pci    => Recv_PCI,
                       Recv_Buffer => Recv_Buffer,
