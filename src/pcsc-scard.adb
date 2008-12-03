@@ -463,15 +463,7 @@ package body PCSC.SCard is
 
       --  Assign correct send PCI depending on active proto of card
 
-      if Card.Active_Proto = Thin.SCARD_PROTOCOL_T0 then
-         C_Send_PCI := Thin.SCARD_PCI_T0;
-      elsif Card.Active_Proto = Thin.SCARD_PROTOCOL_T1 then
-         C_Send_PCI := Thin.SCARD_PCI_T1;
-      elsif Card.Active_Proto = Thin.SCARD_PROTOCOL_RAW then
-         C_Send_PCI := Thin.SCARD_PCI_RAW;
-      else
-         raise No_PCI_for_Proto;
-      end if;
+      C_Send_PCI := Get_PCI (Card => Card);
 
       --  Call thin binding SCardTransmit
 
@@ -618,6 +610,27 @@ package body PCSC.SCard is
    begin
       return Convert.To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
+
+   -------------
+   -- Get_PCI --
+   -------------
+
+   function Get_PCI (Card : in SCard.Card) return Thin.SCARD_IO_REQUEST
+   is
+      PCI : Thin.SCARD_IO_REQUEST;
+   begin
+      --  TODO: use a mapping table for this
+      if Card.Active_Proto = Thin.SCARD_PROTOCOL_T0 then
+         PCI := Thin.SCARD_PCI_T0;
+      elsif Card.Active_Proto = Thin.SCARD_PROTOCOL_T1 then
+         PCI := Thin.SCARD_PCI_T1;
+      elsif Card.Active_Proto = Thin.SCARD_PROTOCOL_RAW then
+         PCI := Thin.SCARD_PCI_RAW;
+      else
+         raise No_PCI_for_Proto;
+      end if;
+      return PCI;
+   end Get_PCI;
 
    --------------
    -- SPE_Init --

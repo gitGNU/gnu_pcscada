@@ -351,8 +351,13 @@ package PCSC.SCard is
    --  parameter to the Get_Attribute function to actually retrieve the
    --  attribute data.
 
+
    function Get_Active_Proto (Card : in SCard.Card) return Proto;
-   --  Return protocol in use for a given card handle.
+   --  Return protocol in use for a given card.
+
+   function Get_PCI (Card : in SCard.Card) return Thin.SCARD_IO_REQUEST;
+   --  Return PCI to use for a given card. If no valid PCI for a proto is
+   --  found, a No_PCI_for_Proto exception will be thrown.
 
 
    procedure SPE_Init (Card : in out SCard.Card; Result : in out Boolean);
