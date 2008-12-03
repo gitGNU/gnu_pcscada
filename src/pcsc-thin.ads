@@ -97,8 +97,8 @@ package PCSC.Thin is
 
 
    type SCARD_IO_REQUEST is record
-      dwProtocol  : DWORD;
-      cbPciLength : DWORD;
+      dwProtocol  : DWORD := 0;
+      cbPciLength : DWORD := 0;
    end record;
    --  SCard io request structure
 
