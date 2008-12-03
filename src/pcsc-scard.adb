@@ -231,7 +231,6 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
 
       --  Update Ada type with values returned by C API function
-      --  TODO: what happens when a reader vanishes?
 
       VORCP.Iterate (Container => Conditions.Data,
                      Process   => Update_Status_Set'Access);
