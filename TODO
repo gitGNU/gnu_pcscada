@@ -15,5 +15,3 @@ PCSC/Ada TODO List
   * e.g. "16 3B 12 28"
 - Use 'private with' for PCSC.Thin in thick binding.
   * A thick binding type for Thin.Byte is needed.
-- Improve Reader_Monitor: make it a Singleton or fix usage of
-  Current_Context and Do_Cancel.
