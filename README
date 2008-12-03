@@ -1,42 +1,143 @@
 PCSC/Ada README
 ===============
 
+This is the README file for the PCSC/Ada library. In this file, you'll find
+information on how to compile, test, install the PCSC/Ada library and use the
+example applications. For the latest information to PCSC/Ada, visit the website
+at http://www.nongnu.org/pcscada.
+
+
 Prerequisites
 -------------
 PCSC/Ada is written in Ada, so you need to have GNAT (GNU Ada Translator)
-installed to compile PCSC/Ada. For the unit tests to work, you further need to
-have Ahven installed (see 'Installation').
-GNAT is available for most distributions, make sure you have gcc version 4.1 or
-later installed.
+installed to compile PCSC/Ada. GNAT is available for most distributions, make
+sure you have version 4.1 or later installed. For the unit tests to work, you
+further need to have Ahven installed (see sections 'Testing' and 'Installation').
+Since PCSC/Ada provides an Ada binding to PC/SC middleware, you also need to
+have PC/SC development files installed on your system.
+
+
+Build PCSC/Ada
+--------------
+To compile PCSC/Ada on your system, you need the following libraries/frameworks
+installed:
+
+* GNAT:
+  http://www.gnu.org/software/gnat/gnat.html
+
+* Ahven (Test-Framework):
+  http://home.gna.org/ahven/
+
+* PC/SC development files and libraries:
+  e.g. pcsc-lite from http://pcsclite.alioth.debian.org
+
+TIP: with Debian (>= Lenny), typing `apt-get install gnat-4.3 libahven-dev
+libpcsclite-dev` will do the job.
+
+The build process of PCSC/Ada is quite easy and straightforward. Just type in
+the following commands:
+
+.................
+  $ tar xjf libpcscada-{revision}.tar.bz2
+  $ cd libpcscada-{revision}
+  $ make
+.................
+
+If no errors occur during the build process, you have now successfully build
+the PCSC/Ada library from sources.
+
+
+Testing
+-------
+Before you install PCSC/Ada on your system, you might want to test the library
+and verify that everything works as expected. PCSC/Ada contains both a unit test
+suite and an integration test application. To run the unit tests of PCSC/Ada,
+just type:
+
+.................
+  $ make utests
+.................
+
+This will run all Ahven based unit tests. All tests should be marked with *PASS*
+behind the test name. To run the integration tests of PCSC/Ada, you need to have
+at least one smart card reader and one smart card ready. Type the following
+command to run the integration tests:
+
+.................
+  $ make itests
+.................
+
+This will run an Ada implementation of the pcsc-lite `testpcsc` binary used to
+test the pcsc-lite framework. If no exception arises, you should be good to go.
+If you really want make sure everything is alright, compare the output of
+`make itests` with the output when running `testpcsc` for a given card / reader
+combination.
+
 
 Installation
 ------------
-For PCSC/Ada to compile, you need the following libraries/frameworks installed:
-
-* GNAT:
-  http://www.gnu.org/software/gnat/gnat.html[]
-
-* Ahven (Test-Framework):
-  http://home.gna.org/ahven/[]
-
-TIP: with Debian, typing `apt-get install gnat-4.3 libahven-dev` will do the job.
-
-The installation of PCSC/Ada is quite easy and straightforward. Just type
-in the following commands, you must be root to install the library system wide.
+To install PCSC/Ada on your system, type the following:
 
 .................
-  $ tar -xzf libpcscada-{revision}.tar.bz2
-  $ cd libpcscada-{revision}
-  $ make
   $ make PREFIX=/usr/local install
 .................
 
-If no `PREFIX` is specified, `$(HOME)/libraries` is used as install destination.
+You must be `root` to install the library system wide. If no `PREFIX` is
+specified, `$(HOME)/libraries` is used as install destination.
 
-Obtaining PCSC/Ada
-------------------
-The latest PCSC/Ada version and online documentation can be found at
-http://www.nongnu.org/pcscada/[].
+
+Examples
+--------
+PCSC/Ada provides some example code to demonstrate the usage of the PCSC/Ada
+API. To build all example apps, type the following:
+
+.................
+  $ make examples
+.................
+
+You can start an example application like so: `obj/examples/pinpad`
+
+examples/cardd
+~~~~~~~~~~~~~~
+This example application is a simple implementation of a reader monitor using
+the Reader_Monitor task provided by PCSC/Ada. After startup, `cardd` will
+observe all smart card readers of a system for status changes (e.g. card
+inserted, card removed). It will print out information if states of readers
+change.
+
+examples/pinvery/pinpad
+~~~~~~~~~~~~~~~~~~~~~~~
+This small application will perform a SPE (secure pin entry) operation with
+a given card / reader. It will first check if the reader supports this operation
+and will exit if not. If it does support SPE, the user is asked to enter the PIN
+of a given smart card by using the pinpad of the smart card reader. The result
+of the operation is displayed after completion.
+
+examples/thin
+~~~~~~~~~~~~~
+The thin_example binary (`obj/examples/thin_example`) can be used to test the
+thin binding of PCSC/Ada. You need to adopt the reader name `Reader_Name` in
+`examples/thin/thin_example.adb` to make this test app work.
+
+TIP: you should not use the PCSC/Ada thin binding in your own applications, use
+the thick binding instead!
+
+
+Documentation
+-------------
+The API documentation of PCSC/Ada can be found in the `doc` directory of the
+release, or online at http://www.nongnu.org/pcscada/api/index.html
+
+
+Development
+-----------
+If you want to contribute code to PCSC/Ada, please use use `git diff` or
+`git format-patch` to create your patches. You can mail your patches to the
+http://lists.nongnu.org/mailman/listinfo/pcscada-devel mailinglist or if your
+patch fixes a specific bug found at
+https://savannah.nongnu.org/bugs/?group=pcscada, attach it to the corresponding
+bug by doing 'Attach file'.
+
 
 COPYING
 -------
