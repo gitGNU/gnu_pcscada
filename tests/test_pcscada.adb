@@ -155,12 +155,13 @@ begin
       Send_Buffer : constant SCard.Byte_Set :=
         (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
       Recv_Len    : Natural := 0;
+      Recv_PCI    : SCard.IO_Request;
    begin
       SCU.Action_Info (Text => "Testing Transmit");
       SCard.Transmit (Card        => Card,
                       Send_Pci    => SCard.PCI_T1,
                       Send_Buffer => Send_Buffer,
-                      Recv_Pci    => SCard.PCI_T1,
+                      Recv_Pci    => Recv_PCI,
                       Recv_Buffer => Recv_Buffer,
                       Recv_Len    => Recv_Len);
       SCU.Action_Result (Result => SCard.Get_Return_Code);

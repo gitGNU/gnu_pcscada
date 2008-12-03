@@ -184,6 +184,9 @@ package PCSC.SCard is
    --  Set of reader status types
 
 
+   subtype IO_Request is Thin.SCARD_IO_REQUEST;
+   --  Thick binding IO request subtype, used in Transmit() procedure
+
    type PCI is
      (PCI_T0,
       --  (PCI) for T=0
@@ -319,7 +322,7 @@ package PCSC.SCard is
      (Card        : in SCard.Card;
       Send_Pci    : in PCI;
       Send_Buffer : in Byte_Set := Null_Byte_Set;
-      Recv_Pci    : in PCI;
+      Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.

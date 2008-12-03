@@ -438,7 +438,7 @@ package body PCSC.SCard is
      (Card        : in SCard.Card;
       Send_Pci    : in PCI;
       Send_Buffer : in Byte_Set := Null_Byte_Set;
-      Recv_Pci    : in PCI;
+      Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
@@ -449,8 +449,7 @@ package body PCSC.SCard is
 
       C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST :=
         Convert.C_PCI (Send_Pci);
-      C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST :=
-        Convert.C_PCI (Recv_Pci);
+      C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST := Recv_Pci;
       Bytes_Returned : aliased Thin.DWORD := Thin.DWORD (Recv_Buffer'Last);
    begin
       --  Empty send buffer makes no sense, return without doing anything
