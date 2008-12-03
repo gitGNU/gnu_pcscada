@@ -182,6 +182,7 @@ begin
          pbSendBuffer  : Byte_Array :=
            (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
          pcbRecvLength : aliased DWORD := 10;
+         pioRecvPCI    : aliased Thin.SCARD_IO_REQUEST;
       begin
 
          --  Send arbitrary APDU to card
@@ -191,7 +192,7 @@ begin
                                pbSendBuffer  => pbSendBuffer
                                  (pbSendBuffer'First)'Unchecked_Access,
                                cbSendLength  => 7,
-                               pioRecvPci    => SCARD_PCI_T1'Access,
+                               pioRecvPci    => pioRecvPCI'Access,
                                pbRecvBuffer  => pbRecvBuffer
                                  (pbRecvBuffer'First)'Unchecked_Access,
                                pcbRecvLength => pcbRecvLength'Access);
