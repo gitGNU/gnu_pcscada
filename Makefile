@@ -25,12 +25,16 @@ INSTALL = install
 
 VERSION = 0.5
 GIT_REV = $(shell git-show --pretty="format:%h" | head -n1)
-PCSCADA = libpcsc-$(VERSION)
-DISTFILES = `ls | grep -v libpcsc`
+
+PCSCADA = libpcscada-$(VERSION)
 
 SOURCEDIR = src
 ALI_FILES = lib/*.ali
 SO_LIBRARY = libpcscada.so.$(VERSION)
+
+TMPDIR = /tmp
+DISTDIR = $(TMPDIR)/$(PCSCADA)
+TARBALL = $(PCSCADA).tar.bz2
 
 all: build_lib
 
@@ -92,4 +96,12 @@ docs:
 	@ls $(SOURCEDIR)/*.ads > pcscada.specs
 	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs -o doc/
 
-.PHONY: itests utests
+dist: distclean $(SOURCEDIR)/pcsc-version.ads
+	@echo -n "Creating release tarball '$(PCSCADA)' ($(GIT_REV)) ... "
+	@mkdir -p $(DISTDIR)
+	@cp -R * $(DISTDIR)
+	@tar -C $(TMPDIR) -cjf $(TARBALL) $(PCSCADA)
+	@rm -rf $(DISTDIR)
+	@echo "DONE"
+
+.PHONY: dist itests utests
