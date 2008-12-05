@@ -22,14 +22,14 @@ Build PCSC/Ada
 To compile PCSC/Ada on your system, you need the following libraries/frameworks
 installed:
 
-* GNAT:
+* GNAT (version >= 4.1):
   http://www.gnu.org/software/gnat/gnat.html
 
-* Ahven (Test-Framework):
+* Ahven (Test-Framework, version 1.3):
   http://home.gna.org/ahven/
 
 * PC/SC development files and libraries:
-  e.g. pcsc-lite from http://pcsclite.alioth.debian.org
+  e.g. pcsc-lite from http://pcsclite.alioth.debian.org (version >= 1.4.0)
 
 TIP: with Debian (>= Lenny), typing `apt-get install gnat-4.3 libahven-dev
 libpcsclite-dev` will do the job.
@@ -100,7 +100,7 @@ You can start an example application like so: `obj/examples/pinpad`
 examples/cardd
 ~~~~~~~~~~~~~~
 This example application is a simple implementation of a reader monitor using
-the Reader_Monitor task provided by PCSC/Ada. After startup, `cardd` will
+the `Reader_Monitor` task provided by PCSC/Ada. After startup, `cardd` will
 observe all smart card readers of a system for status changes (e.g. card
 inserted, card removed). It will print out information if states of readers
 change.
