@@ -84,7 +84,7 @@ examples: build_examples
 
 install: install_lib
 
-install_lib:
+install_lib: build_lib
 	@mkdir -p $(PREFIX)/include/pcscada
 	@mkdir -p $(PREFIX)/lib/pcscada
 	$(INSTALL) -m 644 $(SOURCEDIR)/* $(PREFIX)/include/pcscada
