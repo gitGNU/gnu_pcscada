@@ -21,6 +21,9 @@
 #
 
 PREFIX ?= $(HOME)/libraries
+INCDIR = $(PREFIX)/share/ada/adainclude/pcscada
+ALIDIR = $(PREFIX)/lib/ada/adalib/pcscada
+
 INSTALL = install
 
 VERSION = 0.5
@@ -85,12 +88,12 @@ examples: build_examples
 install: install_lib
 
 install_lib: build_lib
-	@mkdir -p $(PREFIX)/include/pcscada
-	@mkdir -p $(PREFIX)/lib/pcscada
-	$(INSTALL) -m 644 $(SOURCEDIR)/* $(PREFIX)/include/pcscada
-	$(INSTALL) -m 444 $(ALI_FILES) $(PREFIX)/lib/pcscada
-	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib/pcscada
-	@ln -sf $(PREFIX)/lib/pcscada/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
+	@mkdir -p $(INCDIR)
+	@mkdir -p $(ALIDIR)
+	$(INSTALL) -m 644 $(SOURCEDIR)/* $(INCDIR)
+	$(INSTALL) -m 444 $(ALI_FILES) $(ALIDIR)
+	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib
+	@ln -sf $(PREFIX)/lib/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
 
 docs:
 	@ls $(SOURCEDIR)/*.ads > pcscada.specs
