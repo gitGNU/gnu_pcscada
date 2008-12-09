@@ -36,9 +36,9 @@ use PCSC;
 --  test reference.
 procedure Test_PCSCAda is
 
-   package SCU renames SCard.Utils;
-
    pragma Linker_Options ("-lpcsclite");
+
+   package SCU renames SCard.Utils;
 
    Context       : SCard.Context;
    Card          : SCard.Card;

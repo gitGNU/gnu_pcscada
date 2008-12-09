@@ -71,26 +71,31 @@ package body PCSC.SCard.Tests is
       use type VOIDP.Vector;
 
       --  Separation and Termination chars
+
       Sep     : constant Character := Ada.Characters.Latin_1.NUL;
       Term    : constant String := Ada.Characters.Latin_1.NUL
         & Ada.Characters.Latin_1.NUL;
 
       --  Input sources
+
       Source1 : constant String := "This is not a reader string";
       Source2 : constant String := "One Reader" & Term;
       Source3 : constant String := "First  Reader" & Sep & "_SecondReader_"
         & Sep & " Third _ Reader  II " & Term;
 
       --  Resulting reader ID set
+
       Readers : Reader_ID_Set;
    begin
 
       --  Test slicing of an ordinary, invalid string
+
       Readers := Convert.Slice_Readerstring (To_Slice => Source1);
       Assert (Condition => Readers.Data = VOIDP.Empty_Vector,
               Message   => "Reader_ID_Set not empty");
 
       --  Test slicing of one reader
+
       Readers := Convert.Slice_Readerstring (To_Slice => Source2);
 
       Assert (Condition => Readers.Data.Length = 1,
@@ -99,6 +104,7 @@ package body PCSC.SCard.Tests is
               Message   => "Reader name does not match");
 
       --  Test slicing of multiple readers
+
       Readers := Convert.Slice_Readerstring (To_Slice => Source3);
       Assert (Condition => Readers.Data.Length = 3,
               Message   => "Slicing failed");
@@ -115,14 +121,18 @@ package body PCSC.SCard.Tests is
    -------------------------
 
    procedure Test_To_C_RCond_Set is
+
       --  Empty set test
+
       Empty_Set : Reader_Condition_Set;
 
       --  This should return an empty array
+
       E_Result  : constant Thin.READERSTATE_Array :=
         Convert.To_C (Conditions => Empty_Set);
 
       --  Construct a 'real' condition set
+
       Real_Set  : Reader_Condition_Set;
 
       Reader1   : Reader_Condition;
@@ -130,11 +140,14 @@ package body PCSC.SCard.Tests is
 
       Useless   : Reader_States_Set;
    begin
+
       --  Empty
+
       Assert (Condition => E_Result'Length = 0,
               Message   => "array not empty");
 
       --  Fill real set
+
       Reader1.Name := To_Reader_ID ("Reader I");
       Reader1.Current_State.Add (State => S_Reader_Unavailable);
       Reader2.Name := To_Reader_ID ("Reader II");
@@ -143,6 +156,7 @@ package body PCSC.SCard.Tests is
       --  Setting Event_State of Reader2 should be ignored by the conversion,
       --  defaults are used instead. Settting Event_State manually makes no
       --  sense since they are updated by calling the Status_Change procedure.
+
       Useless.Add (State => S_Reader_Ignore);
       Useless.Add (State => S_Reader_Exclusive);
       Reader2.Event_State := Useless;
@@ -150,6 +164,7 @@ package body PCSC.SCard.Tests is
       Reader2.Card_ATR := To_Atr (Bytes => Byte_Set'(16#12#, 16#23#));
 
       --  Add reader status to set set
+
       Real_Set.Add (Status => Reader1);
       Real_Set.Add (Status => Reader2);
 
@@ -160,13 +175,16 @@ package body PCSC.SCard.Tests is
          R_Result : Thin.READERSTATE_Array := Convert.To_C
            (Conditions => Real_Set);
       begin
+
          --  Test resulting size of array
+
          Assert (Condition => R_Result'Length = 2,
                  Message   => "array size mismatch");
 
          --  Test individual values one by one
 
          --  szReader names
+
          Assert (Condition => String'(Strings.Value
                  (R_Result (R_Result'First).szReader)) = "Reader I",
                  Message   => "reader name mismatch");
@@ -175,12 +193,14 @@ package body PCSC.SCard.Tests is
                  Message   => "reader name mismatch");
 
          --  pvUserData must be null
+
          Assert (Condition => R_Result (R_Result'First).pvUserData = null,
                  Message   => "pvUserData not null");
          Assert (Condition => R_Result (R_Result'Last).pvUserData = null,
                  Message   => "pvUserData not null");
 
          --  dwCurrentState
+
          Assert (Condition => R_Result (R_Result'First).dwCurrentState =
                    SCARD_STATE_UNAVAILABLE,
                  Message   => "dwCurrentState incorrect");
@@ -190,12 +210,14 @@ package body PCSC.SCard.Tests is
 
          --  dwEventState must be set to default, even though we specified
          --  Reader_States_Set 'Useless' above.
+
          Assert (Condition => R_Result (R_Result'First).dwEventState = 0,
                  Message   => "dwEventState incorrect");
          Assert (Condition => R_Result (R_Result'Last).dwEventState = 0,
                  Message   => "dwEventState incorrect");
 
          --  cbAtr value must match Card_ATR.Data'Length
+
          Assert (Condition => R_Result (R_Result'First).cbAtr =
                    Reader1.Card_ATR.Data'Length,
                  Message   => "cbAtr size incorrect");
@@ -205,6 +227,7 @@ package body PCSC.SCard.Tests is
 
          --  rgbAtr (Byte_Array) must match Card_ATR.Data for Reader2 and
          --  Null_ATR for Reader1
+
          Assert (Condition => ATR_Type (Byte_Set (R_Result
                  (R_Result'First).rgbAtr)) = Null_ATR.Data,
                  Message   => "ATR data mismatch");
@@ -213,6 +236,7 @@ package body PCSC.SCard.Tests is
                  Message   => "ATR data mismatch");
 
          --  Free memory after test
+
          Convert.Free (Name => R_Result);
       end;
    end Test_To_C_RCond_Set;
@@ -232,6 +256,7 @@ package body PCSC.SCard.Tests is
               Message => "Reader name mismatch");
 
       --  Free memory
+
       Strings.Free (Item => Ptr);
    end Test_To_Chars_Ptr;
 
@@ -249,6 +274,7 @@ package body PCSC.SCard.Tests is
               Message   => "Proto not Proto_Undefined");
 
       --  Just test one Thin.DWORD to Proto conversion, no need to test all
+
       Assert (Condition => Convert.To_Ada (C_Protocol => RAW) = Proto_RAW,
               Message   => "Proto not Proto_RAW");
    end Test_To_Ada_Proto;
@@ -273,10 +299,12 @@ package body PCSC.SCard.Tests is
               Message   => "CStates_Set not empty");
 
       --  Test converted Real_Set
+
       Assert (Condition => Real_Set.Data.Length = 3,
               Message   => "Expected 3 Card_States");
 
       --  Negative test first
+
       Assert (Condition => Real_Set.Data.Find (Item => S_Card_Powered) =
                 No_Element,
               Message   => "Invalid state found");
@@ -313,10 +341,12 @@ package body PCSC.SCard.Tests is
               Message   => "RStates_Set not empty");
 
       --  Test converted Real_Set
+
       Assert (Condition => Real_Set.Data.Length = 3,
               Message   => "Expected 3 Reader_States");
 
       --  Negative test first
+
       Assert (Condition => Real_Set.Data.Find (Item => S_Reader_Empty) =
                 No_Element,
               Message   => "Invalid state found");

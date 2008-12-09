@@ -66,9 +66,9 @@ package body Tests_Utils is
                                   Name    => "Byte_Set to HEX String");
    end Initialize;
 
-   ---------------------------------------
-   -- Test_Long_Long_Integer (Byte_Set) --
-   ---------------------------------------
+   ----------------------------
+   -- Test_Long_Long_Integer --
+   ----------------------------
 
    procedure Test_To_Long_Long_Integer is
       Null_Set    : constant SCard.Byte_Set := SCard.Null_Byte_Set;
@@ -80,17 +80,21 @@ package body Tests_Utils is
 
       Result  : Long_Long_Integer;
    begin
+
       --  Null_Byte_Set
+
       Result := SCU.To_Long_Long_Integer (Given => Null_Set);
       Assert (Condition => Result = 0,
               Message   => "result is not 0");
 
       --  Big byte set
+
       Result := SCU.To_Long_Long_Integer (Given => Big_Set);
       Assert (Condition => Result = 314182314,
               Message   => "result is not 314182314");
 
       --  Small byte set
+
       Result := SCU.To_Long_Long_Integer (Given => Small_Set);
       Assert (Condition => Result = 65298,
               Message   => "result is not 65298");
@@ -101,6 +105,7 @@ package body Tests_Utils is
       begin
          --  Byte set 'Set_Too_Big' cannot be represented by
          --  Long_Long_Integer, this test should raise Number_Too_Big exception
+
          Result := SCU.To_Long_Long_Integer (Given => Set_Too_Big);
          Fail (Message => "No Number_Too_Big exception raised");
       exception

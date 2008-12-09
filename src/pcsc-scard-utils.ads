@@ -76,8 +76,9 @@ package PCSC.SCard.Utils is
    --  or trim newlines. If Null_Byte_Set is passed for 'Given', a "0" string
    --  is returned.
 
-   function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
-                                  return Long_Long_Integer;
+   function To_Long_Long_Integer
+     (Given : in Byte_Set := Null_Byte_Set)
+     return Long_Long_Integer;
    --  Return converted Long_Long_Integer value from Byte_Set. Maximal value
    --  which can be converted is Long_Long_Integer'Last. If given Byte_Set
    --  contains a bigger number than Long_Long_Integer'Last, a
@@ -85,7 +86,7 @@ package PCSC.SCard.Utils is
    --  0 is returned.
 
 
-   procedure Action_Info (Text   : in String);
+   procedure Action_Info (Text : in String);
    --  This function is used by all test and example programs of PCSC/Ada:
    --  Pretty print some information about an operation to stdout. After the
    --  action is complete, the Action_Result() function can be used to display

@@ -32,9 +32,10 @@ use PCSC;
 --  the reader supporst this operation. If the reader does support SPE, the
 --  user is asked to enter the smart card PIN at the card reader.
 procedure Pinpad is
-   package SCU renames SCard.Utils;
 
    pragma Linker_Options ("-lpcsclite");
+
+   package SCU renames SCard.Utils;
 
    Context     : SCard.Context;
    Card        : SCard.Card;
@@ -44,6 +45,7 @@ procedure Pinpad is
    Card_States : SCard.Card_States_Set;
    Card_Proto  : SCard.Proto := SCard.Proto_Undefined;
    Card_ATR    : SCard.ATR;
+
 begin
 
    Ada.Text_IO.New_Line;

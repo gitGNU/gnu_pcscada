@@ -170,7 +170,7 @@ package PCSC.SCard is
       Current_State : Reader_States_Set;
       Event_State   : Reader_States_Set;
       Event_Counter : Natural := 0;
-      Card_ATR      : ATR := Null_ATR;
+      Card_ATR      : ATR     := Null_ATR;
    end record;
    --  Reader condition type for status change handling. Current_State defines
    --  the current assumed state. Event_State and Card_ATR is updated by
@@ -253,8 +253,7 @@ package PCSC.SCard is
    function Is_Valid (Context : in SCard.Context) return Boolean;
    --  Verify that given SCard context is valid.
 
-   function List_Readers (Context : in SCard.Context)
-                          return Reader_ID_Set;
+   function List_Readers (Context : in SCard.Context) return Reader_ID_Set;
    --  Return list of all available readers for this PC/SC context.
 
    procedure Status_Change
@@ -282,12 +281,12 @@ package PCSC.SCard is
    procedure Connect
      (Context : in SCard.Context;
       Card    : in out SCard.Card;
-      Reader  : in Reader_ID := Null_Reader_ID;
+      Reader  : in Reader_ID  := Null_Reader_ID;
       Mode    : in SCard.Mode := Share_Shared);
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
    --  SCard will be stored in 'Card' parameter.
 
-   procedure Disconnect (Card   : in SCard.Card; Action : in SCard.Action);
+   procedure Disconnect (Card : in SCard.Card; Action : in SCard.Action);
    --  This procedure terminates a connection to the connection made through
    --  Connect procedure.
 
@@ -343,8 +342,8 @@ package PCSC.SCard is
    --  call.
 
    function Init_Attribute_Set
-     (Card        : in SCard.Card;
-      Attr        : in Attribute)
+     (Card : in SCard.Card;
+      Attr : in Attribute)
       return Byte_Set;
    --  This function returns an Null_Byte initialized byte set to provide
    --  storage for an attribute 'Attr'. The byte set can then be used as

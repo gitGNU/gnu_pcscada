@@ -51,7 +51,7 @@ package body PCSC.SCard.Utils is
          return "0";
       end if;
 
-      for Index in Given'Range loop -- For each word
+      for Index in Given'Range loop --  For each word
          Temp := Given (Index);
          for J in reverse 0 .. 2 - 1 loop
             Result (Where + J) := Hex (Integer (Temp and 16#F#) + 1);
@@ -186,8 +186,9 @@ package body PCSC.SCard.Utils is
    -- To_Long_Long_Integer --
    --------------------------
 
-   function To_Long_Long_Integer (Given : in Byte_Set := Null_Byte_Set)
-                                  return Long_Long_Integer
+   function To_Long_Long_Integer
+     (Given : in Byte_Set := Null_Byte_Set)
+      return Long_Long_Integer
    is
       use type Interfaces.Unsigned_64;
 
@@ -239,7 +240,9 @@ package body PCSC.SCard.Utils is
    begin
       while VOIDP.Has_Element (Position) loop
          Reader := VOIDP.Element (Position);
+
          --  Perform action on specific reader.
+
          Call (Reader);
          VOIDP.Next (Position);
       end loop;

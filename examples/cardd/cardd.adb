@@ -31,11 +31,13 @@ with PCSC.SCard.Monitor;
 use PCSC;
 
 procedure Cardd is
-   package SCU renames SCard.Utils;
 
    pragma Linker_Options ("-lpcsclite");
 
+   package SCU renames SCard.Utils;
+
    Context : aliased SCard.Context;
+
 begin
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("** PCSC/Ada card daemon [version " &

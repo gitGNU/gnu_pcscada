@@ -32,14 +32,16 @@ use PCSC;
 
 --  Thin-binding example
 procedure Thin_Example is
-   hContext : aliased SCARDCONTEXT;
-   ret      : DWORD;
 
-   use Interfaces.C;
+   pragma Linker_Options ("-lpcsclite");
 
    package SCU renames SCard.Utils;
 
-   pragma Linker_Options ("-lpcsclite");
+   use Interfaces.C;
+
+   hContext : aliased SCARDCONTEXT;
+   ret      : DWORD;
+
 begin
 
    ret := SCardEstablishContext

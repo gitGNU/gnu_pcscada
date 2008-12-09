@@ -26,8 +26,10 @@ package body PCSC.SCard.Monitor is
    -- Is_Interested --
    -------------------
 
-   function Is_Interested (O      : in Observer;
-                           States : in Reader_States_Set) return Boolean
+   function Is_Interested
+     (O      : in Observer;
+      States : in Reader_States_Set)
+      return Boolean
    is
       use type VORSP.Cursor;
 
@@ -251,8 +253,7 @@ package body PCSC.SCard.Monitor is
 
          if not Table.Find (Reader_ID => IDs.Get (R)) then
             --  TODO: add possibility to notify a new reader event
-            Table.Add (Status => Create_Condition
-                       (Reader => IDs.Get (R)));
+            Table.Add (Status => Create_Condition (Reader => IDs.Get (R)));
          end if;
       end loop;
    end Update_Reader_Table;

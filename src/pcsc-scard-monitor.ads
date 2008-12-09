@@ -49,8 +49,10 @@ package PCSC.SCard.Monitor is
    --  This procedure is called to inform an observer about status changes in
    --  reader states for all states this observer is interested in.
 
-   function Is_Interested (O      : in Observer;
-                           States : in Reader_States_Set) return Boolean;
+   function Is_Interested
+     (O      : in Observer;
+      States : in Reader_States_Set)
+      return Boolean;
    --  Function is used to check whether an observer is interested in one of
    --  the states given by 'States' set.
 
