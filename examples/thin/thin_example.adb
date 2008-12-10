@@ -46,7 +46,7 @@ begin
 
    ret := SCardEstablishContext
      (dwScope     => SCARD_SCOPE_SYSTEM,
-      phContext   => hContext'Unchecked_Access);
+      phContext   => hContext'Access);
    if ret = SCARD_S_SUCCESS then
       Ada.Text_IO.Put_Line ("context established");
    else
@@ -152,10 +152,10 @@ begin
       ret := SCardStatus (hCard          => hCard,
                           mszReaderNames => C.Strings.Null_Ptr,
                           pcchReaderLen  => dwReaderLen'Access,
-                          pdwState       => dwState'Unchecked_Access,
+                          pdwState       => dwState'Access,
                           pdwProtocol    => dwProtocol'Access,
                           pbAtr          =>
-                            pbAtr (pbAtr'First)'Unchecked_Access,
+                            pbAtr (pbAtr'First)'Access,
                           pcbAtrLen      => dwAtrLen'Access);
 
       if ret = SCARD_S_SUCCESS then
@@ -192,11 +192,11 @@ begin
          ret := SCardTransmit (hCard         => hCard,
                                pioSendPci    => SCARD_PCI_T1'Access,
                                pbSendBuffer  => pbSendBuffer
-                                 (pbSendBuffer'First)'Unchecked_Access,
+                                 (pbSendBuffer'First)'Access,
                                cbSendLength  => 7,
                                pioRecvPci    => pioRecvPCI'Access,
                                pbRecvBuffer  => pbRecvBuffer
-                                 (pbRecvBuffer'First)'Unchecked_Access,
+                                 (pbRecvBuffer'First)'Access,
                                pcbRecvLength => pcbRecvLength'Access);
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("transmit send ok");
