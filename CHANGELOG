@@ -1,0 +1,1038 @@
+PCSC/Ada ChangeLog
+==================
+
+Version 0.5 (2008-12-10)
+------------------------
+.Additions and changes
+
+* Enabled almost all warnings (except: 'Hiding'). (b9e33f6)
+- Warnings are treated as errors now.
+- Fixed elaboration order problem with SCARD_CTL_CODE function in
+  PCSC.Thin.Reader.
+
+
+* Enabled all validity checks. (49bb456)
+
+
+* Made code comply with new style checks. (dd0e51b)
+
+
+* Enabled almost all style checks (all except 'Check sep. specs'). (91aa524)
+- Switched to GPS format of project files.
+
+
+* Replaced all Unchecked_Access with just Access in thin_example. (f66473d)
+
+
+* Changed install destination of ALI files, lib and sources. (6f28bad)
+
+
+* Minor coding style fixes, some suggested by gnatpp. (8e6e518)
+
+
+* Added build_lib dependency to install_lib target in Makefile. (376c61e)
+
+
+* Added version information to 'Build' section in README. (d8b8591)
+
+
+* Added 'dist' target to Makefile to create dist tarball. (67b7b4e)
+
+
+* Updated README file. (3c56f9f)
+- Added notice about PC/SC development files to README.
+- Simplified URLs in README file (works with asciidoc 8.3.0).
+
+
+* No need to obfuscate the AUTHORS e-mail. (034a9d2)
+
+
+* Added another TODO item. (5bb79e2)
+
+
+* Removed TODO comment in pcsc-scard body (status: no problem). (5f8ce39)
+
+
+* Added Get_PCI() function to retrieve usable PCI for a given Card. (ade9d84)
+
+
+* Removed Send_Pci argument from Transmit() procedure. (d3e54b6)
+- Setting the correct send PCI is handled transparently in the
+  thick binding layer.
+- If a card uses a protocol we don't know a valid PCI for, a
+  No_PCI_for_Proto exception will be thrown.
+
+
+* Fixed Control() and Transmit() procedure. (0c059c8)
+- The workaround for "access-to-variable designates constant" was
+  broken because only one byte has been passed on to the thin
+  binding. Fixed this by copying the initial send buffer.
+
+
+* Added thick binding subtype IO_Request of Thin.SCARD_IO_REQUEST. (d877062)
+- Use this subtype for Recv_Pci argument of Transmit() procedure.
+
+
+* Added 0 initialization of SCARD_IO_REQUEST record type fields. (ff97c10)
+
+
+* Corrected usage of pioRecvPci argument for SCardTransmit. (d70cb8e)
+
+
+* Updated PCSC/Ada API documentation. (e6ac5e8)
+
+
+* Removed TODO item (status: done). (0df3b3f)
+
+
+* Extended purpose header comment of SCard.Monitor package. (d018934)
+
+
+* Moved Current_Context from private spec to Reader_Monitor body. (f7868d2)
+- Extended Run() entry of Status_Peeker task with Context_Handle
+  argument. The Reader_Monitor uses this entry to pass on the
+  Current_Context to the Status_Peeker task.
+
+
+* Start reader monitoring task after registering the observer. (44a7889)
+
+
+* Removed Do_Cancel flag: added separate Stop_Peeker, Stop_Monitor. (f78dfdc)
+
+
+* Renamed 'Status_Observer' task type to 'Status_Peeker'. (704e40a)
+- Status_Observer is misleading because the expression 'observer'
+  is already used in a different context.
+
+
+* Added more output to simple observer example. (cf086eb)
+
+
+* Added S_Reader_Unavailable to interesting states for observer. (7dfc36f)
+
+
+* Implemented an observer pattern for the Reader_Monitor task. (3046d87)
+- Client code can extend the abstract type 'Observer' to create
+  new observers. Observers are used to inform the client code
+  about changes in reader state for all known readers.
+- Observers provide a 'States' Reader_States_Set which stores
+  all the reader states a specific observer is interested in.
+- Added protected type Protected_Observer_Set as storage for all
+  registered observers.
+- Added Register() entry to Reader_Monitor, used to add new
+  observers to the protected type Protected_Observer_Set.
+- Protected_Observer_Set.Notify_All() is used to inform
+  interested observers about a change of reader state.
+- Added simple reader observer in examples/cardd.
+
+
+* Added missing rgReaderStates argument to SCardGetStatusChange. (cddb9b2)
+- Only needed because adabrowse does not like 'null' default
+  initialization of anonymous access types, see commit
+  70391cad3b813f5ebfa90f13e47276652fab12fe.
+
+
+* Updated PCSC/Ada API documentation. (16c5a8b)
+
+
+* Removed 'null' initialization of rgReaderStates anonymous access. (70391ca)
+- adabrowse exits with the error 'null cannot be of an anonymous
+  access type'.
+
+
+* Changed e-mail address for copyright headers. (0c9b519)
+
+
+* Ignore non existing pcsc-version.ads file in distclean target. (5f8d26d)
+
+
+* Added exception block around call to Establish_Context(). (2461baf)
+
+
+* Added another TODO item. (ac9c1b4)
+
+
+* Made Status_Observer a task type and moved it to private part. (03a0a9b)
+
+
+* Added Status_Observer task to Reader_Monitor task. (50276fe)
+- Status_Observer calls the Status_Change procedure to detect
+  status changes on all known readers (until Do_Cancel = True).
+- Renamed Reader_Monitor.Run to Reader_Monitor.Start.
+- Renamed Reader_Monitor.Cancel to Reader_Monitor.Stop.
+- Reader_Monitor.Stop does actually stop the Reader_Monitor.
+
+
+* Changed AUTHORS e-mail address. (3104e2a)
+
+
+* Moved Create_Condition and Update_Reader_Table to private part. (e52088c)
+
+
+* Added Cancel() entry to Reader_Monitor task. (44b4cb2)
+- Renamed Start() to Init().
+- Added Run() entry to Reader_Monitor.
+
+
+* Fixed erroneous usage of Reader_Monitor.Run() entry. (c573aac)
+- Added access to Context type: Context_Handle.
+- Renamed Run() entry to Start().
+- Use the Start rendevous point to init the tasks
+  Current_Context.
+
+
+* Minor: coding style fixes. (58d55ed)
+
+
+* Added missing header comment for Update_Reader_Condition. (8e6766d)
+
+
+* Added missing header comment for Update_Status_Set. (35a8143)
+
+
+* Added missing header for Update_Reader_Table, Create_Condition. (38bcd2e)
+
+
+* Corrected comment for Remove() procedure. (12cadaa)
+
+
+* Fixed handling of 'all reader vanished' event (again). (428e7bc)
+
+
+* Added missing call to Reader_Monitor.Run (Context). (f9866fd)
+
+
+* Re-added exception block in cardd example. (83ac252)
+
+
+* Minor coding style changes. (0271be1)
+
+
+* Replaced Run() procedure of SCard.Monitor with task type. (cb39c8e)
+
+
+* Added handling of empty condition tables to Status_Change(). (8c282ba)
+
+
+* Implemented Event_Counter for Status_Change operation. (9c4e1ce)
+- SCardGetStatusChange adds an event counter in the upper word
+  of dwEventState. This value must be stored to construct the
+  correct value of dwCurentState for further calls to
+  Status_Change.
+
+
+* Removed type definitions from header comments. (acfad62)
+
+
+* Added code to remove vanished readers from the readers table. (bbd48a4)
+
+
+* Fixed Bug in Update_Status_Set: use correct Index for Event_State. (2ee94d8)
+
+
+* Added support for multiple reader monitoring to SCard.Monitor. (4b90ac6)
+- Not yet functional.
+
+
+* Added Cancel() procedure to thick binding for Thin.SCardCancel. (17bd157)
+
+
+* Added thin binding for SCardCancel function. (1c7176d)
+
+
+* Fixed problem with Status_Change() and multiple readers. (8f15151)
+- Removed one indirection: made READERSTATE_Array an array of
+  READERSTATEs, not access to READERSTATEs.
+- Added Create_Readerstate() helper function to create new
+  Thin.READERSTATE objects.
+- Removed Thin.READERSTATE_Access type.
+- Removed Unchecked_Deallocation for Thin.READERSTATE_Access.
+
+
+* Updated TODO item. (2df04cb)
+
+
+* Remove S_Reader_Changed state before updating Current_State. (6e29fe7)
+
+
+* Added Remove() procedure to Reader_States_Set. (69db08f)
+
+
+* Use new SCard.Monitor package for reader condition detection. (7e3e952)
+
+
+* Added SCard.Monitor package. (079ee1f)
+- Used to monitor reader status changes. At the moment, the
+  simple procedure Run() inside the package just prints the
+  new reader states to stdout.
+- This code will be replaced by a task implementation of an
+  observer pattern in the future. Client code can then register
+  new observers to the monitor for different reader states.
+
+
+* Renamed Vector_Of_Status_Package to Vector_Of_Condition_Package. (3249fd8)
+
+
+* Added first (not yet working) version of cardd. (c694543)
+
+
+* Changed Get() for Reader_Condition_Set to return a handle. (303dedf)
+- This throws a GNAT BUG DETECTED with 4.1.2 20061115
+  (prerelease) (Debian 4.1.1-22) (i486-pc-linux-gnu)
+
+
+* Added another TODO item. (2f52de3)
+
+
+* Added support for multiple Current_States readerstates. (3ae057f)
+- Removed corresponding TODO item.
+- Added further functions for simple Set operations
+  ([First|Last]_Item, [First|Last]_Index).
+- Renamed some existing Set operations to new naming convention.
+
+
+* Renamed Status_Set related parameter names to 'Conditions'. (4c56394)
+
+
+* Refactoring: renamed 'Reader_Status' to 'Reader_Table'. (e171828)
+
+
+* Refactoring: renamed Reader_Status type to Reader_Condition. (bf0f734)
+- Removed corresponding TODO item.
+
+
+* Use Is_In function of Card_States_Set to test for card presence. (2b1a9e9)
+
+
+* Added Is_In functions for [Card|Reader]_States_Set. (ac3146d)
+- Used to test if a given State is present in Set.
+
+
+* Minor: Fixed indentation for TODO entry. (38d4464)
+
+
+* Use new SPE_Init() and SPE_Exec() procedures for SPE operations. (8f966c8)
+
+
+* Divided Supports_SPE() into two procedures: SPE_Init, SPE_Exec. (cd79fe0)
+- SPE_Init is used to check if a reader supports SPE operation.
+  If it does, the Verify_Ctrl value of the card handle is
+  initialized.
+- SPE_Exec performs the actual SPE operation by sending the
+  Verify_Ctrl code to the reader using a PC/SC v2.0.2 Part 10
+  PIN verification data structure.
+
+
+* Added Verify_Ctrl DWORD to Card type. (44e990c)
+
+
+* Added SCard_Not_Supported exception. (aa62731)
+- Raised if an operation has been requested which is not
+- supported by the reader or card.
+
+
+* First working version of SPE testcode. (4a6cbd8)
+- The PIN_VERIFY_STRUCTURE is correctly sent to the card reader.
+
+
+* Added representation clause for PIN_VERIFY_STRUCTURE type. (ddb2556)
+
+
+* Extended Supports_SPE() function with PIN verify testcode. (383389d)
+- Only used to test SPE operation, will be removed later.
+
+
+* Added PIN_VERIFY_STRUCTURE record type to the thin binding. (875d569)
+
+
+* Display info and return if no readers are found. (1a4962f)
+
+
+* Added FEATURE flags to thin binding. (c188014)
+
+
+* Added missing call to Action_Result() after Card Status request. (cd25bcc)
+
+
+* Added record representation clause for PCSC_TLV_STRUCTURE record. (fa844c9)
+- Not yet tested.
+
+
+* Get card status first before testing for verify feature. (e0b7d20)
+- Not yet complete, an Is_In() function for Card_States and
+  Reader_States sets is needed to test for a specific state.
+
+
+* Renamed Reader_Proto, Reader_ATR objects to Card_Proto, Card_ATR. (6e17f5a)
+
+
+* Added outer exception block to pinpad example. (59d2f71)
+
+
+* Updated API documentation. (33087da)
+
+
+* Remove generated pcsc-version.ads file when distcleaning. (d1908b9)
+
+
+* Added Action_Info() and Action_Result() helper functions. (4c46b18)
+- Used by test and example programs to display information and
+  result of a scard operation.
+
+
+* Cleanup in thin binding example. (d0eabbf)
+
+
+* Added project file for all examples. (56b5b41)
+
+
+* Added first version of a SPE operation example. (5cdb784)
+
+
+* Added Supports_SPE() convenience function to the thick binding. (50f1973)
+- Can be used to test if a reader supporst SPE (secure PIN entry)
+  operations.
+- First implementation, not yet complete.
+
+
+* Added CM_IOCTL_GET_FEATURE_REQUEST and PCSC_TLV_STRUCTURE. (a9b91ca)
+
+
+* Declared Send_Buffers as constants. (370f96b)
+
+
+* Added SCARD_CTL_CODE function to thin binding. (7379bb4)
+
+
+* Made Send_Buffer of Transmit() and Control() an 'in' parameter. (de8aae7)
+- Set default value to Null_Byte_Set.
+- Added access type Byte_Access to thin binding.
+
+
+* Minor: corrected indentation of comments in scard spec file. (77fdafe)
+
+
+* Minor: corrected indentation for procedure params. (9932dea)
+
+
+* Added MAX_BUFFER_SIZE constant to thin binding spec. (f7072af)
+
+
+* Allow Get_Attribute tests to fail. (ac95f24)
+- Using an explicit exception handler block.
+- SCardGetAttribute is not supported by all ifd handlers.
+
+
+* Allow READERSTATE_Access to point to the storage pool only. (f5626a7)
+
+
+* Removed valgrind SCardControl related TODO item. (a080370)
+- "Syscall param write(buf) points to uninitialised byte(s)" also
+  happens when using the C API directly.
+
+
+* Use GNAT external reference in lib project file to set Version. (902466c)
+
+
+* Generate PCSC/Ada version information in Makefile. (44840b2)
+- Added .gitignore to ignore generated file (pcsc-version.ads)
+  and pcscada.specs (needed for adabrowse).
+
+
+* Added another missing constant keyword in tests_utils body. (55ceabd)
+
+
+* Removed obsolete TODO item (already resolved). (b875c80)
+
+
+* Don't indent package index when generating API doc. (a1e4b67)
+
+
+* Switched to AdaBrowse for automatic API doc generation. (fd28ae4)
+- Added Makefile target 'docs' to create/update documentation.
+- Minor specs reformatting to let the generated doc look nicer.
+
+
+* Added "-gnaty3abefhiklmprt" and "-gnatwa" to Compiler switches. (0826eb1)
+- Fixed various warnings reported by the compiler using these
+  switches (mostly added constant keyword where usable).
+
+
+* Added testcase for Thin.DWORD to Reader_States_Set conversion. (f4cdc9f)
+
+
+* Added testcase for Thin.DWORD to Card_States_Set conversion. (66fdf28)
+
+
+* Added test for Thin.DWORD to type Proto conversion. (f68030d)
+
+
+* Moved Free() for Thin.READERSTATE_Array to Conversion package. (07bdbb8)
+- Call this function after Test_To_C_RStatus_Set testcase to free
+  memory after test.
+
+
+* Renamed To_LPSTR function to To_Chars_Ptr. (0f5b7d2)
+- Added corresponding testcase Test_To_Chars_Ptr.
+
+
+* Implemented To_C (Reader_Status_Set) testcase. (d560c9d)
+
+
+* Added To_Reader_ID from String type helper function. (ef24449)
+
+
+* Reduced MAX_ATR_SIZE constant to 32. (0a6be2c)
+
+
+* Added testcase stub for Test_To_C_RStatus_Set. (ece110a)
+- Tests To_C conversion of Reader_Status_Set type.
+- Simple function re-ordering in scard-conversion body.
+
+
+* Create position-independent code (PIC) when compiling libpcscada. (5426194)
+- Store call stack in exceptions for all build targets (utests,
+  itests and lib).
+
+
+* Added first testcase for PCSC.SCard.Conversion package. (cc2d3b3)
+- Testcase : Slice_Readerstring.
+- Added Last() and Get() functions for Reader_ID_Set.
+- Renamed Get_Status() to Get() for Reader_Status_Set.
+
+
+* Added PCSC.SCard.Conversion package description in spec file. (fe2d0b9)
+
+
+* Moved conversion helpers into private package SCard.Conversion. (5026465)
+- Needed to make these functions/procedures testable.
+
+
+* Removed unneeded 'with Interfaces.C' from utils package. (9d09dd3)
+
+
+* Synced TODO and README files with online versions. (1fab774)
+
+
+* Added another TODO item. (51ed4c4)
+
+
+* Removed Empty_Vector declarations in pcsc-scard package. (86d3034)
+- Vectors are default initialized to Empty_Vector if not
+  otherwise initialized.
+- Removed corresponding TODO item.
+
+
+* Using 'Length attribute to test for empty strings in test_utils. (7567067)
+- Removed corresponding TODO item.
+
+
+* Corrected typo in test_utils package. (1c1e90e)
+
+
+* Use 'private with' for Interfaces.C* in pcsc-scard spec. (a0cd46e)
+- This guarantees that types declared in these packages are only
+  used in the private part of the thick binding.
+
+
+* Removed Byte_Array_Access related Unchecked_Access attributes. (d80b8a0)
+- When using anonymous 'access Byte', specifying 'Access works.
+
+
+* Removed declaration of Byte_Array_Access type. (c915892)
+- Use anonymous 'access Byte' instead.
+
+
+* Completed unit tests for utils package. (06b74e8)
+- Added Test_BArray_To_Hex_String testcase (tests Byte_Array to
+  hex string conversion).
+- Declared all Null_* constants in thin binding as private.
+- Moved declaration of Null_Byte to thin binding; this type is
+  also used in thick binding now.
+- Added Null_Byte_Array type in pcsc-thin spec.
+
+
+* Added Test_BSet_To_Hex_String testcase. (e0eced7)
+- Tests Byte_Set to hex string conversion.
+- Fixed some comments in pcsc-scard-utils spec.
+- Fixed bug in To_Hex_String (Byte_Set) :
+  o use Length attribute instead of Last attribute.
+
+
+* Minor updates of spec comments. (91f936e)
+
+
+* Added routine stubs for Byte_[Array|Set] to hex string testcases. (6905e23)
+
+
+* Added Null_Byte_Set conversion test to Test_To_Long_Long_Integer. (9fb812b)
+- Fixed procedure header comment.
+
+
+* Added Test_ATR_To_Hex_String testcase. (8ccb520)
+- Implemented To_Atr helper function which is used to create new
+  ATR objects from Byte_Sets.
+- Renamed exception 'Number_Too_Big' to 'Bytes_Too_Big' and
+  moved the spec into pcsc.ads file.
+
+
+* Changed test_pcscada to work with new reader status codes. (9e15223)
+
+
+* Added another TODO item. (8f2bd36)
+
+
+* Added Test_ReaderID_To_String testcase. (9726996)
+- Made Reader_ID a private type.
+
+
+* Completed Test_CStates_Set_To_String testcase. (e1422c2)
+- Renamed all card states to start with S_Card_*
+- Renamed all reader states to start with S_Reader_*
+- Added procedure to add Card_State to Card_States_Set.
+  o used mainly for testing purposes.
+
+
+* Minor style fixes: indent and exception comment. (e15bf1c)
+
+
+* Added another TODO item. (0dd3d94)
+
+
+* Added empty Reader_States_Set test to Test_RStates_Set_To_String. (7d9b704)
+
+
+* Added stub for Test_CStates_Set_To_String testcase. (452b7ab)
+
+
+* Renamed Convert_Long_Long_Integer to Test_To_Long_Long_Integer. (28e958a)
+
+
+* Removed 'use' clause where appropriate. (ac07e94)
+- Replaced by 'use type' when operator is needed.
+
+
+* Added test for Reader_States_Set to String conversion. (c28dae3)
+- Added Add (Reader_State) procedure to make testing possible.
+- Renamed Add_Reader for Reader_Status type to Add.
+- Added another TODO item (reduction of 'use clause').
+- Use 'box' <> for default values in qualified expressions.
+
+
+* Added another TODO item. (b11775e)
+- Plus cleanup.
+- Use capital letters.
+
+
+* Added test for Byte_Set to String conversion. (a386a9f)
+
+
+* Minor style corrections. (0f84756)
+
+
+* Use different obj subdirs for each specific target. (1c7dedb)
+- Avoids double definitions when linking.
+
+
+* Completed implementation of To_Long_Long_Integer function. (575138d)
+- Added testcases for a small Byte_Set and a Byte_Set which is
+  too big to be converted to Long_Long_Integer.
+
+
+* Added Number_Too_Big exception. (80edc70)
+- Will be raised by To_Long_Long_Integer function if a given
+  Byte_Set cannot be converted because it's bigger than
+  Long_Long_Integer'Last.
+
+
+* Replaced To_Integer (Byte_Set) with To_Long_Long_Integer function. (63b0088)
+- To_Integer worked onyl for Byte_Set (1 .. 2).
+- To_Long_Long_Integer is not quite ready yet, it cannot handle
+  different Byte_Set sizes.
+- Added testcase for To_Long_Long_Integer conversion.
+
+
+* Let dummy utils testcase fail (not yet implemented). (b7b9c40)
+
+
+* Added unit test runner (ahven based). (3714855)
+- Divided pcscada project files into pcscada_lib, pcscada_utests
+  and pcscada_itests.
+- Added skeleton utils test case.
+
+
+* Create libpcscada.so symlink directly in $(PREFIX)/lib dir. (8886391)
+
+
+* Renamed thick_tests.adb to test_pcscada.adb. (073b15e)
+- Added utests and itests targets to Makefile.
+- utests: unit tests (soon to come).
+- itests: integration tests with reader and smarcard.
+
+
+* Moved thin_tests.adb to new examples directory. (df267ce)
+
+
+* Added install target to Makefile and gnat dynamic library project (bf19223)
+file.
+
+
+* Initial release version will be '0.5'. (f427f87)
+
+
+* Corrected comment for version constant. (3d48266)
+
+
+* No need for Card_States_Set and Reader_States_Set to be tagged (7b75743)
+types.
+
+
+* Changed order of Context and Card parameter in Connect procedure. (63b3c58)
+
+
+* Using Update_Status_Set and Update_Reader_Status procedures to update (1386b3c)
+Reader_Status_Set vector after calling Thin.SCardGetStatusChange.
+
+
+* Added another TODO. (a1250f3)
+
+
+* Added Print_Testinfo and Print_Result helper procedures to display infos about (9533458)
+running tests.
+
+
+* Added thick binding for SCardControl function. (c2a477c)
+- Changed send and receive buffer types from void pointers to
+  Byte_Array_Access in thin binding.
+
+
+* Added another TODO item. (7037444)
+
+
+* Removed 'with PCSC.Thin' from thick binding test (not needed any more). (78f6879)
+
+
+* Added Null_[Byte_Set|ATR] default parameters where appropriate. (c0f8541)
+
+
+* Added SCard.Attr_Maxinput Get_Attribute test. (34ea133)
+- Added To_Integer conversion for Byte_Set.
+
+
+* Refactoring: Use To_Hex_String functions to get hex-representation strings. (9a259bf)
+- Added another Get_Attribute test case: Attr_ATR_String tag.
+
+
+* Refactoring: Use To_Hex_String functions to get hex-representation strings. (f27e9ff)
+
+
+* Renamed To_String functions to 'To_Hex_String' for those returning (8dd04da)
+hex-representation strings.
+
+- Removed SCard prefix usage in utils package (not needed there).
+- Added another To_Hex_String function (Byte_Set, implicit length).
+- Added missing in keywords for function parameters.
+
+
+* Added two more TODOs. (b88a3c2)
+
+
+* Added mapping array for attribute tags. (b8a8991)
+
+
+* Added remaining attribute tags. (fcd9f86)
+
+
+* Left trim Attr_Vendor_Name size output. (5f50b48)
+
+
+* Added more abstraction to Byte_Set type. (d0a5c51)
+
+
+* Extended Init_Attribute_Set function documentation. (527bb40)
+
+
+* Removed Get_Attribute_Size test from thick binding test program. (7a78c64)
+
+
+* Updated package description for PCSC.Thin.Reader. (71cd81b)
+
+
+* Corrected Init_Attribute_Set header comment. (846a413)
+
+
+* Added missing pcsc-thin-reader.ads file. (7c8046b)
+
+
+* Replaced Get_Attribute_Size with Init_Attribute_Set function. (5ccb033)
+- Returns a Null_Byte initialized byte set which can store the
+  attribute identified by Attr parameter.
+
+
+* First working version of Attribute handling in thick binding code. (c328358)
+- Added Get_Attribute procedure; used to get attributes from the IFD handler.
+- Added Get_Attribute_Size function to acquire size needed to store an
+  attribute.
+- Added tests to thick binding test program.
+
+
+* Added default mode Share_Shared to Connect procedure. (2694d56)
+
+
+* Added more TODOs (preferred proto support for Connect procedure). (04a080c)
+
+
+* Validate Context first before calling Release_Context in (63fb3d2)
+exception handler code.
+
+
+* Use Return_Code'Image for Image of Return_Code not Thin.DWORD. (cc9d23f)
+
+
+* Rewrote thick binding test program. (df27c42)
+- It's similar to pcsc-lite testpcsc.c.
+- This way it's easier to compare the test results.
+
+
+* Last return code from the API is stored by calling Store_Error procedure. (d4ba371)
+- Get_Return_Code can be used by the client to inquire the last return code.
+
+
+* Print ATR info string after Status_Change test. (e26a015)
+
+
+* Added Size functions for SCard.ATR type. (5bccf9d)
+
+
+* Removed Timeout parameter from Wait_For_Readers procedure. (c0f9af1)
+
+
+* Minor cleanup of declarations in thick_tests body. (7c33b53)
+
+
+* Added Wait_For_Readers procedure. (c729605)
+- Calls SCardGetStatusChange for reader for detection.
+- Added Empty_Reader_Status_Set constant.
+- Waiting for readers to become active works in thick_tests.
+
+
+* Moved Callback type to utils package. (3fc8c40)
+
+
+* Minor style fixes. (925c999)
+
+
+* Minor style correction: use correct indent for function params. (8f442a7)
+
+
+* Replaced Readers_List with private type Reader_ID_Set. (b6dc4d0)
+- Added functions First and Empty for Reader_ID_Set handling (more to come).
+- Added Null_Reader_ID constant.
+- Moved Slice_Readerstring spec to body.
+
+
+* SCard.ATR is a private type now. (15c7a88)
+- Users do not need to care about ATR length any more.
+
+
+* Added very basic error handling to thin_tests. (3a4142b)
+
+
+* Refactoring: renamed Reader_Status_Array to Reader_Status_Set. (2724e01)
+- Still not optimal: could be easily confused with Reader_States_Set.
+
+
+* Refactoring: renamed Reader_States_Array to Reader_States_Set. (13002d4)
+
+
+* Refactoring: renamed Card_States_Array to Card_States_Set. (ab0715f)
+
+
+* Free() READERSTATE_Array after converting results back to Ada types. (60a4ef9)
+
+
+* Basic status change detection works for client code. (316ef81)
+- Added simple Size/Get_Status functions for Reader_Status_Array.
+- Updating Reader_Status items in Reader_Status_Array by calling
+  Replace_Element.
+- TODO: Update already existing elements, replacing is not appropriate.
+
+
+* Added explanation to Status_Change procedure. (06d6be2)
+- Minor refactoring: renamed States to Reader_States.
+
+
+* Implemented To_Ada conversion from C readerstate (DWORD) to Reader_States type. (c41ba87)
+- Also added To_String function for Reader_States type.
+
+
+* Added type Reader_States_Array. (b87285e)
+- Used to handle multiple reader states.
+
+
+* Refactoring: renamed Readerstates type to Reader_Status_Array. (6f6cf76)
+
+
+* Refactoring: renamed Card_States to Card_States_Array. (316cdb9)
+
+
+* Use Thin.SCARD_STATE_UNAWARE instead of 0 for dwEventState when constructing C (f871645)
+states.
+
+
+* Readerstates_Access not needed at the moment. (b939b9c)
+
+
+* Thick binding reader status change detection works. (4ff36ae)
+- Reduced p2p array to just array of pointers.
+- Moved spec for thick binding conversion functions to body.
+- Added some comments.
+
+
+* First version with a thick binding for reader status change detection. (df8f9a1)
+- Still needs huge cleanup / improvement.
+- Comments missing.
+
+
+* Removed test status change detection. (2bb614c)
+- Code did only work for one reader anyway.
+
+
+* Use correct range for Return_Code subtype. (17e7a69)
+
+
+* Updated comments to make API doc look nice. (775fbe4)
+
+
+* Added Byte_Set subtype to thick-binding. (ca9222f)
+- At the moment, Byte_Sets are just subtypes of Thin.Byte_Arrays;
+  this should be improved by a real abstraction soon.
+
+
+* Minor corrections in comments. (a66e3cd)
+
+
+* Added thick-binding abstraction for SCARD_IO_REQUESTs of thin-binding. (48ad8bd)
+
+
+* Added 'tests' target to Makefile. (17de321)
+- Used to start thin- and thick-test binaries.
+
+
+* Separated thick- and thin-binding tests into different files. (c1e9cbb)
+
+
+* Added Recv_Len argument to Transmit() procedure. (9f7e245)
+- Indicates actual bytes returned from SCard.
+
+
+* Use correct value for cbSendLength parameter in Transmit(). (ebd57c0)
+
+
+* Print out test APDU to send before calling Transmit() procedure. (44a0b64)
+
+
+* First basic thick binding implementation of Transmit() procedure. (a533a23)
+- Needs further abstraction from thin binding.
+
+
+* Moved Print_ReaderID() helper procedure to SCard.Utils package. (dcd13dc)
+- No need for using Unrestricted_Access in For_Every_Reader() any more.
+
+
+* Card states are handled in an indefinite vector. (9199b58)
+- Actual implementation is hidden for a client.
+- Made Utils a child package of PCSC.SCard to provide access to private
+  card states package.
+
+
+* Added Card_State_Array type. (06c27f2)
+- Stores multiple card states translated from C dword (by To_Ada).
+- Added To_String for Card_State_Array.
+
+
+* Using correct state type for Status procedure (Card_State). (584dd69)
+- Bitwise 'and' works.
+- Renamed some state constants.
+
+
+* Added thick binding for SCardStatus function. (bc17b48)
+- Prototype, not yet fully functional. Still needs some refactoring.
+- To_Ada (SCard_State) does not work yet since more than one state is encoded
+  in dwState returned from SCardStatus.
+
+
+* Added thick binding for SCardDisconnect function. (3f63e14)
+
+
+* Added thick binding for SCardEndTransaction function. (ba3612a)
+- Code cleanup in runner.
+- Renamed SCard_Init to SCard_Action.
+
+
+* Added thick binding for SCardBeginTransaction function. (bbe58a3)
+- Removed SCARD_PROTOCOL_T15 proto in Connect and Reconnect procedures for now.
+
+
+* Added thick binding for SCardReconnect procedure. (4e3040a)
+
+
+* Removed SCard_Mode as parameter from Connect procedure in thick binding. (ae22837)
+- Modes are tried in order.
+
+
+* Moved helper functions/procedures to extra package PCSC.Utils. (82d907d)
+
+
+* Removed Ada.Text_IO, not needed in thick binding. (014876e)
+
+
+* Implemented Get_Active_Proto function. (174d3a3)
+- Returns protocol in use after SCard connect.
+
+
+* Implemented first working Connect procedure in thick binding. (ae4668e)
+
+
+* Added SCard_Proto type needed for Connect(). (38a529b)
+- Contains possible SCard protocols.
+
+
+* Added SCard_Mode type needed for Connect(). (03994c7)
+
+
+* For_Every_Reader rewrite. (3c523e3)
+- Use access to procedure instead of generic.
+- Print_ReaderID should be moved to new helper scard package.
+
+
+* Added For_Every_Reader generic. (8171b9e)
+- Can be used to perform actions on all available readers.
+
+
+* Implemented To_String for Reader_ID. (5989b62)
+
+
+* List_Readers returns a vector of Reader_IDs instead of just a string. (8fa9911)
+- Slice_Readerstring () is responsible for slicing the char array coming from
+  the thin binding into reader friendly names and fill Readers_List vector.
+- TODO: Implement iterator.
+
+
+* Using aliased char_array for call to SCardListReaders. (2fcf5c0)
+- No Free () for char_array needed any longer.
+
+
+* List_Readers slices '\0' separated readers list correctly. (2d12659)
+- Using char_array.
+- Implemented Free() for char_array.
+
+
+* Fixed memory allocation in ListReaders. (494772c)
+
+
+* Added first thick-binding procedures. (1b3fca9)
+
+
+* Initial import of PCSC/Ada project. (c49ec49)
+
