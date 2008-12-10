@@ -28,9 +28,7 @@ project PCSCAda_ITests is
    for Main use ("test_pcscada.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnat05", "-gnaty3abefhiklmprt",
-                                        "-gnatwa", "-g", "-gnato",
-                                        "-fstack-check", "-gnatf");
+      for Default_Switches ("ada") use ("-gnat05", "-gnaty3mabcdefhilnoprtuxk", "-gnatwa", "-g", "-gnato", "-fstack-check", "-gnatf");
    end Compiler;
 
    package Builder is
