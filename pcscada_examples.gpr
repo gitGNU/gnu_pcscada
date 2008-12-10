@@ -28,7 +28,7 @@ project Pcscada_Examples is
    for Main use ("cardd.adb", "pinpad.adb", "thin_example.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnatVa", "-gnat05", "-gnaty3abefhiklmprtcdnoux", "-gnatwa", "-g", "-gnato", "-fstack-check", "-gnatf");
+      for Default_Switches ("ada") use ("-gnatweacfdjklmpru", "-gnatVa", "-gnat05", "-gnaty3abefhiklmprtcdnoux", "-g", "-gnato", "-fstack-check", "-gnatf");
    end Compiler;
 
    package Binder is

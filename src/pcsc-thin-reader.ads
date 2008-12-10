@@ -27,6 +27,13 @@
 --  </PURPOSE>
 --
 
+--  Make sure SCARD_CTL_CODE function is ready to use. Without these two
+--  statements, GNAT warns with : warning: call to "SCARD_CTL_CODE" in
+--  elaboration code requires pragma Elaborate_All on "Thin".
+--  TODO: don't call SCARD_CTL_CODE in elaboration code?
+with PCSC.Thin;
+pragma Elaborate_All (PCSC.Thin);
+
 package PCSC.Thin.Reader is
 
    SCARD_ATTR_VENDOR_NAME            : constant := 16#0001_0100#;

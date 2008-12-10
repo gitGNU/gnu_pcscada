@@ -28,7 +28,7 @@ project PCSCAda_UTests is
    for Main use ("runner.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnatVa", "-gnat05", "-gnaty3abefhiklmprtcdnoux", "-gnatwa", "-g", "-gnato", "-fstack-check", "-gnatf");
+      for Default_Switches ("ada") use ("-gnatweacdfjkmlpur", "-gnatVa", "-gnat05", "-gnaty3abefhiklmprtcdnoux", "-g", "-gnato", "-fstack-check", "-gnatf");
    end Compiler;
 
    package Builder is
