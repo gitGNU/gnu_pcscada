@@ -148,7 +148,6 @@ package PCSC.Thin.Reader is
 
    SCARD_ATTR_SUPRESS_T1_IFS_REQUEST : constant := 16#7FFF_0007#;
 
-
    CM_IOCTL_GET_FEATURE_REQUEST      : constant DWORD := SCARD_CTL_CODE (3400);
    --  Control code used to get features from card / reader.
 
@@ -175,7 +174,6 @@ package PCSC.Thin.Reader is
    FEATURE_ABORT                     : constant := 16#0B#;
    --  SCM Proposal
 
-
    type PCSC_TLV_STRUCTURE is record
       tag    : Interfaces.Unsigned_8;
       length : Interfaces.Unsigned_8;
@@ -194,7 +192,6 @@ package PCSC.Thin.Reader is
 
    for PCSC_TLV_STRUCTURE'Size use 48;
    --  The PCSC_TLV_STRUCTURE must be exactly 6 bytes long
-
 
    type PIN_VERIFY_STRUCTURE is record
       bTimerOut                 : aliased Byte;

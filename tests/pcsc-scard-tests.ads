@@ -33,17 +33,17 @@ package PCSC.SCard.Tests is
    procedure Test_Slice_Readerstring;
    --  Test Slice_Readerstring function.
 
-   procedure Test_To_C_RCond_Set;
-   --  Test Reader_Condition_Set to Thin.READERSTATE_Array conversion.
-
-   procedure Test_To_Chars_Ptr;
-   --  Test Reader_ID to chars_ptr conversion.
-
    procedure Test_To_Ada_Proto;
    --  Test Thin.DWORD to Proto conversion.
 
+   procedure Test_To_C_RCond_Set;
+   --  Test Reader_Condition_Set to Thin.READERSTATE_Array conversion.
+
    procedure Test_To_Card_States_Set;
    --  Test Thin.DWORD to Card_States_Set conversion.
+
+   procedure Test_To_Chars_Ptr;
+   --  Test Reader_ID to chars_ptr conversion.
 
    procedure Test_To_Reader_States_Set;
    --  Test Thin.DWORD to Reader_States_Set conversion.

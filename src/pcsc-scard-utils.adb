@@ -28,6 +28,57 @@ with Interfaces;
 
 package body PCSC.SCard.Utils is
 
+   -----------------
+   -- Action_Info --
+   -----------------
+
+   procedure Action_Info (Text : in String) is
+   begin
+      Ada.Text_IO.Put (Item => Text);
+      Ada.Text_IO.Set_Col (To => 28);
+      Ada.Text_IO.Put (":");
+   end Action_Info;
+
+   -------------------
+   -- Action_Result --
+   -------------------
+
+   procedure Action_Result (Result : in String) is
+   begin
+      Ada.Text_IO.Set_Col (To => 30);
+      Ada.Text_IO.Put_Line (Item => Result);
+   end Action_Result;
+
+   ----------------------
+   -- For_Every_Reader --
+   ----------------------
+
+   procedure For_Every_Reader
+     (Readers : in Reader_ID_Set;
+      Call    : in Callback)
+   is
+      Position : VOIDP.Cursor := Readers.Data.First;
+      Reader   : Reader_ID;
+   begin
+      while VOIDP.Has_Element (Position) loop
+         Reader := VOIDP.Element (Position);
+
+         --  Perform action on specific reader.
+
+         Call (Reader);
+         VOIDP.Next (Position);
+      end loop;
+   end For_Every_Reader;
+
+   --------------------
+   -- Print_ReaderID --
+   --------------------
+
+   procedure Print_ReaderID (ID : in Reader_ID) is
+   begin
+      Ada.Text_IO.Put_Line (To_String (ID));
+   end Print_ReaderID;
+
    --------------------
    --  To_Hex_String --
    --------------------
@@ -113,6 +164,30 @@ package body PCSC.SCard.Utils is
                             Len   => 2 * Positive (Given.Length));
    end To_Hex_String;
 
+   --------------------------
+   -- To_Long_Long_Integer --
+   --------------------------
+
+   function To_Long_Long_Integer
+     (Given : in Byte_Set := Null_Byte_Set)
+      return Long_Long_Integer
+   is
+      use type Interfaces.Unsigned_64;
+
+      Result, U : Interfaces.Unsigned_64 := 0;
+   begin
+      for Index in Given'Range loop
+         U := Interfaces.Unsigned_64 (Given (Index));
+         Result := Result or Interfaces.Shift_Left (Value  => U,
+                                                    Amount => (Index - 1) * 8);
+      end loop;
+
+      return Long_Long_Integer (Result);
+   exception
+      when Constraint_Error =>
+         raise Bytes_Too_Big;
+   end To_Long_Long_Integer;
+
    ---------------
    -- To_String --
    ---------------
@@ -181,80 +256,5 @@ package body PCSC.SCard.Utils is
 
       return New_String;
    end To_String;
-
-   --------------------------
-   -- To_Long_Long_Integer --
-   --------------------------
-
-   function To_Long_Long_Integer
-     (Given : in Byte_Set := Null_Byte_Set)
-      return Long_Long_Integer
-   is
-      use type Interfaces.Unsigned_64;
-
-      Result, U : Interfaces.Unsigned_64 := 0;
-   begin
-      for Index in Given'Range loop
-         U := Interfaces.Unsigned_64 (Given (Index));
-         Result := Result or Interfaces.Shift_Left (Value  => U,
-                                                    Amount => (Index - 1) * 8);
-      end loop;
-
-      return Long_Long_Integer (Result);
-   exception
-      when Constraint_Error =>
-         raise Bytes_Too_Big;
-   end To_Long_Long_Integer;
-
-   -----------------
-   -- Action_Info --
-   -----------------
-
-   procedure Action_Info (Text : in String) is
-   begin
-      Ada.Text_IO.Put (Item => Text);
-      Ada.Text_IO.Set_Col (To => 28);
-      Ada.Text_IO.Put (":");
-   end Action_Info;
-
-   -------------------
-   -- Action_Result --
-   -------------------
-
-   procedure Action_Result (Result : in String) is
-   begin
-      Ada.Text_IO.Set_Col (To => 30);
-      Ada.Text_IO.Put_Line (Item => Result);
-   end Action_Result;
-
-   ----------------------
-   -- For_Every_Reader --
-   ----------------------
-
-   procedure For_Every_Reader
-     (Readers : in Reader_ID_Set;
-      Call    : in Callback)
-   is
-      Position : VOIDP.Cursor := Readers.Data.First;
-      Reader   : Reader_ID;
-   begin
-      while VOIDP.Has_Element (Position) loop
-         Reader := VOIDP.Element (Position);
-
-         --  Perform action on specific reader.
-
-         Call (Reader);
-         VOIDP.Next (Position);
-      end loop;
-   end For_Every_Reader;
-
-   --------------------
-   -- Print_ReaderID --
-   --------------------
-
-   procedure Print_ReaderID (ID : in Reader_ID) is
-   begin
-      Ada.Text_IO.Put_Line (To_String (ID));
-   end Print_ReaderID;
 
 end PCSC.SCard.Utils;

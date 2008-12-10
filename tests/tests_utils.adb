@@ -67,123 +67,6 @@ package body Tests_Utils is
    end Initialize;
 
    ----------------------------
-   -- Test_Long_Long_Integer --
-   ----------------------------
-
-   procedure Test_To_Long_Long_Integer is
-      Null_Set    : constant SCard.Byte_Set := SCard.Null_Byte_Set;
-
-      Small_Set   : constant SCard.Byte_Set (1 .. 2) :=
-        (16#12#, 16#FF#);
-      Big_Set     : constant SCard.Byte_Set (1 .. 4) :=
-        (16#AA#, 16#0A#, 16#BA#, 16#12#);
-
-      Result  : Long_Long_Integer;
-   begin
-
-      --  Null_Byte_Set
-
-      Result := SCU.To_Long_Long_Integer (Given => Null_Set);
-      Assert (Condition => Result = 0,
-              Message   => "result is not 0");
-
-      --  Big byte set
-
-      Result := SCU.To_Long_Long_Integer (Given => Big_Set);
-      Assert (Condition => Result = 314182314,
-              Message   => "result is not 314182314");
-
-      --  Small byte set
-
-      Result := SCU.To_Long_Long_Integer (Given => Small_Set);
-      Assert (Condition => Result = 65298,
-              Message   => "result is not 65298");
-
-      declare
-         Set_Too_Big : constant SCard.Byte_Set (1 .. 8) :=
-           (16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#);
-      begin
-         --  Byte set 'Set_Too_Big' cannot be represented by
-         --  Long_Long_Integer, this test should raise Number_Too_Big exception
-
-         Result := SCU.To_Long_Long_Integer (Given => Set_Too_Big);
-         Fail (Message => "No Number_Too_Big exception raised");
-      exception
-         when Bytes_Too_Big =>
-            null;
-      end;
-
-   end Test_To_Long_Long_Integer;
-
-   -----------------------------
-   -- Test_Byte_Set_To_String --
-   -----------------------------
-
-   procedure Test_Byte_Set_To_String is
-      Empty_Set : constant SCard.Byte_Set := SCard.Null_Byte_Set;
-      Test_Set  : constant SCard.Byte_Set (1 .. 4) :=
-        (16#70#, 16#63#, 16#73#, 16#63#);
-   begin
-      Assert (Condition => SCU.To_String (Given => Empty_Set) = "0",
-              Message   => "Returned string not '0'");
-      Assert (Condition => SCU.To_String (Given => Test_Set) = "pcsc",
-              Message   => "Returned string not 'pcsc'");
-   end Test_Byte_Set_To_String;
-
-   --------------------------------
-   -- Test_RStates_Set_To_String --
-   --------------------------------
-
-   procedure Test_RStates_Set_To_String is
-      Empty_RStates : SCard.Reader_States_Set;
-      RStates       : SCard.Reader_States_Set;
-   begin
-      Assert (Condition => SCU.To_String (States => Empty_RStates)'Length = 0,
-              Message   => "String not empty");
-
-      --  Fill RStates set
-
-      RStates.Add (State => SCard.S_Reader_Unaware);
-      RStates.Add (State => SCard.S_Reader_Atrmatch);
-
-      Assert (Condition => SCU.To_String
-              (States => RStates) = "S_READER_ATRMATCH S_READER_UNAWARE",
-              Message   => "String incorrect");
-   end Test_RStates_Set_To_String;
-
-   --------------------------------
-   -- Test_CStates_Set_To_String --
-   --------------------------------
-
-   procedure Test_CStates_Set_To_String is
-      Empty_CStates : SCard.Card_States_Set;
-      CStates       : SCard.Card_States_Set;
-   begin
-      Assert (Condition => SCU.To_String (States => Empty_CStates)'Length = 0,
-              Message   => "String not empty");
-
-      --  Fill CStates set
-
-      CStates.Add (State => SCard.S_Card_Swallowed);
-      CStates.Add (State => SCard.S_Card_Powered);
-
-      Assert (Condition => SCU.To_String
-              (States => CStates) = "S_CARD_POWERED S_CARD_SWALLOWED",
-              Message   => "String incorrect");
-   end Test_CStates_Set_To_String;
-
-   -----------------------------
-   -- Test_ReaderID_To_String --
-   -----------------------------
-
-   procedure Test_ReaderID_To_String is
-      Null_Reader : constant SCard.Reader_ID := SCard.Null_Reader_ID;
-   begin
-      Assert (Condition => SCU.To_String (Reader => Null_Reader)'Length = 0,
-              Message   => "String incorrect");
-   end Test_ReaderID_To_String;
-
-   ----------------------------
    -- Test_ATR_To_Hex_String --
    ----------------------------
 
@@ -236,5 +119,122 @@ package body Tests_Utils is
               (Given => Real_Set) = "00A40000023F00",
               Message   => "Hex string incorrect");
    end Test_BSet_To_Hex_String;
+
+   -----------------------------
+   -- Test_Byte_Set_To_String --
+   -----------------------------
+
+   procedure Test_Byte_Set_To_String is
+      Empty_Set : constant SCard.Byte_Set := SCard.Null_Byte_Set;
+      Test_Set  : constant SCard.Byte_Set (1 .. 4) :=
+        (16#70#, 16#63#, 16#73#, 16#63#);
+   begin
+      Assert (Condition => SCU.To_String (Given => Empty_Set) = "0",
+              Message   => "Returned string not '0'");
+      Assert (Condition => SCU.To_String (Given => Test_Set) = "pcsc",
+              Message   => "Returned string not 'pcsc'");
+   end Test_Byte_Set_To_String;
+
+   --------------------------------
+   -- Test_CStates_Set_To_String --
+   --------------------------------
+
+   procedure Test_CStates_Set_To_String is
+      Empty_CStates : SCard.Card_States_Set;
+      CStates       : SCard.Card_States_Set;
+   begin
+      Assert (Condition => SCU.To_String (States => Empty_CStates)'Length = 0,
+              Message   => "String not empty");
+
+      --  Fill CStates set
+
+      CStates.Add (State => SCard.S_Card_Swallowed);
+      CStates.Add (State => SCard.S_Card_Powered);
+
+      Assert (Condition => SCU.To_String
+              (States => CStates) = "S_CARD_POWERED S_CARD_SWALLOWED",
+              Message   => "String incorrect");
+   end Test_CStates_Set_To_String;
+
+   -----------------------------
+   -- Test_ReaderID_To_String --
+   -----------------------------
+
+   procedure Test_ReaderID_To_String is
+      Null_Reader : constant SCard.Reader_ID := SCard.Null_Reader_ID;
+   begin
+      Assert (Condition => SCU.To_String (Reader => Null_Reader)'Length = 0,
+              Message   => "String incorrect");
+   end Test_ReaderID_To_String;
+
+   --------------------------------
+   -- Test_RStates_Set_To_String --
+   --------------------------------
+
+   procedure Test_RStates_Set_To_String is
+      Empty_RStates : SCard.Reader_States_Set;
+      RStates       : SCard.Reader_States_Set;
+   begin
+      Assert (Condition => SCU.To_String (States => Empty_RStates)'Length = 0,
+              Message   => "String not empty");
+
+      --  Fill RStates set
+
+      RStates.Add (State => SCard.S_Reader_Unaware);
+      RStates.Add (State => SCard.S_Reader_Atrmatch);
+
+      Assert (Condition => SCU.To_String
+              (States => RStates) = "S_READER_ATRMATCH S_READER_UNAWARE",
+              Message   => "String incorrect");
+   end Test_RStates_Set_To_String;
+
+   ----------------------------
+   -- Test_Long_Long_Integer --
+   ----------------------------
+
+   procedure Test_To_Long_Long_Integer is
+      Null_Set    : constant SCard.Byte_Set := SCard.Null_Byte_Set;
+
+      Small_Set   : constant SCard.Byte_Set (1 .. 2) :=
+        (16#12#, 16#FF#);
+      Big_Set     : constant SCard.Byte_Set (1 .. 4) :=
+        (16#AA#, 16#0A#, 16#BA#, 16#12#);
+
+      Result  : Long_Long_Integer;
+   begin
+
+      --  Null_Byte_Set
+
+      Result := SCU.To_Long_Long_Integer (Given => Null_Set);
+      Assert (Condition => Result = 0,
+              Message   => "result is not 0");
+
+      --  Big byte set
+
+      Result := SCU.To_Long_Long_Integer (Given => Big_Set);
+      Assert (Condition => Result = 314182314,
+              Message   => "result is not 314182314");
+
+      --  Small byte set
+
+      Result := SCU.To_Long_Long_Integer (Given => Small_Set);
+      Assert (Condition => Result = 65298,
+              Message   => "result is not 65298");
+
+      declare
+         Set_Too_Big : constant SCard.Byte_Set (1 .. 8) :=
+           (16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#, 16#FF#);
+      begin
+         --  Byte set 'Set_Too_Big' cannot be represented by
+         --  Long_Long_Integer, this test should raise Number_Too_Big exception
+
+         Result := SCU.To_Long_Long_Integer (Given => Set_Too_Big);
+         Fail (Message => "No Number_Too_Big exception raised");
+      exception
+         when Bytes_Too_Big =>
+            null;
+      end;
+
+   end Test_To_Long_Long_Integer;
 
 end Tests_Utils;

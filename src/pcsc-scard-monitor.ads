@@ -44,11 +44,6 @@ package PCSC.SCard.Monitor is
    subtype Observer_Class is Observer'Class;
    --  Observer class subtype
 
-   procedure Notify (O         : in Observer;
-                     Condition : in Reader_Condition) is abstract;
-   --  This procedure is called to inform an observer about status changes in
-   --  reader states for all states this observer is interested in.
-
    function Is_Interested
      (O      : in Observer;
       States : in Reader_States_Set)
@@ -56,6 +51,10 @@ package PCSC.SCard.Monitor is
    --  Function is used to check whether an observer is interested in one of
    --  the states given by 'States' set.
 
+   procedure Notify (O         : in Observer;
+                     Condition : in Reader_Condition) is abstract;
+   --  This procedure is called to inform an observer about status changes in
+   --  reader states for all states this observer is interested in.
 
    task type Reader_Monitor is
       entry Init (Context : in Context_Handle);
@@ -105,7 +104,6 @@ private
    Observer_Set : Protected_Observer_Set;
    --  Set of registered observers. Accessed by Reader_Monitor and
    --  Status_Peeker tasks.
-
 
    function Create_Condition
      (Reader : in SCard.Reader_ID)

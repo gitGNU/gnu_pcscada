@@ -22,6 +22,21 @@
 
 package body PCSC.SCard.Monitor is
 
+   ----------------------
+   -- Create_Condition --
+   ----------------------
+
+   function Create_Condition
+     (Reader : in SCard.Reader_ID)
+      return SCard.Reader_Condition
+   is
+      New_Condition : SCard.Reader_Condition;
+   begin
+      New_Condition.Name := Reader;
+      New_Condition.Current_State.Add (State => SCard.S_Reader_Unaware);
+      return New_Condition;
+   end Create_Condition;
+
    -------------------
    -- Is_Interested --
    -------------------
@@ -203,21 +218,6 @@ package body PCSC.SCard.Monitor is
          Notifying := False;
       end Notify_All;
    end Protected_Observer_Set;
-
-   ----------------------
-   -- Create_Condition --
-   ----------------------
-
-   function Create_Condition
-     (Reader : in SCard.Reader_ID)
-      return SCard.Reader_Condition
-   is
-      New_Condition : SCard.Reader_Condition;
-   begin
-      New_Condition.Name := Reader;
-      New_Condition.Current_State.Add (State => SCard.S_Reader_Unaware);
-      return New_Condition;
-   end Create_Condition;
 
    -------------------------
    -- Update_Reader_Table --

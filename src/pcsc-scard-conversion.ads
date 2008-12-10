@@ -136,12 +136,24 @@ private package PCSC.SCard.Conversion is
          Attr_Supress_T1_IFS_Request => TR.SCARD_ATTR_SUPRESS_T1_IFS_REQUEST);
    --  Map Attribute to corresponding C values
 
+   procedure Free (Name : in out Thin.READERSTATE_Array);
+   --  Free C Array of READERSTATES.
 
    function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set;
    --  Slice reader string returned from thin binding and create vector of
    --  reader names. The string to slice has a format like:
    --  Reader A1\0Reader B1\0Reader C1\0\0
    --  \0 is used as separator, \0\0 as string termination.
+
+   function To_Ada (C_Protocol : in Thin.DWORD) return Proto;
+   --  Return Ada style Proto for C_Protocol (DWORD).
+
+   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set;
+   --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
+
+   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set;
+   --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
+
    --
    --  If an invalid string is passed to Slice_Readerstring, an empty
    --  Reader_ID_Set is returned. In this context, invalid means that To_Slice
@@ -157,18 +169,5 @@ private package PCSC.SCard.Conversion is
                           return Interfaces.C.Strings.chars_ptr;
    --  Return a new C compatible string from Reader_ID. The allocated memory
    --  must be freed by calling Interfaces.C.Strings.Free.
-
-   function To_Ada (C_Protocol : in Thin.DWORD) return Proto;
-   --  Return Ada style Proto for C_Protocol (DWORD).
-
-   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set;
-   --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
-
-   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set;
-   --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
-
-
-   procedure Free (Name : in out Thin.READERSTATE_Array);
-   --  Free C Array of READERSTATES.
 
 end PCSC.SCard.Conversion;

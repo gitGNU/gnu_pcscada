@@ -30,21 +30,6 @@ package Tests_Utils is
    procedure Initialize (T : in out Test);
    --  Initialize Test suite.
 
-   procedure Test_To_Long_Long_Integer;
-   --  Test Byte_Set to Long_Long_Integer conversion.
-
-   procedure Test_Byte_Set_To_String;
-   --  Test Byte_Set to String conversion.
-
-   procedure Test_RStates_Set_To_String;
-   --  Test Reader_States_Set to String conversion.
-
-   procedure Test_CStates_Set_To_String;
-   --  Test Card_States_Set to String conversion.
-
-   procedure Test_ReaderID_To_String;
-   --  Test Reader_ID to String conversion.
-
    procedure Test_ATR_To_Hex_String;
    --  Test ATR to HEX String conversion.
 
@@ -53,5 +38,20 @@ package Tests_Utils is
 
    procedure Test_BSet_To_Hex_String;
    --  Test Byte_Set to HEX String conversion.
+
+   procedure Test_Byte_Set_To_String;
+   --  Test Byte_Set to String conversion.
+
+   procedure Test_CStates_Set_To_String;
+   --  Test Card_States_Set to String conversion.
+
+   procedure Test_RStates_Set_To_String;
+   --  Test Reader_States_Set to String conversion.
+
+   procedure Test_ReaderID_To_String;
+   --  Test Reader_ID to String conversion.
+
+   procedure Test_To_Long_Long_Integer;
+   --  Test Byte_Set to Long_Long_Integer conversion.
 
 end Tests_Utils;

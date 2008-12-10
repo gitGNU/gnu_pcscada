@@ -116,6 +116,25 @@ package body PCSC.SCard.Tests is
               Message   => "Reader name does not match");
    end Test_Slice_Readerstring;
 
+   -----------------------
+   -- Test_To_Ada_Proto --
+   -----------------------
+
+   procedure Test_To_Ada_Proto is
+      No_Proto : constant Thin.DWORD := 16#FFFF_FFFF#;
+
+      RAW      : constant Thin.DWORD := Thin.SCARD_PROTOCOL_RAW;
+   begin
+      Assert (Condition => Convert.To_Ada (C_Protocol => No_Proto) =
+                Proto_Undefined,
+              Message   => "Proto not Proto_Undefined");
+
+      --  Just test one Thin.DWORD to Proto conversion, no need to test all
+
+      Assert (Condition => Convert.To_Ada (C_Protocol => RAW) = Proto_RAW,
+              Message   => "Proto not Proto_RAW");
+   end Test_To_Ada_Proto;
+
    -------------------------
    -- Test_To_C_RCond_Set --
    -------------------------
@@ -241,44 +260,6 @@ package body PCSC.SCard.Tests is
       end;
    end Test_To_C_RCond_Set;
 
-   -----------------------
-   -- Test_To_Chars_Ptr --
-   -----------------------
-
-   procedure Test_To_Chars_Ptr is
-      use Interfaces.C;
-
-      ID  : constant Reader_ID := To_Reader_ID (Name => "Reader I");
-      Ptr : Strings.chars_ptr := Convert.To_Chars_Ptr (Reader => ID);
-   begin
-      Assert (Condition => String'(Strings.Value (Item => Ptr)) =
-                Utils.To_String (Reader => ID),
-              Message => "Reader name mismatch");
-
-      --  Free memory
-
-      Strings.Free (Item => Ptr);
-   end Test_To_Chars_Ptr;
-
-   -----------------------
-   -- Test_To_Ada_Proto --
-   -----------------------
-
-   procedure Test_To_Ada_Proto is
-      No_Proto : constant Thin.DWORD := 16#FFFF_FFFF#;
-
-      RAW      : constant Thin.DWORD := Thin.SCARD_PROTOCOL_RAW;
-   begin
-      Assert (Condition => Convert.To_Ada (C_Protocol => No_Proto) =
-                Proto_Undefined,
-              Message   => "Proto not Proto_Undefined");
-
-      --  Just test one Thin.DWORD to Proto conversion, no need to test all
-
-      Assert (Condition => Convert.To_Ada (C_Protocol => RAW) = Proto_RAW,
-              Message   => "Proto not Proto_RAW");
-   end Test_To_Ada_Proto;
-
    -----------------------------
    -- Test_To_Card_States_Set --
    -----------------------------
@@ -319,6 +300,25 @@ package body PCSC.SCard.Tests is
                 No_Element,
               Message   => "Card_Swallowed not found");
    end Test_To_Card_States_Set;
+
+   -----------------------
+   -- Test_To_Chars_Ptr --
+   -----------------------
+
+   procedure Test_To_Chars_Ptr is
+      use Interfaces.C;
+
+      ID  : constant Reader_ID := To_Reader_ID (Name => "Reader I");
+      Ptr : Strings.chars_ptr := Convert.To_Chars_Ptr (Reader => ID);
+   begin
+      Assert (Condition => String'(Strings.Value (Item => Ptr)) =
+                Utils.To_String (Reader => ID),
+              Message => "Reader name mismatch");
+
+      --  Free memory
+
+      Strings.Free (Item => Ptr);
+   end Test_To_Chars_Ptr;
 
    -------------------------------
    -- Test_To_Reader_States_Set --

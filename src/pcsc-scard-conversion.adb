@@ -29,6 +29,17 @@ package body PCSC.SCard.Conversion is
 
    use Interfaces.C;
 
+   ----------
+   -- Free --
+   ----------
+
+   procedure Free (Name : in out Thin.READERSTATE_Array) is
+   begin
+      for Index in Name'Range loop
+         Strings.Free (Name (Index).szReader);
+      end loop;
+   end Free;
+
    ------------------------
    -- Slice_Readerstring --
    ------------------------
@@ -59,6 +70,56 @@ package body PCSC.SCard.Conversion is
       return Readers;
 
    end Slice_Readerstring;
+
+   ------------
+   -- To_Ada --
+   ------------
+
+   function To_Ada (C_Protocol : in Thin.DWORD) return Proto is
+   begin
+      for P in Proto'Range loop
+         if C_Proto (P) = C_Protocol then
+
+            --  Return active Proto
+
+            return P;
+         end if;
+      end loop;
+
+      --  Return 'Undefined' if no active proto found
+
+      return Proto_Undefined;
+   end To_Ada;
+
+   ------------
+   -- To_Ada --
+   ------------
+
+   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set is
+      States : Card_States_Set;
+   begin
+      for P in C_Card_State'Range loop
+         if (C_Cardstate and C_Card_State (P)) /= 0 then
+            States.Data.Append (New_Item => P);
+         end if;
+      end loop;
+      return States;
+   end To_Ada;
+
+   ------------
+   -- To_Ada --
+   ------------
+
+   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set is
+      States : Reader_States_Set;
+   begin
+      for P in C_Reader_State'Range loop
+         if (C_Readerstate and C_Reader_State (P)) /= 0 then
+            States.Data.Append (New_Item => P);
+         end if;
+      end loop;
+      return States;
+   end To_Ada;
 
    ----------
    -- To_C --
@@ -131,66 +192,5 @@ package body PCSC.SCard.Conversion is
    begin
       return Strings.New_String (To_String (Reader));
    end To_Chars_Ptr;
-
-   ------------
-   -- To_Ada --
-   ------------
-
-   function To_Ada (C_Protocol : in Thin.DWORD) return Proto is
-   begin
-      for P in Proto'Range loop
-         if C_Proto (P) = C_Protocol then
-
-            --  Return active Proto
-
-            return P;
-         end if;
-      end loop;
-
-      --  Return 'Undefined' if no active proto found
-
-      return Proto_Undefined;
-   end To_Ada;
-
-   ------------
-   -- To_Ada --
-   ------------
-
-   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set is
-      States : Card_States_Set;
-   begin
-      for P in C_Card_State'Range loop
-         if (C_Cardstate and C_Card_State (P)) /= 0 then
-            States.Data.Append (New_Item => P);
-         end if;
-      end loop;
-      return States;
-   end To_Ada;
-
-   ------------
-   -- To_Ada --
-   ------------
-
-   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set is
-      States : Reader_States_Set;
-   begin
-      for P in C_Reader_State'Range loop
-         if (C_Readerstate and C_Reader_State (P)) /= 0 then
-            States.Data.Append (New_Item => P);
-         end if;
-      end loop;
-      return States;
-   end To_Ada;
-
-   ----------
-   -- Free --
-   ----------
-
-   procedure Free (Name : in out Thin.READERSTATE_Array) is
-   begin
-      for Index in Name'Range loop
-         Strings.Free (Name (Index).szReader);
-      end loop;
-   end Free;
 
 end PCSC.SCard.Conversion;

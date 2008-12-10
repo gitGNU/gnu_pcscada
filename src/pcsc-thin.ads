@@ -49,7 +49,6 @@ package PCSC.Thin is
    Null_Byte : constant Byte;
    Null_Byte_Array : constant Byte_Array;
 
-
    --  ATR
 
    MAX_ATR_SIZE : constant := 32;
@@ -61,10 +60,8 @@ package PCSC.Thin is
    Null_ATR : constant ATR;
    --  Null initialized ATR
 
-
    MAX_BUFFER_SIZE : constant := 264;
    --  Maximum size of a buffer
-
 
    type void is null record;
    pragma Convention (C, void);
@@ -80,7 +77,6 @@ package PCSC.Thin is
    subtype SCARDHANDLE    is LONG;
    --  Smartcard handle
 
-
    type READERSTATE is record
       szReader       : LPSTR   := C.Strings.Null_Ptr;
       pvUserData     : LPCVOID := null;
@@ -95,13 +91,11 @@ package PCSC.Thin is
      READERSTATE;
    --  Array of reader states
 
-
    type SCARD_IO_REQUEST is record
       dwProtocol  : DWORD := 0;
       cbPciLength : DWORD := 0;
    end record;
    --  SCard io request structure
-
 
    subtype Return_Code is DWORD range 16#0000_0000# .. 16#8010_0069#;
    --  SCard error return codes
@@ -204,7 +198,6 @@ package PCSC.Thin is
    --  The smart card has been removed, so further communication is not
    --  possible
 
-
    SCARD_E_PCI_TOO_SMALL        : constant := 16#8010_0019#;
    --  The PCI Receive buffer was too small
 
@@ -226,8 +219,6 @@ package PCSC.Thin is
    SCARD_E_NO_READERS_AVAILABLE : constant := 16#8010_002E#;
    --  Cannot find a smart card reader
 
-
-
    SCARD_SCOPE_USER             : constant := 16#0000#;
    --  Scope in user space
 
@@ -236,7 +227,6 @@ package PCSC.Thin is
 
    SCARD_SCOPE_SYSTEM           : constant := 16#0002#;
    --  Scope in system
-
 
    SCARD_PROTOCOL_UNDEFINED     : constant := 16#0000#;
    --  protocol not set
@@ -265,7 +255,6 @@ package PCSC.Thin is
    SCARD_SHARE_DIRECT           : constant := 16#0003#;
    --  Raw mode only
 
-
    SCARD_LEAVE_CARD             : constant := 16#0000#;
    --  Do nothing on close
 
@@ -277,7 +266,6 @@ package PCSC.Thin is
 
    SCARD_EJECT_CARD             : constant := 16#0003#;
    --  Eject on close
-
 
    SCARD_UNKNOWN                : constant := 16#0001#;
    --  Unknown state
@@ -299,7 +287,6 @@ package PCSC.Thin is
 
    SCARD_SPECIFIC               : constant := 16#0040#;
    --  PTS has been set
-
 
    SCARD_STATE_UNAWARE          : constant := 16#0000#;
    --  App wants status
@@ -337,7 +324,6 @@ package PCSC.Thin is
    SCARD_STATE_UNPOWERED        : constant := 16#0400#;
    --  Unpowered card
 
-
    SCARD_PCI_T0  : aliased SCARD_IO_REQUEST :=
      (dwProtocol  => SCARD_PROTOCOL_T0, cbPciLength => 8);
    --  Protocol control information (PCI) for T=0
@@ -350,10 +336,8 @@ package PCSC.Thin is
      (dwProtocol  => SCARD_PROTOCOL_RAW, cbPciLength => 8);
    --  Protocol control information (PCI) for RAW protocol
 
-
    INFINITE                     : constant := 16#FFFF_FFFF#;
    --  Infinite timeout (PC/SC Lite specific extension)
-
 
    function SCardEstablishContext
      (dwScope     : in DWORD;
@@ -368,7 +352,6 @@ package PCSC.Thin is
 
    function SCardIsValidContext (hContext : in SCARDCONTEXT) return DWORD;
    --  Validate PC/SC context
-
 
    function SCardConnect
      (hContext             : in SCARDCONTEXT;
@@ -395,7 +378,6 @@ package PCSC.Thin is
       return DWORD;
    --  Disconnect from specific SCard
 
-
    function SCardBeginTransaction (hCard : SCARDHANDLE) return DWORD;
    --  Begin transaction with specific SCard
 
@@ -407,7 +389,6 @@ package PCSC.Thin is
 
    function SCardCancelTransaction (hCard : SCARDHANDLE) return DWORD;
    --  Cancel transaction with specific SCard
-
 
    function SCardStatus
      (hCard          : in SCARDHANDLE;
@@ -431,7 +412,6 @@ package PCSC.Thin is
    function SCardCancel (hContext : in SCARDCONTEXT) return DWORD;
    --  Cancel all pending blocking requests on the SCardGetStatusChange()
    --  function
-
 
    function SCardControl
      (hCard           : in SCARDHANDLE;
@@ -485,7 +465,6 @@ package PCSC.Thin is
       cbAttrLen : in DWORD)
       return DWORD;
    --  Set an attribute of the IFD handler
-
 
    function pcsc_stringify_error (status : DWORD) return C.Strings.chars_ptr;
    --  Get stringified error message
