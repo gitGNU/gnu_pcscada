@@ -5,6 +5,11 @@ Version 0.5 (2008-12-10)
 ------------------------
 .Additions and changes
 
+* Moved comment below 'pragma Elaborate_All' in PCSC.Thin.Reader. (840edfc)
+- Otherwise, this comment is used as package description.
+
+* Fixed CHANGELOG after rebase. (c535fb7)
+
 * Added CHANGELOG for version 0.5. (f15b76f)
 
 * Enabled almost all warnings (except: 'Hiding'). (4ee4b02)
