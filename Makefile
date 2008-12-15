@@ -32,6 +32,7 @@ GIT_REV = $(shell git-show --pretty="format:%h" | head -n1)
 PCSCADA = libpcscada-$(VERSION)
 
 SOURCEDIR = src
+APIDOCDIR = doc
 ALI_FILES = lib/*.ali
 SO_LIBRARY = libpcscada.so.$(VERSION)
 
@@ -96,10 +97,13 @@ install_lib: build_lib
 	@ln -sf $(PREFIX)/lib/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
 
 docs:
+	@echo "Creating API doc for version $(VERSION) ..."
+	@mkdir -p $(APIDOCDIR)
 	@ls $(SOURCEDIR)/*.ads > pcscada.specs
-	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs -o doc/
+	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs \
+		-o $(APIDOCDIR)/
 
-dist: distclean $(SOURCEDIR)/pcsc-version.ads
+dist: distclean $(SOURCEDIR)/pcsc-version.ads docs
 	@echo -n "Creating release tarball '$(PCSCADA)' ($(GIT_REV)) ... "
 	@mkdir -p $(DISTDIR)
 	@cp -R * $(DISTDIR)
