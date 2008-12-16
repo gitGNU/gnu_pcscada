@@ -1,0 +1,75 @@
+#!/usr/bin/make -f
+
+# library full version
+FVERSION = `basename debian/tmp/usr/lib/libpcscada.so.* | \
+		   sed -e 's/libpcscada.so.//'`
+
+# library short version
+SVERSION = `basename debian/tmp/usr/lib/libpcscada.so.* | \
+		   sed -e 's/libpcscada.so.//' -e 's/\..*//'`
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+
+	$(MAKE) distclean
+
+	dh_clean
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+
+	$(MAKE)
+
+# $(MAKE) docs
+
+	$(MAKE) utests \
+		ADA_INCLUDE_PATH=$(ADA_INCLUDE_PATH):/usr/share/ada/adainclude/ahven \
+		ADA_OBJECTS_PATH=$(ADA_OBJECTS_PATH):/usr/lib/ada/adalib/ahven
+
+ifeq ($(PERFORM_ITESTS), 1)
+	$(MAKE) itests
+endif
+
+	touch build-stamp
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+
+	$(MAKE) PREFIX=$(CURDIR)/debian/tmp/usr install
+
+	ln -sf libpcscada.so.$(FVERSION) debian/tmp/usr/lib/libpcscada.so
+
+	ln -sf libpcscada.so.$(FVERSION) \
+		debian/tmp/usr/lib/libpcscada.so.$(SVERSION)
+
+	cp debian/addon/*.gpr debian/tmp/usr/share/ada/adainclude
+
+binary: binary-arch
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_install --fail-missing
+	dh_lintian
+	dh_strip --dbg-package=pcscada-dbg
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary-indep:
+
+.PHONY: clean build install binary binary-arch binary-indep

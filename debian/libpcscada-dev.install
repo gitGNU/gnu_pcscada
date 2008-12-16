@@ -1,0 +1,3 @@
+/usr/lib/*.so
+/usr/lib/ada
+/usr/share/ada/adainclude

@@ -1,0 +1,5 @@
+pcscada (0.5-1) unstable; urgency=low
+
+  * Initial release (Closes: #508846).
+
+ -- Reto Buerki <reet@codelabs.ch>  Tue, 16 Dec 2008 14:54:36 +0100
