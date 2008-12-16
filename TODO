@@ -1,8 +1,7 @@
 PCSC/Ada TODO List
 ===================
 
-- Improve / optimize Set operations, add unit tests for all
-  set operations.
+- Improve / optimize Set operations, add unit tests for all set operations.
 - Add preferred protocols to SCard.Connect procedure
 - Support 'or' operation for SCard.Connect preferred protocols
 - Add default options or null/empty types for in params.
@@ -16,3 +15,5 @@ PCSC/Ada TODO List
 - Use 'private with' for PCSC.Thin in thick binding.
   * A thick binding type for Thin.Byte is needed.
 - Add proper error handling to Reader_Monitor task.
+- Avoid nested functions / procedures: GCC implements them using trampolines,
+  which requires the stack to be executable.
