@@ -30,6 +30,7 @@ project PCSCAda_Lib is
    for Library_Dir use "lib";
    for Library_Kind use "dynamic";
    for Library_Version use "libpcscada.so." & Version;
+   for Library_Options use ("-lpcsclite");
 
    package Compiler is
       for Default_Switches ("ada") use ("-gnatweacdfjkmlpur", "-gnatVa", "-gnat05", "-gnaty3abefhiklmprtcdnoux", "-gnatwa", "-g", "-gnato", "-fstack-check", "-fPIC", "-gnatf");
