@@ -20,6 +20,8 @@
 --  MA  02110-1301  USA
 --
 
+with "ahven";
+
 project PCSCAda_UTests is
 
    for Languages use ("Ada");
