@@ -29,7 +29,7 @@ Description: Ada bindings to PC/SC middleware (development)
  This package contains the development files.
 
 Package: pcscada-dbg
-Section: devel
+Section: debug
 Priority: extra
 Architecture: any
 Depends: libpcscada0 (= ${binary:Version}), libpcscada-dev (= ${binary:Version})
