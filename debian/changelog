@@ -1,3 +1,15 @@
+pcscada (0.5-4) unstable; urgency=low
+
+  * Fix wrong-section-according-to-package-name warning.
+    - pcscada-dbg: devel -> debug.
+  * Remove unused pcscada-dbg lintian override.
+  * Remove "section" field from libpcscada0 package.
+  * libpcscada-dev: Add dependency to gnat-4.3 (Closes: #533157).
+  * Don't dh_compress .ads and .adb files.
+  * Update to Standards-Version 3.8.2 (no changes).
+
+ -- Reto Buerki <reet@codelabs.ch>  Wed, 17 Jun 2009 23:00:39 +0200
+
 pcscada (0.5-3) unstable; urgency=low
 
   * Link libpcscada (dynamic) against pcsclite.
