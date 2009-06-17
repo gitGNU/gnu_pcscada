@@ -29,7 +29,6 @@ with PCSC.SCard.Tests;
 
 procedure Runner is
 
-   pragma Linker_Options ("-lahven");
    pragma Linker_Options ("-lpcsclite");
 
    S : constant Ahven.Framework.Test_Suite_Access :=
