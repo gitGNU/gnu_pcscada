@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -20,26 +20,21 @@
 --  MA  02110-1301  USA
 --
 
-with "ahven";
-with "pcscada_common";
+project PCSCAda_Common is
 
-project PCSCAda_UTests is
+   for Source_Dirs use ();
 
-   for Object_Dir use "obj/utests";
-   for Source_Dirs use ("src", "tests");
-   for Main use ("runner.adb");
+   for Languages use ("Ada");
 
-   package Compiler is
-      for Default_Switches ("ada") use PCSCAda_Common.Compiler_Switches;
-   end Compiler;
+   Compiler_Switches := ("-gnaty3aAbcdefhiIklnprStuxM80o",
+                         "-gnatVa",
+                         "-gnat05",
+                         "-gnatwal",
+                         "-gnatf",
+                         "-fstack-check",
+                         "-gnato",
+                         "-g",
+                         "-fPIC");
 
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
-
-   package Binder is
-      for Default_Switches ("ada") use ("-E");
-   end Binder;
-
-end PCSCAda_UTests;
+end PCSCAda_Common;
 
