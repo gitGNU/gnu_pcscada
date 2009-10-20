@@ -32,7 +32,9 @@ package body Reader_Observer is
    -- Notify --
    ------------
 
-   procedure Notify (O : in Instance; Condition : in SCard.Reader_Condition)
+   procedure Notify
+     (O         : Instance;
+      Condition : SCard.Reader_Condition)
    is
    begin
       Ada.Text_IO.Put_Line ("[observer (" & Utils.To_String

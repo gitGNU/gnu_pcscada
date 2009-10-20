@@ -34,7 +34,9 @@ package Reader_Observer is
    type Instance is new SCard.Monitor.Observer with null record;
 
    overriding
-   procedure Notify (O : in Instance; Condition : in SCard.Reader_Condition);
+   procedure Notify
+     (O         : Instance;
+      Condition : SCard.Reader_Condition);
    --  Implementation of a reader monitor observer.
 
 end Reader_Observer;

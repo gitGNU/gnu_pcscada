@@ -234,113 +234,118 @@ package PCSC.SCard is
       Attr_Supress_T1_IFS_Request);
    --  Possible attributes for Get_Attribute procedure
 
-   procedure Add (States : in out Card_States_Set; State : in Card_State);
-   --  Add a new card state to Card_States_Set.
+   procedure Add
+     (States : in out Card_States_Set;
+      State  :        Card_State);
+   --  Add a new card state to card states set.
 
-   procedure Add (States : in out Reader_States_Set; State : in Reader_State);
-   --  Add a new reader state to Reader_States_Set.
+   procedure Add
+     (States : in out Reader_States_Set;
+      State  :        Reader_State);
+   --  Add a new reader state to reader states set.
 
    procedure Add
      (Set    : in out Reader_Condition_Set;
-      Status : in Reader_Condition);
+      Status :        Reader_Condition);
    --  Add a new reader to reader condition array. State specifies the assumed
    --  initial state of the reader/card.
 
-   procedure Begin_Transaction (Card : in SCard.Card);
+   procedure Begin_Transaction (Card : SCard.Card);
    --  This procedure establishes a temporary exclusive access mode for doing
    --  a series of commands or transactions with a SCard.
 
-   procedure Cancel (Context : in SCard.Context);
+   procedure Cancel (Context : SCard.Context);
    --  This procedure cancels all pending blocking requests on the
    --  Status_Change() procedure for a given SCard 'Context'.
 
    procedure Connect
-     (Context : in SCard.Context;
+     (Context :        SCard.Context;
       Card    : in out SCard.Card;
-      Reader  : in Reader_ID  := Null_Reader_ID;
-      Mode    : in SCard.Mode := Share_Shared);
+      Reader  :        Reader_ID  := Null_Reader_ID;
+      Mode    :        SCard.Mode := Share_Shared);
    --  Connect to a SCard identified by Reader (Reader_ID). Handle to connected
    --  SCard will be stored in 'Card' parameter.
 
    procedure Control
-     (Card        : in SCard.Card;
-      Code        : in Natural;
-      Send_Buffer : in Byte_Set := Null_Byte_Set;
+     (Card        :        SCard.Card;
+      Code        :        Natural;
+      Send_Buffer :        Byte_Set := Null_Byte_Set;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
    --  This procedure sends a control command to the reader connected to by
    --  Connect(). It returns the the control response in Recv_Buffer.
 
-   procedure Disconnect (Card : in SCard.Card; Action : in SCard.Action);
-   --  This procedure terminates a connection to the connection made through
-   --  Connect procedure.
+   procedure Disconnect
+     (Card   : SCard.Card;
+      Action : SCard.Action);
+   --  This procedure terminates a connection to a card.
 
-   function Empty (Set : in Reader_ID_Set) return Boolean;
-   --  Function returns true if Reader_ID_Set contains no readers.
+   function Empty (Set : Reader_ID_Set) return Boolean;
+   --  This function returns True if the reader ID set contains no readers.
 
    procedure End_Transaction
-     (Card   : in SCard.Card;
-      Action : in SCard.Action);
-   --  This procedure ends a previously begun transaction.
+     (Card   : SCard.Card;
+      Action : SCard.Action);
+   --  This procedure ends a previously started transaction.
 
    procedure Establish_Context
      (Context : in out SCard.Context;
-      Scope   : in SCard.Scope);
-   --  Establish PC/SC-context. Possible Scope values are defined in
+      Scope   :        SCard.Scope);
+   --  Establish PC/SC-context. Possible Scope values are defined in the
    --  SCard_Scope type.
 
    function Find
-     (Set       : in Reader_Condition_Set;
-      Reader_ID : in SCard.Reader_ID)
+     (Set       : Reader_Condition_Set;
+      Reader_ID : SCard.Reader_ID)
       return Boolean;
    --  Search a given Reader_ID in Reader_Condition_Set. If found, True is
    --  returned, False if not found.
 
-   function First_Index (Set : in Reader_ID_Set) return Natural;
-   --  Returns the first index of a Reader_ID_Set.
+   function First_Index (Set : Reader_ID_Set) return Natural;
+   --  Returns the first index of the given reader ID set.
 
-   function First_Index (Set : in Reader_States_Set) return Natural;
-   --  Returns the first index of a Reader_States_Set.
+   function First_Index (Set : Reader_States_Set) return Natural;
+   --  Returns the first index of the given reader states set.
 
-   function First_Index (Set : in Reader_Condition_Set) return Natural;
-   --  Returns the first index of a Reader_Condition_Set.
+   function First_Index (Set : Reader_Condition_Set) return Natural;
+   --  Returns the first index of the given reader condition set.
 
-   function First_Item (Set : in Reader_ID_Set) return Reader_ID;
-   --  Returns the first reader ID in a reader ID set.
+   function First_Item (Set : Reader_ID_Set) return Reader_ID;
+   --  Returns the first reader ID from the given reader ID set.
 
-   function First_Item (Set : in Reader_States_Set) return Reader_State;
-   --  Returns the first Reader_State in a Reader_States_Set.
+   function First_Item (Set : Reader_States_Set) return Reader_State;
+   --  Returns the first reader state from the given reader states set.
 
    function Get
-     (Set   : in Reader_ID_Set;
-      Index : in Natural)
+     (Set   : Reader_ID_Set;
+      Index : Natural)
       return Reader_ID;
-   --  Returns Reader_ID object at index 'Index'.
+   --  Returns the reader ID at given index in the set.
 
    function Get
-     (Set   : in Reader_States_Set;
-      Index : in Natural)
+     (Set   : Reader_States_Set;
+      Index : Natural)
       return Reader_State;
-   --  Returns Reader_State object at index 'Index'.
+   --  Returns the reader state at given index in the set.
 
    function Get
-     (Set   : in Reader_Condition_Set;
-      Index : in Natural)
+     (Set   : Reader_Condition_Set;
+      Index : Natural)
       return Reader_Condition;
-   --  Returns Reader_Condition object at index 'Index'.
+   --  Returns the reader condition at given index in the set.
 
-   function Get_Active_Proto (Card : in SCard.Card) return Proto;
+   function Get_Active_Proto (Card : SCard.Card) return Proto;
    --  Return protocol in use for a given card.
 
    procedure Get_Attribute
-     (Card        : in SCard.Card;
-      Attr        : in Attribute;
+     (Card        :        SCard.Card;
+      Attr        :        Attribute;
       Recv_Buffer : in out Byte_Set);
    --  This procedure gets an attribute from the IFD handler. Call
-   --  Init_Attribute_Set function to allocate the correct byte set for the
-   --  call.
+   --  Init_Attribute_Set prior to this function to allocate the correct byte
+   --  set for the call.
 
-   function Get_PCI (Card : in SCard.Card) return Thin.SCARD_IO_REQUEST;
+   function Get_PCI (Card : SCard.Card) return Thin.SCARD_IO_REQUEST;
    --  Return PCI to use for a given card. If no valid PCI for a proto is
    --  found, a No_PCI_for_Proto exception will be thrown.
 
@@ -348,8 +353,8 @@ package PCSC.SCard is
    --  Return string representation of last stored return code.
 
    function Init_Attribute_Set
-     (Card : in SCard.Card;
-      Attr : in Attribute)
+     (Card : SCard.Card;
+      Attr : Attribute)
       return Byte_Set;
    --  This function returns an Null_Byte initialized byte set to provide
    --  storage for an attribute 'Attr'. The byte set can then be used as
@@ -357,58 +362,57 @@ package PCSC.SCard is
    --  attribute data.
 
    function Is_In
-     (States : in Reader_States_Set;
-      State  : in Reader_State)
+     (States : Reader_States_Set;
+      State  : Reader_State)
       return Boolean;
-   --  Function returns True if given Reader_State 'State' is found in Reader
-   --  states set 'States'.
+   --  Function returns True if given reader state is found in the reader states
+   --  set.
 
    function Is_In
-     (States : in Card_States_Set;
-      State  : in Card_State)
+     (States : Card_States_Set;
+      State  : Card_State)
       return Boolean;
-   --  Function returns True if given Card_State 'State' is found in Card
-   --  states set 'States'.
+   --  Function returns True if given card state is found in the card states
+   --  set.
 
-   function Is_Valid (Context : in SCard.Context) return Boolean;
+   function Is_Valid (Context : SCard.Context) return Boolean;
    --  Verify that given SCard context is valid.
 
-   function Last_Index (Set : in Reader_ID_Set) return Natural;
-   --  Returns the last index of a Reader_ID_Set.
+   function Last_Index (Set : Reader_ID_Set) return Natural;
+   --  Returns the last index of a reader ID set.
 
-   function Last_Index (Set : in Reader_States_Set) return Natural;
-   --  Returns the last index of a Reader_States_Set.
+   function Last_Index (Set : Reader_States_Set) return Natural;
+   --  Returns the last index of a reader states set.
 
-   function Last_Index (Set : in Reader_Condition_Set) return Natural;
-   --  Returns the last index of a Reader_Condition_Set.
+   function Last_Index (Set : Reader_Condition_Set) return Natural;
+   --  Returns the last index of a reader condition set.
 
-   function Last_Item (Set : in Reader_ID_Set) return Reader_ID;
+   function Last_Item (Set : Reader_ID_Set) return Reader_ID;
    --  Returns the last reader ID in a reader ID set.
 
-   function Last_Item (Set : in Reader_States_Set) return Reader_State;
-   --  Returns the last Reader_State in a Reader_States_Set.
+   function Last_Item (Set : Reader_States_Set) return Reader_State;
+   --  Returns the last reader state in a reader states set.
 
-   function Length (Set : in Reader_Condition_Set) return Natural;
-   --  Returns the length of a Reader_Condition_Set.
+   function Length (Set : Reader_Condition_Set) return Natural;
+   --  Returns the length of a reader condition set.
 
-   function List_Readers (Context : in SCard.Context) return Reader_ID_Set;
-   --  Return list of all available readers for this PC/SC context.
+   function List_Readers (Context : SCard.Context) return Reader_ID_Set;
+   --  Return list of all available readers for given PC/SC context.
 
    procedure Reconnect
      (Card   : in out SCard.Card;
-      Mode   : in SCard.Mode;
-      Action : in SCard.Action);
-   --  This procedure reestablishes a connection to a reader that was
-   --  previously connected to using Connect(). Init defines the desired action
-   --  taken on the card/reader.
+      Mode   :        SCard.Mode;
+      Action :        SCard.Action);
+   --  This procedure re-establishes a connection. The Init argument defines the
+   --  desired SCard action to perform on the card/reader.
 
    procedure Release_Context (Context : in out SCard.Context);
    --  Release previously acquired SCard context.
 
    procedure Remove
      (States : in out Reader_States_Set;
-      State  : in Reader_State);
-   --  Remove Reader_State 'State' from Reader_States_Set 'States'.
+      State  :        Reader_State);
+   --  Remove reader state from given reader states set.
 
    procedure SPE_Exec (Card : in out SCard.Card; Result : in out Byte_Set);
    --  Request the reader connected to by 'Card' to perform a secure PIN entry
@@ -424,26 +428,26 @@ package PCSC.SCard is
    --  (secure PIN entry) operation. If it does, 'Result' will be True,
    --  otherwise 'Result' will be False.
 
-   function Size (Atr : in SCard.ATR := Null_ATR) return Natural;
+   function Size (Atr : SCard.ATR := Null_ATR) return Natural;
    --  Return current size of an ATR as Natural.
 
-   function Size (Atr : in SCard.ATR := Null_ATR) return String;
+   function Size (Atr : SCard.ATR := Null_ATR) return String;
    --  Return current size of an ATR as string.
 
    procedure Status
-     (Card  : in SCard.Card;
-      State : in out SCard.Card_States_Set;
-      Proto : in out SCard.Proto;
-      Atr   : in out SCard.ATR);
+     (Card  :     SCard.Card;
+      State : out SCard.Card_States_Set;
+      Proto : out SCard.Proto;
+      Atr   : out SCard.ATR);
    --  This procedure checks the current status of the reader connected to by
    --  'Card'. Current state, protocol and ATR value of inserted card are
-   --  returned as in out params.
+   --  returned as out parameters.
 
    procedure Status_Change
-     (Context    : in SCard.Context;
-      Timeout    : in Natural := 0;
+     (Context    :        SCard.Context;
+      Timeout    :        Natural := 0;
       Conditions : in out Reader_Condition_Set);
-   --  This procedure takes a Reader_Condition_Set type containing reader names
+   --  This procedure takes a reader condition set containing reader names
    --  with their assumed state. It then blocks maximum 'Timeout' milliseconds
    --  time for a change in state to occur. If no timeout is given, 0 will be
    --  used, which will block forever. When a status change occurs, the
@@ -451,40 +455,42 @@ package PCSC.SCard is
    --  is called with an empty Conditions object, Wait_For_Readers() is used
    --  to wait for a reader to appear, then the procedure returns.
 
-   procedure Wait_For_Readers (Context : in SCard.Context);
+   procedure Wait_For_Readers (Context : SCard.Context);
    --  This procedure calls SCardGetStatusChange for reader detection. If there
    --  is no reader available, the call will block until a reader is connected.
    --  If there are readers present when this function is called, it will
    --  return immediately.
 
    procedure Transmit
-     (Card        : in SCard.Card;
-      Send_Buffer : in Byte_Set := Null_Byte_Set;
+     (Card        :        SCard.Card;
+      Send_Buffer :        Byte_Set := Null_Byte_Set;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
    --  Transmit APDUs to SCard.
 
-   function To_Atr (Bytes : in Byte_Set) return ATR;
-   --  Create new ATR object from given Byte_Set. If 'Bytes is too big to be
+   function To_Atr (Bytes : Byte_Set) return ATR;
+   --  Create new ATR object from given byte set. If 'Bytes' is too big to be
    --  converted into an ATR type, a 'Bytes_Too_Big' exception will be raised.
 
-   function To_Reader_ID (Name : in String) return Reader_ID;
-   --  Returns a new Reader_ID object initialized with 'Name' string.
+   function To_Reader_ID (Name : String) return Reader_ID;
+   --  Returns a new reader ID initialized with 'Name' string.
 
 private
 
-   procedure SCard_Exception (Code : in Thin.Return_Code; Message : in String);
+   procedure SCard_Exception
+     (Code    : Thin.Return_Code;
+      Message : String);
    pragma No_Return (SCard_Exception);
    --  Raise SCard exception if something goes wrong.
 
    Last_Return_Code : Thin.Return_Code;
    --  Holds the return code of the last SCard operation. Get_Return_Code
-   --  can be used to obtain this code by the client. Store_Error should be
-   --  used to save the return code after a thin binding call.
+   --  can be used to obtain this code. Store_Error should be used to save the
+   --  return code after a thin binding call.
 
-   procedure Store_Error (Code : in Thin.Return_Code);
-   --  Saves the last returned code.
+   procedure Store_Error (Code : Thin.Return_Code);
+   --  Saves the last returned status code.
 
    type Context is limited record
       hContext : aliased Thin.SCARDCONTEXT;
@@ -514,9 +520,9 @@ private
       --  Bytes count
    end record;
 
-   Null_ATR : constant ATR := ATR'(Data   => ATR_Type'
-                                     (others => Thin.Null_Byte),
-                                   Length => 0);
+   Null_ATR : constant ATR := ATR'
+     (Data   => ATR_Type'(others => Thin.Null_Byte),
+      Length => 0);
 
    --  Reader IDs
 
