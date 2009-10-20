@@ -43,19 +43,18 @@ TARBALL = $(PCSCADA).tar.bz2
 all: build_lib
 
 build_lib: prepare
-	@gnatmake -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)"
+	@gnatmake -p -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)"
 
 build_utests: prepare
-	@gnatmake -Ppcscada_utests
+	@gnatmake -p -Ppcscada_utests
 
 build_itests: prepare
-	@gnatmake -Ppcscada_itests
+	@gnatmake -p -Ppcscada_itests
 
 build_examples: prepare
-	@gnatmake -Ppcscada_examples
+	@gnatmake -p -Ppcscada_examples
 
 prepare: $(SOURCEDIR)/pcsc-version.ads
-	@mkdir -p obj/lib obj/itests obj/utests obj/examples lib
 
 $(SOURCEDIR)/pcsc-version.ads:
 	@echo "package PCSC.Version is"                        > $@
