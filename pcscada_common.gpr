@@ -26,6 +26,8 @@ project PCSCAda_Common is
 
    for Languages use ("Ada");
 
+   Version := external ("PCSCADA_VERSION", "0.1");
+
    Compiler_Switches := ("-gnaty3aAbcdefhiIklnprStuxM80o",
                          "-gnatVa",
                          "-gnat05",
@@ -35,6 +37,5 @@ project PCSCAda_Common is
                          "-gnato",
                          "-g",
                          "-fPIC");
-
 end PCSCAda_Common;
 
