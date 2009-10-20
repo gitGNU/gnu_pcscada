@@ -28,7 +28,7 @@ project PCSCAda_Lib is
    for Object_Dir use "obj/lib";
    for Library_Name use "pcscada";
    for Library_Dir use "lib";
-   for Library_Kind use "dynamic";
+   for Library_Kind use external ("LIBRARY_KIND", "dynamic");
    for Library_Version use "libpcscada.so." & PCSCAda_Common.Version;
    for Library_Options use ("-lpcsclite");
 

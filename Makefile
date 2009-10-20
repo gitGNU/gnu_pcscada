@@ -21,29 +21,34 @@
 #
 
 PREFIX ?= $(HOME)/libraries
-INCDIR = $(PREFIX)/share/ada/adainclude/pcscada
-ALIDIR = $(PREFIX)/lib/ada/adalib/pcscada
+INCDIR  = $(PREFIX)/share/ada/adainclude/pcscada
+ALIDIR  = $(PREFIX)/lib/ada/adalib/pcscada
 
 INSTALL = install
 
-VERSION = 0.5
+MAJOR   = 0
+MINOR   = 5
+VERSION = $(MAJOR).$(MINOR)
 GIT_REV = $(shell git-show --pretty="format:%h" | head -n1)
-
 PCSCADA = libpcscada-$(VERSION)
 
-SOURCEDIR = src
-APIDOCDIR = doc
-ALI_FILES = lib/*.ali
+SOURCEDIR  = src
+APIDOCDIR  = doc
+ALI_FILES  = lib/*.ali
 SO_LIBRARY = libpcscada.so.$(VERSION)
+A_LIBRARY  = libpcscada.a
 
-TMPDIR = /tmp
+TMPDIR  = /tmp
 DISTDIR = $(TMPDIR)/$(PCSCADA)
 TARBALL = $(PCSCADA).tar.bz2
+
+LIBRARY_KIND = dynamic
 
 all: build_lib
 
 build_lib: prepare
-	@gnatmake -p -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)"
+	@gnatmake -p -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)" \
+		-XLIBRARY_KIND="$(LIBRARY_KIND)"
 
 build_utests: prepare
 	@gnatmake -p -Ppcscada_utests
@@ -82,18 +87,24 @@ utests: build_utests
 itests: build_itests
 	@obj/itests/test_pcscada
 
-# build all examples
 examples: build_examples
 
-install: install_lib
+install: install_lib install_$(LIBRARY_KIND)
 
 install_lib: build_lib
 	@mkdir -p $(INCDIR)
 	@mkdir -p $(ALIDIR)
 	$(INSTALL) -m 644 $(SOURCEDIR)/* $(INCDIR)
 	$(INSTALL) -m 444 $(ALI_FILES) $(ALIDIR)
+
+install_static:
+	$(INSTALL) -m 444 lib/$(A_LIBRARY) $(PREFIX)/lib
+
+install_dynamic:
 	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib
-	@ln -sf $(PREFIX)/lib/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
+	@cd $(PREFIX)/lib && \
+		ln -sf $(SO_LIBRARY) libpcscada.so && \
+		ln -sf $(SO_LIBRARY) libpcscada.so.$(MAJOR)
 
 docs:
 	@echo "Creating API doc for version $(VERSION) ..."
