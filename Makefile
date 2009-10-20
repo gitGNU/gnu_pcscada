@@ -71,6 +71,7 @@ clean:
 distclean:
 	@rm -rf obj
 	@rm -rf lib
+	@rm -rf $(APIDOCDIR)
 
 # run unit tests
 utests: build_utests
