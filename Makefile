@@ -29,7 +29,7 @@ INSTALL = install
 MAJOR   = 0
 MINOR   = 5
 VERSION = $(MAJOR).$(MINOR)
-GIT_REV = $(shell git-show --pretty="format:%h" | head -n1)
+GIT_REV = `git describe`
 PCSCADA = libpcscada-$(VERSION)
 
 SOURCEDIR  = src
@@ -61,13 +61,24 @@ build_examples: prepare
 
 prepare: $(SOURCEDIR)/pcsc-version.ads
 
-$(SOURCEDIR)/pcsc-version.ads:
-	@echo "package PCSC.Version is"                        > $@
-	@echo "   Version_Number : constant Float  :="        >> $@
-	@echo "      $(VERSION);"                             >> $@
-	@echo "   Version_String : constant String :="        >> $@
-	@echo "     \"$(VERSION) (git $(GIT_REV))\";"         >> $@
-	@echo "end PCSC.Version;"                             >> $@
+pcscada-git-rev: FORCE
+	@if [ -d .git ]; then \
+		if [ -r $@ ]; then \
+			if [ "$$(cat $@)" != "$(GIT_REV)" ]; then \
+				echo $(GIT_REV) > $@; \
+			fi; \
+		else \
+			echo $(GIT_REV) > $@; \
+		fi \
+	fi
+
+$(SOURCEDIR)/pcsc-version.ads: pcscada-git-rev
+	@echo "package PCSC.Version is"                 > $@
+	@echo "   Version_Number : constant Float  :=" >> $@
+	@echo "      $(VERSION);"                      >> $@
+	@echo "   Version_String : constant String :=" >> $@
+	@echo "     \"$(VERSION) ($(GIT_REV))\";"      >> $@
+	@echo "end PCSC.Version;"                      >> $@
 
 clean:
 	@rm -rf obj/*
@@ -77,6 +88,8 @@ distclean:
 	@rm -rf obj
 	@rm -rf lib
 	@rm -rf $(APIDOCDIR)
+	@rm -f pcscada.specs
+	@rm -f $(SOURCEDIR)/pcsc-version.ads
 
 # run unit tests
 utests: build_utests
@@ -120,5 +133,7 @@ dist: distclean $(SOURCEDIR)/pcsc-version.ads docs
 	@tar -C $(TMPDIR) -cjf $(TARBALL) $(PCSCADA)
 	@rm -rf $(DISTDIR)
 	@echo "DONE"
+
+FORCE:
 
 .PHONY: dist itests utests
