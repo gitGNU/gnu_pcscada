@@ -41,9 +41,5 @@ project PCSCAda_Examples is
       for Default_Switches ("ada") use ("-E");
    end Binder;
 
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
-
 end PCSCAda_Examples;
 

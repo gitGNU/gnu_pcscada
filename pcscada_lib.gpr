@@ -36,10 +36,6 @@ project PCSCAda_Lib is
       for Default_Switches ("ada") use PCSCAda_Common.Compiler_Switches;
    end Compiler;
 
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
-
    package Binder is
       for Default_Switches ("ada") use ("-E");
    end Binder;
