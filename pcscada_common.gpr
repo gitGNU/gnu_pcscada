@@ -35,7 +35,6 @@ project PCSCAda_Common is
                          "-gnatf",
                          "-fstack-check",
                          "-gnato",
-                         "-g",
-                         "-fPIC");
+                         "-g");
 end PCSCAda_Common;
 
