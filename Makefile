@@ -27,7 +27,7 @@ ALIDIR  = $(PREFIX)/lib/ada/adalib/pcscada
 INSTALL = install
 
 MAJOR   = 0
-MINOR   = 5
+MINOR   = 6
 VERSION = $(MAJOR).$(MINOR)
 GIT_REV = `git describe`
 PCSCADA = libpcscada-$(VERSION)
