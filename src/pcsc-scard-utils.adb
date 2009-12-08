@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -28,9 +28,7 @@ with Interfaces;
 
 package body PCSC.SCard.Utils is
 
-   -----------------
-   -- Action_Info --
-   -----------------
+   -------------------------------------------------------------------------
 
    procedure Action_Info (Text : String) is
    begin
@@ -39,9 +37,7 @@ package body PCSC.SCard.Utils is
       Ada.Text_IO.Put (":");
    end Action_Info;
 
-   -------------------
-   -- Action_Result --
-   -------------------
+   -------------------------------------------------------------------------
 
    procedure Action_Result (Result : String) is
    begin
@@ -49,9 +45,7 @@ package body PCSC.SCard.Utils is
       Ada.Text_IO.Put_Line (Item => Result);
    end Action_Result;
 
-   ----------------------
-   -- For_Every_Reader --
-   ----------------------
+   -------------------------------------------------------------------------
 
    procedure For_Every_Reader
      (Readers : Reader_ID_Set;
@@ -70,18 +64,14 @@ package body PCSC.SCard.Utils is
       end loop;
    end For_Every_Reader;
 
-   --------------------
-   -- Print_ReaderID --
-   --------------------
+   -------------------------------------------------------------------------
 
    procedure Print_ReaderID (ID : Reader_ID) is
    begin
       Ada.Text_IO.Put_Line (To_String (ID));
    end Print_ReaderID;
 
-   --------------------
-   --  To_Hex_String --
-   --------------------
+   -------------------------------------------------------------------------
 
    function To_Hex_String
      (Given : Byte_Set := Null_Byte_Set;
@@ -117,9 +107,7 @@ package body PCSC.SCard.Utils is
       return Result;
    end To_Hex_String;
 
-   --------------------
-   --  To_Hex_String --
-   --------------------
+   -------------------------------------------------------------------------
 
    function To_Hex_String (Given : Byte_Set := Null_Byte_Set) return String
    is
@@ -132,9 +120,7 @@ package body PCSC.SCard.Utils is
                             Len   => 2 * Given'Length);
    end To_Hex_String;
 
-   --------------------
-   --  To_Hex_String --
-   --------------------
+   -------------------------------------------------------------------------
 
    function To_Hex_String
      (Given : Thin.Byte_Array := Thin.Null_Byte_Array;
@@ -150,9 +136,7 @@ package body PCSC.SCard.Utils is
       return To_Hex_String (Given => Byte_Set (Given), Len => Len);
    end To_Hex_String;
 
-   --------------------
-   --  To_Hex_String --
-   --------------------
+   -------------------------------------------------------------------------
 
    function To_Hex_String (Given : ATR := Null_ATR) return String is
    begin
@@ -164,9 +148,7 @@ package body PCSC.SCard.Utils is
                             Len   => 2 * Positive (Given.Length));
    end To_Hex_String;
 
-   --------------------------
-   -- To_Long_Long_Integer --
-   --------------------------
+   -------------------------------------------------------------------------
 
    function To_Long_Long_Integer
      (Given : Byte_Set := Null_Byte_Set)
@@ -189,9 +171,7 @@ package body PCSC.SCard.Utils is
          raise Bytes_Too_Big;
    end To_Long_Long_Integer;
 
-   ---------------
-   -- To_String --
-   ---------------
+   -------------------------------------------------------------------------
 
    function To_String
      (Reader : Reader_ID := Null_Reader_ID)
@@ -202,9 +182,7 @@ package body PCSC.SCard.Utils is
         (Unbounded_String (Reader));
    end To_String;
 
-   ---------------
-   -- To_String --
-   ---------------
+   -------------------------------------------------------------------------
 
    function To_String (States : Card_States_Set) return String is
       Str_States : Unbounded_String;
@@ -221,9 +199,7 @@ package body PCSC.SCard.Utils is
                                      Side   => Ada.Strings.Right);
    end To_String;
 
-   ---------------
-   -- To_String --
-   ---------------
+   -------------------------------------------------------------------------
 
    function To_String (States : Reader_States_Set) return String is
       Str_States : Unbounded_String;
@@ -240,9 +216,7 @@ package body PCSC.SCard.Utils is
                                      Side   => Ada.Strings.Right);
    end To_String;
 
-   ---------------
-   -- To_String --
-   ---------------
+   -------------------------------------------------------------------------
 
    function To_String (Given : Byte_Set := Null_Byte_Set) return String is
       New_String : String (1 .. Given'Last);

@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -35,14 +35,8 @@ procedure Runner is
      Ahven.Framework.Create_Suite (Suite_Name => "PCSC/Ada Unit Tests");
 
 begin
-
-   --  Utilities tests
-
    Ahven.Framework.Add_Test (Suite => S.all,
                              T     => new Tests_Utils.Test);
-
-   --  SCard Ada <--> C conversion tests
-
    Ahven.Framework.Add_Test (Suite => S.all,
                              T     => new PCSC.SCard.Tests.Test);
 

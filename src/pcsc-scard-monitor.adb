@@ -24,9 +24,7 @@ pragma Detect_Blocking;
 
 package body PCSC.SCard.Monitor is
 
-   ----------------------
-   -- Create_Condition --
-   ----------------------
+   -------------------------------------------------------------------------
 
    function Create_Condition
      (Reader : SCard.Reader_ID)
@@ -39,9 +37,7 @@ package body PCSC.SCard.Monitor is
       return New_Condition;
    end Create_Condition;
 
-   -------------------
-   -- Is_Interested --
-   -------------------
+   -------------------------------------------------------------------------
 
    function Is_Interested
      (O      : Observer;
@@ -62,9 +58,7 @@ package body PCSC.SCard.Monitor is
       return False;
    end Is_Interested;
 
-   --------------------
-   -- Reader_Monitor --
-   --------------------
+   -------------------------------------------------------------------------
 
    task body Reader_Monitor is
       Current_Context : Context_Handle;
@@ -107,9 +101,7 @@ package body PCSC.SCard.Monitor is
       end loop;
    end Reader_Monitor;
 
-   -------------------
-   -- Status_Peeker --
-   -------------------
+   -------------------------------------------------------------------------
 
    task body Status_Peeker is
       Reader_IDs      : SCard.Reader_ID_Set;
@@ -194,9 +186,7 @@ package body PCSC.SCard.Monitor is
       end loop;
    end Status_Peeker;
 
-   ----------------------------
-   -- Protected_Observer_Set --
-   ----------------------------
+   -------------------------------------------------------------------------
 
    protected body Protected_Observer_Set is
       entry Insert (Observer : Observer_Class) when not Notifying is
@@ -222,9 +212,7 @@ package body PCSC.SCard.Monitor is
       end Notify_All;
    end Protected_Observer_Set;
 
-   -------------------------
-   -- Update_Reader_Table --
-   -------------------------
+   -------------------------------------------------------------------------
 
    procedure Update_Reader_Table
      (Table : in out SCard.Reader_Condition_Set;

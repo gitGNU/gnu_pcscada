@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -31,9 +31,7 @@ package body Tests_Utils is
 
    package SCU renames SCard.Utils;
 
-   ----------------
-   -- Initialize --
-   ----------------
+   -------------------------------------------------------------------------
 
    procedure Initialize (T : in out Test) is
    begin
@@ -66,9 +64,7 @@ package body Tests_Utils is
                                   Name    => "Byte_Set to HEX String");
    end Initialize;
 
-   ----------------------------
-   -- Test_ATR_To_Hex_String --
-   ----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_ATR_To_Hex_String is
       Null_ATR      : constant SCard.ATR := SCard.Null_ATR;
@@ -85,9 +81,7 @@ package body Tests_Utils is
               Message   => "Hex string incorrect");
    end Test_ATR_To_Hex_String;
 
-   -------------------------------
-   -- Test_BArray_To_Hex_String --
-   -------------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_BArray_To_Hex_String is
       Empty_Array : constant Thin.Byte_Array := Thin.Null_Byte_Array;
@@ -103,9 +97,7 @@ package body Tests_Utils is
               Message   => "Hex string incorrect");
    end Test_BArray_To_Hex_String;
 
-   -----------------------------
-   -- Test_BSet_To_Hex_String --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_BSet_To_Hex_String is
       Empty_Set : constant SCard.Byte_Set := SCard.Null_Byte_Set;
@@ -120,9 +112,7 @@ package body Tests_Utils is
               Message   => "Hex string incorrect");
    end Test_BSet_To_Hex_String;
 
-   -----------------------------
-   -- Test_Byte_Set_To_String --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_Byte_Set_To_String is
       Empty_Set : constant SCard.Byte_Set := SCard.Null_Byte_Set;
@@ -135,9 +125,7 @@ package body Tests_Utils is
               Message   => "Returned string not 'pcsc'");
    end Test_Byte_Set_To_String;
 
-   --------------------------------
-   -- Test_CStates_Set_To_String --
-   --------------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_CStates_Set_To_String is
       Empty_CStates : SCard.Card_States_Set;
@@ -156,9 +144,7 @@ package body Tests_Utils is
               Message   => "String incorrect");
    end Test_CStates_Set_To_String;
 
-   -----------------------------
-   -- Test_ReaderID_To_String --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_ReaderID_To_String is
       Null_Reader : constant SCard.Reader_ID := SCard.Null_Reader_ID;
@@ -167,9 +153,7 @@ package body Tests_Utils is
               Message   => "String incorrect");
    end Test_ReaderID_To_String;
 
-   --------------------------------
-   -- Test_RStates_Set_To_String --
-   --------------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_RStates_Set_To_String is
       Empty_RStates : SCard.Reader_States_Set;
@@ -188,9 +172,7 @@ package body Tests_Utils is
               Message   => "String incorrect");
    end Test_RStates_Set_To_String;
 
-   ----------------------------
-   -- Test_Long_Long_Integer --
-   ----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Long_Long_Integer is
       Null_Set    : constant SCard.Byte_Set := SCard.Null_Byte_Set;

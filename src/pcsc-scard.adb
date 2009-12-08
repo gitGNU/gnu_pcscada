@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -37,9 +37,7 @@ package body PCSC.SCard is
 
    package Convert renames PCSC.SCard.Conversion;
 
-   ---------
-   -- Add --
-   ---------
+   -------------------------------------------------------------------------
 
    procedure Add
      (States : in out Card_States_Set;
@@ -49,9 +47,7 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add;
 
-   ---------
-   -- Add --
-   ---------
+   -------------------------------------------------------------------------
 
    procedure Add
      (States : in out Reader_States_Set;
@@ -61,9 +57,7 @@ package body PCSC.SCard is
       States.Data.Append (New_Item => State);
    end Add;
 
-   ---------
-   -- Add --
-   ---------
+   -------------------------------------------------------------------------
 
    procedure Add
      (Set    : in out Reader_Condition_Set;
@@ -73,9 +67,7 @@ package body PCSC.SCard is
       Set.Data.Append (New_Item => Status);
    end Add;
 
-   -----------------------
-   -- Begin_Transaction --
-   -----------------------
+   -------------------------------------------------------------------------
 
    procedure Begin_Transaction (Card : SCard.Card) is
       Res : Thin.DWORD;
@@ -89,9 +81,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Begin_Transaction;
 
-   ------------
-   -- Cancel --
-   ------------
+   -------------------------------------------------------------------------
 
    procedure Cancel (Context : SCard.Context) is
       Res : Thin.DWORD;
@@ -105,9 +95,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Cancel;
 
-   -------------
-   -- Connect --
-   -------------
+   -------------------------------------------------------------------------
 
    procedure Connect
      (Context :        SCard.Context;
@@ -139,9 +127,7 @@ package body PCSC.SCard is
       Strings.Free (C_Reader);
    end Connect;
 
-   -------------
-   -- Control --
-   -------------
+   -------------------------------------------------------------------------
 
    procedure Control
      (Card        :        SCard.Card;
@@ -195,9 +181,7 @@ package body PCSC.SCard is
       Recv_Len := Natural (Bytes_Returned);
    end Control;
 
-   ----------------
-   -- Disconnect --
-   ----------------
+   -------------------------------------------------------------------------
 
    procedure Disconnect
      (Card   : SCard.Card;
@@ -215,9 +199,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Disconnect;
 
-   -----------
-   -- Empty --
-   -----------
+   -------------------------------------------------------------------------
 
    function Empty (Set : Reader_ID_Set) return Boolean is
       use type Ada.Containers.Count_Type;
@@ -229,9 +211,7 @@ package body PCSC.SCard is
       return False;
    end Empty;
 
-   ---------------------
-   -- End_Transaction --
-   ---------------------
+   -------------------------------------------------------------------------
 
    procedure End_Transaction
      (Card   : SCard.Card;
@@ -250,9 +230,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end End_Transaction;
 
-   -----------------------
-   -- Establish_Context --
-   -----------------------
+   -------------------------------------------------------------------------
 
    procedure Establish_Context
      (Context : in out SCard.Context;
@@ -271,9 +249,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Establish_Context;
 
-   ----------
-   -- Find --
-   ----------
+   -------------------------------------------------------------------------
 
    function Find
      (Set       : Reader_Condition_Set;
@@ -293,36 +269,28 @@ package body PCSC.SCard is
       return False;
    end Find;
 
-   -----------------
-   -- First_Index --
-   -----------------
+   -------------------------------------------------------------------------
 
    function First_Index (Set : Reader_ID_Set) return Natural is
    begin
       return Set.Data.First_Index;
    end First_Index;
 
-   -----------------
-   -- First_Index --
-   -----------------
+   -------------------------------------------------------------------------
 
    function First_Index (Set : Reader_States_Set) return Natural is
    begin
       return Set.Data.First_Index;
    end First_Index;
 
-   -----------------
-   -- First_Index --
-   -----------------
+   -------------------------------------------------------------------------
 
    function First_Index (Set : Reader_Condition_Set) return Natural is
    begin
       return Set.Data.First_Index;
    end First_Index;
 
-   ----------------
-   -- First_Item --
-   ----------------
+   -------------------------------------------------------------------------
 
    function First_Item (Set : Reader_ID_Set) return Reader_ID is
       use type Ada.Containers.Count_Type;
@@ -334,9 +302,7 @@ package body PCSC.SCard is
       return Set.Data.First_Element;
    end First_Item;
 
-   ----------------
-   -- First_Item --
-   ----------------
+   -------------------------------------------------------------------------
 
    function First_Item (Set : Reader_States_Set) return Reader_State is
       use type Ada.Containers.Count_Type;
@@ -344,9 +310,7 @@ package body PCSC.SCard is
       return Set.Data.First_Element;
    end First_Item;
 
-   ---------
-   -- Get --
-   ---------
+   -------------------------------------------------------------------------
 
    function Get
      (Set   : Reader_ID_Set;
@@ -358,9 +322,7 @@ package body PCSC.SCard is
       return Set.Data.Element (Index);
    end Get;
 
-   ---------
-   -- Get --
-   ---------
+   -------------------------------------------------------------------------
 
    function Get
      (Set   : Reader_States_Set;
@@ -372,9 +334,7 @@ package body PCSC.SCard is
       return Set.Data.Element (Index);
    end Get;
 
-   ---------
-   -- Get --
-   ---------
+   -------------------------------------------------------------------------
 
    function Get
      (Set   : Reader_Condition_Set;
@@ -386,18 +346,14 @@ package body PCSC.SCard is
       return Set.Data.Element (Index);
    end Get;
 
-   ----------------------
-   -- Get_Active_Proto --
-   ----------------------
+   -------------------------------------------------------------------------
 
    function Get_Active_Proto (Card : SCard.Card) return Proto is
    begin
       return Convert.To_Ada (Card.Active_Proto);
    end Get_Active_Proto;
 
-   -------------------
-   -- Get_Attribute --
-   -------------------
+   -------------------------------------------------------------------------
 
    procedure Get_Attribute
      (Card        :        SCard.Card;
@@ -420,9 +376,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Get_Attribute;
 
-   -------------
-   -- Get_PCI --
-   -------------
+   -------------------------------------------------------------------------
 
    function Get_PCI (Card : SCard.Card) return Thin.SCARD_IO_REQUEST
    is
@@ -441,9 +395,7 @@ package body PCSC.SCard is
       return PCI;
    end Get_PCI;
 
-   ---------------------
-   -- Get_Return_Code --
-   ---------------------
+   -------------------------------------------------------------------------
 
    function Get_Return_Code return String is
       Err_Message : constant String := Strings.Value
@@ -452,9 +404,7 @@ package body PCSC.SCard is
       return Err_Message;
    end Get_Return_Code;
 
-   ------------------------
-   -- Init_Attribute_Set --
-   ------------------------
+   -------------------------------------------------------------------------
 
    function Init_Attribute_Set
      (Card : SCard.Card;
@@ -486,9 +436,7 @@ package body PCSC.SCard is
       end;
    end Init_Attribute_Set;
 
-   -----------
-   -- Is_In --
-   -----------
+   -------------------------------------------------------------------------
 
    function Is_In
      (States : Reader_States_Set;
@@ -503,9 +451,7 @@ package body PCSC.SCard is
       return True;
    end Is_In;
 
-   -----------
-   -- Is_In --
-   -----------
+   -------------------------------------------------------------------------
 
    function Is_In
      (States : Card_States_Set;
@@ -520,9 +466,7 @@ package body PCSC.SCard is
       return True;
    end Is_In;
 
-   --------------
-   -- Is_Valid --
-   --------------
+   -------------------------------------------------------------------------
 
    function Is_Valid (Context : SCard.Context) return Boolean is
       Res : Thin.DWORD;
@@ -538,36 +482,28 @@ package body PCSC.SCard is
       return True;
    end Is_Valid;
 
-   ----------------
-   -- Last_Index --
-   ----------------
+   -------------------------------------------------------------------------
 
    function Last_Index (Set : Reader_ID_Set) return Natural is
    begin
       return Set.Data.Last_Index;
    end Last_Index;
 
-   ----------------
-   -- Last_Index --
-   ----------------
+   -------------------------------------------------------------------------
 
    function Last_Index (Set : Reader_States_Set) return Natural is
    begin
       return Set.Data.Last_Index;
    end Last_Index;
 
-   ----------------
-   -- Last_Index --
-   ----------------
+   -------------------------------------------------------------------------
 
    function Last_Index (Set : Reader_Condition_Set) return Natural is
    begin
       return Set.Data.Last_Index;
    end Last_Index;
 
-   ---------------
-   -- Last_Item --
-   ---------------
+   -------------------------------------------------------------------------
 
    function Last_Item (Set : Reader_ID_Set) return Reader_ID is
       use type Ada.Containers.Count_Type;
@@ -579,9 +515,7 @@ package body PCSC.SCard is
       return Set.Data.Last_Element;
    end Last_Item;
 
-   ---------------
-   -- Last_Item --
-   ---------------
+   -------------------------------------------------------------------------
 
    function Last_Item (Set : Reader_States_Set) return Reader_State is
       use type Ada.Containers.Count_Type;
@@ -589,18 +523,14 @@ package body PCSC.SCard is
       return Set.Data.Last_Element;
    end Last_Item;
 
-   ------------
-   -- Length --
-   ------------
+   -------------------------------------------------------------------------
 
    function Length (Set : Reader_Condition_Set) return Natural is
    begin
       return Natural (Set.Data.Length);
    end Length;
 
-   ------------------
-   -- List_Readers --
-   ------------------
+   -------------------------------------------------------------------------
 
    function List_Readers (Context : SCard.Context) return Reader_ID_Set
    is
@@ -647,9 +577,7 @@ package body PCSC.SCard is
       end;
    end List_Readers;
 
-   ---------------
-   -- Reconnect --
-   ---------------
+   -------------------------------------------------------------------------
 
    procedure Reconnect
      (Card   : in out SCard.Card;
@@ -673,9 +601,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Reconnect;
 
-   ---------------------
-   -- Release_Context --
-   ---------------------
+   -------------------------------------------------------------------------
 
    procedure Release_Context (Context : in out SCard.Context) is
       Res : Thin.DWORD;
@@ -689,9 +615,7 @@ package body PCSC.SCard is
       Store_Error (Code => Res);
    end Release_Context;
 
-   ------------
-   -- Remove --
-   ------------
+   -------------------------------------------------------------------------
 
    procedure Remove
      (States : in out Reader_States_Set;
@@ -702,9 +626,7 @@ package body PCSC.SCard is
       States.Data.Delete (Index => States.Data.Find_Index (Item => State));
    end Remove;
 
-   ---------------------
-   -- SCard_Exception --
-   ---------------------
+   -------------------------------------------------------------------------
 
    procedure SCard_Exception
      (Code    : Thin.Return_Code;
@@ -724,18 +646,14 @@ package body PCSC.SCard is
            & Thin.Return_Code'Image (Code) & "] " & Err_Message);
    end SCard_Exception;
 
-   ----------
-   -- Size --
-   ----------
+   -------------------------------------------------------------------------
 
    function Size (Atr : SCard.ATR := Null_ATR) return Natural is
    begin
       return Natural (Atr.Length);
    end Size;
 
-   ----------
-   -- Size --
-   ----------
+   -------------------------------------------------------------------------
 
    function Size (Atr : SCard.ATR := Null_ATR) return String is
       Natural_ATR : constant Natural := Size (Atr);
@@ -747,9 +665,7 @@ package body PCSC.SCard is
                                      Side   => Ada.Strings.Left);
    end Size;
 
-   --------------
-   -- SPE_Exec --
-   --------------
+   -------------------------------------------------------------------------
 
    procedure SPE_Exec
      (Card   : in out SCard.Card;
@@ -826,9 +742,7 @@ package body PCSC.SCard is
       end loop;
    end SPE_Exec;
 
-   --------------
-   -- SPE_Init --
-   --------------
+   -------------------------------------------------------------------------
 
    procedure SPE_Init
      (Card   : in out SCard.Card;
@@ -918,9 +832,7 @@ package body PCSC.SCard is
       end;
    end SPE_Init;
 
-   ------------
-   -- Status --
-   ------------
+   -------------------------------------------------------------------------
 
    procedure Status
      (Card  :     SCard.Card;
@@ -957,9 +869,7 @@ package body PCSC.SCard is
       State      := Convert.To_Ada (dwState);
    end Status;
 
-   -------------------
-   -- Status_Change --
-   -------------------
+   -------------------------------------------------------------------------
 
    procedure Status_Change
      (Context    :        SCard.Context;
@@ -973,15 +883,7 @@ package body PCSC.SCard is
       C_States  : Thin.READERSTATE_Array := Convert.To_C
         (Conditions => Conditions);
 
-      -----------------------
-      -- Update_Status_Set --
-      -----------------------
-
       procedure Update_Status_Set (Position : VORCP.Cursor) is
-
-         -----------------------------
-         -- Update_Reader_Condition --
-         -----------------------------
 
          procedure Update_Reader_Condition (Element : in out Reader_Condition)
          is
@@ -1055,18 +957,14 @@ package body PCSC.SCard is
 
    end Status_Change;
 
-   -----------------
-   -- Store_Error --
-   -----------------
+   -------------------------------------------------------------------------
 
    procedure Store_Error (Code : Thin.Return_Code) is
    begin
       Last_Return_Code := Code;
    end Store_Error;
 
-   ------------
-   -- To_Atr --
-   ------------
+   -------------------------------------------------------------------------
 
    function To_Atr (Bytes : Byte_Set) return ATR is
       New_Atr  : ATR;
@@ -1088,18 +986,14 @@ package body PCSC.SCard is
       return New_Atr;
    end To_Atr;
 
-   ------------------
-   -- To_Reader_ID --
-   ------------------
+   -------------------------------------------------------------------------
 
    function To_Reader_ID (Name : String) return Reader_ID is
    begin
       return Reader_ID'(To_Unbounded_String (Name));
    end To_Reader_ID;
 
-   --------------
-   -- Transmit --
-   --------------
+   -------------------------------------------------------------------------
 
    procedure Transmit
      (Card        :        SCard.Card;
@@ -1155,9 +1049,7 @@ package body PCSC.SCard is
       Recv_Len := Natural (Bytes_Returned);
    end Transmit;
 
-   ----------------------
-   -- Wait_For_Readers --
-   ----------------------
+   -------------------------------------------------------------------------
 
    procedure Wait_For_Readers (Context : SCard.Context) is
       Res : Thin.DWORD;

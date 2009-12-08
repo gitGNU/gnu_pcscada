@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -33,9 +33,7 @@ package body PCSC.SCard.Tests is
 
    package Convert renames PCSC.SCard.Conversion;
 
-   ----------------
-   -- Initialize --
-   ----------------
+   -------------------------------------------------------------------------
 
    procedure Initialize (T : in out Test) is
    begin
@@ -62,9 +60,7 @@ package body PCSC.SCard.Tests is
                                   Name    => "DWORD to Reader_States_Set");
    end Initialize;
 
-   -----------------------------
-   -- Test_Slice_Readerstring --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_Slice_Readerstring is
       use type Ada.Containers.Count_Type;
@@ -116,9 +112,7 @@ package body PCSC.SCard.Tests is
               Message   => "Reader name does not match");
    end Test_Slice_Readerstring;
 
-   -----------------------
-   -- Test_To_Ada_Proto --
-   -----------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Ada_Proto is
       No_Proto : constant Thin.DWORD := 16#FFFF_FFFF#;
@@ -135,9 +129,7 @@ package body PCSC.SCard.Tests is
               Message   => "Proto not Proto_RAW");
    end Test_To_Ada_Proto;
 
-   -------------------------
-   -- Test_To_C_RCond_Set --
-   -------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_C_RCond_Set is
 
@@ -260,9 +252,7 @@ package body PCSC.SCard.Tests is
       end;
    end Test_To_C_RCond_Set;
 
-   -----------------------------
-   -- Test_To_Card_States_Set --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Card_States_Set is
       use VOCSP;
@@ -301,9 +291,7 @@ package body PCSC.SCard.Tests is
               Message   => "Card_Swallowed not found");
    end Test_To_Card_States_Set;
 
-   -----------------------
-   -- Test_To_Chars_Ptr --
-   -----------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Chars_Ptr is
       use Interfaces.C;
@@ -320,9 +308,7 @@ package body PCSC.SCard.Tests is
       Strings.Free (Item => Ptr);
    end Test_To_Chars_Ptr;
 
-   -------------------------------
-   -- Test_To_Reader_States_Set --
-   -------------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Reader_States_Set is
       use VORSP;

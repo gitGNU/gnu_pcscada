@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -29,9 +29,7 @@ package body PCSC.SCard.Conversion is
 
    use Interfaces.C;
 
-   ----------
-   -- Free --
-   ----------
+   -------------------------------------------------------------------------
 
    procedure Free (Name : in out Thin.READERSTATE_Array) is
    begin
@@ -40,9 +38,7 @@ package body PCSC.SCard.Conversion is
       end loop;
    end Free;
 
-   ------------------------
-   -- Slice_Readerstring --
-   ------------------------
+   -------------------------------------------------------------------------
 
    function Slice_Readerstring (To_Slice : String) return Reader_ID_Set
    is
@@ -71,9 +67,7 @@ package body PCSC.SCard.Conversion is
 
    end Slice_Readerstring;
 
-   ------------
-   -- To_Ada --
-   ------------
+   -------------------------------------------------------------------------
 
    function To_Ada (C_Protocol : Thin.DWORD) return Proto is
    begin
@@ -91,9 +85,7 @@ package body PCSC.SCard.Conversion is
       return Proto_Undefined;
    end To_Ada;
 
-   ------------
-   -- To_Ada --
-   ------------
+   -------------------------------------------------------------------------
 
    function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set is
       States : Card_States_Set;
@@ -106,9 +98,7 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
-   ------------
-   -- To_Ada --
-   ------------
+   -------------------------------------------------------------------------
 
    function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set is
       States : Reader_States_Set;
@@ -121,9 +111,7 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
-   ----------
-   -- To_C --
-   ----------
+   -------------------------------------------------------------------------
 
    function To_C
      (Conditions : Reader_Condition_Set)
@@ -187,9 +175,7 @@ package body PCSC.SCard.Conversion is
       return C_States;
    end To_C;
 
-   ------------------
-   -- To_Chars_Ptr --
-   ------------------
+   -------------------------------------------------------------------------
 
    function To_Chars_Ptr (Reader : Reader_ID) return Strings.chars_ptr is
    begin
