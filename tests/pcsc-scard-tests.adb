@@ -37,27 +37,25 @@ package body PCSC.SCard.Tests is
 
    procedure Initialize (T : in out Test) is
    begin
-      Set_Name (T    => T,
-                Name => "Tests for PCSC/Ada SCard Ada <=> C Conversions");
-
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_Slice_Readerstring'Access,
-                                  Name    => "String to Reader_ID_Set");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_C_RCond_Set'Access,
-                                  Name    => "To_C for Reader_Condition_Set");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Chars_Ptr'Access,
-                                  Name    => "Reader_ID to LPSTR");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Ada_Proto'Access,
-                                  Name    => "DWORD to Proto type");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Card_States_Set'Access,
-                                  Name    => "DWORD to Card_States_Set");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Reader_States_Set'Access,
-                                  Name    => "DWORD to Reader_States_Set");
+      T.Set_Name (Name => "Tests for PCSC/Ada SCard Ada <=> C Conversions");
+      T.Add_Test_Routine
+        (Routine => Test_Slice_Readerstring'Access,
+         Name    => "String to Reader_ID_Set");
+      T.Add_Test_Routine
+        (Routine => Test_To_C_RCond_Set'Access,
+         Name    => "To_C for Reader_Condition_Set");
+      T.Add_Test_Routine
+        (Routine => Test_To_Chars_Ptr'Access,
+         Name    => "Reader_ID to LPSTR");
+      T.Add_Test_Routine
+        (Routine => Test_To_Ada_Proto'Access,
+         Name    => "DWORD to Proto type");
+      T.Add_Test_Routine
+        (Routine => Test_To_Card_States_Set'Access,
+         Name    => "DWORD to Card_States_Set");
+      T.Add_Test_Routine
+        (Routine => Test_To_Reader_States_Set'Access,
+         Name    => "DWORD to Reader_States_Set");
    end Initialize;
 
    -------------------------------------------------------------------------

@@ -35,33 +35,31 @@ package body Tests_Utils is
 
    procedure Initialize (T : in out Test) is
    begin
-      Set_Name (T    => T,
-                Name => "Tests for PCSC/Ada SCard Utils");
-
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Long_Long_Integer'Access,
-                                  Name    => "Byte_Set to Long_Long_Integer");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_Byte_Set_To_String'Access,
-                                  Name    => "Byte_Set to String");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_RStates_Set_To_String'Access,
-                                  Name    => "Reader_States_Set to String");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_CStates_Set_To_String'Access,
-                                  Name    => "Card_States_Set to String");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_ReaderID_To_String'Access,
-                                  Name    => "Reader_ID to String");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_ATR_To_Hex_String'Access,
-                                  Name    => "ATR to HEX String");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_BArray_To_Hex_String'Access,
-                                  Name    => "Byte_Array to HEX String");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_BSet_To_Hex_String'Access,
-                                  Name    => "Byte_Set to HEX String");
+      T.Set_Name (Name => "Tests for PCSC/Ada SCard Utils");
+      T.Add_Test_Routine
+        (Routine => Test_To_Long_Long_Integer'Access,
+         Name    => "Byte_Set to Long_Long_Integer");
+      T.Add_Test_Routine
+        (Routine => Test_Byte_Set_To_String'Access,
+         Name    => "Byte_Set to String");
+      T.Add_Test_Routine
+        (Routine => Test_RStates_Set_To_String'Access,
+         Name    => "Reader_States_Set to String");
+      T.Add_Test_Routine
+        (Routine => Test_CStates_Set_To_String'Access,
+         Name    => "Card_States_Set to String");
+      T.Add_Test_Routine
+        (Routine => Test_ReaderID_To_String'Access,
+         Name    => "Reader_ID to String");
+      T.Add_Test_Routine
+        (Routine => Test_ATR_To_Hex_String'Access,
+         Name    => "ATR to HEX String");
+      T.Add_Test_Routine
+        (Routine => Test_BArray_To_Hex_String'Access,
+         Name    => "Byte_Array to HEX String");
+      T.Add_Test_Routine
+        (Routine => Test_BSet_To_Hex_String'Access,
+         Name    => "Byte_Set to HEX String");
    end Initialize;
 
    -------------------------------------------------------------------------
