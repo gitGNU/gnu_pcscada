@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2008,
+#  Copyright (c) 2008-2009,
 #  Reto Buerki <reet@codelabs.ch>
 #
 #  This file is part of PCSC/Ada.
@@ -61,15 +61,13 @@ build_examples: prepare
 
 prepare: $(SOURCEDIR)/pcsc-version.ads
 
-pcscada-git-rev: FORCE
-	@if [ -d .git ]; then \
-		if [ -r $@ ]; then \
-			if [ "$$(cat $@)" != "$(GIT_REV)" ]; then \
-				echo $(GIT_REV) > $@; \
-			fi; \
-		else \
+pcscada-git-rev:
+	@if [ -r $@ ]; then \
+		if [ "$$(cat $@)" != "$(GIT_REV)" ]; then \
 			echo $(GIT_REV) > $@; \
-		fi \
+		fi; \
+	else \
+		echo $(GIT_REV) > $@; \
 	fi
 
 $(SOURCEDIR)/pcsc-version.ads: pcscada-git-rev
@@ -133,7 +131,5 @@ dist: distclean $(SOURCEDIR)/pcsc-version.ads docs
 	@tar -C $(TMPDIR) -cjf $(TARBALL) $(PCSCADA)
 	@rm -rf $(DISTDIR)
 	@echo "DONE"
-
-FORCE:
 
 .PHONY: dist itests utests
