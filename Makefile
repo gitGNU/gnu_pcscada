@@ -88,7 +88,6 @@ distclean:
 	@rm -rf obj
 	@rm -rf lib
 	@rm -rf $(APIDOCDIR)
-	@rm -f pcscada.specs
 	@rm -f $(SOURCEDIR)/pcsc-version.ads
 
 # run unit tests
@@ -125,6 +124,7 @@ docs:
 	@ls $(SOURCEDIR)/*.ads > pcscada.specs
 	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs \
 		-o $(APIDOCDIR)/
+	@rm pcscada.specs
 
 dist: distclean $(SOURCEDIR)/pcsc-version.ads docs
 	@echo -n "Creating release tarball '$(PCSCADA)' ($(GIT_REV)) ... "
