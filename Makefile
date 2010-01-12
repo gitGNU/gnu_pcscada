@@ -29,7 +29,6 @@ INSTALL = install
 MAJOR   = 0
 MINOR   = 6
 VERSION = $(MAJOR).$(MINOR)
-GIT_REV = `git describe`
 PCSCADA = libpcscada-$(VERSION)
 
 SOURCEDIR  = src
@@ -61,21 +60,10 @@ build_examples: prepare
 
 prepare: $(SOURCEDIR)/pcsc-version.ads
 
-pcscada-git-rev:
-	@if [ -r $@ ]; then \
-		if [ "$$(cat $@)" != "$(GIT_REV)" ]; then \
-			echo $(GIT_REV) > $@; \
-		fi; \
-	else \
-		echo $(GIT_REV) > $@; \
-	fi
-
-$(SOURCEDIR)/pcsc-version.ads: pcscada-git-rev
+$(SOURCEDIR)/pcsc-version.ads:
 	@echo "package PCSC.Version is"                 > $@
-	@echo "   Version_Number : constant Float  :=" >> $@
-	@echo "      $(VERSION);"                      >> $@
 	@echo "   Version_String : constant String :=" >> $@
-	@echo "     \"$(VERSION) ($(GIT_REV))\";"      >> $@
+	@echo "      \"$(VERSION)\";"                  >> $@
 	@echo "end PCSC.Version;"                      >> $@
 
 clean:
@@ -125,7 +113,7 @@ docs:
 	@rm pcscada.specs
 
 dist: distclean $(SOURCEDIR)/pcsc-version.ads docs
-	@echo -n "Creating release tarball '$(PCSCADA)' ($(GIT_REV)) ... "
+	@echo -n "Creating release tarball '$(PCSCADA)' ($(VERSION)) ... "
 	@mkdir -p $(DISTDIR)
 	@cp -R * $(DISTDIR)
 	@tar -C $(TMPDIR) -cjf $(TARBALL) $(PCSCADA)
