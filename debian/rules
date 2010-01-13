@@ -1,19 +1,11 @@
 #!/usr/bin/make -f
 
-# library full version
-FVERSION = `basename debian/tmp/usr/lib/libpcscada.so.* | \
-		   sed -e 's/libpcscada.so.//'`
-
-# library short version
-SVERSION = `basename debian/tmp/usr/lib/libpcscada.so.* | \
-		   sed -e 's/libpcscada.so.//' -e 's/\..*//'`
-
 clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
 
-	$(MAKE) distclean
+	$(MAKE) clean
 
 	dh_clean
 
@@ -23,11 +15,7 @@ build-stamp:
 
 	$(MAKE)
 
-# $(MAKE) docs
-
-	$(MAKE) utests \
-		ADA_INCLUDE_PATH=$(ADA_INCLUDE_PATH):/usr/share/ada/adainclude/ahven \
-		ADA_OBJECTS_PATH=$(ADA_OBJECTS_PATH):/usr/lib/ada/adalib/ahven
+	$(MAKE) utests
 
 ifeq ($(PERFORM_ITESTS), 1)
 	$(MAKE) itests
@@ -42,11 +30,6 @@ install: build
 	dh_installdirs
 
 	$(MAKE) PREFIX=$(CURDIR)/debian/tmp/usr install
-
-	ln -sf libpcscada.so.$(FVERSION) debian/tmp/usr/lib/libpcscada.so
-
-	ln -sf libpcscada.so.$(FVERSION) \
-		debian/tmp/usr/lib/libpcscada.so.$(SVERSION)
 
 	cp debian/addon/*.gpr debian/tmp/usr/share/ada/adainclude
 
