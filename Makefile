@@ -63,7 +63,7 @@ prepare: $(SOURCEDIR)/pcsc-version.ads
 $(SOURCEDIR)/pcsc-version.ads:
 	@echo "package PCSC.Version is"                 > $@
 	@echo "   Version_String : constant String :=" >> $@
-	@echo "      \"$(VERSION)\";"                  >> $@
+	@echo "     \"$(VERSION)\";"                   >> $@
 	@echo "end PCSC.Version;"                      >> $@
 
 clean:
