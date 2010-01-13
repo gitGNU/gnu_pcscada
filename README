@@ -37,13 +37,11 @@ libpcsclite-dev` will do the job.
 The build process of PCSC/Ada is quite easy and straightforward. Just type in
 the following commands:
 
-.................
   $ tar xjf libpcscada-{revision}.tar.bz2
   $ cd libpcscada-{revision}
   $ make
-.................
 
-If no errors occur during the build process, you have now successfully build
+If no errors occur during the build process, you have now successfully built
 the PCSC/Ada library from sources.
 
 
@@ -54,18 +52,14 @@ and verify that everything works as expected. PCSC/Ada contains both a unit test
 suite and an integration test application. To run the unit tests of PCSC/Ada,
 just type:
 
-.................
   $ make utests
-.................
 
 This will run all Ahven based unit tests. All tests should be marked with *PASS*
 behind the test name. To run the integration tests of PCSC/Ada, you need to have
 at least one smart card reader and one smart card ready. Type the following
 command to run the integration tests:
 
-.................
   $ make itests
-.................
 
 This will run an Ada implementation of the pcsc-lite `testpcsc` binary used to
 test the pcsc-lite framework. If no exception arises, you should be good to go.
@@ -78,9 +72,7 @@ Installation
 ------------
 To install PCSC/Ada on your system, type the following:
 
-.................
   $ make PREFIX=/usr/local install
-.................
 
 You must be `root` to install the library system wide. If no `PREFIX` is
 specified, `$(HOME)/libraries` is used as install destination.
@@ -91,9 +83,7 @@ Examples
 PCSC/Ada provides some example code to demonstrate the usage of the PCSC/Ada
 API. To build all example apps, type the following:
 
-.................
   $ make examples
-.................
 
 You can start an example application like so: `obj/examples/pinpad`
 
@@ -129,19 +119,9 @@ The API documentation of PCSC/Ada can be found in the `doc` directory of the
 release, or online at http://www.nongnu.org/pcscada/api/index.html
 
 
-Development
------------
-If you want to contribute code to PCSC/Ada, please use use `git diff` or
-`git format-patch` to create your patches. You can mail your patches to the
-http://lists.nongnu.org/mailman/listinfo/pcscada-devel mailinglist or if your
-patch fixes a specific bug found at
-https://savannah.nongnu.org/bugs/?group=pcscada, attach it to the corresponding
-bug by doing 'Attach file'.
-
-
 COPYING
 -------
 ---------------------------------------------------------------------------------
-Copyright (C) 2008 Reto Buerki. Free use of this software is granted under the
-terms of the GNU Lesser General Public License (LGPL).
+Copyright (c) 2008-2009 Reto Buerki. Free use of this software is granted under
+the terms of the GNU Lesser General Public License (LGPL).
 ---------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -33,38 +33,32 @@ package body PCSC.SCard.Tests is
 
    package Convert renames PCSC.SCard.Conversion;
 
-   ----------------
-   -- Initialize --
-   ----------------
+   -------------------------------------------------------------------------
 
    procedure Initialize (T : in out Test) is
    begin
-      Set_Name (T    => T,
-                Name => "Tests for PCSC/Ada SCard Ada <=> C Conversions");
-
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_Slice_Readerstring'Access,
-                                  Name    => "String to Reader_ID_Set");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_C_RCond_Set'Access,
-                                  Name    => "To_C for Reader_Condition_Set");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Chars_Ptr'Access,
-                                  Name    => "Reader_ID to LPSTR");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Ada_Proto'Access,
-                                  Name    => "DWORD to Proto type");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Card_States_Set'Access,
-                                  Name    => "DWORD to Card_States_Set");
-      Framework.Add_Test_Routine (T       => T,
-                                  Routine => Test_To_Reader_States_Set'Access,
-                                  Name    => "DWORD to Reader_States_Set");
+      T.Set_Name (Name => "Tests for PCSC/Ada SCard Ada <=> C Conversions");
+      T.Add_Test_Routine
+        (Routine => Test_Slice_Readerstring'Access,
+         Name    => "String to Reader_ID_Set");
+      T.Add_Test_Routine
+        (Routine => Test_To_C_RCond_Set'Access,
+         Name    => "To_C for Reader_Condition_Set");
+      T.Add_Test_Routine
+        (Routine => Test_To_Chars_Ptr'Access,
+         Name    => "Reader_ID to LPSTR");
+      T.Add_Test_Routine
+        (Routine => Test_To_Ada_Proto'Access,
+         Name    => "DWORD to Proto type");
+      T.Add_Test_Routine
+        (Routine => Test_To_Card_States_Set'Access,
+         Name    => "DWORD to Card_States_Set");
+      T.Add_Test_Routine
+        (Routine => Test_To_Reader_States_Set'Access,
+         Name    => "DWORD to Reader_States_Set");
    end Initialize;
 
-   -----------------------------
-   -- Test_Slice_Readerstring --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_Slice_Readerstring is
       use type Ada.Containers.Count_Type;
@@ -116,9 +110,7 @@ package body PCSC.SCard.Tests is
               Message   => "Reader name does not match");
    end Test_Slice_Readerstring;
 
-   -----------------------
-   -- Test_To_Ada_Proto --
-   -----------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Ada_Proto is
       No_Proto : constant Thin.DWORD := 16#FFFF_FFFF#;
@@ -135,9 +127,7 @@ package body PCSC.SCard.Tests is
               Message   => "Proto not Proto_RAW");
    end Test_To_Ada_Proto;
 
-   -------------------------
-   -- Test_To_C_RCond_Set --
-   -------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_C_RCond_Set is
 
@@ -260,9 +250,7 @@ package body PCSC.SCard.Tests is
       end;
    end Test_To_C_RCond_Set;
 
-   -----------------------------
-   -- Test_To_Card_States_Set --
-   -----------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Card_States_Set is
       use VOCSP;
@@ -301,9 +289,7 @@ package body PCSC.SCard.Tests is
               Message   => "Card_Swallowed not found");
    end Test_To_Card_States_Set;
 
-   -----------------------
-   -- Test_To_Chars_Ptr --
-   -----------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Chars_Ptr is
       use Interfaces.C;
@@ -320,9 +306,7 @@ package body PCSC.SCard.Tests is
       Strings.Free (Item => Ptr);
    end Test_To_Chars_Ptr;
 
-   -------------------------------
-   -- Test_To_Reader_States_Set --
-   -------------------------------
+   -------------------------------------------------------------------------
 
    procedure Test_To_Reader_States_Set is
       use VORSP;

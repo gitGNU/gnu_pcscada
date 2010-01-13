@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -139,35 +139,37 @@ private package PCSC.SCard.Conversion is
    procedure Free (Name : in out Thin.READERSTATE_Array);
    --  Free C Array of READERSTATES.
 
-   function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set;
+   function Slice_Readerstring (To_Slice : String) return Reader_ID_Set;
    --  Slice reader string returned from thin binding and create vector of
    --  reader names. The string to slice has a format like:
    --  Reader A1\0Reader B1\0Reader C1\0\0
    --  \0 is used as separator, \0\0 as string termination.
+   --
+   --  If an invalid string is passed to Slice_Readerstring, an empty reader
+   --  ID set is returned. In this context, invalid means that the To_Slice
+   --  argument is not in the format described above (e.g. no double NUL
+   --  termination).
 
-   function To_Ada (C_Protocol : in Thin.DWORD) return Proto;
+   function To_Ada (C_Protocol : Thin.DWORD) return Proto;
    --  Return Ada style Proto for C_Protocol (DWORD).
 
-   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set;
-   --  Return Ada style Card_States_Array for C_Cardstate (DWORD).
+   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set;
+   --  Return Ada style array of card states for C_Cardstate (DWORD).
 
-   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set;
-   --  Return Ada style Reader_States_Set for C_Readerstate (DWORD).
+   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set;
+   --  Return Ada style reader states set for C_Readerstate (DWORD).
 
-   --
-   --  If an invalid string is passed to Slice_Readerstring, an empty
-   --  Reader_ID_Set is returned. In this context, invalid means that To_Slice
-   --  is not in the format described above (e.g. no double NUL termination).
-
-   function To_C (Conditions : in Reader_Condition_Set)
-                  return Thin.READERSTATE_Array;
+   function To_C
+     (Conditions : Reader_Condition_Set)
+      return Thin.READERSTATE_Array;
    --  Convert Ada type Reader_Condition_Set to the corresponding C
    --  READERSTATE_Array. Memory allocated by the array must be freed by
    --  calling Free (Thin.READERSTATE_Array) after usage.
 
-   function To_Chars_Ptr (Reader : in Reader_ID)
-                          return Interfaces.C.Strings.chars_ptr;
-   --  Return a new C compatible string from Reader_ID. The allocated memory
+   function To_Chars_Ptr
+     (Reader : Reader_ID)
+      return Interfaces.C.Strings.chars_ptr;
+   --  Return a new C compatible string from reader ID. The allocated memory
    --  must be freed by calling Interfaces.C.Strings.Free.
 
 end PCSC.SCard.Conversion;

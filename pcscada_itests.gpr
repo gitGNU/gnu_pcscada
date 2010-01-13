@@ -20,20 +20,17 @@
 --  MA  02110-1301  USA
 --
 
+with "pcscada_common";
+
 project PCSCAda_ITests is
 
-   for Languages use ("Ada");
    for Object_Dir use "obj/itests";
    for Source_Dirs use ("src", "tests");
    for Main use ("test_pcscada.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnatweacdfjklmpru", "-gnatVa", "-gnat05", "-gnaty3mabcdefhilnoprtuxk", "-g", "-gnato", "-fstack-check", "-gnatf");
+      for Default_Switches ("ada") use PCSCAda_Common.Compiler_Switches;
    end Compiler;
-
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
 
    package Binder is
       for Default_Switches ("ada") use ("-E");

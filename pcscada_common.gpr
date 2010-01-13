@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -19,24 +19,22 @@
 --  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 --  MA  02110-1301  USA
 --
---  <PURPOSE>
---    Simple reader observer example.
---  </PURPOSE>
---
 
-with PCSC.SCard;
-with PCSC.SCard.Monitor;
+project PCSCAda_Common is
 
-use PCSC;
+   for Source_Dirs use ();
 
-package Reader_Observer is
+   for Languages use ("Ada");
 
-   type Instance is new SCard.Monitor.Observer with null record;
+   Version := external ("PCSCADA_VERSION", "0.1");
 
-   overriding
-   procedure Notify
-     (O         : Instance;
-      Condition : SCard.Reader_Condition);
-   --  Implementation of a reader monitor observer.
+   Compiler_Switches := ("-gnaty3aAbcdefhiIklnprStuxM80o",
+                         "-gnatVa",
+                         "-gnat05",
+                         "-gnatwal",
+                         "-gnatf",
+                         "-fstack-check",
+                         "-gnato",
+                         "-g");
+end PCSCAda_Common;
 
-end Reader_Observer;

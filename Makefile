@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2008,
+#  Copyright (c) 2008-2009,
 #  Reto Buerki <reet@codelabs.ch>
 #
 #  This file is part of PCSC/Ada.
@@ -21,48 +21,50 @@
 #
 
 PREFIX ?= $(HOME)/libraries
-INCDIR = $(PREFIX)/share/ada/adainclude/pcscada
-ALIDIR = $(PREFIX)/lib/ada/adalib/pcscada
+INCDIR  = $(PREFIX)/share/ada/adainclude/pcscada
+ALIDIR  = $(PREFIX)/lib/ada/adalib/pcscada
 
 INSTALL = install
 
-VERSION = 0.5
-GIT_REV = $(shell git-show --pretty="format:%h" | head -n1)
-
+MAJOR   = 0
+MINOR   = 6
+VERSION = $(MAJOR).$(MINOR)
 PCSCADA = libpcscada-$(VERSION)
 
-SOURCEDIR = src
-ALI_FILES = lib/*.ali
+SOURCEDIR  = src
+APIDOCDIR  = doc
+ALI_FILES  = lib/*.ali
 SO_LIBRARY = libpcscada.so.$(VERSION)
+A_LIBRARY  = libpcscada.a
 
-TMPDIR = /tmp
+TMPDIR  = /tmp
 DISTDIR = $(TMPDIR)/$(PCSCADA)
 TARBALL = $(PCSCADA).tar.bz2
+
+LIBRARY_KIND = dynamic
 
 all: build_lib
 
 build_lib: prepare
-	@gnatmake -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)"
+	@gnatmake -p -Ppcscada_lib -XPCSCADA_VERSION="$(VERSION)" \
+		-XLIBRARY_KIND="$(LIBRARY_KIND)"
 
 build_utests: prepare
-	@gnatmake -Ppcscada_utests
+	@gnatmake -p -Ppcscada_utests
 
 build_itests: prepare
-	@gnatmake -Ppcscada_itests
+	@gnatmake -p -Ppcscada_itests
 
 build_examples: prepare
-	@gnatmake -Ppcscada_examples
+	@gnatmake -p -Ppcscada_examples
 
 prepare: $(SOURCEDIR)/pcsc-version.ads
-	@mkdir -p obj/lib obj/itests obj/utests obj/examples lib
 
 $(SOURCEDIR)/pcsc-version.ads:
-	@echo "package PCSC.Version is"                        > $@
-	@echo "   Version_Number : constant Float  :="        >> $@
-	@echo "      $(VERSION);"                             >> $@
-	@echo "   Version_String : constant String :="        >> $@
-	@echo "     \"$(VERSION) (git $(GIT_REV))\";"         >> $@
-	@echo "end PCSC.Version;"                             >> $@
+	@echo "package PCSC.Version is"                 > $@
+	@echo "   Version_String : constant String :=" >> $@
+	@echo "      \"$(VERSION)\";"                  >> $@
+	@echo "end PCSC.Version;"                      >> $@
 
 clean:
 	@rm -rf obj/*
@@ -71,6 +73,8 @@ clean:
 distclean:
 	@rm -rf obj
 	@rm -rf lib
+	@rm -rf $(APIDOCDIR)
+	@rm -f $(SOURCEDIR)/pcsc-version.ads
 
 # run unit tests
 utests: build_utests
@@ -81,25 +85,35 @@ utests: build_utests
 itests: build_itests
 	@obj/itests/test_pcscada
 
-# build all examples
 examples: build_examples
 
-install: install_lib
+install: install_lib install_$(LIBRARY_KIND)
 
 install_lib: build_lib
 	@mkdir -p $(INCDIR)
 	@mkdir -p $(ALIDIR)
 	$(INSTALL) -m 644 $(SOURCEDIR)/* $(INCDIR)
 	$(INSTALL) -m 444 $(ALI_FILES) $(ALIDIR)
+
+install_static:
+	$(INSTALL) -m 444 lib/$(A_LIBRARY) $(PREFIX)/lib
+
+install_dynamic:
 	$(INSTALL) -m 444 lib/$(SO_LIBRARY) $(PREFIX)/lib
-	@ln -sf $(PREFIX)/lib/$(SO_LIBRARY) $(PREFIX)/lib/libpcscada.so
+	@cd $(PREFIX)/lib && \
+		ln -sf $(SO_LIBRARY) libpcscada.so && \
+		ln -sf $(SO_LIBRARY) libpcscada.so.$(MAJOR)
 
 docs:
+	@echo "Creating API doc for version $(VERSION) ..."
+	@mkdir -p $(APIDOCDIR)
 	@ls $(SOURCEDIR)/*.ads > pcscada.specs
-	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs -o doc/
+	@adabrowse -c adabrowse.cfg -p -t -i -I src/ -f@pcscada.specs \
+		-o $(APIDOCDIR)/
+	@rm pcscada.specs
 
-dist: distclean $(SOURCEDIR)/pcsc-version.ads
-	@echo -n "Creating release tarball '$(PCSCADA)' ($(GIT_REV)) ... "
+dist: distclean $(SOURCEDIR)/pcsc-version.ads docs
+	@echo -n "Creating release tarball '$(PCSCADA)' ($(VERSION)) ... "
 	@mkdir -p $(DISTDIR)
 	@cp -R * $(DISTDIR)
 	@tar -C $(TMPDIR) -cjf $(TARBALL) $(PCSCADA)

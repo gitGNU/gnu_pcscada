@@ -1,6 +1,63 @@
 PCSC/Ada ChangeLog
 ==================
 
+Version 0.6 (2010-01-13)
+------------------------
+.Additions and changes
+
+* Remove 'git describe' version string. (3baf31c)
+
+* Don't force pcscada-git-rev target. (a8f911e)
+
+* Remove pcscada.specs in docs target. (bf94d81)
+
+* Update README file. (3e85b9d)
+
+* Add sample code. (c7e188a)
+
+* Use dotted notation for ahven code. (4c6fec0)
+
+* Replace box comments by dashed line separators. (defea84)
+
+* Bump MINOR version to 6. (4de4606)
+
+* Remove unneeded Builder packages from project files. (840c76f)
+
+* Remove unneeded -fPIC from Compiler_Switches. (81a954d)
+
+* Use 'git describe' for GIT_REV. (38d7c53)
+
+* Add library kind selection support to build logic. (2d9d121)
+
+* Remove explicit 'in' parameter mode. (19b9f26)
+
+* Use common settings in library project too. (f374432)
+
+* Remove apidoc directory on distclean. (110be42)
+
+* Let gnatmake create missing dirs. (2a6cbdf)
+
+* Add Detect_Blocking pragma. (b18c2f8)
+
+* Factor out common settings to PCSCAda_Common. (3b4daf8)
+
+* Remove unneeded Linker_Options ("-lahven"). (c3f9a84)
+
+* Add missing ahven dependency to project file. (8819653)
+
+* Link libpcscada (dynamic) against pcsclite. (9d857fa)
+
+* Don't remove generated pcsc-version.ads file on distclean. (f872703)
+
+* Add another TODO item. (6c13873)
+
+* Change examples project name to PCSCAda_Examples. (3038bc6)
+
+* Create API doc in 'dist' target. (2a1216f)
+
+* Remove API doc, will be generated in 'dist' target when needed. (486dbd8)
+
+
 Version 0.5 (2008-12-10)
 ------------------------
 .Additions and changes

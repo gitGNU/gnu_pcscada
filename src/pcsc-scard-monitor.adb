@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -20,14 +20,14 @@
 --  MA  02110-1301  USA
 --
 
+pragma Detect_Blocking;
+
 package body PCSC.SCard.Monitor is
 
-   ----------------------
-   -- Create_Condition --
-   ----------------------
+   -------------------------------------------------------------------------
 
    function Create_Condition
-     (Reader : in SCard.Reader_ID)
+     (Reader : SCard.Reader_ID)
       return SCard.Reader_Condition
    is
       New_Condition : SCard.Reader_Condition;
@@ -37,13 +37,11 @@ package body PCSC.SCard.Monitor is
       return New_Condition;
    end Create_Condition;
 
-   -------------------
-   -- Is_Interested --
-   -------------------
+   -------------------------------------------------------------------------
 
    function Is_Interested
-     (O      : in Observer;
-      States : in Reader_States_Set)
+     (O      : Observer;
+      States : Reader_States_Set)
       return Boolean
    is
       use type VORSP.Cursor;
@@ -60,9 +58,7 @@ package body PCSC.SCard.Monitor is
       return False;
    end Is_Interested;
 
-   --------------------
-   -- Reader_Monitor --
-   --------------------
+   -------------------------------------------------------------------------
 
    task body Reader_Monitor is
       Current_Context : Context_Handle;
@@ -72,7 +68,7 @@ package body PCSC.SCard.Monitor is
       Stop_Monitor    : Boolean := False;
       --  Flag to signal monitor shutdown
    begin
-      accept Init (Context : in Context_Handle) do
+      accept Init (Context : Context_Handle) do
          Current_Context := Context;
       end Init;
 
@@ -98,16 +94,14 @@ package body PCSC.SCard.Monitor is
                Peeker.Stop;
          or
             when not Stop_Monitor =>
-               accept Register (O : in Observer_Class) do
+               accept Register (O : Observer_Class) do
                   Observer_Set.Insert (Observer => O);
                end Register;
          end select;
       end loop;
    end Reader_Monitor;
 
-   -------------------
-   -- Status_Peeker --
-   -------------------
+   -------------------------------------------------------------------------
 
    task body Status_Peeker is
       Reader_IDs      : SCard.Reader_ID_Set;
@@ -192,24 +186,23 @@ package body PCSC.SCard.Monitor is
       end loop;
    end Status_Peeker;
 
-   ----------------------------
-   -- Protected_Observer_Set --
-   ----------------------------
+   -------------------------------------------------------------------------
 
    protected body Protected_Observer_Set is
-      entry Insert (Observer : in Observer_Class) when not Notifying is
+      entry Insert (Observer : Observer_Class) when not Notifying is
       begin
          My_Set.Append (New_Item => Observer);
       end Insert;
 
-      procedure Notify_All (Condition : in Reader_Condition) is
+      procedure Notify_All (Condition : Reader_Condition) is
          Position : VOOBP.Cursor := My_Set.First;
       begin
          Notifying := True;
 
          while VOOBP.Has_Element (Position) loop
             if VOOBP.Element (Position).Is_Interested
-              (States => Condition.Current_State) then
+              (States => Condition.Current_State)
+            then
                VOOBP.Element (Position).Notify (Condition);
             end if;
             VOOBP.Next (Position);
@@ -219,13 +212,11 @@ package body PCSC.SCard.Monitor is
       end Notify_All;
    end Protected_Observer_Set;
 
-   -------------------------
-   -- Update_Reader_Table --
-   -------------------------
+   -------------------------------------------------------------------------
 
    procedure Update_Reader_Table
      (Table : in out SCard.Reader_Condition_Set;
-      IDs   : in SCard.Reader_ID_Set)
+      IDs   :        SCard.Reader_ID_Set)
    is
       use type VOIDP.Cursor;
 

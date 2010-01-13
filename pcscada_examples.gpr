@@ -20,24 +20,27 @@
 --  MA  02110-1301  USA
 --
 
-project Pcscada_Examples is
+with "pcscada_common";
 
-   for Languages use ("Ada");
+project PCSCAda_Examples is
+
    for Object_Dir use "obj/examples";
-   for Source_Dirs use ("src", "examples/cardd", "examples/pinverify", "examples/thin");
-   for Main use ("cardd.adb", "pinpad.adb", "thin_example.adb");
+
+   for Source_Dirs use ("src",
+                        "examples/cardd",
+                        "examples/pinverify",
+                        "examples/thin",
+                        "examples/sample");
+
+   for Main use ("cardd.adb", "pinpad.adb", "sample.adb", "thin_example.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-gnatweacfdjklmpru", "-gnatVa", "-gnat05", "-gnaty3abefhiklmprtcdnoux", "-g", "-gnato", "-fstack-check", "-gnatf");
+      for Default_Switches ("ada") use PCSCAda_Common.Compiler_Switches;
    end Compiler;
 
    package Binder is
       for Default_Switches ("ada") use ("-E");
    end Binder;
 
-   package Builder is
-      for Default_Switches ("ada") use ("-g");
-   end Builder;
-
-end Pcscada_Examples;
+end PCSCAda_Examples;
 

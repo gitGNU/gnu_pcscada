@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -340,41 +340,41 @@ package PCSC.Thin is
    --  Infinite timeout (PC/SC Lite specific extension)
 
    function SCardEstablishContext
-     (dwScope     : in DWORD;
-      pvReserved1 : in LPCVOID := null;
-      pvReserver2 : in LPCVOID := null;
+     (dwScope     :        DWORD;
+      pvReserved1 :        LPCVOID := null;
+      pvReserver2 :        LPCVOID := null;
       phContext   : access SCARDCONTEXT)
       return DWORD;
    --  Establish PC/SC context
 
-   function SCardReleaseContext (hContext : in SCARDCONTEXT) return DWORD;
+   function SCardReleaseContext (hContext : SCARDCONTEXT) return DWORD;
    --  Release PC/SC context
 
-   function SCardIsValidContext (hContext : in SCARDCONTEXT) return DWORD;
+   function SCardIsValidContext (hContext : SCARDCONTEXT) return DWORD;
    --  Validate PC/SC context
 
    function SCardConnect
-     (hContext             : in SCARDCONTEXT;
-      szReader             : in LPSTR;
-      dwShareMode          : in DWORD;
-      dwPreferredProtocols : in DWORD;
+     (hContext             :        SCARDCONTEXT;
+      szReader             :        LPSTR;
+      dwShareMode          :        DWORD;
+      dwPreferredProtocols :        DWORD;
       phCard               : access SCARDHANDLE;
       pdwActiveProtocol    : access DWORD)
       return DWORD;
    --  Connect to specific SCard
 
    function SCardReconnect
-     (hCard                : in SCARDHANDLE;
-      dwShareMode          : in DWORD;
-      dwPreferredProtocols : in DWORD;
-      dwInitialization     : in DWORD;
+     (hCard                :        SCARDHANDLE;
+      dwShareMode          :        DWORD;
+      dwPreferredProtocols :        DWORD;
+      dwInitialization     :        DWORD;
       pdwActiveProtocol    : access DWORD)
       return DWORD;
    --  Recconnect to specific SCard
 
    function SCardDisconnect
-     (hCard         : in SCARDHANDLE;
-      dwDisposition : in DWORD)
+     (hCard         : SCARDHANDLE;
+      dwDisposition : DWORD)
       return DWORD;
    --  Disconnect from specific SCard
 
@@ -391,8 +391,8 @@ package PCSC.Thin is
    --  Cancel transaction with specific SCard
 
    function SCardStatus
-     (hCard          : in SCARDHANDLE;
-      mszReaderNames : in LPSTR;
+     (hCard          :        SCARDHANDLE;
+      mszReaderNames :        LPSTR;
       pcchReaderLen  : access DWORD;
       pdwState       : access DWORD;
       pdwProtocol    : access DWORD;
@@ -402,33 +402,33 @@ package PCSC.Thin is
    --  Get status from specific card
 
    function SCardGetStatusChange
-     (hContext       : in SCARDCONTEXT;
-      dwTimeout      : in DWORD;
+     (hContext       :        SCARDCONTEXT;
+      dwTimeout      :        DWORD;
       rgReaderStates : access READERSTATE;
-      cReaders       : in DWORD := 0)
+      cReaders       :        DWORD := 0)
       return DWORD;
    --  Used to track status changes of readers
 
-   function SCardCancel (hContext : in SCARDCONTEXT) return DWORD;
+   function SCardCancel (hContext : SCARDCONTEXT) return DWORD;
    --  Cancel all pending blocking requests on the SCardGetStatusChange()
    --  function
 
    function SCardControl
-     (hCard           : in SCARDHANDLE;
-      dwControlCode   : in DWORD;
+     (hCard           :        SCARDHANDLE;
+      dwControlCode   :        DWORD;
       pbSendBuffer    : access Byte;
-      cbSendLength    : in DWORD;
+      cbSendLength    :        DWORD;
       pbRecvBuffer    : access Byte;
-      cbRecvLength    : in DWORD;
+      cbRecvLength    :        DWORD;
       lpBytesReturned : access DWORD)
       return DWORD;
    --  Send control to card
 
    function SCardTransmit
-     (hCard         : in SCARDHANDLE;
+     (hCard         :        SCARDHANDLE;
       pioSendPci    : access SCARD_IO_REQUEST;
       pbSendBuffer  : access Byte;
-      cbSendLength  : in DWORD;
+      cbSendLength  :        DWORD;
       pioRecvPci    : access SCARD_IO_REQUEST;
       pbRecvBuffer  : access Byte;
       pcbRecvLength : access DWORD)
@@ -436,40 +436,40 @@ package PCSC.Thin is
    --  Transmit APDUs to card
 
    function SCardListReaders
-     (hContext    : in SCARDCONTEXT;
-      mszGroups   : in LPSTR := C.Strings.Null_Ptr;
-      mszReaders  : in LPSTR;
+     (hContext    :        SCARDCONTEXT;
+      mszGroups   :        LPSTR := C.Strings.Null_Ptr;
+      mszReaders  :        LPSTR;
       pcchReaders : access DWORD)
       return DWORD;
    --  List readers
 
    function SCardListReaderGroups
-     (hContext   : in SCARDCONTEXT;
-      mszGroups  : in LPSTR;
+     (hContext   :        SCARDCONTEXT;
+      mszGroups  :        LPSTR;
       pcchGroups : access DWORD)
       return DWORD;
    --  List reader groups
 
    function SCardGetAttrib
-     (hCard      : in SCARDHANDLE;
-      dwAttrId   : in DWORD;
+     (hCard      :        SCARDHANDLE;
+      dwAttrId   :        DWORD;
       pbAttr     : access Byte;
       pcbAttrLen : access DWORD)
       return DWORD;
    --  Get an attribute from the IFD handler
 
    function SCardSetAttrib
-     (hCard     : in SCARDHANDLE;
-      dwAttrId  : in DWORD;
+     (hCard     :        SCARDHANDLE;
+      dwAttrId  :        DWORD;
       pbAttr    : access Byte;
-      cbAttrLen : in DWORD)
+      cbAttrLen :        DWORD)
       return DWORD;
    --  Set an attribute of the IFD handler
 
    function pcsc_stringify_error (status : DWORD) return C.Strings.chars_ptr;
    --  Get stringified error message
 
-   function SCARD_CTL_CODE (Code : in DWORD) return DWORD;
+   function SCARD_CTL_CODE (Code : DWORD) return DWORD;
    --  Return SCard Control Code for given code. Used to provide source
    --  compatibility on different platforms.
 

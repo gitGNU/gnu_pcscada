@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2009,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -29,9 +29,7 @@ package body PCSC.SCard.Conversion is
 
    use Interfaces.C;
 
-   ----------
-   -- Free --
-   ----------
+   -------------------------------------------------------------------------
 
    procedure Free (Name : in out Thin.READERSTATE_Array) is
    begin
@@ -40,16 +38,14 @@ package body PCSC.SCard.Conversion is
       end loop;
    end Free;
 
-   ------------------------
-   -- Slice_Readerstring --
-   ------------------------
+   -------------------------------------------------------------------------
 
-   function Slice_Readerstring (To_Slice : in String) return Reader_ID_Set
+   function Slice_Readerstring (To_Slice : String) return Reader_ID_Set
    is
       use type GNAT.String_Split.Slice_Number;
 
-      Readers  : Reader_ID_Set;
-      Lines    : GNAT.String_Split.Slice_Set;
+      Readers : Reader_ID_Set;
+      Lines   : GNAT.String_Split.Slice_Set;
    begin
       --  Slice readers into parts.
       --  Who uses '\0' as separator anyway?
@@ -71,11 +67,9 @@ package body PCSC.SCard.Conversion is
 
    end Slice_Readerstring;
 
-   ------------
-   -- To_Ada --
-   ------------
+   -------------------------------------------------------------------------
 
-   function To_Ada (C_Protocol : in Thin.DWORD) return Proto is
+   function To_Ada (C_Protocol : Thin.DWORD) return Proto is
    begin
       for P in Proto'Range loop
          if C_Proto (P) = C_Protocol then
@@ -91,11 +85,9 @@ package body PCSC.SCard.Conversion is
       return Proto_Undefined;
    end To_Ada;
 
-   ------------
-   -- To_Ada --
-   ------------
+   -------------------------------------------------------------------------
 
-   function To_Ada (C_Cardstate : in Thin.DWORD) return Card_States_Set is
+   function To_Ada (C_Cardstate : Thin.DWORD) return Card_States_Set is
       States : Card_States_Set;
    begin
       for P in C_Card_State'Range loop
@@ -106,11 +98,9 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
-   ------------
-   -- To_Ada --
-   ------------
+   -------------------------------------------------------------------------
 
-   function To_Ada (C_Readerstate : in Thin.DWORD) return Reader_States_Set is
+   function To_Ada (C_Readerstate : Thin.DWORD) return Reader_States_Set is
       States : Reader_States_Set;
    begin
       for P in C_Reader_State'Range loop
@@ -121,12 +111,11 @@ package body PCSC.SCard.Conversion is
       return States;
    end To_Ada;
 
-   ----------
-   -- To_C --
-   ----------
+   -------------------------------------------------------------------------
 
-   function To_C (Conditions : in Reader_Condition_Set)
-                  return Thin.READERSTATE_Array
+   function To_C
+     (Conditions : Reader_Condition_Set)
+      return Thin.READERSTATE_Array
    is
       use VORCP;
 
@@ -137,14 +126,17 @@ package body PCSC.SCard.Conversion is
       --  Helper function to create a new Thin.READERSTATE object from
       --  Reader_Condition
 
-      function Create_Readerstate (Condition : in Reader_Condition;
-                                   State     : in Thin.DWORD)
-                                   return Thin.READERSTATE
+      function Create_Readerstate
+        (Condition : Reader_Condition;
+         State     : Thin.DWORD)
+         return Thin.READERSTATE
       is
          Current_State : Thin.DWORD := State;
          Temp          : Interfaces.Unsigned_64;
       begin
+
          --  Add event counter in the upper word of dwCurrentState
+
          Current_State := State and 16#FFFF#;
          Temp          := Interfaces.Unsigned_64 (Condition.Event_Counter);
          Current_State := Current_State or Thin.DWORD
@@ -154,18 +146,17 @@ package body PCSC.SCard.Conversion is
          return Thin.READERSTATE'
            (szReader       => Strings.New_String
               (To_String (Condition.Name)),
-            pvUserData     => <>,  --  use default
             dwCurrentState => Current_State,
-            dwEventState   => <>,  --  use default
             cbAtr          => Condition.Card_ATR.Data'Length,
-            rgbAtr         => Thin.Byte_Array (Condition.Card_ATR.Data));
+            rgbAtr         => Thin.Byte_Array (Condition.Card_ATR.Data),
+            others         => <>);
       end Create_Readerstate;
 
    begin
       while Has_Element (Position) loop
          declare
             Item     : constant Reader_Condition := Element (Position);
-            C_RState : Thin.DWORD := 0;
+            C_RState : Thin.DWORD                := 0;
          begin
             for S in Natural range Item.Current_State.First_Index ..
               Item.Current_State.Last_Index loop
@@ -173,7 +164,7 @@ package body PCSC.SCard.Conversion is
                  (Item.Current_State.Get (Index => S));
             end loop;
 
-            C_States (size_t (To_Index (Position))) :=  Create_Readerstate
+            C_States (size_t (To_Index (Position))) := Create_Readerstate
               (Condition => Item,
                State     => C_RState);
 
@@ -184,11 +175,9 @@ package body PCSC.SCard.Conversion is
       return C_States;
    end To_C;
 
-   ------------------
-   -- To_Chars_Ptr --
-   ------------------
+   -------------------------------------------------------------------------
 
-   function To_Chars_Ptr (Reader : in Reader_ID) return Strings.chars_ptr is
+   function To_Chars_Ptr (Reader : Reader_ID) return Strings.chars_ptr is
    begin
       return Strings.New_String (To_String (Reader));
    end To_Chars_Ptr;
