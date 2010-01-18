@@ -19,7 +19,7 @@ Description: Ada bindings to PC/SC middleware
 Package: libpcscada-dev
 Section: libdevel
 Architecture: any
-Depends: libpcscada0.6 (= ${binary:Version}), libpcsclite-dev (>= 1.4.0), gnat-4.4
+Depends: ${misc:Depends}, libpcscada0.6 (= ${binary:Version}), libpcsclite-dev (>= 1.4.0), gnat-4.4
 Description: Ada bindings to PC/SC middleware (development)
  PCSC/Ada provides thin- and thick-bindings to PC/SC-middleware for the Ada
  programming language. The library allows applications written in Ada to
@@ -31,7 +31,7 @@ Package: pcscada-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: libpcscada0.6 (= ${binary:Version}), libpcscada-dev (= ${binary:Version})
+Depends: ${misc:Depends}, libpcscada0.6 (= ${binary:Version}), libpcscada-dev (= ${binary:Version})
 Description: Ada bindings to PC/SC middleware (debug)
  PCSC/Ada provides thin- and thick-bindings to PC/SC-middleware for the Ada
  programming language. The library allows applications written in Ada to
