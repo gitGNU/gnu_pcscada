@@ -1,3 +1,15 @@
+pcscada (0.6-1) unstable; urgency=low
+
+  * Update to Standards-Version 3.8.3 (no changes).
+  * Update debian/rules.
+  * Migrate to gnat-4.4 (Closes: #555100).
+  * Update libahven Build-Depends (Closes: #560603).
+  * Merge upstream version 0.6.
+  * Change soname from 0 to 0.6.
+  * Fix debhelper-but-no-misc-depends lintian warning.
+
+ -- Reto Buerki <reet@codelabs.ch>  Mon, 18 Jan 2010 22:05:32 +0100
+
 pcscada (0.5-4) unstable; urgency=low
 
   * Fix wrong-section-according-to-package-name warning.
