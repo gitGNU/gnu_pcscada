@@ -1,3 +1,13 @@
+pcscada (0.6-2) unstable; urgency=low
+
+  * Add aliversion to dev package.
+  * Declare conflict with libpcscada-dev.
+  * Declare conflict with libpcscada0 (Closes: #566096).
+  * Update to Standards-Version 3.8.4 (no changes).
+  * Disable stack overflow checking (Closes: #520434).
+
+ -- Reto Buerki <reet@codelabs.ch>  Wed, 03 Feb 2010 23:08:41 +0100
+
 pcscada (0.6-1) unstable; urgency=low
 
   * Update to Standards-Version 3.8.3 (no changes).
