@@ -1,0 +1,14 @@
+Author: Reto Buerki <reet@codelabs.ch>
+Description: Disable stack checking to fix FTBFS on hppa.
+Bug-Debian: http://bugs.debian.org/520434
+
+--- a/pcscada_common.gpr
++++ b/pcscada_common.gpr
+@@ -33,7 +33,6 @@
+                          "-gnat05",
+                          "-gnatwal",
+                          "-gnatf",
+-                         "-fstack-check",
+                          "-gnato",
+                          "-g");
+ end PCSCAda_Common;
