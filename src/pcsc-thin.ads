@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -39,6 +39,9 @@ package PCSC.Thin is
    subtype LONG  is C.long;
    subtype DWORD is C.unsigned_long;
    subtype LPSTR is C.Strings.chars_ptr;
+   subtype UCHAR is C.unsigned_char;
+
+   type PDWORD is access DWORD;
 
    --  Byte'n'Hex
 
@@ -56,6 +59,9 @@ package PCSC.Thin is
 
    subtype ATR is Byte_Array (0 .. MAX_ATR_SIZE);
    --  Binary ATR data
+
+   type ATR_Access is access ATR;
+   --  Access to ATR data array
 
    Null_ATR : constant ATR;
    --  Null initialized ATR
