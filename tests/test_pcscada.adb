@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -40,13 +40,13 @@ procedure Test_PCSCAda is
 
    package SCU renames SCard.Utils;
 
-   Context       : SCard.Context;
-   Card          : SCard.Card;
+   Context      : SCard.Context;
+   Card         : SCard.Card;
 
-   Readers       : SCard.Reader_ID_Set;
+   Readers      : SCard.Reader_ID_Set;
 
-   Reader_Table  : SCard.Reader_Condition_Set;
-   Reader1       : SCard.Reader_Condition;
+   Reader_Table : SCard.Reader_Condition_Set;
+   Reader1      : SCard.Reader_Condition;
 
 begin
 
@@ -200,12 +200,14 @@ begin
    begin
       declare
          Attr_Vendor   : SCard.Byte_Set := SCard.Init_Attribute_Set
-           (Card => Card, Attr => SCard.Attr_Vendor_Name);
-
+           (Card => Card,
+            Attr => SCard.Attr_Vendor_Name);
          Attr_ATR      : SCard.Byte_Set := SCard.Init_Attribute_Set
-           (Card => Card, Attr => SCard.Attr_ATR_String);
+           (Card => Card,
+            Attr => SCard.Attr_ATR_String);
          Attr_Maxinput : SCard.Byte_Set := SCard.Init_Attribute_Set
-           (Card => Card, Attr => SCard.Attr_Maxinput);
+           (Card => Card,
+            Attr => SCard.Attr_Maxinput);
 
          use Ada.Strings.Fixed;
       begin
@@ -216,7 +218,7 @@ begin
          Ada.Text_IO.Put_Line (">> Attr_Vendor_Name is     : "
                                & SCU.To_String (Given => Attr_Vendor));
          Ada.Text_IO.Put_Line (">> Attr_Vendor_Name size   : "
-           & Trim (Source => Integer'Image (Attr_Vendor'Last),
+           & Trim (Source => Attr_Vendor'Last'Img,
                    Side   => Ada.Strings.Left));
 
          SCU.Action_Info (Text => "Testing Get_Attribute");
@@ -227,7 +229,7 @@ begin
          Ada.Text_IO.Put_Line (">> Attr_ATR_String is      : "
                                & SCU.To_Hex_String (Given => Attr_ATR));
          Ada.Text_IO.Put_Line (">> Attr_ATR_String size    : "
-           & Trim (Source => Integer'Image (Attr_ATR'Last),
+           & Trim (Source => Attr_ATR'Last'Img,
                    Side   => Ada.Strings.Left));
 
          SCU.Action_Info (Text => "Testing Get_Attribute");
@@ -236,8 +238,9 @@ begin
                               Recv_Buffer => Attr_Maxinput);
          SCU.Action_Result (Result => SCard.Get_Return_Code);
          Ada.Text_IO.Put_Line (">> Attr_Maxinput is        : "
-           & Trim (Long_Long_Integer'Image (SCU.To_Long_Long_Integer
-             (Given => Attr_Maxinput)), Ada.Strings.Left));
+           & Trim (Source => SCU.To_Long_Long_Integer
+                   (Given => Attr_Maxinput)'Img,
+                   Side   => Ada.Strings.Left));
       end;
    exception
       when SCard_Error =>
