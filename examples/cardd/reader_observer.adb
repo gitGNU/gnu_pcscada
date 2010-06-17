@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -28,9 +28,7 @@ package body Reader_Observer is
 
    package Utils renames PCSC.SCard.Utils;
 
-   ------------
-   -- Notify --
-   ------------
+   -------------------------------------------------------------------------
 
    procedure Notify
      (O         : Instance;

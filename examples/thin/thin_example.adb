@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -117,28 +117,25 @@ begin
 
       --  Try to connect
 
-      ret := SCardConnect (hContext             => hContext,
-                           szReader             => Reader_Name,
-                           dwShareMode          => SCARD_SHARE_SHARED,
-                           dwPreferredProtocols => SCARD_PROTOCOL_T0 or
-                                                   SCARD_PROTOCOL_T1,
-                           phCard               => hCard'Access,
-                           pdwActiveProtocol    =>
-                                                  dwActiveProtocol'Access);
+      ret := SCardConnect
+        (hContext             => hContext,
+         szReader             => Reader_Name,
+         dwShareMode          => SCARD_SHARE_SHARED,
+         dwPreferredProtocols => SCARD_PROTOCOL_T0 or SCARD_PROTOCOL_T1,
+         phCard               => hCard'Access,
+         pdwActiveProtocol    => dwActiveProtocol'Access);
 
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("connect ok");
 
          --  Try to re-connect
 
-         ret := SCardReconnect (hCard                => hCard,
-                                dwShareMode          => SCARD_SHARE_SHARED,
-                                dwPreferredProtocols =>
-                                                   SCARD_PROTOCOL_T0 or
-                                                        SCARD_PROTOCOL_T1,
-                                dwInitialization     => SCARD_LEAVE_CARD,
-                                pdwActiveProtocol    =>
-                                  dwActiveProtocol'Access);
+         ret := SCardReconnect
+           (hCard                => hCard,
+            dwShareMode          => SCARD_SHARE_SHARED,
+            dwPreferredProtocols => SCARD_PROTOCOL_T0 or SCARD_PROTOCOL_T1,
+            dwInitialization     => SCARD_LEAVE_CARD,
+            pdwActiveProtocol    => dwActiveProtocol'Access);
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("re-connect ok");
          end if;
@@ -149,14 +146,14 @@ begin
 
       --  Get status
 
-      ret := SCardStatus (hCard          => hCard,
-                          mszReaderNames => C.Strings.Null_Ptr,
-                          pcchReaderLen  => dwReaderLen'Access,
-                          pdwState       => dwState'Access,
-                          pdwProtocol    => dwProtocol'Access,
-                          pbAtr          =>
-                            pbAtr (pbAtr'First)'Access,
-                          pcbAtrLen      => dwAtrLen'Access);
+      ret := SCardStatus
+        (hCard          => hCard,
+         mszReaderNames => C.Strings.Null_Ptr,
+         pcchReaderLen  => dwReaderLen'Access,
+         pdwState       => dwState'Access,
+         pdwProtocol    => dwProtocol'Access,
+         pbAtr          => pbAtr (pbAtr'First)'Access,
+         pcbAtrLen      => dwAtrLen'Access);
 
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("card status ok");
@@ -189,15 +186,14 @@ begin
 
          --  Send arbitrary APDU to card
 
-         ret := SCardTransmit (hCard         => hCard,
-                               pioSendPci    => SCARD_PCI_T1'Access,
-                               pbSendBuffer  => pbSendBuffer
-                                 (pbSendBuffer'First)'Access,
-                               cbSendLength  => 7,
-                               pioRecvPci    => pioRecvPCI'Access,
-                               pbRecvBuffer  => pbRecvBuffer
-                                 (pbRecvBuffer'First)'Access,
-                               pcbRecvLength => pcbRecvLength'Access);
+         ret := SCardTransmit
+           (hCard         => hCard,
+            pioSendPci    => SCARD_PCI_T1'Access,
+            pbSendBuffer  => pbSendBuffer (pbSendBuffer'First)'Access,
+            cbSendLength  => 7,
+            pioRecvPci    => pioRecvPCI'Access,
+            pbRecvBuffer  => pbRecvBuffer (pbRecvBuffer'First)'Access,
+            pcbRecvLength => pcbRecvLength'Access);
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("transmit send ok");
          end if;

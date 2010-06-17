@@ -15,7 +15,8 @@ begin
 
    --  Establish context
 
-   SCard.Establish_Context (Context => Context, Scope => SCard.Scope_System);
+   SCard.Establish_Context (Context => Context,
+                            Scope   => SCard.Scope_System);
 
    --  List readers
 
