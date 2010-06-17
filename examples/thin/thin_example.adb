@@ -45,8 +45,8 @@ procedure Thin_Example is
 begin
 
    ret := SCardEstablishContext
-     (dwScope     => SCARD_SCOPE_SYSTEM,
-      phContext   => hContext'Access);
+     (dwScope   => SCARD_SCOPE_SYSTEM,
+      phContext => hContext'Access);
    if ret = SCARD_S_SUCCESS then
       Ada.Text_IO.Put_Line ("context established");
    else
