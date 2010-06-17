@@ -138,13 +138,13 @@ begin
                     Proto => Card_Proto,
                     Atr   => Card_ATR);
       SCU.Action_Result (Result => SCard.Get_Return_Code);
-      Ada.Text_IO.Put_Line (">>  ATR                    : " &
+      Ada.Text_IO.Put_Line (">> ATR                     : " &
                             SCU.To_Hex_String (Given => Card_ATR));
-      Ada.Text_IO.Put_Line (">>  ATR Size               : " &
+      Ada.Text_IO.Put_Line (">> ATR Size                : " &
                             SCard.Size (Card_ATR));
-      Ada.Text_IO.Put_Line (">>  Protocol               : " &
+      Ada.Text_IO.Put_Line (">> Protocol                : " &
                             SCard.Proto'Image (Card_Proto));
-      Ada.Text_IO.Put_Line (">>  Card states            : " &
+      Ada.Text_IO.Put_Line (">> Card states             : " &
                             SCU.To_String (Card_States));
    end;
 
