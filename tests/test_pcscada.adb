@@ -164,11 +164,13 @@ begin
                       Recv_Buffer => Recv_Buffer,
                       Recv_Len    => Recv_Len);
       SCU.Action_Result (Result => SCard.Get_Return_Code);
-      Ada.Text_IO.Put_Line (">> APDU (select file)      : " &
-                            String (SCU.To_Hex_String (Given => Send_Buffer)));
-      Ada.Text_IO.Put_Line (">> Response from card      : " &
-        String (SCU.To_Hex_String (Given => Recv_Buffer,
-                                   Len   => 2 * Integer (Recv_Len))));
+      Ada.Text_IO.Put_Line
+        (">> APDU (select file)      : " &
+         SCU.To_Hex_String (Given => Send_Buffer));
+      Ada.Text_IO.Put_Line
+        (">> Response from card      : " &
+         SCU.To_Hex_String (Given => Recv_Buffer,
+                            Len   => 2 * Recv_Len));
    end;
 
    --  Test smart card control
@@ -177,8 +179,8 @@ begin
       Recv_Buffer  : SCard.Byte_Set (1 .. 10);
       Send_Buffer  : constant SCard.Byte_Set :=
         (16#06#, 16#00#, 16#0A#, 16#01#, 16#01#, 16#10#, 16#00#);
-      Recv_Len     : Natural := 0;
-      Control_Code : constant Integer := 16#42000001#;
+      Recv_Len     : Natural  := 0;
+      Control_Code : constant := 16#42000001#;
    begin
       SCU.Action_Info (Text => "Testing Control");
       SCard.Control (Card        => Card,
@@ -242,6 +244,7 @@ begin
                    (Given => Attr_Maxinput)'Img,
                    Side   => Ada.Strings.Left));
       end;
+
    exception
       when SCard_Error =>
          --  Most likely this happens when GetAttribute feature is not
