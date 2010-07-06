@@ -1023,13 +1023,14 @@ package body PCSC.SCard is
 
       --  Call thin binding SCardTransmit
 
-      Res := Thin.SCardTransmit
-        (hCard         => Card.hCard,
+      Thin.SCardTransmit
+        (returnValue   => Res,
+         hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,
          pbSendBuffer  => Thin.Byte_Array (Send_Buffer),
          cbSendLength  => Thin.DWORD (Send_Buffer'Length),
          pioRecvPci    => C_Recv_PCI'Access,
-         pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Access,
+         pbRecvBuffer  => Thin.Byte_Array (Recv_Buffer),
          pcbRecvLength => Bytes_Returned'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then

@@ -430,15 +430,15 @@ package PCSC.Thin is
       return DWORD;
    --  Send control to card
 
-   function SCardTransmit
-     (hCard         :        SCARDHANDLE;
+   procedure SCardTransmit
+     (returnValue   :    out DWORD;
+      hCard         :        SCARDHANDLE;
       pioSendPci    : access SCARD_IO_REQUEST;
       pbSendBuffer  :        Byte_Array;
       cbSendLength  :        DWORD;
       pioRecvPci    : access SCARD_IO_REQUEST;
-      pbRecvBuffer  : access Byte;
-      pcbRecvLength : access DWORD)
-      return DWORD;
+      pbRecvBuffer  :    out Byte_Array;
+      pcbRecvLength : access DWORD);
    --  Transmit APDUs to card
 
    function SCardListReaders
@@ -533,6 +533,8 @@ private
    pragma Import (Convention    => C,
                   Entity        => SCardTransmit,
                   External_Name => "SCardTransmit");
+   pragma Import_Valued_Procedure (Internal => SCardTransmit,
+                                   External => "SCardTransmit");
    pragma Import (Convention    => C,
                   Entity        => SCardListReaders,
                   External_Name => "SCardListReaders");

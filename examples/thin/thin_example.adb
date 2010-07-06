@@ -78,7 +78,7 @@ begin
       --  Modify Reader_Name according to your test setup
 
       Reader_Name      : C.Strings.chars_ptr := C.Strings.New_String
-        ("KOBIL KAAN SIM III (K_000000000) 00 00");
+        ("OmniKey CardMan 3121 00 00");
    begin
 
       --  List readers
@@ -187,13 +187,14 @@ begin
 
          --  Send arbitrary APDU to card
 
-         ret := SCardTransmit
-           (hCard         => hCard,
+         SCardTransmit
+           (returnValue   => ret,
+            hCard         => hCard,
             pioSendPci    => SCARD_PCI_T1'Access,
             pbSendBuffer  => pbSendBuffer,
             cbSendLength  => 7,
             pioRecvPci    => pioRecvPCI'Access,
-            pbRecvBuffer  => pbRecvBuffer (pbRecvBuffer'First)'Access,
+            pbRecvBuffer  => pbRecvBuffer,
             pcbRecvLength => pcbRecvLength'Access);
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("transmit send ok");
