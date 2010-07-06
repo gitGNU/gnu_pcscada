@@ -433,7 +433,7 @@ package PCSC.Thin is
    function SCardTransmit
      (hCard         :        SCARDHANDLE;
       pioSendPci    : access SCARD_IO_REQUEST;
-      pbSendBuffer  : access Byte;
+      pbSendBuffer  :        Byte_Array;
       cbSendLength  :        DWORD;
       pioRecvPci    : access SCARD_IO_REQUEST;
       pbRecvBuffer  : access Byte;

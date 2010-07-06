@@ -1004,13 +1004,6 @@ package body PCSC.SCard is
    is
       Res            : Thin.DWORD;
 
-      Sbuffer_Copy   : aliased Byte_Set := Send_Buffer;
-      --  Copy of initial Send_Buffer. This is needed because we cannot
-      --  directly pass the 'in' Parameter Send_Buffer as :
-      --    pbSendBuffer => Send_Buffer (Send_Buffer'First)'Access
-      --  to the thin binding. If we try, the compiler complains:
-      --    access-to-variable designates constant
-
       C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST;
       C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST := Recv_Pci;
       Bytes_Returned : aliased Thin.DWORD            :=
@@ -1032,7 +1025,7 @@ package body PCSC.SCard is
       Res := Thin.SCardTransmit
         (hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,
-         pbSendBuffer  => Sbuffer_Copy (Sbuffer_Copy'First)'Access,
+         pbSendBuffer  => Thin.Byte_Array (Send_Buffer),
          cbSendLength  => Thin.DWORD (Send_Buffer'Length),
          pioRecvPci    => C_Recv_PCI'Access,
          pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Access,

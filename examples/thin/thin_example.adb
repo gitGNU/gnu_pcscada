@@ -178,9 +178,9 @@ begin
 
       declare
          pbRecvBuffer  : Byte_Array (1 .. 10);
-         pbSendBuffer  : Byte_Array :=
+         pbSendBuffer  : constant Byte_Array :=
            (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
-         pcbRecvLength : aliased DWORD := 10;
+         pcbRecvLength : aliased DWORD       := 10;
          pioRecvPCI    : aliased Thin.SCARD_IO_REQUEST;
       begin
 
@@ -189,7 +189,7 @@ begin
          ret := SCardTransmit
            (hCard         => hCard,
             pioSendPci    => SCARD_PCI_T1'Access,
-            pbSendBuffer  => pbSendBuffer (pbSendBuffer'First)'Access,
+            pbSendBuffer  => pbSendBuffer,
             cbSendLength  => 7,
             pioRecvPci    => pioRecvPCI'Access,
             pbRecvBuffer  => pbRecvBuffer (pbRecvBuffer'First)'Access,
