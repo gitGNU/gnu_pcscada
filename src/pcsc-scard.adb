@@ -427,10 +427,9 @@ package body PCSC.SCard is
       end if;
       Store_Error (Code => Res);
 
-      --  TODO: extended return statement
       declare
-         B : constant Byte_Set (1 .. Positive (Len)) :=
-           (others => Thin.Null_Byte);
+         B : constant Byte_Set (1 .. Positive (Len))
+           := (others => Thin.Null_Byte);
       begin
          return B;
       end;
