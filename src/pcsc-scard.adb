@@ -738,7 +738,7 @@ package body PCSC.SCard is
       --        flexible way of Byte_Set size handling (handles to byte sets?)
 
       for Index in Result'Range loop
-         Result (Index) := Recv_Buffer (size_t (Index));
+         Result (Index) := Recv_Buffer (Index);
       end loop;
    end SPE_Exec;
 
@@ -793,15 +793,15 @@ package body PCSC.SCard is
       declare
          use type Interfaces.Unsigned_8;
 
-         TLV_Array : array (1 .. size_t (Elements)) of TR.PCSC_TLV_STRUCTURE;
+         TLV_Array : array (1 .. Elements) of TR.PCSC_TLV_STRUCTURE;
 
-         T         : size_t := Recv_Buffer'First;
-         Index     : size_t := TLV_Array'First;
+         T         : Natural := Recv_Buffer'First;
+         Index     : Natural := TLV_Array'First;
 
          Value     : Byte_Set (1 .. 4);
       begin
          loop
-            exit when T >= size_t (Recv_Len);
+            exit when T >= Natural (Recv_Len);
             TLV_Array (Index).tag    := Recv_Buffer (T);
             TLV_Array (Index).length := Recv_Buffer (T + 1);
 
@@ -819,7 +819,7 @@ package body PCSC.SCard is
 
          --  Test for FEATURE_VERIFY_PIN_DIRECT flag
 
-         for Index in size_t range TLV_Array'Range loop
+         for Index in Natural range TLV_Array'Range loop
             if TLV_Array (Index).tag = TR.FEATURE_VERIFY_PIN_DIRECT then
 
                --  Store verify control code for this card
