@@ -467,7 +467,7 @@ package PCSC.Thin is
    function SCardSetAttrib
      (hCard     :        SCARDHANDLE;
       dwAttrId  :        DWORD;
-      pbAttr    : access Byte;
+      pbAttr    :        Byte_Array;
       cbAttrLen :        DWORD)
       return DWORD;
    --  Set an attribute of the IFD handler
