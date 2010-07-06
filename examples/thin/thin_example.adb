@@ -146,13 +146,14 @@ begin
 
       --  Get status
 
-      ret := SCardStatus
-        (hCard          => hCard,
+      SCardStatus
+        (returnValue    => ret,
+         hCard          => hCard,
          mszReaderNames => C.Strings.Null_Ptr,
          pcchReaderLen  => dwReaderLen'Access,
          pdwState       => dwState'Access,
          pdwProtocol    => dwProtocol'Access,
-         pbAtr          => pbAtr (pbAtr'First)'Access,
+         pbAtr          => Byte_Array (pbAtr),
          pcbAtrLen      => dwAtrLen'Access);
 
       if ret = SCARD_S_SUCCESS then

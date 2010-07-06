@@ -847,13 +847,14 @@ package body PCSC.SCard is
       dwProtocol  : aliased Thin.DWORD;
       dwAtrLen    : aliased Thin.DWORD := Thin.MAX_ATR_SIZE;
    begin
-      Res := Thin.SCardStatus
-        (hCard          => Card.hCard,
+      Thin.SCardStatus
+        (returnValue    => Res,
+         hCard          => Card.hCard,
          mszReaderNames => Strings.Null_Ptr,
          pcchReaderLen  => dwReaderLen'Access,
          pdwState       => dwState'Access,
          pdwProtocol    => dwProtocol'Access,
-         pbAtr          => Atr.Data (Atr.Data'First)'Access,
+         pbAtr          => Thin.Byte_Array (Atr.Data),
          pcbAtrLen      => dwAtrLen'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then

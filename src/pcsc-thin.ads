@@ -396,15 +396,15 @@ package PCSC.Thin is
    function SCardCancelTransaction (hCard : SCARDHANDLE) return DWORD;
    --  Cancel transaction with specific SCard
 
-   function SCardStatus
-     (hCard          :        SCARDHANDLE;
+   procedure SCardStatus
+     (returnValue    :    out DWORD;
+      hCard          :        SCARDHANDLE;
       mszReaderNames :        LPSTR;
       pcchReaderLen  : access DWORD;
       pdwState       : access DWORD;
       pdwProtocol    : access DWORD;
-      pbAtr          : access Byte;
-      pcbAtrLen      : access DWORD)
-      return DWORD;
+      pbAtr          :    out Byte_Array;
+      pcbAtrLen      : access DWORD);
    --  Get status from specific card
 
    function SCardGetStatusChange
@@ -519,6 +519,8 @@ private
    pragma Import (Convention    => C,
                   Entity        => SCardStatus,
                   External_Name => "SCardStatus");
+   pragma Import_Valued_Procedure (Internal => SCardStatus,
+                                   External => "SCardStatus");
    pragma Import (Convention    => C,
                   Entity        => SCardGetStatusChange,
                   External_Name => "SCardGetStatusChange");
