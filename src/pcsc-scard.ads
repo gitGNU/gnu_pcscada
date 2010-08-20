@@ -365,8 +365,8 @@ package PCSC.SCard is
      (States : Reader_States_Set;
       State  : Reader_State)
       return Boolean;
-   --  Function returns True if given reader state is found in the reader states
-   --  set.
+   --  Function returns True if given reader state is found in the reader
+   --  states set.
 
    function Is_In
      (States : Card_States_Set;
@@ -403,8 +403,8 @@ package PCSC.SCard is
      (Card   : in out SCard.Card;
       Mode   :        SCard.Mode;
       Action :        SCard.Action);
-   --  This procedure re-establishes a connection. The Init argument defines the
-   --  desired SCard action to perform on the card/reader.
+   --  This procedure re-establishes a connection. The Init argument defines
+   --  the desired SCard action to perform on the card/reader.
 
    procedure Release_Context (Context : in out SCard.Context);
    --  Release previously acquired SCard context.
