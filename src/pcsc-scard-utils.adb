@@ -219,17 +219,38 @@ package body PCSC.SCard.Utils is
    -------------------------------------------------------------------------
 
    function To_String (Given : Byte_Set := Null_Byte_Set) return String is
-      New_String : String (1 .. Given'Last);
+   begin
+      return To_String
+        (Given => Given,
+         Len   => Given'Last);
+   end To_String;
+
+   -------------------------------------------------------------------------
+
+   function To_String
+     (Given : Byte_Set := Null_Byte_Set;
+      Len   : Natural)
+      return String
+   is
+      Upper : Natural := Len;
    begin
       if Given = Null_Byte_Set then
          return "0";
       end if;
 
-      for Index in Given'First .. Given'Last loop
-         New_String (Index) := Character'Val (Given (Index));
-      end loop;
+      if Len > Given'Last then
+         Upper := Given'Last;
+      end if;
 
-      return New_String;
+      declare
+         New_String : String (1 .. Upper);
+      begin
+         for Index in Given'First .. Upper loop
+            New_String (Index) := Character'Val (Given (Index));
+         end loop;
+
+         return New_String;
+      end;
    end To_String;
 
 end PCSC.SCard.Utils;

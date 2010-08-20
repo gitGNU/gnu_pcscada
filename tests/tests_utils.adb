@@ -121,6 +121,14 @@ package body Tests_Utils is
               Message   => "Returned string not '0'");
       Assert (Condition => SCU.To_String (Given => Test_Set) = "pcsc",
               Message   => "Returned string not 'pcsc'");
+      Assert (Condition => SCU.To_String
+              (Given => Test_Set,
+               Len   => 2) = "pc",
+              Message   => "Returned string not 'pc'");
+      Assert (Condition => SCU.To_String
+              (Given => Test_Set,
+               Len   => 6) = "pcsc",
+              Message   => "Returned string not 'pcsc'");
    end Test_Byte_Set_To_String;
 
    -------------------------------------------------------------------------
