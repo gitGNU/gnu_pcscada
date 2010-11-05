@@ -467,7 +467,16 @@ package PCSC.SCard is
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
-   --  Transmit APDUs to SCard.
+   --  Transmit buffer to SCard.
+
+   procedure Transmit
+     (Card        :        SCard.Card;
+      Send_Buffer :        Byte_Set := Null_Byte_Set;
+      Send_Len    :        Natural;
+      Recv_Pci    : in out IO_Request;
+      Recv_Buffer : in out Byte_Set;
+      Recv_Len    : in out Natural);
+   --  Transmit Send_Len bytes of buffer to SCard.
 
    function To_Atr (Bytes : Byte_Set) return ATR;
    --  Create new ATR object from given byte set. If 'Bytes' is too big to be

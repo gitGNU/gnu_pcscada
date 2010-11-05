@@ -1002,6 +1002,26 @@ package body PCSC.SCard is
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
+   begin
+      Transmit
+        (Card        => Card,
+         Send_Buffer => Send_Buffer,
+         Send_Len    => Send_Buffer'Length,
+         Recv_Pci    => Recv_Pci,
+         Recv_Buffer => Recv_Buffer,
+         Recv_Len    => Recv_Len);
+   end Transmit;
+
+   -------------------------------------------------------------------------
+
+   procedure Transmit
+     (Card        :        SCard.Card;
+      Send_Buffer :        Byte_Set := Null_Byte_Set;
+      Send_Len    :        Natural;
+      Recv_Pci    : in out IO_Request;
+      Recv_Buffer : in out Byte_Set;
+      Recv_Len    : in out Natural)
+   is
       Res            : Thin.DWORD;
 
       C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST;
@@ -1020,14 +1040,12 @@ package body PCSC.SCard is
 
       C_Send_PCI := Get_PCI (Card => Card);
 
-      --  Call thin binding SCardTransmit
-
       Thin.SCardTransmit
         (returnValue   => Res,
          hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,
          pbSendBuffer  => Thin.Byte_Array (Send_Buffer),
-         cbSendLength  => Thin.DWORD (Send_Buffer'Length),
+         cbSendLength  => Thin.DWORD (Send_Len),
          pioRecvPci    => C_Recv_PCI'Access,
          pbRecvBuffer  => Thin.Byte_Array (Recv_Buffer),
          pcbRecvLength => Bytes_Returned'Access);
@@ -1037,8 +1055,6 @@ package body PCSC.SCard is
                           Message => "Transmit failed");
       end if;
       Store_Error (Code => Res);
-
-      --  Return read bytes count
 
       Recv_Len := Natural (Bytes_Returned);
    end Transmit;
