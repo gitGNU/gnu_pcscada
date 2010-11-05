@@ -111,7 +111,7 @@ package body PCSC.SCard is
          szReader             => C_Reader,
          dwShareMode          => Convert.C_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
-                                 Thin.SCARD_PROTOCOL_T0,
+           Thin.SCARD_PROTOCOL_T0,
          phCard               => Card.hCard'Access,
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
@@ -589,7 +589,7 @@ package body PCSC.SCard is
         (hCard                => Card.hCard,
          dwShareMode          => Convert.C_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
-                                 Thin.SCARD_PROTOCOL_T0,
+           Thin.SCARD_PROTOCOL_T0,
          dwInitialization     => Convert.C_Action (Action),
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
@@ -642,7 +642,7 @@ package body PCSC.SCard is
       Ada.Exceptions.Raise_Exception
         (SCard_Error'Identity,
          Message & " - ["
-           & Thin.Return_Code'Image (Code) & "] " & Err_Message);
+         & Thin.Return_Code'Image (Code) & "] " & Err_Message);
    end SCard_Exception;
 
    -------------------------------------------------------------------------
