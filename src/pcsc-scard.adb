@@ -1056,6 +1056,7 @@ package body PCSC.SCard is
       end if;
       Store_Error (Code => Res);
 
+      Recv_Pci := C_Recv_PCI;
       Recv_Len := Natural (Bytes_Returned);
    end Transmit;
 
