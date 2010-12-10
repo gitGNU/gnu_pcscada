@@ -463,7 +463,7 @@ package PCSC.SCard is
 
    procedure Transmit
      (Card        :        SCard.Card;
-      Send_Buffer :        Byte_Set := Null_Byte_Set;
+      Send_Buffer :        Byte_Set;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
@@ -471,7 +471,7 @@ package PCSC.SCard is
 
    procedure Transmit
      (Card        :        SCard.Card;
-      Send_Buffer :        Byte_Set := Null_Byte_Set;
+      Send_Buffer :        Byte_Set;
       Send_Len    :        Natural;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
