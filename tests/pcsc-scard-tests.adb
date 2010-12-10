@@ -35,6 +35,37 @@ package body PCSC.SCard.Tests is
 
    -------------------------------------------------------------------------
 
+   procedure Bytes_To_Atr is
+      Valid_1  : constant Byte_Set (5 .. 37) := (others => 0);
+      Valid_2  : constant Byte_Set (0 .. 32) := (others => 0);
+      Valid_3  : constant Byte_Set (5 .. 9)  := (others => 0);
+      Too_Long : constant Byte_Set (1 .. 34) := (others => 0);
+      Tmp_ATR  : ATR;
+   begin
+      Tmp_ATR := To_Atr (Bytes => Valid_1);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 33,
+              Message   => "Valid_1 not 33 bytes");
+
+      Tmp_ATR := To_Atr (Bytes => Valid_2);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 33,
+              Message   => "Valid_2 not 33 bytes");
+
+      Tmp_ATR := To_Atr (Bytes => Valid_3);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 5,
+              Message   => "Valid_3 not 5 bytes");
+
+      begin
+         Tmp_ATR := To_Atr (Bytes => Too_Long);
+         Fail (Message => "Expected bytes to big error");
+
+      exception
+         when Bytes_Too_Big =>
+            null;
+      end;
+   end Bytes_To_Atr;
+
+   -------------------------------------------------------------------------
+
    procedure Initialize (T : in out Test) is
    begin
       T.Set_Name (Name => "Tests for PCSC/Ada SCard Ada <=> C Conversions");
@@ -56,6 +87,9 @@ package body PCSC.SCard.Tests is
       T.Add_Test_Routine
         (Routine => Test_To_Reader_States_Set'Access,
          Name    => "DWORD to Reader_States_Set");
+      T.Add_Test_Routine
+        (Routine => Bytes_To_Atr'Access,
+         Name    => "Byte set to ATR");
    end Initialize;
 
    -------------------------------------------------------------------------

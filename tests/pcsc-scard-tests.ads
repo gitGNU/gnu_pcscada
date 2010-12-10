@@ -48,4 +48,7 @@ package PCSC.SCard.Tests is
    procedure Test_To_Reader_States_Set;
    --  Test Thin.DWORD to Reader_States_Set conversion.
 
+   procedure Bytes_To_Atr;
+   --  Verify byte set to ATR conversion.
+
 end PCSC.SCard.Tests;

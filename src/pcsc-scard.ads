@@ -429,10 +429,10 @@ package PCSC.SCard is
    --  otherwise 'Result' will be False.
 
    function Size (Atr : SCard.ATR := Null_ATR) return Natural;
-   --  Return current size of an ATR as Natural.
+   --  Return current size (in bytes) of an ATR as Natural.
 
    function Size (Atr : SCard.ATR := Null_ATR) return String;
-   --  Return current size of an ATR as string.
+   --  Return current size (in bytes) of an ATR as String.
 
    procedure Status
      (Card  :     SCard.Card;
@@ -523,15 +523,15 @@ private
    --  ATR type definition. Defines a constrained Byte_Set to store ATRs.
 
    type ATR is record
-      Data   : ATR_Type;
+      Data     : ATR_Type;
       --  ATR data bytes
-      Length : ATR_Index;
-      --  Bytes count
+      Last_Idx : ATR_Index;
+      --  Last allocated byte index
    end record;
 
    Null_ATR : constant ATR := ATR'
-     (Data   => ATR_Type'(others => Thin.Null_Byte),
-      Length => 0);
+     (Data     => ATR_Type'(others => Thin.Null_Byte),
+      Last_Idx => 0);
 
    --  Reader IDs
 

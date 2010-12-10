@@ -66,9 +66,8 @@ package body Tests_Utils is
 
    procedure Test_ATR_To_Hex_String is
       Null_ATR      : constant SCard.ATR := SCard.Null_ATR;
-
-      ATR_Bytes     : constant SCard.Byte_Set :=
-        (16#2C#, 16#23#, 16#AB#, 16#8B#);
+      ATR_Bytes     : constant SCard.Byte_Set
+        := (16#2C#, 16#23#, 16#AB#, 16#8B#);
       Reader_ATR    : constant SCard.ATR := SCard.To_Atr (Bytes => ATR_Bytes);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Null_ATR) = "0",

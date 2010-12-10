@@ -649,7 +649,7 @@ package body PCSC.SCard is
 
    function Size (Atr : SCard.ATR := Null_ATR) return Natural is
    begin
-      return Natural (Atr.Length);
+      return Natural (Atr.Last_Idx + 1);
    end Size;
 
    -------------------------------------------------------------------------
@@ -864,9 +864,9 @@ package body PCSC.SCard is
 
       --  Assign in out params
 
-      Atr.Length := ATR_Index (dwAtrLen);
-      Proto      := Convert.To_Ada (dwProtocol);
-      State      := Convert.To_Ada (dwState);
+      Atr.Last_Idx := ATR_Index (dwAtrLen - 1);
+      Proto        := Convert.To_Ada (dwProtocol);
+      State        := Convert.To_Ada (dwState);
    end Status;
 
    -------------------------------------------------------------------------
@@ -895,8 +895,8 @@ package body PCSC.SCard is
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
             Element.Card_ATR.Data   := ATR_Type
               (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
-            Element.Card_ATR.Length := ATR_Index
-              (C_States (size_t (VORCP.To_Index (Position))).cbAtr);
+            Element.Card_ATR.Last_Idx := ATR_Index
+              (C_States (size_t (VORCP.To_Index (Position))).cbAtr - 1);
 
             --  Update event counter for this condition
 
@@ -972,16 +972,16 @@ package body PCSC.SCard is
    begin
       --  Raise exception if Byte_Set is too big.
 
-      if Bytes'Last > ATR_Index'Last then
+      if Bytes'Length > (ATR_Index'Last + 1) then
          raise Bytes_Too_Big;
       end if;
 
       --  Store Byte_Set in ATR_Type and set length accordingly.
 
-      Temp_Set (Bytes'First .. Bytes'Last) := Bytes;
+      Temp_Set (ATR_Index'First .. Bytes'Length - 1) := Bytes;
 
       New_Atr.Data   := ATR_Type (Temp_Set);
-      New_Atr.Length := Bytes'Length;
+      New_Atr.Last_Idx := Bytes'Length - 1;
 
       return New_Atr;
    end To_Atr;
