@@ -889,14 +889,20 @@ package body PCSC.SCard is
          is
             use type Interfaces.Unsigned_64;
 
-            Counter : Interfaces.Unsigned_64;
+            Counter   : Interfaces.Unsigned_64;
+            ATR_Bytes : constant Thin.DWORD :=
+              C_States (size_t (VORCP.To_Index (Position))).cbAtr;
          begin
-            Element.Event_State       := Convert.To_Ada
+            Element.Event_State := Convert.To_Ada
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
-            Element.Card_ATR.Data     := ATR_Data_Type
-              (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
-            Element.Card_ATR.Last_Idx := ATR_Index
-              (C_States (size_t (VORCP.To_Index (Position))).cbAtr - 1);
+
+            if ATR_Bytes > 0 then
+               Element.Card_ATR.Data     := ATR_Data_Type
+                 (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
+               Element.Card_ATR.Last_Idx := ATR_Index (ATR_Bytes - 1);
+            else
+               Element.Card_ATR := Null_ATR;
+            end if;
 
             --  Update event counter for this condition
 
