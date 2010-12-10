@@ -22,6 +22,9 @@
 
 pragma Detect_Blocking;
 
+with Ada.Text_IO;
+with Ada.Exceptions;
+
 package body PCSC.SCard.Monitor is
 
    -------------------------------------------------------------------------
@@ -184,6 +187,10 @@ package body PCSC.SCard.Monitor is
                end Stop;
          end select;
       end loop;
+
+   exception
+      when E : others =>
+         Ada.Text_IO.Put_Line (Ada.Exceptions.Exception_Information (X => E));
    end Status_Peeker;
 
    -------------------------------------------------------------------------
