@@ -891,9 +891,9 @@ package body PCSC.SCard is
 
             Counter : Interfaces.Unsigned_64;
          begin
-            Element.Event_State     := Convert.To_Ada
+            Element.Event_State       := Convert.To_Ada
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
-            Element.Card_ATR.Data   := ATR_Type
+            Element.Card_ATR.Data     := ATR_Data_Type
               (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
             Element.Card_ATR.Last_Idx := ATR_Index
               (C_States (size_t (VORCP.To_Index (Position))).cbAtr - 1);
@@ -980,7 +980,7 @@ package body PCSC.SCard is
 
       Temp_Set (ATR_Index'First .. Bytes'Length - 1) := Bytes;
 
-      New_Atr.Data   := ATR_Type (Temp_Set);
+      New_Atr.Data     := ATR_Data_Type (Temp_Set);
       New_Atr.Last_Idx := Bytes'Length - 1;
 
       return New_Atr;

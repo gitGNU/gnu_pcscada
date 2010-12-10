@@ -38,9 +38,18 @@ package body PCSC.SCard.Tests is
    procedure Bytes_To_Atr is
       Valid_1  : constant Byte_Set (5 .. 37) := (others => 0);
       Valid_2  : constant Byte_Set (0 .. 32) := (others => 0);
-      Valid_3  : constant Byte_Set (5 .. 9)  := (others => 0);
+      Valid_3  : constant Byte_Set (5 .. 7)  := (others => 2);
+      Valid_4  : constant Byte_Set           := Null_Byte_Set;
       Too_Long : constant Byte_Set (1 .. 34) := (others => 0);
-      Tmp_ATR  : ATR;
+
+      Tmp_ATR   : ATR;
+      Ref_ATR_3 : constant ATR := ATR'
+        (Data     => ATR_Data_Type'
+           (0      => 2,
+            1      => 2,
+            2      => 2,
+            others => Thin.Null_Byte),
+         Last_Idx => 2);
    begin
       Tmp_ATR := To_Atr (Bytes => Valid_1);
       Assert (Condition => Size (Atr => Tmp_ATR) = 33,
@@ -51,8 +60,14 @@ package body PCSC.SCard.Tests is
               Message   => "Valid_2 not 33 bytes");
 
       Tmp_ATR := To_Atr (Bytes => Valid_3);
-      Assert (Condition => Size (Atr => Tmp_ATR) = 5,
-              Message   => "Valid_3 not 5 bytes");
+      Assert (Condition => Size (Atr => Tmp_ATR) = 3,
+              Message   => "Valid_3 not 3 bytes");
+      Assert (Condition => Tmp_ATR = Ref_ATR_3,
+              Message   => "Valid_3 ATR mismatch");
+
+      Tmp_ATR := To_Atr (Bytes => Valid_4);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 0,
+              Message   => "Valid_4 not 0 bytes");
 
       begin
          Tmp_ATR := To_Atr (Bytes => Too_Long);
@@ -271,10 +286,10 @@ package body PCSC.SCard.Tests is
          --  rgbAtr (Byte_Array) must match Card_ATR.Data for Reader2 and
          --  Null_ATR for Reader1
 
-         Assert (Condition => ATR_Type (Byte_Set (R_Result
+         Assert (Condition => ATR_Data_Type (Byte_Set (R_Result
                  (R_Result'First).rgbAtr)) = Null_ATR.Data,
                  Message   => "ATR data mismatch");
-         Assert (Condition => ATR_Type (Byte_Set (R_Result
+         Assert (Condition => ATR_Data_Type (Byte_Set (R_Result
                  (R_Result'Last).rgbAtr)) = Reader2.Card_ATR.Data,
                  Message   => "ATR data mismatch");
 
