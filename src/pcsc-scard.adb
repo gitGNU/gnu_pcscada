@@ -148,9 +148,9 @@ package body PCSC.SCard is
       Send_First_Ptr : Thin.Byte_Access;
       --  Pointer to first byte of send buffer
 
-      Recv_Length    : aliased constant Thin.DWORD :=
-        Thin.DWORD (Recv_Buffer'Last);
-      Bytes_Returned : aliased Thin.DWORD          := 0;
+      Recv_Length    : aliased constant Thin.DWORD
+        := Thin.DWORD (Recv_Buffer'Length);
+      Bytes_Returned : aliased Thin.DWORD := 0;
    begin
 
       --  The send buffer can also by empty, replace with null ptr if it is
@@ -724,7 +724,7 @@ package body PCSC.SCard is
          pbSendBuffer    => Verify_Struct.bTimerOut'Access,
          cbSendLength    => 32, --  Exact size of Verify_Struct object
          pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Access,
-         cbRecvLength    => Thin.DWORD (Recv_Buffer'Last),
+         cbRecvLength    => Thin.DWORD (Recv_Buffer'Length),
          lpBytesReturned => Recv_Len'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -763,7 +763,7 @@ package body PCSC.SCard is
          pbSendBuffer    => null,
          cbSendLength    => 0,
          pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Access,
-         cbRecvLength    => Thin.DWORD (Recv_Buffer'Last),
+         cbRecvLength    => Thin.DWORD (Recv_Buffer'Length),
          lpBytesReturned => Recv_Len'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -1032,8 +1032,8 @@ package body PCSC.SCard is
 
       C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST;
       C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST := Recv_Pci;
-      Bytes_Returned : aliased Thin.DWORD            :=
-        Thin.DWORD (Recv_Buffer'Last);
+      Bytes_Returned : aliased Thin.DWORD
+        := Thin.DWORD (Recv_Buffer'Length);
    begin
 
       --  Empty send buffer makes no sense, return without doing anything
