@@ -83,7 +83,7 @@ package body PCSC.SCard.Tests is
 
    procedure Initialize (T : in out Test) is
    begin
-      T.Set_Name (Name => "Tests for PCSC/Ada SCard package");
+      T.Set_Name (Name => "Tests for SCard package");
       T.Add_Test_Routine
         (Routine => Test_Slice_Readerstring'Access,
          Name    => "String to Reader_ID_Set");

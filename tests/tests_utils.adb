@@ -35,7 +35,7 @@ package body Tests_Utils is
 
    procedure Initialize (T : in out Test) is
    begin
-      T.Set_Name (Name => "Tests for PCSC/Ada SCard Utils");
+      T.Set_Name (Name => "Tests for SCard.Utils package");
       T.Add_Test_Routine
         (Routine => Test_To_Long_Long_Integer'Access,
          Name    => "Byte_Set to Long_Long_Integer");
