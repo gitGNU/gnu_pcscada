@@ -44,12 +44,12 @@ package body PCSC.SCard.Tests is
 
       Tmp_ATR   : ATR;
       Ref_ATR_3 : constant ATR := ATR'
-        (Data     => ATR_Data_Type'
+        (Data => ATR_Data_Type'
            (0      => 2,
             1      => 2,
             2      => 2,
             others => Thin.Null_Byte),
-         Last_Idx => 2);
+         Size => 3);
    begin
       Tmp_ATR := To_Atr (Bytes => Valid_1);
       Assert (Condition => Size (Atr => Tmp_ATR) = 33,

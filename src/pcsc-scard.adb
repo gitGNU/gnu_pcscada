@@ -649,7 +649,7 @@ package body PCSC.SCard is
 
    function Size (Atr : SCard.ATR := Null_ATR) return Natural is
    begin
-      return Natural (Atr.Last_Idx + 1);
+      return Natural (Atr.Size);
    end Size;
 
    -------------------------------------------------------------------------
@@ -864,9 +864,9 @@ package body PCSC.SCard is
 
       --  Assign in out params
 
-      Atr.Last_Idx := ATR_Index (dwAtrLen - 1);
-      Proto        := Convert.To_Ada (dwProtocol);
-      State        := Convert.To_Ada (dwState);
+      Atr.Size := ATR_Byte_Count (dwAtrLen);
+      Proto    := Convert.To_Ada (dwProtocol);
+      State    := Convert.To_Ada (dwState);
    end Status;
 
    -------------------------------------------------------------------------
@@ -897,9 +897,9 @@ package body PCSC.SCard is
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
 
             if ATR_Bytes > 0 then
-               Element.Card_ATR.Data     := ATR_Data_Type
+               Element.Card_ATR.Data := ATR_Data_Type
                  (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
-               Element.Card_ATR.Last_Idx := ATR_Index (ATR_Bytes - 1);
+               Element.Card_ATR.Size := ATR_Byte_Count (ATR_Bytes);
             else
                Element.Card_ATR := Null_ATR;
             end if;
@@ -986,8 +986,8 @@ package body PCSC.SCard is
 
       Temp_Set (ATR_Index'First .. Bytes'Length - 1) := Bytes;
 
-      New_Atr.Data     := ATR_Data_Type (Temp_Set);
-      New_Atr.Last_Idx := Bytes'Length - 1;
+      New_Atr.Data := ATR_Data_Type (Temp_Set);
+      New_Atr.Size := Bytes'Length;
 
       return New_Atr;
    end To_Atr;

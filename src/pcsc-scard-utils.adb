@@ -145,7 +145,7 @@ package body PCSC.SCard.Utils is
       end if;
 
       return To_Hex_String (Given => Byte_Set (Given.Data),
-                            Len   => 2 * Positive (Given.Last_Idx + 1));
+                            Len   => 2 * Positive (Given.Size));
    end To_Hex_String;
 
    -------------------------------------------------------------------------

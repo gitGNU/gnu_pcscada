@@ -517,21 +517,21 @@ private
    Null_Byte_Set : constant Byte_Set (1 .. 0) := (others => Thin.Null_Byte);
 
    subtype ATR_Index is Natural range 0 .. Thin.MAX_ATR_SIZE;
-   --  Allowed index values for valid ATRs. '0' is used to indicate Null_ATR.
+
+   type ATR_Byte_Count is range 0 .. Thin.MAX_ATR_SIZE + 1;
+   --  ATR size in bytes.
 
    type ATR_Data_Type is new Byte_Set (ATR_Index'Range);
    --  ATR data: Defines a constrained Byte_Set to store the actual ATR data.
 
    type ATR is record
-      Data     : ATR_Data_Type;
-      --  ATR data bytes
-      Last_Idx : ATR_Index;
-      --  Last allocated byte index
+      Data : ATR_Data_Type;
+      Size : ATR_Byte_Count;
    end record;
 
    Null_ATR : constant ATR := ATR'
-     (Data     => ATR_Data_Type'(others => Thin.Null_Byte),
-      Last_Idx => 0);
+     (Data => ATR_Data_Type'(others => Thin.Null_Byte),
+      Size => 0);
 
    --  Reader IDs
 
