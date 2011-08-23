@@ -27,7 +27,7 @@ ALIDIR  = $(PREFIX)/lib/ada/adalib/pcscada
 INSTALL = install
 
 MAJOR   = 0
-MINOR   = 6
+MINOR   = 7
 VERSION = $(MAJOR).$(MINOR)
 PCSCADA = libpcscada-$(VERSION)
 
