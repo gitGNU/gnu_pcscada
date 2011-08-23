@@ -1,0 +1,1 @@
+libpcscada0.7: shlib-with-executable-stack usr/lib/libpcscada.so.0.7
