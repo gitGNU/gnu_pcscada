@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -35,7 +35,7 @@ package body Tests_Utils is
 
    procedure Initialize (T : in out Test) is
    begin
-      T.Set_Name (Name => "Tests for PCSC/Ada SCard Utils");
+      T.Set_Name (Name => "Tests for SCard.Utils package");
       T.Add_Test_Routine
         (Routine => Test_To_Long_Long_Integer'Access,
          Name    => "Byte_Set to Long_Long_Integer");
@@ -66,9 +66,8 @@ package body Tests_Utils is
 
    procedure Test_ATR_To_Hex_String is
       Null_ATR      : constant SCard.ATR := SCard.Null_ATR;
-
-      ATR_Bytes     : constant SCard.Byte_Set :=
-        (16#2C#, 16#23#, 16#AB#, 16#8B#);
+      ATR_Bytes     : constant SCard.Byte_Set
+        := (16#2C#, 16#23#, 16#AB#, 16#8B#);
       Reader_ATR    : constant SCard.ATR := SCard.To_Atr (Bytes => ATR_Bytes);
    begin
       Assert (Condition => SCU.To_Hex_String (Given => Null_ATR) = "0",
@@ -120,6 +119,14 @@ package body Tests_Utils is
       Assert (Condition => SCU.To_String (Given => Empty_Set) = "0",
               Message   => "Returned string not '0'");
       Assert (Condition => SCU.To_String (Given => Test_Set) = "pcsc",
+              Message   => "Returned string not 'pcsc'");
+      Assert (Condition => SCU.To_String
+              (Given => Test_Set,
+               Len   => 2) = "pc",
+              Message   => "Returned string not 'pc'");
+      Assert (Condition => SCU.To_String
+              (Given => Test_Set,
+               Len   => 6) = "pcsc",
               Message   => "Returned string not 'pcsc'");
    end Test_Byte_Set_To_String;
 

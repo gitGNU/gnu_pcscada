@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -29,10 +29,6 @@
 
 with PCSC.Thin;
 pragma Elaborate_All (PCSC.Thin);
---  Make sure SCARD_CTL_CODE function is ready to use. Without these two
---  statements above, GNAT warns with : warning: call to "SCARD_CTL_CODE" in
---  elaboration code requires pragma Elaborate_All on "Thin".
---  TODO: don't call SCARD_CTL_CODE in elaboration code?
 
 package PCSC.Thin.Reader is
 

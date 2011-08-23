@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -365,8 +365,8 @@ package PCSC.SCard is
      (States : Reader_States_Set;
       State  : Reader_State)
       return Boolean;
-   --  Function returns True if given reader state is found in the reader states
-   --  set.
+   --  Function returns True if given reader state is found in the reader
+   --  states set.
 
    function Is_In
      (States : Card_States_Set;
@@ -403,8 +403,8 @@ package PCSC.SCard is
      (Card   : in out SCard.Card;
       Mode   :        SCard.Mode;
       Action :        SCard.Action);
-   --  This procedure re-establishes a connection. The Init argument defines the
-   --  desired SCard action to perform on the card/reader.
+   --  This procedure re-establishes a connection. The Init argument defines
+   --  the desired SCard action to perform on the card/reader.
 
    procedure Release_Context (Context : in out SCard.Context);
    --  Release previously acquired SCard context.
@@ -429,10 +429,10 @@ package PCSC.SCard is
    --  otherwise 'Result' will be False.
 
    function Size (Atr : SCard.ATR := Null_ATR) return Natural;
-   --  Return current size of an ATR as Natural.
+   --  Return current size (in bytes) of an ATR as Natural.
 
    function Size (Atr : SCard.ATR := Null_ATR) return String;
-   --  Return current size of an ATR as string.
+   --  Return current size (in bytes) of an ATR as String.
 
    procedure Status
      (Card  :     SCard.Card;
@@ -463,11 +463,20 @@ package PCSC.SCard is
 
    procedure Transmit
      (Card        :        SCard.Card;
-      Send_Buffer :        Byte_Set := Null_Byte_Set;
+      Send_Buffer :        Byte_Set;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural);
-   --  Transmit APDUs to SCard.
+   --  Transmit buffer to SCard.
+
+   procedure Transmit
+     (Card        :        SCard.Card;
+      Send_Buffer :        Byte_Set;
+      Send_Len    :        Natural;
+      Recv_Pci    : in out IO_Request;
+      Recv_Buffer : in out Byte_Set;
+      Recv_Len    : in out Natural);
+   --  Transmit Send_Len bytes of buffer to SCard.
 
    function To_Atr (Bytes : Byte_Set) return ATR;
    --  Create new ATR object from given byte set. If 'Bytes' is too big to be
@@ -508,21 +517,21 @@ private
    Null_Byte_Set : constant Byte_Set (1 .. 0) := (others => Thin.Null_Byte);
 
    subtype ATR_Index is Natural range 0 .. Thin.MAX_ATR_SIZE;
-   --  Allowed index values for valid ATRs. '0' is used to indicate Null_ATR.
 
-   type ATR_Type is new Byte_Set (ATR_Index'Range);
-   --  ATR type definition. Defines a constrained Byte_Set to store ATRs.
+   type ATR_Byte_Count is range 0 .. Thin.MAX_ATR_SIZE + 1;
+   --  ATR size in bytes.
+
+   type ATR_Data_Type is new Byte_Set (ATR_Index'Range);
+   --  ATR data: Defines a constrained Byte_Set to store the actual ATR data.
 
    type ATR is record
-      Data   : ATR_Type;
-      --  ATR data bytes
-      Length : ATR_Index;
-      --  Bytes count
+      Data : ATR_Data_Type;
+      Size : ATR_Byte_Count;
    end record;
 
    Null_ATR : constant ATR := ATR'
-     (Data   => ATR_Type'(others => Thin.Null_Byte),
-      Length => 0);
+     (Data => ATR_Data_Type'(others => Thin.Null_Byte),
+      Size => 0);
 
    --  Reader IDs
 

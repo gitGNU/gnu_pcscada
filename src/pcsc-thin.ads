@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -39,14 +39,17 @@ package PCSC.Thin is
    subtype LONG  is C.long;
    subtype DWORD is C.unsigned_long;
    subtype LPSTR is C.Strings.chars_ptr;
+   subtype UCHAR is C.unsigned_char;
+
+   type PDWORD is access DWORD;
 
    --  Byte'n'Hex
 
    subtype Byte is Interfaces.Unsigned_8;
-   type Byte_Array is array (C.size_t range <>) of aliased Byte;
+   type Byte_Array is array (Natural range <>) of aliased Byte;
    type Byte_Access is access all Byte;
 
-   Null_Byte : constant Byte;
+   Null_Byte       : constant Byte;
    Null_Byte_Array : constant Byte_Array;
 
    --  ATR
@@ -56,6 +59,9 @@ package PCSC.Thin is
 
    subtype ATR is Byte_Array (0 .. MAX_ATR_SIZE);
    --  Binary ATR data
+
+   type ATR_Access is access ATR;
+   --  Access to ATR data array
 
    Null_ATR : constant ATR;
    --  Null initialized ATR
@@ -390,15 +396,15 @@ package PCSC.Thin is
    function SCardCancelTransaction (hCard : SCARDHANDLE) return DWORD;
    --  Cancel transaction with specific SCard
 
-   function SCardStatus
-     (hCard          :        SCARDHANDLE;
+   procedure SCardStatus
+     (returnValue    :    out DWORD;
+      hCard          :        SCARDHANDLE;
       mszReaderNames :        LPSTR;
       pcchReaderLen  : access DWORD;
       pdwState       : access DWORD;
       pdwProtocol    : access DWORD;
-      pbAtr          : access Byte;
-      pcbAtrLen      : access DWORD)
-      return DWORD;
+      pbAtr          :    out Byte_Array;
+      pcbAtrLen      : access DWORD);
    --  Get status from specific card
 
    function SCardGetStatusChange
@@ -424,15 +430,15 @@ package PCSC.Thin is
       return DWORD;
    --  Send control to card
 
-   function SCardTransmit
-     (hCard         :        SCARDHANDLE;
+   procedure SCardTransmit
+     (returnValue   :    out DWORD;
+      hCard         :        SCARDHANDLE;
       pioSendPci    : access SCARD_IO_REQUEST;
-      pbSendBuffer  : access Byte;
+      pbSendBuffer  :        Byte_Array;
       cbSendLength  :        DWORD;
       pioRecvPci    : access SCARD_IO_REQUEST;
-      pbRecvBuffer  : access Byte;
-      pcbRecvLength : access DWORD)
-      return DWORD;
+      pbRecvBuffer  :    out Byte_Array;
+      pcbRecvLength : access DWORD);
    --  Transmit APDUs to card
 
    function SCardListReaders
@@ -461,7 +467,7 @@ package PCSC.Thin is
    function SCardSetAttrib
      (hCard     :        SCARDHANDLE;
       dwAttrId  :        DWORD;
-      pbAttr    : access Byte;
+      pbAttr    :        Byte_Array;
       cbAttrLen :        DWORD)
       return DWORD;
    --  Set an attribute of the IFD handler
@@ -513,6 +519,8 @@ private
    pragma Import (Convention    => C,
                   Entity        => SCardStatus,
                   External_Name => "SCardStatus");
+   pragma Import_Valued_Procedure (Internal => SCardStatus,
+                                   External => "SCardStatus");
    pragma Import (Convention    => C,
                   Entity        => SCardGetStatusChange,
                   External_Name => "SCardGetStatusChange");
@@ -525,6 +533,8 @@ private
    pragma Import (Convention    => C,
                   Entity        => SCardTransmit,
                   External_Name => "SCardTransmit");
+   pragma Import_Valued_Procedure (Internal => SCardTransmit,
+                                   External => "SCardTransmit");
    pragma Import (Convention    => C,
                   Entity        => SCardListReaders,
                   External_Name => "SCardListReaders");

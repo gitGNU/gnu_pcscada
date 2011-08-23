@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -111,7 +111,7 @@ package body PCSC.SCard is
          szReader             => C_Reader,
          dwShareMode          => Convert.C_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
-                                 Thin.SCARD_PROTOCOL_T0,
+           Thin.SCARD_PROTOCOL_T0,
          phCard               => Card.hCard'Access,
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
@@ -148,9 +148,9 @@ package body PCSC.SCard is
       Send_First_Ptr : Thin.Byte_Access;
       --  Pointer to first byte of send buffer
 
-      Recv_Length    : aliased constant Thin.DWORD :=
-        Thin.DWORD (Recv_Buffer'Last);
-      Bytes_Returned : aliased Thin.DWORD          := 0;
+      Recv_Length    : aliased constant Thin.DWORD
+        := Thin.DWORD (Recv_Buffer'Length);
+      Bytes_Returned : aliased Thin.DWORD := 0;
    begin
 
       --  The send buffer can also by empty, replace with null ptr if it is
@@ -427,10 +427,9 @@ package body PCSC.SCard is
       end if;
       Store_Error (Code => Res);
 
-      --  TODO: extended return statement
       declare
-         B : constant Byte_Set (1 .. Positive (Len)) :=
-           (others => Thin.Null_Byte);
+         B : constant Byte_Set (1 .. Positive (Len))
+           := (others => Thin.Null_Byte);
       begin
          return B;
       end;
@@ -590,7 +589,7 @@ package body PCSC.SCard is
         (hCard                => Card.hCard,
          dwShareMode          => Convert.C_Mode (Mode),
          dwPreferredProtocols => Thin.SCARD_PROTOCOL_T1 or
-                                 Thin.SCARD_PROTOCOL_T0,
+           Thin.SCARD_PROTOCOL_T0,
          dwInitialization     => Convert.C_Action (Action),
          pdwActiveProtocol    => Card.Active_Proto'Access);
 
@@ -643,14 +642,14 @@ package body PCSC.SCard is
       Ada.Exceptions.Raise_Exception
         (SCard_Error'Identity,
          Message & " - ["
-           & Thin.Return_Code'Image (Code) & "] " & Err_Message);
+         & Thin.Return_Code'Image (Code) & "] " & Err_Message);
    end SCard_Exception;
 
    -------------------------------------------------------------------------
 
    function Size (Atr : SCard.ATR := Null_ATR) return Natural is
    begin
-      return Natural (Atr.Length);
+      return Natural (Atr.Size);
    end Size;
 
    -------------------------------------------------------------------------
@@ -725,7 +724,7 @@ package body PCSC.SCard is
          pbSendBuffer    => Verify_Struct.bTimerOut'Access,
          cbSendLength    => 32, --  Exact size of Verify_Struct object
          pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Access,
-         cbRecvLength    => Thin.DWORD (Recv_Buffer'Last),
+         cbRecvLength    => Thin.DWORD (Recv_Buffer'Length),
          lpBytesReturned => Recv_Len'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -738,7 +737,7 @@ package body PCSC.SCard is
       --        flexible way of Byte_Set size handling (handles to byte sets?)
 
       for Index in Result'Range loop
-         Result (Index) := Recv_Buffer (size_t (Index));
+         Result (Index) := Recv_Buffer (Index);
       end loop;
    end SPE_Exec;
 
@@ -764,7 +763,7 @@ package body PCSC.SCard is
          pbSendBuffer    => null,
          cbSendLength    => 0,
          pbRecvBuffer    => Recv_Buffer (Recv_Buffer'First)'Access,
-         cbRecvLength    => Thin.DWORD (Recv_Buffer'Last),
+         cbRecvLength    => Thin.DWORD (Recv_Buffer'Length),
          lpBytesReturned => Recv_Len'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -793,15 +792,15 @@ package body PCSC.SCard is
       declare
          use type Interfaces.Unsigned_8;
 
-         TLV_Array : array (1 .. size_t (Elements)) of TR.PCSC_TLV_STRUCTURE;
+         TLV_Array : array (1 .. Elements) of TR.PCSC_TLV_STRUCTURE;
 
-         T         : size_t := Recv_Buffer'First;
-         Index     : size_t := TLV_Array'First;
+         T         : Natural := Recv_Buffer'First;
+         Index     : Natural := TLV_Array'First;
 
          Value     : Byte_Set (1 .. 4);
       begin
          loop
-            exit when T >= size_t (Recv_Len);
+            exit when T >= Natural (Recv_Len);
             TLV_Array (Index).tag    := Recv_Buffer (T);
             TLV_Array (Index).length := Recv_Buffer (T + 1);
 
@@ -819,7 +818,7 @@ package body PCSC.SCard is
 
          --  Test for FEATURE_VERIFY_PIN_DIRECT flag
 
-         for Index in size_t range TLV_Array'Range loop
+         for Index in Natural range TLV_Array'Range loop
             if TLV_Array (Index).tag = TR.FEATURE_VERIFY_PIN_DIRECT then
 
                --  Store verify control code for this card
@@ -847,13 +846,14 @@ package body PCSC.SCard is
       dwProtocol  : aliased Thin.DWORD;
       dwAtrLen    : aliased Thin.DWORD := Thin.MAX_ATR_SIZE;
    begin
-      Res := Thin.SCardStatus
-        (hCard          => Card.hCard,
+      Thin.SCardStatus
+        (returnValue    => Res,
+         hCard          => Card.hCard,
          mszReaderNames => Strings.Null_Ptr,
          pcchReaderLen  => dwReaderLen'Access,
          pdwState       => dwState'Access,
          pdwProtocol    => dwProtocol'Access,
-         pbAtr          => Atr.Data (Atr.Data'First)'Access,
+         pbAtr          => Thin.Byte_Array (Atr.Data),
          pcbAtrLen      => dwAtrLen'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -864,9 +864,9 @@ package body PCSC.SCard is
 
       --  Assign in out params
 
-      Atr.Length := ATR_Index (dwAtrLen);
-      Proto      := Convert.To_Ada (dwProtocol);
-      State      := Convert.To_Ada (dwState);
+      Atr.Size := ATR_Byte_Count (dwAtrLen);
+      Proto    := Convert.To_Ada (dwProtocol);
+      State    := Convert.To_Ada (dwState);
    end Status;
 
    -------------------------------------------------------------------------
@@ -883,20 +883,32 @@ package body PCSC.SCard is
       C_States  : Thin.READERSTATE_Array := Convert.To_C
         (Conditions => Conditions);
 
+      procedure Update_Status_Set (Position : VORCP.Cursor);
+      --  Update the status set given by cursor.
+
       procedure Update_Status_Set (Position : VORCP.Cursor) is
+
+         procedure Update_Reader_Condition (Element : in out Reader_Condition);
+         --  Update reader condition element.
 
          procedure Update_Reader_Condition (Element : in out Reader_Condition)
          is
             use type Interfaces.Unsigned_64;
 
-            Counter : Interfaces.Unsigned_64;
+            Counter   : Interfaces.Unsigned_64;
+            ATR_Bytes : constant Thin.DWORD :=
+              C_States (size_t (VORCP.To_Index (Position))).cbAtr;
          begin
-            Element.Event_State     := Convert.To_Ada
+            Element.Event_State := Convert.To_Ada
               (C_States (size_t (VORCP.To_Index (Position))).dwEventState);
-            Element.Card_ATR.Data   := ATR_Type
-              (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
-            Element.Card_ATR.Length := ATR_Index
-              (C_States (size_t (VORCP.To_Index (Position))).cbAtr);
+
+            if ATR_Bytes > 0 then
+               Element.Card_ATR.Data := ATR_Data_Type
+                 (C_States (size_t (VORCP.To_Index (Position))).rgbAtr);
+               Element.Card_ATR.Size := ATR_Byte_Count (ATR_Bytes);
+            else
+               Element.Card_ATR := Null_ATR;
+            end if;
 
             --  Update event counter for this condition
 
@@ -972,16 +984,16 @@ package body PCSC.SCard is
    begin
       --  Raise exception if Byte_Set is too big.
 
-      if Bytes'Last > ATR_Index'Last then
+      if Bytes'Length > (ATR_Index'Last + 1) then
          raise Bytes_Too_Big;
       end if;
 
       --  Store Byte_Set in ATR_Type and set length accordingly.
 
-      Temp_Set (Bytes'First .. Bytes'Last) := Bytes;
+      Temp_Set (ATR_Index'First .. Bytes'Length - 1) := Bytes;
 
-      New_Atr.Data   := ATR_Type (Temp_Set);
-      New_Atr.Length := Bytes'Length;
+      New_Atr.Data := ATR_Data_Type (Temp_Set);
+      New_Atr.Size := Bytes'Length;
 
       return New_Atr;
    end To_Atr;
@@ -997,24 +1009,37 @@ package body PCSC.SCard is
 
    procedure Transmit
      (Card        :        SCard.Card;
-      Send_Buffer :        Byte_Set := Null_Byte_Set;
+      Send_Buffer :        Byte_Set;
+      Recv_Pci    : in out IO_Request;
+      Recv_Buffer : in out Byte_Set;
+      Recv_Len    : in out Natural)
+   is
+   begin
+      Transmit
+        (Card        => Card,
+         Send_Buffer => Send_Buffer,
+         Send_Len    => Send_Buffer'Length,
+         Recv_Pci    => Recv_Pci,
+         Recv_Buffer => Recv_Buffer,
+         Recv_Len    => Recv_Len);
+   end Transmit;
+
+   -------------------------------------------------------------------------
+
+   procedure Transmit
+     (Card        :        SCard.Card;
+      Send_Buffer :        Byte_Set;
+      Send_Len    :        Natural;
       Recv_Pci    : in out IO_Request;
       Recv_Buffer : in out Byte_Set;
       Recv_Len    : in out Natural)
    is
       Res            : Thin.DWORD;
 
-      Sbuffer_Copy   : aliased Byte_Set := Send_Buffer;
-      --  Copy of initial Send_Buffer. This is needed because we cannot
-      --  directly pass the 'in' Parameter Send_Buffer as :
-      --    pbSendBuffer => Send_Buffer (Send_Buffer'First)'Access
-      --  to the thin binding. If we try, the compiler complains:
-      --    access-to-variable designates constant
-
       C_Send_PCI     : aliased Thin.SCARD_IO_REQUEST;
       C_Recv_PCI     : aliased Thin.SCARD_IO_REQUEST := Recv_Pci;
-      Bytes_Returned : aliased Thin.DWORD            :=
-        Thin.DWORD (Recv_Buffer'Last);
+      Bytes_Returned : aliased Thin.DWORD
+        := Thin.DWORD (Recv_Buffer'Length);
    begin
 
       --  Empty send buffer makes no sense, return without doing anything
@@ -1027,15 +1052,14 @@ package body PCSC.SCard is
 
       C_Send_PCI := Get_PCI (Card => Card);
 
-      --  Call thin binding SCardTransmit
-
-      Res := Thin.SCardTransmit
-        (hCard         => Card.hCard,
+      Thin.SCardTransmit
+        (returnValue   => Res,
+         hCard         => Card.hCard,
          pioSendPci    => C_Send_PCI'Access,
-         pbSendBuffer  => Sbuffer_Copy (Sbuffer_Copy'First)'Access,
-         cbSendLength  => Thin.DWORD (Send_Buffer'Length),
+         pbSendBuffer  => Thin.Byte_Array (Send_Buffer),
+         cbSendLength  => Thin.DWORD (Send_Len),
          pioRecvPci    => C_Recv_PCI'Access,
-         pbRecvBuffer  => Recv_Buffer (Recv_Buffer'First)'Access,
+         pbRecvBuffer  => Thin.Byte_Array (Recv_Buffer),
          pcbRecvLength => Bytes_Returned'Access);
 
       if Res /= Thin.SCARD_S_SUCCESS then
@@ -1044,8 +1068,7 @@ package body PCSC.SCard is
       end if;
       Store_Error (Code => Res);
 
-      --  Return read bytes count
-
+      Recv_Pci := C_Recv_PCI;
       Recv_Len := Natural (Bytes_Returned);
    end Transmit;
 

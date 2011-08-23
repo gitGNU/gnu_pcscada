@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -35,9 +35,55 @@ package body PCSC.SCard.Tests is
 
    -------------------------------------------------------------------------
 
+   procedure Bytes_To_Atr is
+      Valid_1  : constant Byte_Set (5 .. 37) := (others => 0);
+      Valid_2  : constant Byte_Set (0 .. 32) := (others => 0);
+      Valid_3  : constant Byte_Set (5 .. 7)  := (others => 2);
+      Valid_4  : constant Byte_Set           := Null_Byte_Set;
+      Too_Long : constant Byte_Set (1 .. 34) := (others => 0);
+
+      Tmp_ATR   : ATR;
+      Ref_ATR_3 : constant ATR := ATR'
+        (Data => ATR_Data_Type'
+           (0      => 2,
+            1      => 2,
+            2      => 2,
+            others => Thin.Null_Byte),
+         Size => 3);
+   begin
+      Tmp_ATR := To_Atr (Bytes => Valid_1);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 33,
+              Message   => "Valid_1 not 33 bytes");
+
+      Tmp_ATR := To_Atr (Bytes => Valid_2);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 33,
+              Message   => "Valid_2 not 33 bytes");
+
+      Tmp_ATR := To_Atr (Bytes => Valid_3);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 3,
+              Message   => "Valid_3 not 3 bytes");
+      Assert (Condition => Tmp_ATR = Ref_ATR_3,
+              Message   => "Valid_3 ATR mismatch");
+
+      Tmp_ATR := To_Atr (Bytes => Valid_4);
+      Assert (Condition => Size (Atr => Tmp_ATR) = 0,
+              Message   => "Valid_4 not 0 bytes");
+
+      begin
+         Tmp_ATR := To_Atr (Bytes => Too_Long);
+         Fail (Message => "Expected bytes to big error");
+
+      exception
+         when Bytes_Too_Big =>
+            null;
+      end;
+   end Bytes_To_Atr;
+
+   -------------------------------------------------------------------------
+
    procedure Initialize (T : in out Test) is
    begin
-      T.Set_Name (Name => "Tests for PCSC/Ada SCard Ada <=> C Conversions");
+      T.Set_Name (Name => "Tests for SCard package");
       T.Add_Test_Routine
         (Routine => Test_Slice_Readerstring'Access,
          Name    => "String to Reader_ID_Set");
@@ -56,6 +102,9 @@ package body PCSC.SCard.Tests is
       T.Add_Test_Routine
         (Routine => Test_To_Reader_States_Set'Access,
          Name    => "DWORD to Reader_States_Set");
+      T.Add_Test_Routine
+        (Routine => Bytes_To_Atr'Access,
+         Name    => "Byte set to ATR");
    end Initialize;
 
    -------------------------------------------------------------------------
@@ -237,10 +286,10 @@ package body PCSC.SCard.Tests is
          --  rgbAtr (Byte_Array) must match Card_ATR.Data for Reader2 and
          --  Null_ATR for Reader1
 
-         Assert (Condition => ATR_Type (Byte_Set (R_Result
+         Assert (Condition => ATR_Data_Type (Byte_Set (R_Result
                  (R_Result'First).rgbAtr)) = Null_ATR.Data,
                  Message   => "ATR data mismatch");
-         Assert (Condition => ATR_Type (Byte_Set (R_Result
+         Assert (Condition => ATR_Data_Type (Byte_Set (R_Result
                  (R_Result'Last).rgbAtr)) = Reader2.Card_ATR.Data,
                  Message   => "ATR data mismatch");
 

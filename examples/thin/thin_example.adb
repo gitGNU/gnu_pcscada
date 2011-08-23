@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -45,8 +45,8 @@ procedure Thin_Example is
 begin
 
    ret := SCardEstablishContext
-     (dwScope     => SCARD_SCOPE_SYSTEM,
-      phContext   => hContext'Access);
+     (dwScope   => SCARD_SCOPE_SYSTEM,
+      phContext => hContext'Access);
    if ret = SCARD_S_SUCCESS then
       Ada.Text_IO.Put_Line ("context established");
    else
@@ -78,7 +78,7 @@ begin
       --  Modify Reader_Name according to your test setup
 
       Reader_Name      : C.Strings.chars_ptr := C.Strings.New_String
-        ("KOBIL KAAN SIM III (K_000000000) 00 00");
+        ("OmniKey CardMan 3121 00 00");
    begin
 
       --  List readers
@@ -117,28 +117,25 @@ begin
 
       --  Try to connect
 
-      ret := SCardConnect (hContext             => hContext,
-                           szReader             => Reader_Name,
-                           dwShareMode          => SCARD_SHARE_SHARED,
-                           dwPreferredProtocols => SCARD_PROTOCOL_T0 or
-                                                   SCARD_PROTOCOL_T1,
-                           phCard               => hCard'Access,
-                           pdwActiveProtocol    =>
-                                                  dwActiveProtocol'Access);
+      ret := SCardConnect
+        (hContext             => hContext,
+         szReader             => Reader_Name,
+         dwShareMode          => SCARD_SHARE_SHARED,
+         dwPreferredProtocols => SCARD_PROTOCOL_T0 or SCARD_PROTOCOL_T1,
+         phCard               => hCard'Access,
+         pdwActiveProtocol    => dwActiveProtocol'Access);
 
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("connect ok");
 
          --  Try to re-connect
 
-         ret := SCardReconnect (hCard                => hCard,
-                                dwShareMode          => SCARD_SHARE_SHARED,
-                                dwPreferredProtocols =>
-                                                   SCARD_PROTOCOL_T0 or
-                                                        SCARD_PROTOCOL_T1,
-                                dwInitialization     => SCARD_LEAVE_CARD,
-                                pdwActiveProtocol    =>
-                                  dwActiveProtocol'Access);
+         ret := SCardReconnect
+           (hCard                => hCard,
+            dwShareMode          => SCARD_SHARE_SHARED,
+            dwPreferredProtocols => SCARD_PROTOCOL_T0 or SCARD_PROTOCOL_T1,
+            dwInitialization     => SCARD_LEAVE_CARD,
+            pdwActiveProtocol    => dwActiveProtocol'Access);
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("re-connect ok");
          end if;
@@ -149,14 +146,15 @@ begin
 
       --  Get status
 
-      ret := SCardStatus (hCard          => hCard,
-                          mszReaderNames => C.Strings.Null_Ptr,
-                          pcchReaderLen  => dwReaderLen'Access,
-                          pdwState       => dwState'Access,
-                          pdwProtocol    => dwProtocol'Access,
-                          pbAtr          =>
-                            pbAtr (pbAtr'First)'Access,
-                          pcbAtrLen      => dwAtrLen'Access);
+      SCardStatus
+        (returnValue    => ret,
+         hCard          => hCard,
+         mszReaderNames => C.Strings.Null_Ptr,
+         pcchReaderLen  => dwReaderLen'Access,
+         pdwState       => dwState'Access,
+         pdwProtocol    => dwProtocol'Access,
+         pbAtr          => Byte_Array (pbAtr),
+         pcbAtrLen      => dwAtrLen'Access);
 
       if ret = SCARD_S_SUCCESS then
          Ada.Text_IO.Put_Line ("card status ok");
@@ -181,23 +179,23 @@ begin
 
       declare
          pbRecvBuffer  : Byte_Array (1 .. 10);
-         pbSendBuffer  : Byte_Array :=
+         pbSendBuffer  : constant Byte_Array :=
            (16#00#, 16#A4#, 16#00#, 16#00#, 16#02#, 16#3F#, 16#00#);
-         pcbRecvLength : aliased DWORD := 10;
+         pcbRecvLength : aliased DWORD       := 10;
          pioRecvPCI    : aliased Thin.SCARD_IO_REQUEST;
       begin
 
          --  Send arbitrary APDU to card
 
-         ret := SCardTransmit (hCard         => hCard,
-                               pioSendPci    => SCARD_PCI_T1'Access,
-                               pbSendBuffer  => pbSendBuffer
-                                 (pbSendBuffer'First)'Access,
-                               cbSendLength  => 7,
-                               pioRecvPci    => pioRecvPCI'Access,
-                               pbRecvBuffer  => pbRecvBuffer
-                                 (pbRecvBuffer'First)'Access,
-                               pcbRecvLength => pcbRecvLength'Access);
+         SCardTransmit
+           (returnValue   => ret,
+            hCard         => hCard,
+            pioSendPci    => SCARD_PCI_T1'Access,
+            pbSendBuffer  => pbSendBuffer,
+            cbSendLength  => 7,
+            pioRecvPci    => pioRecvPCI'Access,
+            pbRecvBuffer  => pbRecvBuffer,
+            pcbRecvLength => pcbRecvLength'Access);
          if ret = SCARD_S_SUCCESS then
             Ada.Text_IO.Put_Line ("transmit send ok");
          end if;

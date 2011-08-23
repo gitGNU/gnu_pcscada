@@ -1,5 +1,5 @@
 --
---  Copyright (c) 2008-2009,
+--  Copyright (c) 2008-2010,
 --  Reto Buerki <reet@codelabs.ch>
 --
 --  This file is part of PCSC/Ada.
@@ -98,8 +98,16 @@ package PCSC.SCard.Utils is
    --  Return string representation of reader states.
 
    function To_String (Given : Byte_Set := Null_Byte_Set) return String;
-   --  Return an array of characters from byte set. This function does not
-   --  remove or trim newlines. If Null_Byte_Set is passed for 'Given', a "0"
-   --  string is returned.
+   --  Convert byte set to string. This function does not remove or trim
+   --  newlines. If Null_Byte_Set is passed for 'Given', a "0" string is
+   --  returned.
+
+   function To_String
+     (Given : Byte_Set := Null_Byte_Set;
+      Len   : Natural)
+      return String;
+   --  Convert Len bytes from byte set to string. This function does not remove
+   --  or trim newlines. If Null_Byte_Set is passed for 'Given', a "0" string
+   --  is returned. If Len > Given'Last, Len = Given'Last will be used instead.
 
 end PCSC.SCard.Utils;

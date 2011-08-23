@@ -123,6 +123,10 @@ package body PCSC.SCard.Conversion is
       C_States : Thin.READERSTATE_Array
         (size_t (1) .. size_t (Conditions.Data.Last_Index));
 
+      function Create_Readerstate
+        (Condition : Reader_Condition;
+         State     : Thin.DWORD)
+         return Thin.READERSTATE;
       --  Helper function to create a new Thin.READERSTATE object from
       --  Reader_Condition
 
