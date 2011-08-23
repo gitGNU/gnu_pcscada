@@ -28,7 +28,7 @@ project PCSCAda_Common is
 
    Version := external ("PCSCADA_VERSION", "0.1");
 
-   Compiler_Switches := ("-gnaty3aAbcdefhiIklnprStuxM79o",
+   Compiler_Switches := ("-gnatygAdISuxo",
                          "-gnatVa",
                          "-gnat05",
                          "-gnatwal",

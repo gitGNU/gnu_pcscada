@@ -883,7 +883,13 @@ package body PCSC.SCard is
       C_States  : Thin.READERSTATE_Array := Convert.To_C
         (Conditions => Conditions);
 
+      procedure Update_Status_Set (Position : VORCP.Cursor);
+      --  Update the status set given by cursor.
+
       procedure Update_Status_Set (Position : VORCP.Cursor) is
+
+         procedure Update_Reader_Condition (Element : in out Reader_Condition);
+         --  Update reader condition element.
 
          procedure Update_Reader_Condition (Element : in out Reader_Condition)
          is
