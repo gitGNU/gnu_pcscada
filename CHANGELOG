@@ -1,9 +1,96 @@
 PCSC/Ada ChangeLog
 ==================
 
+Version 0.7 (2011-08-23)
+------------------------
+.Additions and changes
+
+* Add lib and obj subdirs to gitignore. (4365106)
+
+* Simplify Compiler_Switches. (44d2826)
+
+* Update copyright headers. (7547034)
+
+* Update README file. (7291f2d)
+
+* Bump MINOR version to 7. (c7f76d0)
+
+* Unify test names. (5f20f26)
+
+* Transmit: Remove send buffer default expression. (950f2b2)
+
+* Correctly handle byte sets not starting at index 1. (e3f0dfc)
+
+* Introduce internal ATR_Byte_Count type. (bf54072)
+
+* Status_Change: Reset ATR data on card removal. (996ac00)
+
+* Add exception handler to status peeker. (a27de6a)
+
+* Rename ATR_Type to ATR_Data_Type. (acb1b94)
+
+* Allow ATR size of 33 bytes. (e7c20f4)
+According to ISO 7816-3, the answer to reset is at most 33 characters
+(including the initial character).
+
+* Transmit: Return optional recv PCI data to caller. (dd4ff89)
+Thanks to Stefan Berghofer for the hint.
+
+* Provide additional Transmit procedure. (279cde9)
+This procedure transmits Send_Len bytes of the given buffer to the card.
+
+* Minor: Fix indentation. (45d1165)
+
+* Use 79 in line length checks (-gnatyM79). (5cef8b1)
+
+* SCU: Add To_String() function with Len parameter. (027ce74)
+This function converts Len bytes from byte set to string.
+
+* SCardSetAttrib: Use Byte_Array type for pbAttr. (09a4aa6)
+
+* Remove obsolete TODO in Init_Attribute_Set(). (f106d71)
+
+* Make SCardTransmit() a Valued_Procedure. (6fe7bc7)
+
+* Make SCardStatus() a Valued_Procedure. (3b60575)
+
+* Minor: Fix Null_Byte constant alignment. (260f688)
+
+* SCardTransmit: Use Byte_Array type for pbSendBuffer. (e6688b9)
+See Ada RM B.3/70: An Ada parameter of an array type with component
+type T, of any mode, is passed as a t* argument to a C function, where t
+is the C type corresponding to the Ada type T.
+
+* Use Natural range instead of C.size_t for Byte_Array. (178a422)
+
+* Remove unneeded type conversions. (6b27e9d)
+
+* Minor: More code cleanup in examples. (e255c7b)
+
+* Minor: Remove unnecessary spaces in thin example. (db37035)
+
+* Minor: Remove unnecessary spaces in test output. (57fb476)
+
+* Fix Library_Name in IFD example project file. (a3cf804)
+
+* Add IFD handler example. (cdb6d17)
+
+* Add initial Thin.IFDHandler package. (18ae12d)
+
+* Add UCHAR, PDWORD and ATR_Access (sub)types. (af1d7a2)
+
+* Minor code cleanup. (f9a6bc4)
+
+* Remove unnecessary comment. (3227dcc)
+
+* Minor: Correct indentation in pcsc-version file. (1651809)
+
+
 Version 0.6 (2010-01-13)
 ------------------------
 .Additions and changes
+
+* Update CHANGELOG for release 0.6. (bc52668)
 
 * Remove 'git describe' version string. (3baf31c)
 
