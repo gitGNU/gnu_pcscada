@@ -1,3 +1,19 @@
+pcscada (0.7-1) unstable; urgency=low
+
+  * Merging upstream version 0.7
+  * Migrate to gnat-4.6
+  * Build-Depend on libahven3-dev (Closes: #647796)
+  * Switch to 3.0 (quilt) source package format
+  * Drop disable-stack-check.patch
+  * Rename libpcscada0.6 package to libpcscada0.7
+  * Bump dev package aliversion to 2
+  * Unapply patches from source
+  * Update to debhelper 8
+  * Switch to minimal debian/rules syntax
+  * Update to Standards-Version 3.9.2 (no changes)
+
+ -- Reto Buerki <reet@codelabs.ch>  Sun, 06 Nov 2011 19:18:44 +0100
+
 pcscada (0.6-2) unstable; urgency=low
 
   * Add aliversion to dev package.
