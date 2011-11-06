@@ -3,7 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Reto Buerki <reet@codelabs.ch>
 Build-Depends: debhelper (>= 8), gnat-4.6, libahven3-dev, libpcsclite-dev (>= 1.4.0)
-Standards-Version: 3.8.4
+Standards-Version: 3.9.2
 Homepage: http://www.nongnu.org/pcscada/
 Vcs-Browser: http://git.savannah.nongnu.org/gitweb/?p=pcscada.git
 Vcs-Git: git://git.savannah.nongnu.org/pcscada.git
